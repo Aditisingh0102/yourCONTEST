@@ -41,33 +41,34 @@
   color-scheme: dark;
 }
 .dark body {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
+  background-color: #0a0a0a !important;
+  color: #ededed !important;
 }
 
 /* Base structural overrides */
-.dark .bg-white { background-color: #1e293b !important; }
-.dark .bg-gray-50, .dark .bg-slate-50 { background-color: #0f172a !important; }
-.dark .bg-gray-100, .dark .bg-slate-100 { background-color: #334155 !important; }
+.dark .bg-white { background-color: #111111 !important; border-color: #222222 !important; }
+.dark .bg-gray-50, .dark .bg-slate-50 { background-color: #0a0a0a !important; }
+.dark .bg-gray-100, .dark .bg-slate-100 { background-color: #1a1a1a !important; }
+.dark .border-gray-100, .dark .border-gray-200 { border-color: #222222 !important; }
 
 /* Handle Tailwind hover classes (escaped colon and slash in CSS) */
-.dark .hover\:bg-gray-50:hover { background-color: #1e293b !important; }
-.dark .hover\:bg-gray-100:hover { background-color: #334155 !important; }
-.dark .hover\:bg-slate-50:hover { background-color: #1e293b !important; }
-.dark .hover\:text-gray-900:hover { color: #f8fafc !important; }
+.dark .hover\:bg-gray-50:hover { background-color: #1a1a1a !important; }
+.dark .hover\:bg-gray-100:hover { background-color: #222222 !important; }
+.dark .hover\:bg-slate-50:hover { background-color: #1a1a1a !important; }
+.dark .hover\:text-gray-900:hover { color: #ffffff !important; }
 
 /* Handle Tailwind opacity classes (escaped slash in CSS) */
-.dark .bg-slate-50\/50 { background-color: #0f172a !important; border-color: #1e293b !important; }
-.dark .bg-gray-50\/50 { background-color: rgba(15, 23, 42, 0.5) !important; border-color: #334155 !important; }
-.dark .hover\:bg-gray-50\/50:hover { background-color: rgba(15, 23, 42, 0.8) !important; }
-.dark .bg-blue-50\/50 { background-color: rgba(30, 58, 138, 0.2) !important; }
-.dark .bg-indigo-50\/50 { background-color: rgba(49, 46, 129, 0.2) !important; border-color: rgba(49, 46, 129, 0.4) !important; }
-.dark .bg-green-50\/50 { background-color: rgba(6, 78, 59, 0.2) !important; border-color: rgba(6, 78, 59, 0.4) !important; }
-.dark .bg-white\/70 { background-color: rgba(30, 41, 59, 0.7) !important; color: #e2e8f0 !important; }
-.dark .bg-white\/20 { background-color: rgba(15, 23, 42, 0.4) !important; color: #e2e8f0 !important; }
-.dark .bg-gray-100\/80 { background-color: rgba(30, 41, 59, 0.8) !important; }
-.dark .border-white\/40 { border-color: rgba(51, 65, 85, 0.6) !important; }
-.dark .border-white\/10 { border-color: rgba(51, 65, 85, 0.3) !important; }
+.dark .bg-slate-50\/50 { background-color: #0a0a0a !important; border-color: #222222 !important; }
+.dark .bg-gray-50\/50 { background-color: rgba(26, 26, 26, 0.5) !important; border-color: #222222 !important; }
+.dark .hover\:bg-gray-50\/50:hover { background-color: rgba(26, 26, 26, 0.8) !important; }
+.dark .bg-blue-50\/50 { background-color: rgba(30, 58, 138, 0.15) !important; }
+.dark .bg-indigo-50\/50 { background-color: rgba(49, 46, 129, 0.15) !important; border-color: rgba(49, 46, 129, 0.3) !important; }
+.dark .bg-green-50\/50 { background-color: rgba(6, 78, 59, 0.15) !important; border-color: rgba(6, 78, 59, 0.3) !important; }
+.dark .bg-white\/70 { background-color: rgba(17, 17, 17, 0.7) !important; color: #ededed !important; }
+.dark .bg-white\/20 { background-color: rgba(34, 34, 34, 0.4) !important; color: #ededed !important; }
+.dark .bg-gray-100\/80 { background-color: rgba(26, 26, 26, 0.8) !important; }
+.dark .border-white\/40 { border-color: rgba(51, 51, 51, 0.6) !important; }
+.dark .border-white\/10 { border-color: rgba(51, 51, 51, 0.3) !important; }
 
 /* Active States & Premium Theme Colors for Badges/Boxes */
 .dark .bg-blue-50, .dark .bg-blue-100 { background-color: rgba(30, 58, 138, 0.4) !important; }
