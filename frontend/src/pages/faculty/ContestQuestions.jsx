@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Save, Code, CheckCircle2, Trash2, HelpCircle } from 'lucide-react';
+import { ArrowLeft, Plus, Save, Code, CheckCircle2, Trash2, HelpCircle, Edit2, XCircle } from 'lucide-react';
 import { getContests, updateContest } from '../../api';
 
 export default function ContestQuestions() {
@@ -11,6 +11,7 @@ export default function ContestQuestions() {
   
   const [activeTab, setActiveTab] = useState('MCQ');
   const [questions, setQuestions] = useState([]);
+  const [editingId, setEditingId] = useState(null);
   
   // MCQ Form
   const [mcqForm, setMcqForm] = useState({ question: '', options: ['', '', '', ''], correctOption: 0, marks: 1 });
@@ -46,21 +47,57 @@ export default function ContestQuestions() {
   const handleAddMCQ = (e) => {
     e.preventDefault();
     if (!mcqForm.question) return;
-    const newQ = { id: Date.now(), type: 'MCQ', ...mcqForm };
-    saveQuestions([...questions, newQ]);
+    const newQ = { type: 'MCQ', ...mcqForm };
+    if (editingId) {
+      saveQuestions(questions.map(q => q.id === editingId ? { ...q, ...newQ } : q));
+      setEditingId(null);
+    } else {
+      saveQuestions([...questions, { id: Date.now(), ...newQ }]);
+    }
     setMcqForm({ question: '', options: ['', '', '', ''], correctOption: 0, marks: 1 });
   };
 
   const handleAddCoding = (e) => {
     e.preventDefault();
     if (!codingForm.title) return;
-    const newQ = { id: Date.now(), type: 'Coding', ...codingForm };
-    saveQuestions([...questions, newQ]);
+    const newQ = { type: 'Coding', ...codingForm };
+    if (editingId) {
+      saveQuestions(questions.map(q => q.id === editingId ? { ...q, ...newQ } : q));
+      setEditingId(null);
+    } else {
+      saveQuestions([...questions, { id: Date.now(), ...newQ }]);
+    }
     setCodingForm({ title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', sampleInput: '', sampleOutput: '', marks: 10 });
+  };
+
+  const handleEdit = (q) => {
+    setEditingId(q.id);
+    setActiveTab(q.type);
+    if (q.type === 'MCQ') {
+      setMcqForm({ question: q.question, options: q.options, correctOption: q.correctOption, marks: q.marks });
+    } else {
+      setCodingForm({ 
+        title: q.title, problemStatement: q.problemStatement, inputFormat: q.inputFormat, 
+        outputFormat: q.outputFormat, constraints: q.constraints || '', sampleInput: q.sampleInput, 
+        sampleOutput: q.sampleOutput, marks: q.marks 
+      });
+    }
   };
 
   const handleDelete = (qId) => {
     saveQuestions(questions.filter(q => q.id !== qId));
+    if (editingId === qId) {
+      cancelEdit();
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    if (activeTab === 'MCQ') {
+      setMcqForm({ question: '', options: ['', '', '', ''], correctOption: 0, marks: 1 });
+    } else {
+      setCodingForm({ title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', sampleInput: '', sampleOutput: '', marks: 10 });
+    }
   };
 
   if (!contest) return <div className="p-8 text-center text-gray-500">Loading contest...</div>;
@@ -71,10 +108,15 @@ export default function ContestQuestions() {
         <button onClick={() => navigate('/faculty/manage-contests')} className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
-        <div>
+        <div className="flex-1">
           <h1 className="text-2xl font-bold text-gray-900">Manage Questions</h1>
           <p className="text-sm text-gray-500 mt-1">{contest.title} • {contest.questions} Total Questions Planned</p>
         </div>
+        {editingId && (
+          <button onClick={cancelEdit} className="px-4 py-2 bg-red-50 text-red-600 font-bold text-sm rounded-lg hover:bg-red-100 transition-colors flex items-center gap-2">
+            <XCircle className="w-4 h-4" /> Cancel Edit
+          </button>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -141,7 +183,7 @@ export default function ContestQuestions() {
                       />
                     </div>
                     <button type="submit" className="flex-1 py-2.5 bg-blue-600 text-white font-bold text-[14px] rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2">
-                      <Plus className="w-4 h-4" /> Save MCQ
+                      <Plus className="w-4 h-4" /> {editingId ? "Update MCQ" : "Save MCQ"}
                     </button>
                   </div>
                 </form>
@@ -220,7 +262,7 @@ export default function ContestQuestions() {
                       />
                     </div>
                     <button type="submit" className="flex-1 py-2.5 bg-blue-600 text-white font-bold text-[14px] rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2">
-                      <Plus className="w-4 h-4" /> Save Coding Problem
+                      <Plus className="w-4 h-4" /> {editingId ? "Update Coding Problem" : "Save Coding Problem"}
                     </button>
                   </div>
                 </form>
@@ -246,12 +288,22 @@ export default function ContestQuestions() {
             ) : (
               questions.map((q, idx) => (
                 <div key={q.id} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm relative group">
-                  <button 
-                    onClick={() => handleDelete(q.id)}
-                    className="absolute top-3 right-3 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
+                  <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={() => handleEdit(q)}
+                      className="text-gray-400 hover:text-blue-500"
+                      title="Edit Question"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button 
+                      onClick={() => handleDelete(q.id)}
+                      className="text-gray-400 hover:text-red-500"
+                      title="Delete Question"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${q.type === 'MCQ' ? 'bg-blue-50 text-blue-600' : 'bg-purple-50 text-purple-600'}`}>
                       {q.type}

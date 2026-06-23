@@ -126,55 +126,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
           </button>
         </div>
 
-        {/* Profile Card Section */}
-        <div 
-          onClick={() => {
-            navigate(role === 'student' ? '/student/profile' : '/faculty/profile');
-            if (setIsMobileOpen) setIsMobileOpen(false);
-          }}
-          className={`flex items-center gap-3 p-3 mx-3 mb-4 border border-gray-100 rounded-xl hover:bg-slate-50 hover:border-blue-100 cursor-pointer transition-all duration-200 group relative ${
-            isCollapsed ? 'justify-center p-1.5' : ''
-          }`}
-        >
-          {isCollapsed ? (
-            <div className="relative">
-              <img 
-                src={profileData.avatar} 
-                alt="Avatar" 
-                className="w-10 h-10 rounded-full border border-gray-200 object-cover"
-              />
-              <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
-              
-              {/* Tooltip for collapsed Profile Card */}
-              <div className="absolute left-16 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md z-50">
-                <p className="font-bold">{profileData.name}</p>
-                <p className="text-[10px] text-gray-400 capitalize">{profileData.role}</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="relative shrink-0">
-                <img 
-                  src={profileData.avatar} 
-                  alt="Avatar" 
-                  className="w-11 h-11 rounded-full border border-gray-200 object-cover"
-                />
-                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
-              </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-bold text-gray-800 truncate leading-snug">{profileData.name}</h4>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                    role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-purple-50 text-purple-600 border border-purple-100'
-                  }`}>
-                    {role}
-                  </span>
-                  <span className="text-[10px] text-gray-400 truncate">{role === 'student' ? profileData.rollNo : profileData.facultyId}</span>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+
 
         {/* Navigation Links */}
         <nav className="flex-1 px-4 space-y-1">
@@ -208,27 +160,55 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
 
         {/* Account Sections Block (Profile + Redesigned Logout Button) */}
         <div className="p-4 mt-auto border-t border-gray-100 pt-4 space-y-3 shrink-0">
-          {/* Profile link moved directly above Logout */}
-          <NavLink
-            to={role === 'student' ? '/student/profile' : '/faculty/profile'}
-            className={({ isActive }) =>
-              `flex items-center gap-3 py-2.5 rounded-lg transition-all duration-200 group relative ${
-                isActive 
-                  ? 'bg-blue-50 text-blue-600 font-semibold shadow-sm' 
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              } ${isCollapsed ? 'justify-center px-2' : 'px-4'}`
-            }
+          {/* Profile Card Section */}
+          <div 
+            onClick={() => {
+              navigate(role === 'student' ? '/student/profile' : '/faculty/profile');
+              if (setIsMobileOpen) setIsMobileOpen(false);
+            }}
+            className={`flex items-center gap-3 p-3 border border-gray-100 rounded-xl hover:bg-slate-50 hover:border-blue-100 cursor-pointer transition-all duration-200 group relative w-full ${
+              isCollapsed ? 'justify-center p-1.5' : ''
+            }`}
           >
-            <User className="w-5 h-5 shrink-0" />
-            {!isCollapsed && <span className="text-sm">Profile</span>}
-            
-            {/* Tooltip for collapsed state */}
-            {isCollapsed && (
-              <div className="absolute left-16 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md z-50">
-                Profile
+            {isCollapsed ? (
+              <div className="relative">
+                <img 
+                  src={profileData.avatar} 
+                  alt="Avatar" 
+                  className="w-10 h-10 rounded-full border border-gray-200 object-cover"
+                />
+                <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+                
+                {/* Tooltip for collapsed Profile Card */}
+                <div className="absolute left-16 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md z-50">
+                  <p className="font-bold">{profileData.name}</p>
+                  <p className="text-[10px] text-gray-400 capitalize">{profileData.role}</p>
+                </div>
               </div>
+            ) : (
+              <>
+                <div className="relative shrink-0">
+                  <img 
+                    src={profileData.avatar} 
+                    alt="Avatar" 
+                    className="w-11 h-11 rounded-full border border-gray-200 object-cover"
+                  />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white rounded-full"></div>
+                </div>
+                <div className="flex-1 min-w-0 text-left">
+                  <h4 className="text-sm font-bold text-gray-800 truncate leading-snug">{profileData.name}</h4>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                      role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-purple-50 text-purple-600 border border-purple-100'
+                    }`}>
+                      {role}
+                    </span>
+                    <span className="text-[10px] text-gray-400 truncate">{role === 'student' ? profileData.rollNo : profileData.facultyId}</span>
+                  </div>
+                </div>
+              </>
             )}
-          </NavLink>
+          </div>
 
           {/* Premium Logout Button */}
           {isCollapsed ? (
