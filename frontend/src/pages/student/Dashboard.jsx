@@ -54,6 +54,21 @@ export default function Dashboard() {
     }
   };
 
+  const [studentName, setStudentName] = useState(() => {
+    const saved = localStorage.getItem('student_profile');
+    if (saved) return JSON.parse(saved).name;
+    return 'Aditi';
+  });
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      const saved = localStorage.getItem('student_profile');
+      if (saved) setStudentName(JSON.parse(saved).name);
+    };
+    window.addEventListener('profile-updated', handleUpdate);
+    return () => window.removeEventListener('profile-updated', handleUpdate);
+  }, []);
+
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
@@ -62,7 +77,7 @@ export default function Dashboard() {
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 rounded-full text-[11px] font-bold tracking-wider mb-3 backdrop-blur-sm shadow-sm border border-white/10 uppercase">
             <Rocket className="w-3.5 h-3.5" /> BATCH: ALPHA 1
           </div>
-          <h1 className="text-3xl font-bold mb-1">Welcome back, Aditi!</h1>
+          <h1 className="text-3xl font-bold mb-1">Welcome back, {studentName}!</h1>
           <p className="text-blue-100 text-sm mb-4">UIT • B.Tech CSE • 4th Year Student</p>
 
         </div>

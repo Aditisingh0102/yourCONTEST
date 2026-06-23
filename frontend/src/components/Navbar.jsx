@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Moon, Sun, Bell } from 'lucide-react';
+import { BookOpen, Moon, Sun, Bell, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar({ user }) {
+export default function Navbar({ user, onToggleSidebar, isCollapsed }) {
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
 
@@ -30,13 +30,24 @@ export default function Navbar({ user }) {
 
   return (
     <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container">
-      <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="bg-blue-600 text-white p-1.5 rounded-lg logo-icon">
-          <BookOpen className="w-5 h-5" />
-        </div>
-        <div className="flex flex-col border-l border-gray-300 pl-3 logo-text-container">
-          <span className="text-[15px] font-bold text-gray-800 leading-tight">University Platform</span>
-          <span className="text-[11px] text-gray-500 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Faculty Portal'}</span>
+      <div className="flex items-center gap-4">
+        {/* Sidebar Hamburger Toggle Button */}
+        <button 
+          onClick={onToggleSidebar}
+          className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-100"
+          aria-label="Toggle Sidebar"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+          <div className="bg-blue-600 text-white p-1.5 rounded-lg logo-icon hidden sm:block">
+            <BookOpen className="w-5 h-5" />
+          </div>
+          <div className="flex flex-col sm:border-l sm:border-gray-300 sm:pl-3 logo-text-container">
+            <span className="text-[15px] font-bold text-gray-800 leading-tight">University Platform</span>
+            <span className="text-[11px] text-gray-500 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Faculty Portal'}</span>
+          </div>
         </div>
       </div>
       

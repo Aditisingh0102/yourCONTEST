@@ -51,18 +51,36 @@ export default function Dashboard() {
     setEditingNoteId(null);
   };
 
+  const [profileData, setProfileData] = useState(() => {
+    const saved = localStorage.getItem('faculty_profile');
+    if (saved) return JSON.parse(saved);
+    return {
+      name: faculty.name,
+      avatar: faculty.avatar
+    };
+  });
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      const saved = localStorage.getItem('faculty_profile');
+      if (saved) setProfileData(JSON.parse(saved));
+    };
+    window.addEventListener('profile-updated', handleUpdate);
+    return () => window.removeEventListener('profile-updated', handleUpdate);
+  }, []);
+
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
       <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 rounded-2xl p-8 text-white shadow-md flex items-center gap-6 relative overflow-hidden">
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
         
-        <img src={faculty.avatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white/20 shadow-sm relative z-10 object-cover bg-white" />
+        <img src={profileData.avatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white/20 shadow-sm relative z-10 object-cover bg-white" />
         <div className="relative z-10">
           <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold tracking-wider mb-2 backdrop-blur-sm border border-white/10">
             FACULTY CONTEST PORTAL
           </div>
-          <h1 className="text-3xl font-bold mb-1">Welcome, {faculty.name}</h1>
+          <h1 className="text-3xl font-bold mb-1">Welcome, {profileData.name}</h1>
           <p className="text-blue-100 text-sm">{faculty.role} • {faculty.university}</p>
         </div>
       </div>
