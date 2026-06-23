@@ -118,8 +118,8 @@ export default function Dashboard() {
                 {contests.map((contest) => (
                   <div key={contest._id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                     <div>
-                      <h3 className="text-[15px] font-bold text-gray-900">{contest.name}</h3>
-                      <p className="text-[13px] text-gray-500">{contest.subject} • {contest.duration}</p>
+                      <h3 className="text-[15px] font-bold text-gray-900">{contest.name || contest.title || "Untitled Contest"}</h3>
+                      <p className="text-[13px] text-gray-500">{contest.subject || contest.type || 'Contest'} • {contest.duration}</p>
                     </div>
                     <div className="flex items-center gap-4">
                       <span className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${

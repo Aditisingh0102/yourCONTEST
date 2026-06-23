@@ -37,16 +37,8 @@ export default function Contests() {
     }
     
     if (contest.status === 'Upcoming') {
-      // Check if it's within 30 minutes of start time
-      const startTime = new Date(contest.startTime).getTime();
-      const now = new Date().getTime();
-      const diffMins = (startTime - now) / 1000 / 60;
-      
-      // If it's more than 30 mins away, show soft message
-      if (diffMins > 30) {
-        showToast("The contest hasn't started yet. The waiting room will open 30 minutes before the start time.");
-        return;
-      }
+      navigate(`/student/arena/${contest._id || contest.id}`);
+      return;
     }
     
     // Within 30 mins or Live -> go to Arena
@@ -133,7 +125,7 @@ export default function Contests() {
                 {/* Details */}
                 <div>
                   <div className="flex items-center gap-3 mb-1.5">
-                    <h3 className="text-[16px] font-bold text-gray-900 leading-none group-hover:text-blue-600 transition-colors">{contest.name}</h3>
+                    <h3 className="text-[16px] font-bold text-gray-900 leading-none group-hover:text-blue-600 transition-colors">{contest.name || contest.title || "Untitled Contest"}</h3>
                     {contest.status === 'Live' && (
                        <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-red-50 text-red-600 border border-red-200 flex items-center gap-1">
                          <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
@@ -142,7 +134,7 @@ export default function Contests() {
                     )}
                   </div>
                   <p className="text-[13px] text-gray-500 font-medium">
-                    {contest.date}, {contest.time} • {contest.duration}
+                    {contest.startTime || `${contest.date || ''}, ${contest.time || ''}`} • {contest.duration}
                   </p>
                 </div>
               </div>

@@ -12,6 +12,9 @@ export default function Arena() {
   const [answers, setAnswers] = useState({});
   const [timeRemaining, setTimeRemaining] = useState('');
   const [isWaiting, setIsWaiting] = useState(true);
+  const [error, setError] = useState(null);
+  const [hasAgreed, setHasAgreed] = useState(false);
+  const [rulesChecked, setRulesChecked] = useState(false);
 
   const fetchContestData = async () => {
     try {
@@ -21,15 +24,15 @@ export default function Arena() {
         setContest(current);
         if (current.status === 'Live') {
           setIsWaiting(false);
-          if (current.questionList && current.questionList.length > 0 && !activeProblem) {
-            setActiveProblem(current.questionList[0]);
-          }
         } else {
           setIsWaiting(true);
         }
+      } else {
+        setError("Contest not found. It might have been removed or the server restarted.");
       }
     } catch(err) {
       console.error(err);
+      setError("Failed to load contest data. Please check your connection.");
     }
   };
 
@@ -43,14 +46,24 @@ export default function Arena() {
     if (!contest || contest.status !== 'Upcoming') return;
     
     const interval = setInterval(() => {
-      const start = new Date(contest.startTime).getTime();
+      let start = 0;
+      if (contest.startTime && contest.startTime.includes(',')) {
+          const parts = contest.startTime.split(', ');
+          if(parts.length === 2) {
+             start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
+          }
+      } else if (contest.date && contest.time) {
+          start = new Date(`${contest.date}T${contest.time}:00`).getTime();
+      } else {
+          start = new Date(contest.startTime).getTime();
+      }
+
       const now = new Date().getTime();
       const diff = start - now;
       
-      if (diff <= 0) {
+      if (diff <= 0 || isNaN(diff)) {
         setTimeRemaining('00:00:00');
-        // Once time hits zero, it could automatically turn live if faculty didn't
-        setIsWaiting(false);
+        if(!isNaN(diff)) setIsWaiting(false);
         clearInterval(interval);
       } else {
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -63,6 +76,14 @@ export default function Arena() {
     return () => clearInterval(interval);
   }, [contest]);
 
+  const questions = contest?.questionList || [];
+
+  useEffect(() => {
+    if (!isWaiting && hasAgreed && questions.length > 0 && !activeProblem) {
+      setActiveProblem(questions[0]);
+    }
+  }, [isWaiting, hasAgreed, questions, activeProblem]);
+
   const handleAnswerChange = (qId, val) => {
     setAnswers({ ...answers, [qId]: val });
   };
@@ -72,47 +93,92 @@ export default function Arena() {
     navigate('/student/dashboard');
   };
 
-  if (!contest) return <div className="fixed inset-0 bg-[#0f172a] text-white flex items-center justify-center">Loading Arena...</div>;
-
-  if (isWaiting) {
+  if (error) {
     return (
-      <div className="fixed inset-0 bg-gray-50 flex flex-col font-sans">
-        <div className="h-16 bg-white border-b border-gray-200 flex items-center px-6 shrink-0 shadow-sm">
-           <button onClick={() => navigate(-1)} className="text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2 font-medium">
-             <ChevronLeft className="w-5 h-5" /> Back to Dashboard
-           </button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-center">
-           <div className="bg-white max-w-2xl w-full rounded-2xl shadow-xl border border-gray-100 p-10 text-center">
-              <div className="w-20 h-20 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-pulse">
-                <Clock className="w-10 h-10" />
-              </div>
-              <h1 className="text-3xl font-black text-gray-900 mb-2">{contest.title}</h1>
-              <p className="text-gray-500 font-medium mb-8">This contest hasn't started yet. Please wait in the arena.</p>
-              
-              <div className="bg-gray-900 text-white rounded-xl p-6 mb-8 inline-block min-w-[300px]">
-                 <p className="text-sm text-gray-400 font-bold uppercase tracking-widest mb-2">Starts In</p>
-                 <div className="text-5xl font-mono font-bold tracking-tight text-orange-400">{timeRemaining || "Loading..."}</div>
-              </div>
-              
-              <div className="text-left bg-blue-50 border border-blue-100 rounded-xl p-6">
-                <h3 className="font-bold text-blue-900 flex items-center gap-2 mb-4">
-                  <ShieldAlert className="w-5 h-5 text-blue-600" /> Rules and Regulations
-                </h3>
-                <ul className="space-y-3 text-sm text-blue-800">
-                  <li className="flex gap-2"><span className="text-blue-400 font-bold">•</span> Questions will be visible exactly at the start time.</li>
-                  <li className="flex gap-2"><span className="text-blue-400 font-bold">•</span> Do not refresh the page during the contest.</li>
-                  <li className="flex gap-2"><span className="text-blue-400 font-bold">•</span> Tab switching is strictly prohibited and will be logged.</li>
-                  <li className="flex gap-2"><span className="text-blue-400 font-bold">•</span> Ensure stable internet connection before time begins.</li>
-                </ul>
-              </div>
-           </div>
+      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50">
+        <div className="bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700/50 text-center max-w-md w-full mx-4">
+          <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ShieldAlert className="w-10 h-10 text-red-500 animate-pulse" />
+          </div>
+          <h2 className="text-2xl font-black text-white mb-3">Oops!</h2>
+          <p className="text-slate-400 font-medium mb-8 leading-relaxed">{error}</p>
+          <button onClick={() => navigate('/student/contests')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
+             Go Back to Dashboard
+          </button>
         </div>
       </div>
     );
   }
 
-  const questions = contest.questionList || [];
+  if (!contest) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50">
+         <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-6"></div>
+         <p className="text-slate-400 font-bold tracking-widest uppercase">Loading Arena...</p>
+      </div>
+    );
+  }
+
+  if (isWaiting || !hasAgreed) {
+    return (
+      <div className="fixed inset-0 bg-gray-50 flex flex-col font-sans">
+        <div className="h-16 bg-white border-b border-gray-200 flex items-center px-6 shrink-0 shadow-sm">
+           <button onClick={() => navigate('/student/contests')} className="text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2 font-medium">
+             <ChevronLeft className="w-5 h-5" /> Back to Dashboard
+           </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center">
+           <div className="bg-white max-w-3xl w-full rounded-2xl shadow-xl border border-gray-100 p-8">
+              <h1 className="text-2xl font-black text-gray-900 mb-6 border-b pb-4">Rules & Regulations</h1>
+              
+              <div className="space-y-4 text-gray-600 text-sm mb-8">
+                <p className="flex gap-3"><span className="text-blue-600 font-bold">1.</span> <span>Do not switch tabs or minimize the browser window during the assessment. Doing so may result in automatic submission.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-bold">2.</span> <span>Ensure you have a stable internet connection before starting the contest.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-bold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-bold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-bold">5.</span> <span>Any malpractice or copying will lead to immediate disqualification.</span></p>
+              </div>
+
+              {isWaiting ? (
+                <div className="bg-gray-900 text-white rounded-xl p-8 text-center mt-8">
+                   <div className="w-16 h-16 bg-orange-500/20 text-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                     <Clock className="w-8 h-8" />
+                   </div>
+                   <h2 className="text-xl font-bold mb-2">Assessment Starts In</h2>
+                   <div className="text-5xl font-mono font-bold tracking-tight text-orange-400">{timeRemaining || "Loading..."}</div>
+                </div>
+              ) : (
+                <div className="mt-8 bg-blue-50 border border-blue-100 p-6 rounded-xl">
+                  <label className="flex items-start gap-3 cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                      checked={rulesChecked}
+                      onChange={(e) => setRulesChecked(e.target.checked)}
+                    />
+                    <span className="text-gray-700 font-medium text-sm">
+                      I have read all the rules and regulations. I understand that any violation will lead to disqualification. I am ready to begin the assessment.
+                    </span>
+                  </label>
+                  
+                  <button 
+                    disabled={!rulesChecked}
+                    onClick={() => setHasAgreed(true)}
+                    className={`mt-6 w-full py-3.5 rounded-xl font-bold text-white transition-all ${
+                      rulesChecked 
+                        ? 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/30' 
+                        : 'bg-gray-300 cursor-not-allowed'
+                    }`}
+                  >
+                    Start Assessment Now
+                  </button>
+                </div>
+              )}
+           </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 bg-[#0f172a] text-gray-300 z-50 flex flex-col font-sans">

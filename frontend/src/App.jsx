@@ -53,7 +53,7 @@ export default function App() {
         </Route>
 
         <Route path="/student/contests/:id" element={<ContestRules />} />
-        <Route path="/student/contests/:id/arena" element={<Arena />} />
+        <Route path="/student/arena/:id" element={<Arena />} />
 
         {/* Faculty Routes */}
         <Route path="/faculty" element={<FacultyLayout />}>
