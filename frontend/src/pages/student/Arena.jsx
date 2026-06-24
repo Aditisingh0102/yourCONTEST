@@ -15,6 +15,9 @@ export default function Arena() {
   const [error, setError] = useState(null);
   const [hasAgreed, setHasAgreed] = useState(false);
   const [rulesChecked, setRulesChecked] = useState(false);
+  const [violations, setViolations] = useState(0);
+  const [showWarning, setShowWarning] = useState(false);
+  const isViolatingRef = React.useRef(false);
 
   const fetchContestData = async () => {
     try {
@@ -84,11 +87,86 @@ export default function Arena() {
     }
   }, [isWaiting, hasAgreed, questions, activeProblem]);
 
+  useEffect(() => {
+    if (isWaiting || !hasAgreed) return;
+    if (contest && contest.strictFullscreen === false) return;
+
+    const handleViolation = () => {
+      if (isViolatingRef.current) return;
+      isViolatingRef.current = true;
+
+      setViolations(prev => {
+        const newCount = prev + 1;
+        if (newCount > 1) { 
+          if (document.fullscreenElement) {
+             document.exitFullscreen().catch(() => {});
+          }
+          alert("Contest auto-submitted due to rule violations (tab switching or exiting fullscreen).");
+          navigate('/student/dashboard');
+        } else {
+          setShowWarning(true);
+        }
+        return newCount;
+      });
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') handleViolation();
+    };
+
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) handleViolation();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, [isWaiting, hasAgreed, navigate, contest]);
+
+  useEffect(() => {
+    if (contest && contest.disableCopyPaste !== false && !isWaiting && hasAgreed) {
+      const handleCopyPaste = (e) => {
+        e.preventDefault();
+        alert("Copying and pasting is strictly disabled during this assessment.");
+      };
+      
+      document.addEventListener('copy', handleCopyPaste);
+      document.addEventListener('paste', handleCopyPaste);
+      document.addEventListener('cut', handleCopyPaste);
+      
+      return () => {
+        document.removeEventListener('copy', handleCopyPaste);
+        document.removeEventListener('paste', handleCopyPaste);
+        document.removeEventListener('cut', handleCopyPaste);
+      };
+    }
+  }, [contest, isWaiting, hasAgreed]);
+
+  const handleStartAssessment = () => {
+    if (contest && contest.strictFullscreen === false) {
+      setHasAgreed(true);
+      return;
+    }
+    
+    document.documentElement.requestFullscreen().then(() => {
+      setHasAgreed(true);
+    }).catch(err => {
+      alert("Fullscreen mode is required to start the contest. Please allow fullscreen.");
+    });
+  };
+
   const handleAnswerChange = (qId, val) => {
     setAnswers({ ...answers, [qId]: val });
   };
 
   const submitContest = () => {
+    if (document.fullscreenElement) {
+       document.exitFullscreen().catch(() => {});
+    }
     alert('Contest Submitted Successfully!');
     navigate('/student/dashboard');
   };
@@ -163,7 +241,7 @@ export default function Arena() {
                   
                   <button 
                     disabled={!rulesChecked}
-                    onClick={() => setHasAgreed(true)}
+                    onClick={handleStartAssessment}
                     className={`mt-6 w-full py-3.5 rounded-xl font-bold text-white transition-all ${
                       rulesChecked 
                         ? 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/30' 
@@ -182,6 +260,27 @@ export default function Arena() {
 
   return (
     <div className="fixed inset-0 bg-[#0f172a] text-gray-300 z-50 flex flex-col font-sans">
+      {showWarning && (
+        <div className="fixed inset-0 bg-red-900/95 z-[9999] flex items-center justify-center p-6 backdrop-blur-md">
+          <div className="bg-black/80 border border-red-500/30 p-10 rounded-2xl max-w-lg text-center shadow-2xl shadow-red-900/50">
+            <ShieldAlert className="w-20 h-20 text-red-500 mx-auto mb-6 animate-pulse" />
+            <h1 className="text-3xl font-black text-white mb-4 tracking-tight">Violation Detected!</h1>
+            <p className="text-red-200 text-lg mb-2">You have exited fullscreen or switched tabs.</p>
+            <p className="text-red-400 font-bold mb-8">Warning 1 of 1. If this happens again, your test will be automatically submitted.</p>
+            <button 
+              onClick={() => {
+                document.documentElement.requestFullscreen().then(() => {
+                  setShowWarning(false);
+                  setTimeout(() => { isViolatingRef.current = false; }, 500);
+                }).catch(() => alert("Fullscreen required!"));
+              }}
+              className="px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl shadow-lg shadow-red-900/50 transition-all active:scale-95"
+            >
+              Return to Fullscreen & Continue
+            </button>
+          </div>
+        </div>
+      )}
       {/* Top Navbar */}
       <div className="h-14 bg-[#1e293b] border-b border-gray-700 flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-4">

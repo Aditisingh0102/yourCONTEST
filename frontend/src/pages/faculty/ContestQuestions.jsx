@@ -423,13 +423,6 @@ export default function ContestQuestions() {
             <h1 className="text-2xl font-bold text-gray-900">Add Questions</h1>
             <p className="text-sm text-gray-500 mt-0.5">{contest.title}</p>
           </div>
-          {allDone && (
-            <button
-              onClick={() => navigate('/faculty/manage-contests')}
-              className="px-5 py-2.5 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 flex items-center gap-2 shadow-sm shadow-green-200">
-              <Sparkles className="w-4 h-4" /> Finish & Publish
-            </button>
-          )}
         </div>
 
         {/* Progress bar */}
@@ -522,12 +515,21 @@ export default function ContestQuestions() {
                   className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
                   <ChevronLeft className="w-4 h-4" /> Previous
                 </button>
-                <button
-                  disabled={currentSlotIdx === totalSlots - 1}
-                  onClick={() => setCurrentSlotIdx(i => i + 1)}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
-                  Next <ChevronRight className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    disabled={currentSlotIdx === totalSlots - 1}
+                    onClick={() => setCurrentSlotIdx(i => i + 1)}
+                    className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                    Next <ChevronRight className="w-4 h-4" />
+                  </button>
+                  {allDone && (
+                    <button
+                      onClick={() => navigate('/faculty/manage-contests')}
+                      className="px-5 py-2 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 flex items-center gap-2 shadow-sm shadow-green-200 transition-colors">
+                      <Sparkles className="w-4 h-4" /> Finish & Publish
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>

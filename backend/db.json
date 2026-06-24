@@ -1,0 +1,67 @@
+{
+  "notices": [],
+  "contests": [
+    {
+      "title": "as",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-24, 23:31",
+      "endTime": "TBD",
+      "duration": "1.3 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": "dw",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782324079530,
+          "type": "MCQ",
+          "question": "dis",
+          "options": [
+            "nd",
+            "dns",
+            "sn",
+            "snd"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782324066586",
+      "createdAt": "2026-06-24T18:01:06.586Z"
+    },
+    {
+      "title": "Ansh",
+      "type": "Assessment",
+      "status": "Upcoming",
+      "startTime": "2026-06-24, 23:24",
+      "endTime": "TBD",
+      "duration": "1.3 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": "jsa",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782323666870,
+          "type": "MCQ",
+          "question": "Ojasdsdcs",
+          "options": [
+            "ds",
+            "ds",
+            "as",
+            "sd"
+          ],
+          "correctOption": 0,
+          "marks": 7
+        }
+      ],
+      "_id": "1782323626755",
+      "createdAt": "2026-06-24T17:53:46.755Z"
+    }
+  ]
+}

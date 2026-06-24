@@ -204,7 +204,7 @@ export default function ContestForm() {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: ''
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: '', strictFullscreen: true, disableCopyPaste: true
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
@@ -224,7 +224,9 @@ export default function ContestForm() {
             startDate: datePart || '',
             startTime: timePart || '',
             duration: contest.duration ? parseInt(contest.duration) : '',
-            customRules: contest.customRules || ''
+            customRules: contest.customRules || '',
+            strictFullscreen: contest.strictFullscreen !== false,
+            disableCopyPaste: contest.disableCopyPaste !== false
           });
         }
       });
@@ -243,7 +245,9 @@ export default function ContestForm() {
           type: formData.type,
           startTime: `${formData.startDate}, ${formData.startTime}`,
           duration: `${formData.duration} mins`,
-          customRules: formData.customRules || ''
+          customRules: formData.customRules || '',
+          strictFullscreen: formData.strictFullscreen,
+          disableCopyPaste: formData.disableCopyPaste
         });
         setSavedContestId(dbContestId);
       } else {
@@ -259,6 +263,8 @@ export default function ContestForm() {
           questions: 0,
           submissions: 0,
           customRules: formData.customRules || '',
+          strictFullscreen: formData.strictFullscreen,
+          disableCopyPaste: formData.disableCopyPaste,
           questionList: []
         };
         const res = await createContest(newContest);
@@ -383,11 +389,17 @@ export default function ContestForm() {
               <div className="space-y-5 pl-8">
                 <div className="flex gap-4">
                   <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" defaultChecked />
+                    <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
+                      checked={formData.strictFullscreen} 
+                      onChange={(e) => setFormData({...formData, strictFullscreen: e.target.checked})} 
+                    />
                     <span className="text-[14px] font-bold text-gray-800">Strict Fullscreen Mode</span>
                   </label>
                   <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" defaultChecked />
+                    <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
+                      checked={formData.disableCopyPaste} 
+                      onChange={(e) => setFormData({...formData, disableCopyPaste: e.target.checked})} 
+                    />
                     <span className="text-[14px] font-bold text-gray-800">Disable Copy/Paste</span>
                   </label>
                 </div>
