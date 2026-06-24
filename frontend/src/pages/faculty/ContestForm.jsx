@@ -211,6 +211,8 @@ export default function ContestForm() {
   const [savedContestId, setSavedContestId] = useState(null);
   const [saving, setSaving] = useState(false);
 
+  const today = new Date().toISOString().split('T')[0];
+
   useEffect(() => {
     if (id) {
       getContests().then(res => {
@@ -235,6 +237,13 @@ export default function ContestForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const selectedDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
+    if (selectedDateTime < new Date()) {
+      alert("Start date and time cannot be in the past!");
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -350,6 +359,7 @@ export default function ContestForm() {
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Start Date</label>
                   <input
                     type="date"
+                    min={today}
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium text-gray-700"
