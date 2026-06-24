@@ -133,7 +133,7 @@ export default function Dashboard() {
             ) : (
               <div className="space-y-4">
                 {contests.map((contest) => (
-                  <div key={contest._id} className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-black border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
+                  <div key={contest._id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                     <div>
                       <h3 className="text-[15px] font-bold text-gray-900">{contest.name || contest.title || "Untitled Contest"}</h3>
                       <p className="text-[13px] text-gray-500">{contest.subject || contest.type || 'Contest'} • {contest.duration}</p>
@@ -154,7 +154,7 @@ export default function Dashboard() {
           </div>
 
           {/* Notice Board */}
-          <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-black border border-gray-200 dark:border-zinc-800 rounded-xl shadow-sm p-6">
+          <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2">
                 <Megaphone className="w-5 h-5 text-orange-500" />
@@ -197,7 +197,7 @@ export default function Dashboard() {
           {/* Batch & Mentor Info */}
           <div
             onClick={() => navigate('/student/profile')}
-            className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-black border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-zinc-600 hover:scale-[1.02] transition-all cursor-pointer group"
+            className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-200 hover:scale-[1.02] transition-all cursor-pointer group"
           >
             <div className="flex items-center justify-between mb-5 border-b border-gray-100 pb-4">
               <div className="flex items-center gap-3">
