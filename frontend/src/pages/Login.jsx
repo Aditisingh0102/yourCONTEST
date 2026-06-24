@@ -10,11 +10,20 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (erpId.endsWith('@uudoon.in')) {
-      navigate('/student/dashboard');
-    } else if (erpId.endsWith('@uumail.in')) {
-      navigate('/faculty/dashboard');
-    } else {
+// Regex breakdown:
+  // ^      : Starts with
+  // \d     : Only digits (0-9)
+  // {1,10} : Between 1 and 10 characters long (change to {10} if it must be EXACTLY 10)
+  // @...   : Followed by the literal domain string
+  // $      : End of string
+  const isValidStudent = /^\d{1,11}@uudoon\.in$/.test(erpId);
+  const isValidFaculty = /^\d{1,11}@uumail\.in$/.test(erpId);
+
+  if (isValidStudent) {
+    navigate('/student/dashboard');
+  } else if (isValidFaculty) {
+    navigate('/faculty/dashboard');
+  } else {
       setError('Invalid ERP ID domain. Use @uudoon.in for students or @uumail.in for faculty.');
     }
   };
@@ -45,11 +54,12 @@ export default function Login() {
             <label className="block text-sm font-medium text-gray-700 mb-1">ERP ID</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <User className="h-5 w-5 text-gray-400" />
+                <User className="h-5 w-5 text-gray-400" /> 
               </div>
               <input 
                 type="email" 
                 required
+	  	maxLength={21}
                 className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-white/50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
                 placeholder="student@uudoon.in"
                 value={erpId}
