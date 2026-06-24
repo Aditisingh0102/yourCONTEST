@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
-import { getContests } from '../../api';
+import { getContests, getSubmissions } from '../../api';
 import { socket } from '../../socket';
 
 export default function Arena() {
@@ -9,8 +9,15 @@ export default function Arena() {
   const navigate = useNavigate();
   const [contest, setContest] = useState(null);
   const [activeProblem, setActiveProblem] = useState(null);
+  const [submittedResult, setSubmittedResult] = useState(null);
   const [answers, setAnswers] = useState({});
+  const answersRef = React.useRef(answers);
+  useEffect(() => {
+    answersRef.current = answers;
+  }, [answers]);
+  
   const [timeRemaining, setTimeRemaining] = useState('');
+  const [assessmentTimeRemaining, setAssessmentTimeRemaining] = useState('');
   const [isWaiting, setIsWaiting] = useState(true);
   const [error, setError] = useState(null);
   const [hasAgreed, setHasAgreed] = useState(false);
@@ -23,6 +30,16 @@ export default function Arena() {
     try {
       const res = await getContests();
       const current = res.data.find(c => (c._id || c.id).toString() === id);
+      
+      const subsRes = await getSubmissions();
+      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+      const hasSubmitted = subsRes.data.some(sub => (sub.contestId === id) && (sub.studentId === studentProfile.id));
+
+      if (hasSubmitted) {
+        setError("You have already submitted this assessment. You cannot retake it.");
+        return;
+      }
+
       if (current) {
         setContest(current);
         if (current.status === 'Live') {
@@ -101,8 +118,7 @@ export default function Arena() {
           if (document.fullscreenElement) {
              document.exitFullscreen().catch(() => {});
           }
-          alert("Contest auto-submitted due to rule violations (tab switching or exiting fullscreen).");
-          navigate('/student/dashboard');
+          performSubmission();
         } else {
           setShowWarning(true);
         }
@@ -146,6 +162,60 @@ export default function Arena() {
     }
   }, [contest, isWaiting, hasAgreed]);
 
+  useEffect(() => {
+    if (!contest || !hasAgreed) return;
+
+    const storageKey = `contest_${contest.id || contest._id}_startTime`;
+    let studentStartTime = localStorage.getItem(storageKey);
+
+    if (!studentStartTime) {
+      studentStartTime = Date.now().toString();
+      localStorage.setItem(storageKey, studentStartTime);
+    }
+    
+    studentStartTime = parseInt(studentStartTime, 10);
+
+    let start = 0;
+    if (contest.startTime && contest.startTime.includes(',')) {
+        const parts = contest.startTime.split(', ');
+        if(parts.length === 2) {
+           start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
+        }
+    } else if (contest.date && contest.time) {
+        start = new Date(`${contest.date}T${contest.time}:00`).getTime();
+    } else {
+        start = new Date(contest.startTime).getTime();
+    }
+
+    const durationMatch = contest.duration?.match(/(\d+)/);
+    const durationMins = durationMatch ? parseInt(durationMatch[1], 10) : 60;
+    const durationMs = durationMins * 60 * 1000;
+    
+    const absoluteEndTime = (start && !isNaN(start)) ? start + durationMs : studentStartTime + durationMs;
+    const normalEndTime = studentStartTime + durationMs;
+
+    // Student gets whichever ends first (capping late starters to the global end time)
+    const endTime = Math.min(normalEndTime, absoluteEndTime);
+
+    const interval = setInterval(() => {
+      const diff = endTime - Date.now();
+
+      if (diff <= 0) {
+        clearInterval(interval);
+        setAssessmentTimeRemaining('00:00:00');
+        
+        performSubmission();
+      } else {
+        const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((diff % (1000 * 60)) / 1000);
+        setAssessmentTimeRemaining(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [contest, hasAgreed, navigate]);
+
   const handleStartAssessment = () => {
     if (contest && contest.strictFullscreen === false) {
       setHasAgreed(true);
@@ -163,13 +233,71 @@ export default function Arena() {
     setAnswers({ ...answers, [qId]: val });
   };
 
-  const submitContest = () => {
+  const performSubmission = async () => {
     if (document.fullscreenElement) {
        document.exitFullscreen().catch(() => {});
     }
-    alert('Contest Submitted Successfully!');
-    navigate('/student/dashboard');
+
+    let score = 0;
+    const questions = contest?.questionList || [];
+    questions.forEach(q => {
+      if (q.type === 'MCQ' && answersRef.current[q.id] === q.correctOption) {
+        score += 1;
+      }
+    });
+
+    try {
+      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+      const { submitContestAnswers } = await import('../../api');
+      
+      const payload = {
+        contestId: contest?._id || contest?.id,
+        contestName: contest?.title || contest?.name,
+        studentId: studentProfile.id,
+        studentName: studentProfile.name,
+        batch: studentProfile.batch,
+        answers: answersRef.current,
+        score: score,
+        submittedAt: new Date().toISOString()
+      };
+
+      await submitContestAnswers(payload);
+    } catch(err) {
+      console.error("Failed to save submission:", err);
+    }
+
+    const storageKey = `contest_${contest?.id || contest?._id}_startTime`;
+    localStorage.removeItem(storageKey);
+    setSubmittedResult({ score, total: questions.length });
   };
+
+  const submitContest = async () => {
+    await performSubmission();
+  };
+
+  if (submittedResult) {
+    return (
+      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50 p-6">
+        <div className="bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700/50 text-center max-w-md w-full mx-4">
+          <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-10 h-10 text-green-500" />
+          </div>
+          <h2 className="text-2xl font-black text-white mb-3">Assessment Submitted</h2>
+          <p className="text-slate-400 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
+          
+          <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 mb-8">
+             <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Total Score</p>
+             <p className="text-4xl font-black text-white">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
+             <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
+          </div>
+
+          <button onClick={() => navigate('/student/dashboard')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
+             Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -292,7 +420,7 @@ export default function Arena() {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 text-orange-400 font-mono bg-gray-800 px-3 py-1.5 rounded-lg">
             <Clock className="w-4 h-4" />
-            <span>{contest.duration}</span>
+            <span>{assessmentTimeRemaining || contest.duration}</span>
           </div>
           <button onClick={submitContest} className="flex items-center gap-2 bg-green-600 hover:bg-green-500 text-white px-4 py-1.5 rounded-lg font-medium transition-colors text-sm">
             <Send className="w-4 h-4" />
@@ -328,7 +456,7 @@ export default function Arena() {
                     </span>
                     <span className="text-xs text-gray-600 mt-0.5">{prob.marks} Marks</span>
                   </div>
-                  {answers[prob.id] && <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />}
+                  {answers[prob.id] !== undefined && answers[prob.id] !== '' && <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />}
                 </button>
               ))
             )}

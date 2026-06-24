@@ -44,7 +44,7 @@ const TYPE_META = {
 /* ─── Empty forms ───────────────────────────────────────── */
 const emptyMCQ    = { question: '', options: ['', '', '', ''], correctOption: 0, marks: 1 };
 const emptyTheory = { question: '', answer: '', marks: 5 };
-const emptyCoding = { title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', sampleInput: '', sampleOutput: '', marks: 10 };
+const emptyCoding = { title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', sampleInput: '', sampleOutput: '', hiddenInput: '', hiddenOutput: '', marks: 10 };
 
 /* ─── MCQ form ──────────────────────────────────────────── */
 function MCQForm({ data, onChange, onSubmit, editing }) {
@@ -220,6 +220,26 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
           />
         </div>
       </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Hidden Input (For Evaluation)</label>
+          <textarea rows="3"
+            value={data.hiddenInput}
+            onChange={e => onChange({ ...data, hiddenInput: e.target.value })}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
+            placeholder="Hidden from student..."
+          />
+        </div>
+        <div>
+          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Hidden Output (Expected)</label>
+          <textarea rows="3"
+            value={data.hiddenOutput}
+            onChange={e => onChange({ ...data, hiddenOutput: e.target.value })}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
+            placeholder="Hidden expected output..."
+          />
+        </div>
+      </div>
       <div className="flex gap-4 items-end">
         <div className="w-32">
           <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Marks</label>
@@ -319,7 +339,7 @@ export default function ContestQuestions() {
       setEditingQId(slotQ.id);
       if (slot.type === 'mcq')    setMcqForm({ question: slotQ.question, options: slotQ.options, correctOption: slotQ.correctOption, marks: slotQ.marks });
       if (slot.type === 'theory') setTheoryForm({ question: slotQ.question, answer: slotQ.answer, marks: slotQ.marks });
-      if (slot.type === 'coding') setCodingForm({ title: slotQ.title, problemStatement: slotQ.problemStatement, inputFormat: slotQ.inputFormat, outputFormat: slotQ.outputFormat, constraints: slotQ.constraints || '', sampleInput: slotQ.sampleInput, sampleOutput: slotQ.sampleOutput, marks: slotQ.marks });
+      if (slot.type === 'coding') setCodingForm({ title: slotQ.title, problemStatement: slotQ.problemStatement, inputFormat: slotQ.inputFormat, outputFormat: slotQ.outputFormat, constraints: slotQ.constraints || '', sampleInput: slotQ.sampleInput, sampleOutput: slotQ.sampleOutput, hiddenInput: slotQ.hiddenInput || '', hiddenOutput: slotQ.hiddenOutput || '', marks: slotQ.marks });
     } else {
       setEditingQId(null);
       setMcqForm({ ...emptyMCQ });
@@ -373,7 +393,7 @@ export default function ContestQuestions() {
     setEditingQId(q.id);
     if (q.type === 'MCQ')    setMcqForm({ question: q.question, options: q.options, correctOption: q.correctOption, marks: q.marks });
     if (q.type === 'Theory') setTheoryForm({ question: q.question, answer: q.answer, marks: q.marks });
-    if (q.type === 'Coding') setCodingForm({ title: q.title, problemStatement: q.problemStatement, inputFormat: q.inputFormat, outputFormat: q.outputFormat, constraints: q.constraints || '', sampleInput: q.sampleInput, sampleOutput: q.sampleOutput, marks: q.marks });
+    if (q.type === 'Coding') setCodingForm({ title: q.title, problemStatement: q.problemStatement, inputFormat: q.inputFormat, outputFormat: q.outputFormat, constraints: q.constraints || '', sampleInput: q.sampleInput, sampleOutput: q.sampleOutput, hiddenInput: q.hiddenInput || '', hiddenOutput: q.hiddenOutput || '', marks: q.marks });
   };
 
   /* ── Free-list save (no slots) */

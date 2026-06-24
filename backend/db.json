@@ -2,6 +2,160 @@
   "notices": [],
   "contests": [
     {
+      "title": "asa",
+      "type": "Assessment",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 01:37",
+      "endTime": "TBD",
+      "duration": "3 mins",
+      "registered": 0,
+      "questions": 0,
+      "submissions": 0,
+      "customRules": "dw",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [],
+      "_id": "1782328009676",
+      "createdAt": "2026-06-24T19:06:49.676Z"
+    },
+    {
+      "title": "mock",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 00:31",
+      "endTime": "TBD",
+      "duration": "18 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": "stick",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782327654140,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        },
+        {
+          "id": 1782327667008,
+          "type": "MCQ",
+          "question": "sum 3+6",
+          "options": [
+            "9",
+            "5",
+            "4",
+            "3"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782327621057",
+      "createdAt": "2026-06-24T19:00:21.057Z"
+    },
+    {
+      "title": "amsa",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 00:04",
+      "endTime": "TBD",
+      "duration": "3 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": "sd",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782326021514,
+          "type": "MCQ",
+          "question": "rewf",
+          "options": [
+            "fd",
+            "fda",
+            "dsw",
+            "sa"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782326007122",
+      "createdAt": "2026-06-24T18:33:27.122Z"
+    },
+    {
+      "title": "qw",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 00:01",
+      "endTime": "TBD",
+      "duration": "1 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": "ja",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782325844068,
+          "type": "MCQ",
+          "question": "ndasdjda",
+          "options": [
+            "43",
+            "23",
+            "23",
+            "12"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782325824703",
+      "createdAt": "2026-06-24T18:30:24.703Z"
+    },
+    {
+      "title": "ansh",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-24, 23:58",
+      "endTime": "TBD",
+      "duration": "1 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": "ds",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782325615533,
+          "type": "MCQ",
+          "question": "ds",
+          "options": [
+            "sd",
+            "ds",
+            "sd",
+            "awe"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782325597977",
+      "createdAt": "2026-06-24T18:26:37.977Z"
+    },
+    {
       "title": "as",
       "type": "Mock Test",
       "status": "Upcoming",

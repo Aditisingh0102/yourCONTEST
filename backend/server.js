@@ -30,20 +30,21 @@ function loadDB() {
   } catch (e) {
     console.error('Failed to load db.json, starting fresh:', e.message);
   }
-  return { notices: [], contests: [] };
+  return { notices: [], contests: [], submissions: [] };
 }
 
 function saveDB() {
   try {
-    fs.writeFileSync(DB_FILE, JSON.stringify({ notices, contests }, null, 2), 'utf8');
+    fs.writeFileSync(DB_FILE, JSON.stringify({ notices, contests, submissions }, null, 2), 'utf8');
   } catch (e) {
     console.error('Failed to save db.json:', e.message);
   }
 }
 
 const db = loadDB();
-let notices = db.notices;
-let contests = db.contests;
+let notices = db.notices || [];
+let contests = db.contests || [];
+let submissions = db.submissions || [];
 
 // REST API Endpoints
 
@@ -111,6 +112,19 @@ app.delete('/api/contests/:id', (req, res) => {
   saveDB();
   io.emit('CONTEST_UPDATED', { type: 'DELETE', id: req.params.id });
   res.json({ message: 'Contest deleted' });
+});
+
+// Submissions API
+app.get('/api/submissions', (req, res) => {
+  res.json(submissions);
+});
+
+app.post('/api/submissions', (req, res) => {
+  const newSubmission = { ...req.body, _id: Date.now().toString() };
+  submissions = [newSubmission, ...submissions];
+  saveDB();
+  io.emit('SUBMISSION_ADDED', newSubmission);
+  res.status(201).json(newSubmission);
 });
 
 // Socket.IO Connection
