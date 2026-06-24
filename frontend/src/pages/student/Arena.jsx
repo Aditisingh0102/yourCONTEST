@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle } from 'lucide-react';
+import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
 import { getContests } from '../../api';
 import { socket } from '../../socket';
 
@@ -222,11 +222,14 @@ export default function Arena() {
                 >
                   <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-200">
-                      Q{idx + 1}. {prob.type === 'MCQ' ? 'Multiple Choice' : 'Coding'}
+                      Q{idx + 1}. {prob.type === 'MCQ' ? 'Multiple Choice' : prob.type === 'Theory' ? 'Theory Q&A' : 'Coding'}
                     </span>
-                    <span className="text-xs text-gray-500 mt-0.5">{prob.marks} Marks</span>
+                    <span className="text-xs text-gray-500 mt-0.5 truncate max-w-[180px]">
+                      {prob.type === 'Coding' ? prob.title : prob.question?.slice(0, 40)}{prob.type !== 'Coding' && prob.question?.length > 40 ? '…' : ''}
+                    </span>
+                    <span className="text-xs text-gray-600 mt-0.5">{prob.marks} Marks</span>
                   </div>
-                  {answers[prob.id] && <CheckCircle className="w-4 h-4 text-green-500" />}
+                  {answers[prob.id] && <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />}
                 </button>
               ))
             )}
@@ -251,6 +254,7 @@ export default function Arena() {
                   {activeProblem.options.map((opt, idx) => (
                     <label 
                       key={idx} 
+                      onClick={() => handleAnswerChange(activeProblem.id, idx)}
                       className={`block p-4 rounded-xl border cursor-pointer transition-all ${
                         answers[activeProblem.id] === idx 
                           ? 'bg-blue-900/30 border-blue-500/50' 
@@ -267,6 +271,32 @@ export default function Arena() {
                       </div>
                     </label>
                   ))}
+                </div>
+              </div>
+            </div>
+          ) : activeProblem.type === 'Theory' ? (
+            <div className="flex-1 bg-[#0f172a] p-8 overflow-y-auto">
+              <div className="max-w-3xl mx-auto">
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1.5">
+                    <BookOpen className="w-3 h-3" /> Theory
+                  </span>
+                  <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
+                </div>
+
+                <h2 className="text-xl font-medium text-white mb-8 leading-relaxed">
+                  {activeProblem.question}
+                </h2>
+
+                <div className="space-y-3">
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Your Answer</label>
+                  <textarea
+                    className="w-full min-h-[240px] bg-[#1e293b] border border-gray-700 focus:border-amber-500 rounded-xl p-4 text-gray-200 text-sm resize-y outline-none transition-colors placeholder-gray-600 leading-relaxed"
+                    placeholder="Write your answer here..."
+                    value={answers[activeProblem.id] || ''}
+                    onChange={(e) => handleAnswerChange(activeProblem.id, e.target.value)}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">Write a clear and complete answer. Your response will be evaluated by the faculty.</p>
                 </div>
               </div>
             </div>

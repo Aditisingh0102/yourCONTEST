@@ -24,9 +24,11 @@ export default function Login() {
       <div className="mb-8 text-center">
         <div className="flex items-center justify-center gap-3 mb-2">
           <Trophy className="w-10 h-10 text-orange-500" />
-          <h1 className="text-4xl font-bold text-white tracking-tight">YourContest</h1>
+          <h1 className="text-4xl font-bold tracking-tight">
+            <span className="text-orange-500">v</span><span className="text-white">Decided</span>
+          </h1>
         </div>
-        <p className="text-blue-200 text-lg">Compete. Learn. Excel.</p>
+        <p className="text-blue-200 text-lg">Built to challenge you. Designed to grow you.</p>
       </div>
 
       <div className="w-full max-w-md p-8 glass-panel">

@@ -3,10 +3,12 @@ import { Outlet } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { faculty } from '../data/mockData';
+import { useDarkMode } from '../hooks/useDarkMode';
 
 export default function FacultyLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isDark, toggleDark] = useDarkMode();
 
   const [profileData, setProfileData] = useState(() => {
     const saved = localStorage.getItem('faculty_profile');
@@ -37,7 +39,7 @@ export default function FacultyLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
-      <Navbar user={profileData} onToggleSidebar={toggleSidebar} isCollapsed={isCollapsed} />
+      <Navbar user={profileData} onToggleSidebar={toggleSidebar} isCollapsed={isCollapsed} isDark={isDark} onToggleDark={toggleDark} />
       <div className="flex flex-1 overflow-hidden relative">
         <Sidebar 
           role="faculty" 

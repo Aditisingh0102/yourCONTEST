@@ -8,7 +8,7 @@ export const user = {
 export const faculty = {
   name: 'Arun Kudiyal',
   avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Arun',
-  role: 'Senior Faculty & Corporate Trainer',
+  role: 'Senior Faculty & Trainer',
   erp: 'UU9087@uumail.in',
   university: 'Uttaranchal University, Dehradun'
 };

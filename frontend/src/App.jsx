@@ -23,6 +23,7 @@ import ContestForm from './pages/faculty/ContestForm';
 import FacultyBatches from './pages/faculty/Batches';
 import StudentRecords from './pages/faculty/StudentRecords';
 import FacultyProfile from './pages/faculty/Profile';
+import QuestionBank from './pages/faculty/QuestionBank';
 
 // Placeholders for other routes
 const Placeholder = ({ title }) => (
@@ -67,7 +68,9 @@ export default function App() {
           <Route path="manage-contests/:id/questions" element={<ContestQuestions />} />
           <Route path="batches" element={<FacultyBatches />} />
           <Route path="students" element={<StudentRecords />} />
+          <Route path="student-records" element={<StudentRecords />} />
           <Route path="results" element={<Placeholder title="Results & Analytics" />} />
+          <Route path="question-bank" element={<QuestionBank />} />
           <Route path="profile" element={<FacultyProfile />} />
         </Route>
       </Routes>

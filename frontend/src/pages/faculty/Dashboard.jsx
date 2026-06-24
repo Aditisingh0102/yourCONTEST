@@ -72,16 +72,14 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 rounded-2xl p-8 text-white shadow-md flex items-center gap-6 relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md flex items-center gap-6 relative overflow-hidden border border-transparent dark:border-blue-900/30 text-white">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 dark:bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+        <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         
-        <img src={profileData.avatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white/20 shadow-sm relative z-10 object-cover bg-white" />
+        <img src={profileData.avatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white/20 dark:border-blue-500/30 shadow-sm relative z-10 object-cover bg-white dark:bg-[#0b1120]" />
         <div className="relative z-10">
-          <div className="inline-block px-3 py-1 bg-white/20 rounded-full text-[10px] font-bold tracking-wider mb-2 backdrop-blur-sm border border-white/10">
-            FACULTY CONTEST PORTAL
-          </div>
-          <h1 className="text-3xl font-bold mb-1">Welcome, {profileData.name}</h1>
-          <p className="text-blue-100 text-sm">{faculty.role} • {faculty.university}</p>
+          <h1 className="text-3xl font-bold mb-1 text-white">{profileData.name}</h1>
+          <p className="text-blue-100 dark:text-blue-200/60 text-sm">{faculty.role} • {faculty.university}</p>
         </div>
       </div>
 
@@ -93,14 +91,14 @@ export default function Dashboard() {
           { label: 'Active Contests', value: managedContests.filter(c => c.status === 'Live').length, icon: Trophy, color: 'text-purple-500', bg: 'bg-purple-50', path: '/faculty/manage-contests' },
           { label: 'Upcoming Contests', value: managedContests.filter(c => c.status !== 'Live').length, icon: Calendar, color: 'text-orange-500', bg: 'bg-orange-50', path: '/faculty/manage-contests' },
         ].map((stat, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             onClick={() => {
               if (stat.label === 'Batches Allocated') setShowBatches(true);
               else if (stat.label === 'Total Students') setShowStudents(true);
               else navigate(stat.path);
             }}
-            className="bg-white rounded-xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm hover:shadow-md hover:border-blue-200 hover:-translate-y-0.5 transition-all cursor-pointer group"
+            className="bg-white rounded-xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-zinc-600 hover:-translate-y-0.5 transition-all cursor-pointer group"
           >
             <div className={`p-3 rounded-xl border border-gray-100 ${stat.color} ${stat.bg} group-hover:scale-110 transition-transform`}>
               <stat.icon className="w-6 h-6" />
@@ -114,151 +112,150 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-         {/* Main Content Area */}
-         <div className="lg:col-span-2 space-y-6">
-            
-            {/* Active & Upcoming Contests */}
-            <div>
-               <div className="flex justify-between items-center mb-3">
-                 <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2"><Trophy className="w-4 h-4 text-blue-600" /> Managed Contests</h2>
-                 <button onClick={() => navigate('/faculty/manage-contests')} className="text-[13px] font-bold text-blue-600 hover:text-blue-700">View All</button>
-               </div>
-               <div className="grid grid-cols-2 gap-4">
-                 {managedContests.length === 0 ? (
-                   <div className="col-span-2 py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                     <p className="text-sm text-gray-500 font-medium">No contests created yet.</p>
-                     <button onClick={() => navigate('/faculty/create-contest')} className="mt-3 text-[13px] font-bold text-blue-600 hover:text-blue-700">Create your first contest</button>
-                   </div>
-                 ) : (
-                   managedContests.slice(0, 4).map((contest) => (
-                     <div 
-                       key={contest.id} 
-                       onClick={() => navigate('/faculty/manage-contests')}
-                       className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-100 transition-all cursor-pointer relative overflow-hidden group"
-                     >
-                        <div className={`absolute top-4 right-4 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider border ${
-                          contest.status === 'Live' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-600 border-gray-200'
-                        }`}>
-                          {contest.status === 'Live' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse mr-1"></span>}
-                          {contest.status === 'Live' ? 'Live Now' : contest.date || 'Upcoming'}
-                        </div>
-                        
-                        <div className={`p-2 w-max rounded-lg mb-3 ${contest.type === 'Assessment' ? 'bg-purple-50 text-purple-600' : 'bg-orange-50 text-orange-500'}`}>
-                          <Trophy className="w-4 h-4" />
-                        </div>
-                        <h3 className="text-[14px] font-bold text-gray-800 leading-tight mb-1 group-hover:text-blue-600 transition-colors truncate" title={contest.title}>{contest.title}</h3>
-                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">{contest.type}</p>
-                        
-                        <div className="text-[11px] font-bold text-gray-500 flex justify-between items-center border-t border-gray-50 pt-3">
-                          <span className="flex items-center gap-1.5"><CheckSquare className="w-3.5 h-3.5 text-gray-400" /> {contest.questions} Questions</span>
-                          <span className="text-blue-600 hover:underline">Manage</span>
-                        </div>
-                     </div>
-                   ))
-                 )}
-               </div>
+        {/* Main Content Area */}
+        <div className="lg:col-span-2 space-y-6">
+
+          {/* Active & Upcoming Contests */}
+          <div>
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2"><Trophy className="w-4 h-4 text-blue-600" /> Managed Contests</h2>
+              <button onClick={() => navigate('/faculty/manage-contests')} className="text-[13px] font-bold text-blue-600 hover:text-blue-700">View All</button>
             </div>
-
-
-
-         </div>
-
-         {/* Sidebar Area */}
-         <div className="space-y-6">
-            
-            {/* Quick Actions */}
-            <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-               <h2 className="text-[15px] font-bold text-gray-800 mb-4">Quick Actions</h2>
-               <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', path: '/faculty/create-contest' },
-                    { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', path: '/faculty/course-hub' },
-                    { name: 'Submissions', icon: FileCheck, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-100', path: '/faculty/manage-contests' },
-                    { name: 'Analytics', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-100', path: '/faculty/student-records' },
-                  ].map((action, i) => (
-                    <button 
-                      key={i} 
-                      onClick={() => navigate(action.path)}
-                      className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all gap-2 ${action.bg} ${action.border} hover:shadow-md hover:-translate-y-0.5`}
-                    >
-                        <action.icon className={`w-5 h-5 ${action.color}`} />
-                        <span className={`text-[11px] font-bold ${action.color}`}>{action.name}</span>
-                    </button>
-                  ))}
-               </div>
-            </div>
-
-            {/* Quick Notes */}
-             <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex flex-col h-[350px]">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2"><CheckSquare className="w-4 h-4 text-green-600" /> Quick Notes</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {managedContests.length === 0 ? (
+                <div className="col-span-2 py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                  <p className="text-sm text-gray-500 font-medium">No contests created yet.</p>
+                  <button onClick={() => navigate('/faculty/create-contest')} className="mt-3 text-[13px] font-bold text-blue-600 hover:text-blue-700">Create your first contest</button>
                 </div>
-                
-                <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1 scrollbar-thin scrollbar-thumb-gray-200">
-                  {notes.length === 0 ? (
-                    <p className="text-sm text-gray-400 text-center py-4">No notes added yet.</p>
-                  ) : (
-                    notes.map(note => (
-                      <div key={note.id} className="group bg-gray-50 border border-gray-100 rounded-lg p-3 relative hover:border-gray-200 transition-colors">
-                        {editingNoteId === note.id ? (
-                          <div className="flex gap-2">
-                            <input 
-                              type="text" 
-                              value={editingNoteText}
-                              onChange={(e) => setEditingNoteText(e.target.value)}
-                              className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-green-500"
-                              autoFocus
-                            />
-                            <button onClick={() => saveEdit(note.id)} className="text-green-600 hover:text-green-700">
-                              <Save className="w-4 h-4" />
-                            </button>
-                            <button onClick={() => setEditingNoteId(null)} className="text-gray-400 hover:text-gray-600">
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <div className="flex justify-between items-start gap-2">
-                            <p className="text-sm text-gray-700 leading-snug break-words flex-1">{note.text}</p>
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0">
-                              <button 
-                                onClick={() => { setEditingNoteId(note.id); setEditingNoteText(note.text); }}
-                                className="p-1 text-gray-400 hover:text-blue-600 rounded"
-                              >
-                                <Edit3 className="w-3.5 h-3.5" />
-                              </button>
-                              <button 
-                                onClick={() => deleteNote(note.id)}
-                                className="p-1 text-gray-400 hover:text-red-600 rounded"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  )}
-                </div>
-
-                <form onSubmit={addNote} className="relative mt-auto">
-                  <input 
-                    type="text" 
-                    value={newNote}
-                    onChange={(e) => setNewNote(e.target.value)}
-                    placeholder="Type a new note..." 
-                    className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-3 pr-10 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-green-500 transition-colors"
-                  />
-                  <button 
-                    type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md transition-colors"
-                    disabled={!newNote.trim()}
+              ) : (
+                managedContests.slice(0, 4).map((contest) => (
+                  <div
+                    key={contest.id}
+                    onClick={() => navigate('/faculty/manage-contests')}
+                    className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-100 dark:hover:border-zinc-600 transition-all cursor-pointer relative overflow-hidden group"
                   >
-                    <Plus className="w-4 h-4" />
-                  </button>
-                </form>
-             </div>
+                    <div className={`absolute top-4 right-4 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider border ${contest.status === 'Live' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-600 border-gray-200'
+                      }`}>
+                      {contest.status === 'Live' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse mr-1"></span>}
+                      {contest.status === 'Live' ? 'Live Now' : contest.date || 'Upcoming'}
+                    </div>
 
-         </div>
+                    <div className={`p-2 w-max rounded-lg mb-3 ${contest.type === 'Assessment' ? 'bg-purple-50 text-purple-600' : 'bg-orange-50 text-orange-500'}`}>
+                      <Trophy className="w-4 h-4" />
+                    </div>
+                    <h3 className="text-[14px] font-bold text-gray-800 leading-tight mb-1 group-hover:text-blue-600 transition-colors truncate" title={contest.title}>{contest.title}</h3>
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">{contest.type}</p>
+
+                    <div className="text-[11px] font-bold text-gray-500 flex justify-between items-center border-t border-gray-50 pt-3">
+                      <span className="flex items-center gap-1.5"><CheckSquare className="w-3.5 h-3.5 text-gray-400" /> {contest.questions} Questions</span>
+                      <span className="text-blue-600 hover:underline">Manage</span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+
+
+        </div>
+
+        {/* Sidebar Area */}
+        <div className="space-y-6">
+
+          {/* Quick Actions */}
+          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+            <h2 className="text-[15px] font-bold text-gray-800 mb-4">Quick Actions</h2>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', path: '/faculty/create-contest' },
+                { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', path: '/faculty/question-bank' },
+                { name: 'Submissions', icon: FileCheck, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-100', path: '/faculty/manage-contests' },
+                { name: 'Analytics', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-100', path: '/faculty/student-records' },
+              ].map((action, i) => (
+                <button
+                  key={i}
+                  onClick={() => navigate(action.path)}
+                  className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all gap-2 ${action.bg} ${action.border} hover:shadow-md hover:-translate-y-0.5`}
+                >
+                  <action.icon className={`w-5 h-5 ${action.color}`} />
+                  <span className={`text-[11px] font-bold ${action.color}`}>{action.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Notes */}
+          <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex flex-col h-[350px]">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2"><CheckSquare className="w-4 h-4 text-green-600" /> Quick Notes</h2>
+            </div>
+
+            <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1 scrollbar-thin scrollbar-thumb-gray-200">
+              {notes.length === 0 ? (
+                <p className="text-sm text-gray-400 text-center py-4">No notes added yet.</p>
+              ) : (
+                notes.map(note => (
+                  <div key={note.id} className="group bg-gray-50 border border-gray-100 rounded-lg p-3 relative hover:border-gray-200 transition-colors">
+                    {editingNoteId === note.id ? (
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={editingNoteText}
+                          onChange={(e) => setEditingNoteText(e.target.value)}
+                          className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-green-500"
+                          autoFocus
+                        />
+                        <button onClick={() => saveEdit(note.id)} className="text-green-600 hover:text-green-700">
+                          <Save className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => setEditingNoteId(null)} className="text-gray-400 hover:text-gray-600">
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex justify-between items-start gap-2">
+                        <p className="text-sm text-gray-700 leading-snug break-words flex-1">{note.text}</p>
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={() => { setEditingNoteId(note.id); setEditingNoteText(note.text); }}
+                            className="p-1 text-gray-400 hover:text-blue-600 rounded"
+                          >
+                            <Edit3 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => deleteNote(note.id)}
+                            className="p-1 text-gray-400 hover:text-red-600 rounded"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+
+            <form onSubmit={addNote} className="relative mt-auto">
+              <input
+                type="text"
+                value={newNote}
+                onChange={(e) => setNewNote(e.target.value)}
+                placeholder="Type a new note..."
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-3 pr-10 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-green-500 transition-colors"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md transition-colors"
+                disabled={!newNote.trim()}
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+
+        </div>
       </div>
 
       {/* Batches Modal */}
@@ -270,7 +267,7 @@ export default function Dashboard() {
                 <h3 className="text-xl font-black text-gray-900">Allocated Batches</h3>
                 <p className="text-sm text-gray-500 font-medium mt-1">Batches currently assigned to you</p>
               </div>
-              <button 
+              <button
                 onClick={() => setShowBatches(false)}
                 className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
               >
@@ -302,7 +299,7 @@ export default function Dashboard() {
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-100 flex justify-end">
-              <button 
+              <button
                 onClick={() => setShowBatches(false)}
                 className="px-5 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
               >
@@ -322,7 +319,7 @@ export default function Dashboard() {
                 <h3 className="text-xl font-black text-gray-900">Total Students Overview</h3>
                 <p className="text-sm text-gray-500 font-medium mt-1">Breakdown of students across your allocated batches</p>
               </div>
-              <button 
+              <button
                 onClick={() => setShowStudents(false)}
                 className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
               >
@@ -361,13 +358,13 @@ export default function Dashboard() {
                 </span>
               </div>
               <div className="flex gap-3">
-                <button 
+                <button
                   onClick={() => setShowStudents(false)}
                   className="px-4 py-2 text-gray-500 hover:bg-gray-100 text-sm font-bold rounded-xl transition-colors"
                 >
                   Close
                 </button>
-                <button 
+                <button
                   onClick={() => {
                     setShowStudents(false);
                     navigate('/faculty/student-records');

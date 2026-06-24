@@ -112,7 +112,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
         {/* Mobile Header (Only visible on mobile overlay drawer) */}
         <div className="flex items-center justify-between px-6 pb-4 mb-4 border-b border-gray-100 lg:hidden">
           <div className="flex items-center gap-3">
-            <div className="bg-blue-600 text-white p-1.5 rounded-lg logo-icon">
+            <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-lg logo-icon shadow-sm border border-transparent dark:border-gray-600">
               <BookOpen className="w-5 h-5" />
             </div>
             <span className="text-[15px] font-bold text-gray-800 leading-tight">University Platform</span>
@@ -139,8 +139,8 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                 className={({ isActive }) =>
                   `flex items-center gap-3 py-2.5 rounded-lg transition-all duration-200 group relative ${
                     isActive 
-                      ? 'bg-blue-50 text-blue-600 font-semibold shadow-sm' 
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-blue-50 text-blue-600 dark:!bg-none dark:!bg-gradient-to-r dark:!from-zinc-800 dark:!to-zinc-900 dark:!text-white font-semibold shadow-sm border border-transparent dark:!border-zinc-700' 
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-zinc-800/50 hover:text-gray-900 dark:hover:text-white'
                   } ${isCollapsed ? 'justify-center px-2' : 'px-4'}`
                 }
               >
@@ -199,7 +199,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                   <h4 className="text-sm font-bold text-gray-800 truncate leading-snug">{profileData.name}</h4>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                      role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-purple-50 text-purple-600 border border-purple-100'
+                      role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700' : 'bg-purple-50 text-purple-600 border border-purple-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700'
                     }`}>
                       {role}
                     </span>

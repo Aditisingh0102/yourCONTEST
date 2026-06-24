@@ -1,16 +1,215 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Trophy, Save } from 'lucide-react';
+import { 
+  ArrowLeft, Trophy, Save, CheckCircle2, Code, BookOpen, 
+  Plus, Minus, ChevronRight, X, Sparkles, ListChecks
+} from 'lucide-react';
 import { getContests, createContest, updateContest } from '../../api';
 
+/* ────────────────────────────────────────────────────────
+   Question-type config — shown after contest is saved
+──────────────────────────────────────────────────────── */
+const TYPE_CONFIG = [
+  {
+    key: 'mcq',
+    label: 'MCQ',
+    sublabel: 'Multiple Choice',
+    icon: CheckCircle2,
+    color: 'blue',
+    gradient: 'from-blue-500 to-blue-600',
+    light: 'bg-blue-50 border-blue-200 text-blue-700',
+    ring: 'ring-blue-400',
+    description: 'Objective questions with 4 options',
+  },
+  {
+    key: 'theory',
+    label: 'Theory Q&A',
+    sublabel: 'Definition / Explanation',
+    icon: BookOpen,
+    color: 'amber',
+    gradient: 'from-amber-500 to-orange-500',
+    light: 'bg-amber-50 border-amber-200 text-amber-700',
+    ring: 'ring-amber-400',
+    description: 'Written answer / definition questions',
+  },
+  {
+    key: 'coding',
+    label: 'Coding',
+    sublabel: 'Programming Problems',
+    icon: Code,
+    color: 'purple',
+    gradient: 'from-violet-500 to-purple-600',
+    light: 'bg-purple-50 border-purple-200 text-purple-700',
+    ring: 'ring-purple-400',
+    description: 'Code submission with test cases',
+  },
+];
+
+function QuestionTypeModal({ contestId, onClose }) {
+  const navigate = useNavigate();
+  const [selected, setSelected] = useState({ mcq: false, theory: false, coding: false });
+  const [counts, setCounts]     = useState({ mcq: 5, theory: 3, coding: 2 });
+
+  const toggleType = (key) =>
+    setSelected(prev => ({ ...prev, [key]: !prev[key] }));
+
+  const changeCount = (key, delta) =>
+    setCounts(prev => ({ ...prev, [key]: Math.max(1, (prev[key] || 1) + delta) }));
+
+  const anySelected = Object.values(selected).some(Boolean);
+
+  const handleConfirm = () => {
+    const params = new URLSearchParams();
+    TYPE_CONFIG.forEach(({ key }) => {
+      if (selected[key]) params.set(key, counts[key]);
+    });
+    navigate(`/faculty/manage-contests/${contestId}/questions?${params.toString()}`);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+         style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)' }}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-modalIn">
+
+        {/* Header */}
+        <div className="px-7 pt-7 pb-5 border-b border-gray-100">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+                <ListChecks className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h2 className="text-lg font-black text-gray-900">Configure Questions</h2>
+                <p className="text-[13px] text-gray-500 mt-0.5">Choose question types & how many of each</p>
+              </div>
+            </div>
+            <button onClick={onClose}
+              className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* Type selector cards */}
+        <div className="px-7 py-6 space-y-3">
+          {TYPE_CONFIG.map(({ key, label, sublabel, icon: Icon, gradient, light, ring, description }) => {
+            const isOn = selected[key];
+            return (
+              <div key={key}
+                onClick={() => toggleType(key)}
+                className={`relative flex items-center gap-4 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200
+                  ${isOn ? `${light} border-current ring-2 ${ring} ring-offset-1` : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50/60'}`}>
+
+                {/* Icon */}
+                <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm
+                  bg-gradient-to-br ${gradient}`}>
+                  <Icon className="w-5 h-5 text-white" />
+                </div>
+
+                {/* Labels */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-[14px] text-gray-900">{label}</span>
+                    <span className="text-[11px] text-gray-500 font-medium">— {sublabel}</span>
+                  </div>
+                  <p className="text-[12px] text-gray-400 mt-0.5">{description}</p>
+                </div>
+
+                {/* Checkbox visual */}
+                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center flex-shrink-0 transition-all
+                  ${isOn ? `bg-gradient-to-br ${gradient} border-transparent` : 'border-gray-300'}`}>
+                  {isOn && <CheckCircle2 className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Count steppers — only shown for selected types */}
+        {anySelected && (
+          <div className="px-7 pb-6">
+            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">
+              How many questions?
+            </p>
+            <div className="space-y-2">
+              {TYPE_CONFIG.filter(({ key }) => selected[key]).map(({ key, label, icon: Icon, gradient }) => (
+                <div key={key} className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br ${gradient}`}>
+                      <Icon className="w-3.5 h-3.5 text-white" />
+                    </div>
+                    <span className="text-[13px] font-bold text-gray-800">{label}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button onClick={(e) => { e.stopPropagation(); changeCount(key, -1); }}
+                      className="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors">
+                      <Minus className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="w-8 text-center text-[15px] font-black text-gray-900">{counts[key]}</span>
+                    <button onClick={(e) => { e.stopPropagation(); changeCount(key, 1); }}
+                      className="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors">
+                      <Plus className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Total badge */}
+            <div className="mt-4 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl px-4 py-3 border border-blue-100">
+              <span className="text-[13px] font-bold text-blue-800 flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5" /> Total Questions
+              </span>
+              <span className="text-[18px] font-black text-blue-700">
+                {TYPE_CONFIG.filter(({ key }) => selected[key]).reduce((sum, { key }) => sum + counts[key], 0)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Footer */}
+        <div className="px-7 pb-7 pt-1 flex gap-3">
+          <button onClick={onClose}
+            className="flex-1 py-2.5 bg-gray-100 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-200 transition-colors">
+            Back
+          </button>
+          <button
+            onClick={handleConfirm}
+            disabled={!anySelected}
+            className={`flex-1 py-2.5 font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all
+              ${anySelected
+                ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-200'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
+            Start Adding Questions <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes modalIn {
+          from { opacity: 0; transform: scale(0.94) translateY(12px); }
+          to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-modalIn { animation: modalIn 0.22s ease-out both; }
+      `}</style>
+    </div>
+  );
+}
+
+/* ────────────────────────────────────────────────────────
+   Main ContestForm
+──────────────────────────────────────────────────────── */
 export default function ContestForm() {
   const navigate = useNavigate();
-  const { id } = useParams(); // if present, we are in edit mode
-  
-  const [formData, setFormData] = useState({ 
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: '' 
+  const { id } = useParams();
+
+  const [formData, setFormData] = useState({
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: ''
   });
-  const [dbContestId, setDbContestId] = useState(null);
+  const [dbContestId, setDbContestId]   = useState(null);
+  const [showTypeModal, setShowTypeModal] = useState(false);
+  const [savedContestId, setSavedContestId] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -34,12 +233,11 @@ export default function ContestForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setSaving(true);
+
     try {
-      let contestIdToRedirect = id;
-      
       if (id && dbContestId) {
-        // Edit Mode
+        // Edit mode — just save, then open modal
         await updateContest(dbContestId, {
           title: formData.title,
           type: formData.type,
@@ -47,14 +245,15 @@ export default function ContestForm() {
           duration: `${formData.duration} mins`,
           customRules: formData.customRules || ''
         });
+        setSavedContestId(dbContestId);
       } else {
-        // Create Mode
+        // Create mode — save new contest, then open modal
         const newContest = {
           title: formData.title,
           type: formData.type,
-          status: 'Upcoming', 
+          status: 'Upcoming',
           startTime: `${formData.startDate}, ${formData.startTime}`,
-          endTime: 'TBD', 
+          endTime: 'TBD',
           duration: `${formData.duration} mins`,
           registered: 0,
           questions: 0,
@@ -63,21 +262,24 @@ export default function ContestForm() {
           questionList: []
         };
         const res = await createContest(newContest);
-        contestIdToRedirect = res.data._id || res.data.id;
+        setSavedContestId(res.data._id || res.data.id);
       }
-      
-      // Redirect immediately to questions page
-      navigate(`/faculty/manage-contests/${contestIdToRedirect}/questions`);
-    } catch(err) {
+      setShowTypeModal(true);
+    } catch (err) {
       console.error(err);
-      alert("Error saving contest");
+      alert('Error saving contest');
+    } finally {
+      setSaving(false);
     }
   };
 
   return (
     <div className="max-w-[800px] mx-auto py-6">
+
+      {/* Page Header */}
       <div className="flex items-center gap-4 border-b border-gray-100 pb-6 mb-6">
-        <button onClick={() => navigate('/faculty/manage-contests')} className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+        <button onClick={() => navigate('/faculty/manage-contests')}
+          className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
@@ -86,7 +288,9 @@ export default function ContestForm() {
             {id ? 'Edit Contest Details' : 'Configure New Contest'}
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            {id ? 'Update the details and rules for this contest.' : 'Set up the basic details and rules before adding questions.'}
+            {id
+              ? 'Update the details and rules for this contest.'
+              : 'Set up the basic details and rules before adding questions.'}
           </p>
         </div>
       </div>
@@ -94,20 +298,20 @@ export default function ContestForm() {
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <form onSubmit={handleSubmit} className="p-8">
           <div className="space-y-8">
-            
-            {/* Basic Details */}
+
+            {/* ① Basic Details */}
             <div>
               <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">1</span> 
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">1</span>
                 Basic Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pl-8">
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Contest Name</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={formData.title}
-                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g. End Semester Exam: Data Structures"
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
                     required
@@ -115,12 +319,12 @@ export default function ContestForm() {
                 </div>
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Contest Type</label>
-                  <select 
+                  <select
                     value={formData.type}
-                    onChange={(e) => setFormData({...formData, type: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
                   >
-                    <option value="Assessment">Assessment (Mid/End Term)</option>
+                    <option value="Assessment">Assessment</option>
                     <option value="Mock Test">Mock Test</option>
                     <option value="Coding Challenge">Weekly Coding Challenge</option>
                     <option value="Lab Exam">Lab Exam</option>
@@ -129,39 +333,39 @@ export default function ContestForm() {
               </div>
             </div>
 
-            {/* Scheduling */}
+            {/* ② Scheduling */}
             <div className="pt-6 border-t border-gray-100">
               <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">2</span> 
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">2</span>
                 Scheduling
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pl-8">
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Start Date</label>
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     value={formData.startDate}
-                    onChange={(e) => setFormData({...formData, startDate: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium text-gray-700"
                     required
                   />
                 </div>
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Start Time</label>
-                  <input 
-                    type="time" 
+                  <input
+                    type="time"
                     value={formData.startTime}
-                    onChange={(e) => setFormData({...formData, startTime: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium text-gray-700"
                     required
                   />
                 </div>
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Duration (Mins)</label>
-                  <input 
-                    type="number" 
+                  <input
+                    type="number"
                     value={formData.duration}
-                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                     placeholder="e.g. 120"
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
                     required
@@ -170,10 +374,10 @@ export default function ContestForm() {
               </div>
             </div>
 
-            {/* Rules & Proctoring */}
+            {/* ③ Rules & Proctoring */}
             <div className="pt-6 border-t border-gray-100">
               <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">3</span> 
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">3</span>
                 Rules & Proctoring
               </h3>
               <div className="space-y-5 pl-8">
@@ -189,37 +393,45 @@ export default function ContestForm() {
                 </div>
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Custom Instructions for Students (Optional)</label>
-                  <textarea 
+                  <textarea
                     rows="3"
                     value={formData.customRules}
-                    onChange={(e) => setFormData({...formData, customRules: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, customRules: e.target.value })}
                     placeholder="e.g. You are allowed to use rough paper. Calculators are strictly prohibited."
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium resize-none"
-                  ></textarea>
+                  />
                 </div>
               </div>
             </div>
 
           </div>
 
+          {/* Footer actions */}
           <div className="pt-8 mt-8 flex gap-4 border-t border-gray-100">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => navigate('/faculty/manage-contests')}
-              className="px-8 py-3 bg-gray-100 text-gray-700 font-bold text-[15px] rounded-xl hover:bg-gray-200 transition-colors"
-            >
+              className="px-8 py-3 bg-gray-100 text-gray-700 font-bold text-[15px] rounded-xl hover:bg-gray-200 transition-colors">
               Cancel
             </button>
-            <button 
-              type="submit" 
-              className="flex-1 py-3 bg-blue-600 text-white font-bold text-[15px] rounded-xl hover:bg-blue-700 shadow-sm shadow-blue-200 transition-colors flex items-center justify-center gap-2"
-            >
+            <button
+              type="submit"
+              disabled={saving}
+              className="flex-1 py-3 bg-blue-600 text-white font-bold text-[15px] rounded-xl hover:bg-blue-700 shadow-sm shadow-blue-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
               <Save className="w-5 h-5" />
-              Save & Proceed to Questions 
+              {saving ? 'Saving...' : 'Save & Proceed to Questions'}
             </button>
           </div>
         </form>
       </div>
+
+      {/* Question Type Modal */}
+      {showTypeModal && savedContestId && (
+        <QuestionTypeModal
+          contestId={savedContestId}
+          onClose={() => setShowTypeModal(false)}
+        />
+      )}
     </div>
   );
 }

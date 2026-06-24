@@ -39,7 +39,7 @@ export default function Dashboard() {
   const fetchNotices = async () => {
     try {
       const res = await getNotices();
-      setNotices(res.data.slice(0, 3)); 
+      setNotices(res.data.slice(0, 3));
     } catch (error) {
       console.error("Failed to fetch notices", error);
     }
@@ -57,7 +57,7 @@ export default function Dashboard() {
   const [studentName, setStudentName] = useState(() => {
     const saved = localStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved).name;
-    return 'Aditi';
+    return 'Aditi Singh';
   });
 
   useEffect(() => {
@@ -72,13 +72,15 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 rounded-2xl p-8 text-white shadow-md">
+      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md border border-transparent dark:border-blue-900/30 text-white relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 dark:bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+        <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 rounded-full text-[11px] font-bold tracking-wider mb-3 backdrop-blur-sm shadow-sm border border-white/10 uppercase">
-            <Rocket className="w-3.5 h-3.5" /> BATCH: ALPHA 1
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 dark:bg-blue-500/10 rounded-full text-[11px] font-bold tracking-wider mb-3 shadow-sm border border-white/10 dark:border-blue-400/20 uppercase text-white dark:text-blue-200">
+            <Rocket className="w-3.5 h-3.5 text-white dark:text-blue-300" /> BATCH: ALPHA 1
           </div>
-          <h1 className="text-3xl font-bold mb-1">Welcome back, {studentName}!</h1>
-          <p className="text-blue-100 text-sm mb-4">UIT • B.Tech CSE • 4th Year Student</p>
+          <h1 className="text-3xl font-bold mb-1 text-white">{studentName}</h1>
+          <p className="text-blue-100 dark:text-blue-200/60 text-sm mb-4">UIT • B.Tech CSE • 4th Year Student</p>
 
         </div>
       </div>
@@ -91,13 +93,13 @@ export default function Dashboard() {
           { label: 'Assessments Given', value: 0, icon: Users, color: 'text-purple-500' },
           { label: 'Avg. Score', value: '0%', icon: CheckCircle, color: 'text-green-500' },
         ].map((stat, i) => (
-          <div 
-             key={i} 
-             onClick={() => {
-                if (stat.label === 'Avg. Score') navigate('/student/profile');
-                else navigate('/student/contests');
-             }}
-             className="bg-white rounded-xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm hover:shadow-md hover:border-blue-200 hover:-translate-y-1 transition-all cursor-pointer group"
+          <div
+            key={i}
+            onClick={() => {
+              if (stat.label === 'Avg. Score') navigate('/student/profile');
+              else navigate('/student/contests');
+            }}
+            className="bg-white rounded-xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-zinc-600 hover:-translate-y-1 transition-all cursor-pointer group"
           >
             <div className={`p-3 rounded-xl bg-gray-50/50 border border-gray-100 group-hover:scale-110 transition-transform ${stat.color}`}>
               <stat.icon className="w-6 h-6" />
@@ -118,28 +120,27 @@ export default function Dashboard() {
               <h2 className="text-[15px] font-bold text-gray-800">Upcoming Contests</h2>
               <button className="text-[13px] font-medium text-blue-600 hover:underline" onClick={() => navigate('/student/contests')}>View all</button>
             </div>
-            
+
             {contests.length === 0 ? (
               <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-10 flex flex-col items-center justify-center text-center">
-                 <Trophy className="w-12 h-12 text-gray-300 mb-3" />
-                 <h3 className="text-lg font-bold text-gray-800 mb-1">No Upcoming Contests</h3>
-                 <p className="text-sm text-gray-500 mb-4 max-w-sm">You're all caught up! Keep an eye out for new mock tests or assessments scheduled by your mentors.</p>
-                 <button className="text-sm font-medium text-blue-600 flex items-center gap-1 hover:underline" onClick={() => navigate('/student/contests')}>
-                   View Past Contests &rarr;
-                 </button>
+                <Trophy className="w-12 h-12 text-gray-300 mb-3" />
+                <h3 className="text-lg font-bold text-gray-800 mb-1">No Upcoming Contests</h3>
+                <p className="text-sm text-gray-500 mb-4 max-w-sm">You're all caught up! Keep an eye out for new mock tests or assessments scheduled by your mentors.</p>
+                <button className="text-sm font-medium text-blue-600 flex items-center gap-1 hover:underline" onClick={() => navigate('/student/contests')}>
+                  View Past Contests &rarr;
+                </button>
               </div>
             ) : (
               <div className="space-y-4">
                 {contests.map((contest) => (
-                  <div key={contest._id} className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
+                  <div key={contest._id} className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-black border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm flex items-center justify-between hover:shadow-md transition-shadow">
                     <div>
                       <h3 className="text-[15px] font-bold text-gray-900">{contest.name || contest.title || "Untitled Contest"}</h3>
                       <p className="text-[13px] text-gray-500">{contest.subject || contest.type || 'Contest'} • {contest.duration}</p>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${
-                        contest.status === 'Live' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-orange-50 text-orange-600 border border-orange-100'
-                      }`}>
+                      <span className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider ${contest.status === 'Live' ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-orange-50 text-orange-600 border border-orange-100'
+                        }`}>
                         {contest.status}
                       </span>
                       <button onClick={() => navigate('/student/contests')} className="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-lg hover:bg-gray-800">
@@ -153,81 +154,81 @@ export default function Dashboard() {
           </div>
 
           {/* Notice Board */}
-          <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6">
-             <div className="flex items-center justify-between mb-5">
-               <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2">
-                 <Megaphone className="w-5 h-5 text-orange-500" />
-                 Notice Board
-               </h2>
-               <button onClick={() => navigate('/student/notices')} className="text-[13px] font-medium text-blue-600 hover:underline">View all</button>
-             </div>
-             
-             <div className="space-y-4">
-               {notices.length === 0 ? (
-                 <div onClick={() => navigate('/student/notices')} className="text-center py-8 rounded-xl border border-gray-100 border-dashed hover:bg-gray-50 transition-colors cursor-pointer group">
-                   <p className="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">No new notices from your faculty.</p>
-                 </div>
-               ) : (
-                 notices.map((notice) => {
-                   const IconComponent = iconMap[notice.iconName] || Info;
-                   return (
-                     <div key={notice._id} onClick={() => navigate('/student/notices')} className={`flex gap-4 p-4 rounded-xl border ${notice.borderColor} ${notice.bg}/50 hover:${notice.bg} transition-colors cursor-pointer group`}>
-                        <div className={`w-10 h-10 rounded-full ${notice.bg} flex items-center justify-center shrink-0 ${notice.color} group-hover:scale-110 transition-transform`}>
-                          <IconComponent className="w-5 h-5" />
+          <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-black border border-gray-200 dark:border-zinc-800 rounded-xl shadow-sm p-6">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2">
+                <Megaphone className="w-5 h-5 text-orange-500" />
+                Notice Board
+              </h2>
+              <button onClick={() => navigate('/student/notices')} className="text-[13px] font-medium text-blue-600 hover:underline">View all</button>
+            </div>
+
+            <div className="space-y-4">
+              {notices.length === 0 ? (
+                <div onClick={() => navigate('/student/notices')} className="text-center py-8 rounded-xl border border-gray-100 border-dashed hover:bg-gray-50 transition-colors cursor-pointer group">
+                  <p className="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">No new notices from your faculty.</p>
+                </div>
+              ) : (
+                notices.map((notice) => {
+                  const IconComponent = iconMap[notice.iconName] || Info;
+                  return (
+                    <div key={notice._id} onClick={() => navigate('/student/notices')} className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-gray-300 dark:border-zinc-800/80 dark:hover:border-zinc-700 bg-gray-50/30 hover:bg-gray-100/50 dark:bg-[#121212] dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group">
+                      <div className={`w-10 h-10 rounded-full ${notice.bg} flex items-center justify-center shrink-0 ${notice.color} group-hover:scale-110 transition-transform`}>
+                        <IconComponent className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <div className="flex justify-between items-start mb-1 gap-4">
+                          <h3 className="text-[14px] font-bold text-gray-900 leading-tight">{notice.title}</h3>
+                          <span className={`text-[10px] font-bold ${notice.color} ${notice.bg} px-2 py-0.5 rounded border ${notice.borderColor} whitespace-nowrap`}>{notice.type}</span>
                         </div>
-                        <div>
-                          <div className="flex justify-between items-start mb-1 gap-4">
-                            <h3 className="text-[14px] font-bold text-gray-900 leading-tight">{notice.title}</h3>
-                            <span className={`text-[10px] font-bold ${notice.color} ${notice.bg} px-2 py-0.5 rounded border ${notice.borderColor} whitespace-nowrap`}>{notice.type}</span>
-                          </div>
-                          <p className="text-[13px] text-gray-600 mb-2 leading-relaxed line-clamp-2">{notice.content}</p>
-                          <p className="text-[11px] font-bold text-gray-400">By {notice.author} • {new Date(notice.date).toLocaleDateString()}</p>
-                        </div>
-                     </div>
-                   );
-                 })
-               )}
-             </div>
+                        <p className="text-[13px] text-gray-600 mb-2 leading-relaxed line-clamp-2">{notice.content}</p>
+                        <p className="text-[11px] font-bold text-gray-400">By {notice.author} • {new Date(notice.date).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
         </div>
 
         {/* Sidebar Info */}
         <div className="space-y-6">
-           {/* Batch & Mentor Info */}
-           <div 
-             onClick={() => navigate('/student/profile')}
-             className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-200 hover:scale-[1.02] transition-all cursor-pointer group"
-           >
-               <div className="flex items-center justify-between mb-5 border-b border-gray-100 pb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                      <Rocket className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <h2 className="text-[16px] font-bold text-gray-800 leading-none group-hover:text-blue-600 transition-colors">Alpha 1</h2>
-                      <p className="text-[11px] text-gray-500 font-medium mt-1">Session 2023-2027</p>
-                    </div>
-                  </div>
-                  <button className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100">View Profile</button>
-               </div>
-               
-               <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <User className="w-4 h-4 text-purple-500 mt-0.5" />
-                    <div>
-                      <p className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Assigned Mentors</p>
-                      <p className="text-[13px] font-bold text-gray-800">Arun Kudiyal Sir<br/>Mahi Sir</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <BookOpen className="w-4 h-4 text-purple-500 mt-0.5" />
-                    <div>
-                      <p className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Program</p>
-                      <p className="text-[13px] font-bold text-gray-800">B.Tech CSE</p>
-                    </div>
-                  </div>
-               </div>
-           </div>
+          {/* Batch & Mentor Info */}
+          <div
+            onClick={() => navigate('/student/profile')}
+            className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-zinc-900 dark:to-black border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-gray-300 dark:hover:border-zinc-600 hover:scale-[1.02] transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between mb-5 border-b border-gray-100 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
+                  <Rocket className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-[16px] font-bold text-gray-800 leading-none group-hover:text-blue-600 transition-colors">Alpha 1</h2>
+                  <p className="text-[11px] text-gray-500 font-medium mt-1">Session 2023-2027</p>
+                </div>
+              </div>
+              <button className="text-[11px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded hover:bg-blue-100">View Profile</button>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <User className="w-4 h-4 text-purple-500 mt-0.5" />
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Assigned Mentors</p>
+                  <p className="text-[13px] font-bold text-gray-800">Arun Kudiyal<br />Mahesh Sharma</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <BookOpen className="w-4 h-4 text-purple-500 mt-0.5" />
+                <div>
+                  <p className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Program</p>
+                  <p className="text-[13px] font-bold text-gray-800">B.Tech CSE</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

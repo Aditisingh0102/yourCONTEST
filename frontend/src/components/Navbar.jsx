@@ -1,38 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BookOpen, Moon, Sun, Bell, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Navbar({ user, onToggleSidebar, isCollapsed }) {
+export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onToggleDark }) {
   const navigate = useNavigate();
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      setIsDark(true);
-      document.documentElement.classList.add('dark');
-    } else {
-      setIsDark(false);
-      document.documentElement.classList.remove('dark');
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove('dark');
-      localStorage.theme = 'light';
-      setIsDark(false);
-    } else {
-      document.documentElement.classList.add('dark');
-      localStorage.theme = 'dark';
-      setIsDark(true);
-    }
-  };
 
   return (
-    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container">
+    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container transition-colors duration-300">
       <div className="flex items-center gap-4">
         {/* Sidebar Hamburger Toggle Button */}
-        <button 
+        <button
           onClick={onToggleSidebar}
           className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-100"
           aria-label="Toggle Sidebar"
@@ -41,7 +18,7 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed }) {
         </button>
 
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
-          <div className="bg-blue-600 text-white p-1.5 rounded-lg logo-icon hidden sm:block">
+          <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-lg logo-icon hidden sm:block shadow-sm border border-transparent dark:border-gray-600">
             <BookOpen className="w-5 h-5" />
           </div>
           <div className="flex flex-col sm:border-l sm:border-gray-300 sm:pl-3 logo-text-container">
@@ -50,16 +27,47 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed }) {
           </div>
         </div>
       </div>
-      
-      <div className="flex items-center gap-5">
-        <button onClick={toggleTheme} className="text-gray-400 hover:text-blue-600 transition-colors p-2 rounded-full hover:bg-gray-100">
-          {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+
+      <div className="flex items-center gap-3">
+        {/* ── Dark / Light Mode Toggle ── */}
+        <button
+          onClick={onToggleDark}
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          className={`
+            relative flex items-center w-[56px] h-[28px] rounded-full border transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1
+            ${isDark
+              ? 'bg-slate-700 border-slate-600'
+              : 'bg-blue-50 border-blue-200'}
+          `}
+        >
+          {/* Track icons */}
+          <Sun  className={`absolute left-[5px]  w-3.5 h-3.5 transition-all duration-300 ${isDark ? 'opacity-30 text-slate-400' : 'opacity-100 text-yellow-500'}`} />
+          <Moon className={`absolute right-[5px] w-3.5 h-3.5 transition-all duration-300 ${isDark ? 'opacity-100 text-blue-300' : 'opacity-30 text-slate-400'}`} />
+
+          {/* Thumb */}
+          <span
+            className={`
+              absolute top-[3px] w-[22px] h-[22px] rounded-full shadow-md transition-all duration-300 flex items-center justify-center
+              ${isDark
+                ? 'left-[29px] bg-slate-900'
+                : 'left-[3px]  bg-white border border-blue-100'}
+            `}
+          >
+            {isDark
+              ? <Moon className="w-3 h-3 text-blue-300" />
+              : <Sun  className="w-3 h-3 text-yellow-500" />
+            }
+          </span>
         </button>
+
+        {/* Bell */}
         <button className="text-gray-400 hover:text-blue-600 transition-colors p-2 rounded-full hover:bg-gray-100">
           <Bell className="w-5 h-5" />
         </button>
-        
-        <div className="flex items-center gap-3 pl-4 cursor-pointer">
+
+        {/* Avatar */}
+        <div className="flex items-center gap-3 pl-2 cursor-pointer">
           <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-200" />
           <div className="text-left hidden sm:block">
             <p className="text-[13px] font-semibold text-gray-800 leading-tight">{user.name}</p>
