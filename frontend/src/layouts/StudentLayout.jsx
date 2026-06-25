@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useDarkMode } from '../hooks/useDarkMode';
@@ -8,6 +8,7 @@ export default function StudentLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDark, toggleDark] = useDarkMode();
+  const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState(() => {
     const saved = localStorage.getItem('student_profile');
@@ -26,6 +27,24 @@ export default function StudentLayout() {
     };
     window.addEventListener('profile-updated', handleUpdate);
     return () => window.removeEventListener('profile-updated', handleUpdate);
+  }, []);
+
+  useEffect(() => {
+    const currentProfile = JSON.parse(localStorage.getItem('student_profile') || '{}');
+    if (currentProfile.batch !== 'Alpha 1') {
+      const aditiProfile = {
+        name: 'Aditi Singh',
+        rollNo: '23210101548',
+        regNo: 'UU23104209',
+        branch: 'B.Tech CSE',
+        semester: '7th Semester',
+        batch: 'Alpha 1',
+        role: 'student'
+      };
+      localStorage.setItem('student_profile', JSON.stringify(aditiProfile));
+      setProfileData(aditiProfile);
+      window.dispatchEvent(new Event('profile-updated'));
+    }
   }, []);
 
   const toggleSidebar = () => {
