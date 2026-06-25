@@ -1,34 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, Calendar, Clock, Users, PlayCircle, Plus, Edit3, Trash2, Search, Filter, X, CheckCircle2, AlertCircle, FileText, BarChart2 } from 'lucide-react';
-import { getContests, updateContest, deleteContest } from '../../api';
+import { getContests, updateContest, deleteContest, getSubmissions } from '../../api';
 import { socket } from '../../socket';
+import AnalyticsModal from './AnalyticsModal';
 
 export default function ContestManager() {
   const navigate = useNavigate();
   const [contests, setContests] = useState([]);
+  const [submissions, setSubmissions] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('Active');
   const [extendModal, setExtendModal] = useState({ show: false, contestId: null, minutes: 30 });
+  const [analyticsModal, setAnalyticsModal] = useState({ show: false, contest: null });
 
   const fetchContests = async () => {
     try {
-      const res = await getContests();
-      setContests(res.data);
+      const [contRes, subRes] = await Promise.all([
+        getContests(),
+        getSubmissions()
+      ]);
+      setContests(contRes.data);
+      
+      const rawSubmissions = subRes.data || [];
+      const uniqueSubsMap = new Map();
+      rawSubmissions.forEach(sub => {
+        const key = `${sub.contestId}-${sub.studentId || sub.studentName}`;
+        if (!uniqueSubsMap.has(key)) {
+          uniqueSubsMap.set(key, sub);
+        } else {
+          const existing = uniqueSubsMap.get(key);
+          if (new Date(sub.submittedAt) > new Date(existing.submittedAt)) {
+            uniqueSubsMap.set(key, sub);
+          }
+        }
+      });
+      
+      setSubmissions(Array.from(uniqueSubsMap.values()));
     } catch (error) {
-      console.error("Failed to fetch contests", error);
+      console.error("Failed to fetch contests/submissions", error);
     }
   };
 
   useEffect(() => {
     fetchContests();
 
-    socket.on('CONTEST_UPDATED', () => {
+    const handleUpdate = () => {
       fetchContests(); // Refresh data when changes happen
-    });
+    };
+
+    socket.on('CONTEST_UPDATED', handleUpdate);
+    socket.on('SUBMISSION_ADDED', handleUpdate);
+    socket.on('SUBMISSION_DELETED', handleUpdate);
 
     return () => {
-      socket.off('CONTEST_UPDATED');
+      socket.off('CONTEST_UPDATED', handleUpdate);
+      socket.off('SUBMISSION_ADDED', handleUpdate);
+      socket.off('SUBMISSION_DELETED', handleUpdate);
     };
   }, []);
 
@@ -127,7 +155,7 @@ export default function ContestManager() {
           </div>
           <div>
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Submissions</p>
-            <p className="text-2xl font-black text-gray-900">{contests.reduce((acc, curr) => acc + (curr.submissions || 0), 0)}</p>
+            <p className="text-2xl font-black text-gray-900">{submissions.length}</p>
           </div>
         </div>
       </div>
@@ -210,7 +238,7 @@ export default function ContestManager() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2 text-[13px] text-gray-600 font-medium">
-                        <Users className="w-4 h-4 text-gray-400" /> {contest.registered} Registered
+                        <Users className="w-4 h-4 text-gray-400" /> {submissions.filter(s => s.contestId === (contest._id || contest.id)).length} Submissions
                       </div>
                     </td>
                     <td className="px-6 py-4">
@@ -236,7 +264,9 @@ export default function ContestManager() {
                           title="Manage Questions">
                           <FileText className="w-4 h-4" />
                         </button>
-                        <button className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="View Analytics">
+                        <button 
+                          onClick={() => setAnalyticsModal({ show: true, contest })}
+                          className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="View Analytics">
                           <BarChart2 className="w-4 h-4" />
                         </button>
                         <button 
@@ -310,6 +340,15 @@ export default function ContestManager() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Analytics Modal */}
+      {analyticsModal.show && (
+        <AnalyticsModal 
+          contest={analyticsModal.contest}
+          submissions={submissions.filter(s => s.contestId === (analyticsModal.contest._id || analyticsModal.contest.id))}
+          onClose={() => setAnalyticsModal({ show: false, contest: null })}
+        />
       )}
 
     </div>

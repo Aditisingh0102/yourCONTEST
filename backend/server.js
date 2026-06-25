@@ -127,6 +127,13 @@ app.post('/api/submissions', (req, res) => {
   res.status(201).json(newSubmission);
 });
 
+app.delete('/api/submissions/:id', (req, res) => {
+  submissions = submissions.filter(s => s._id !== req.params.id);
+  saveDB();
+  io.emit('SUBMISSION_DELETED', req.params.id);
+  res.json({ message: 'Submission deleted' });
+});
+
 // Socket.IO Connection
 io.on('connection', (socket) => {
   console.log('A client connected:', socket.id);

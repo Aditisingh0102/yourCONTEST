@@ -242,7 +242,7 @@ export default function Arena() {
     const questions = contest?.questionList || [];
     questions.forEach(q => {
       if (q.type === 'MCQ' && answersRef.current[q.id] === q.correctOption) {
-        score += 1;
+        score += q.marks || 1;
       }
     });
 

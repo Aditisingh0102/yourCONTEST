@@ -49,3 +49,4 @@ export const deleteContest = (id) => axios.delete(`${API_URL}/contests/${id}`);
 
 export const getSubmissions = () => axios.get(`${API_URL}/submissions`);
 export const submitContestAnswers = (data) => axios.post(`${API_URL}/submissions`, data);
+export const deleteSubmission = (id) => axios.delete(`${API_URL}/submissions/${id}`);
