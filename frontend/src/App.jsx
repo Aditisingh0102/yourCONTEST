@@ -39,9 +39,9 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         
-        {/* Student 1 Routes (Aditi) */}
-        <Route path="/student1" element={<StudentLayout portalId="student1" />}>
-          <Route index element={<Navigate to="/student1/dashboard" replace />} />
+        {/* Student Routes */}
+        <Route path="/student" element={<StudentLayout />}>
+          <Route index element={<Navigate to="/student/dashboard" replace />} />
           <Route path="dashboard" element={<StudentDashboard />} />
           <Route path="notice" element={<NoticeBoard />} />
           <Route path="courses" element={<Courses />} />
@@ -53,25 +53,8 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
         </Route>
 
-        <Route path="/student1/contests/:id" element={<ContestRules />} />
-        <Route path="/student1/arena/:id" element={<Arena />} />
-
-        {/* Student 2 Routes (Ambar) */}
-        <Route path="/student2" element={<StudentLayout portalId="student2" />}>
-          <Route index element={<Navigate to="/student2/dashboard" replace />} />
-          <Route path="dashboard" element={<StudentDashboard />} />
-          <Route path="notice" element={<NoticeBoard />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="courses/:id" element={<CourseDetail />} />
-          <Route path="contests" element={<StudentContests />} />
-          <Route path="leaderboard" element={<Placeholder title="Leaderboard" />} />
-          <Route path="submissions" element={<Placeholder title="My Submissions" />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="profile" element={<Profile />} />
-        </Route>
-
-        <Route path="/student2/contests/:id" element={<ContestRules />} />
-        <Route path="/student2/arena/:id" element={<Arena />} />
+        <Route path="/student/contests/:id" element={<ContestRules />} />
+        <Route path="/student/arena/:id" element={<Arena />} />
 
         {/* Faculty Routes */}
         <Route path="/faculty" element={<FacultyLayout />}>

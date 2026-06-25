@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import {
   Mail,
   Phone,
@@ -17,10 +16,6 @@ import {
 } from 'lucide-react';
 
 export default function Profile() {
-  const location = useLocation();
-  const portalId = location.pathname.split('/')[1]; // Extract student1 or student2
-  const storageKey = `student_profile_${portalId}`;
-  
   const [isEditing, setIsEditing] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ current: '', new: '', confirm: '' });
@@ -28,17 +23,17 @@ export default function Profile() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem(storageKey);
+    const saved = localStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved);
     return {
-      name: portalId === 'student1' ? 'Aditi Singh' : 'Ambar Singh',
-      rollNo: portalId === 'student1' ? '2023CSE1042' : '2023IT1099',
-      regNo: portalId === 'student1' ? 'UU23104209' : 'UU23104299',
+      name: 'Aditi Singh',
+      rollNo: '2023CSE1042',
+      regNo: 'UU23104209',
       branch: 'B.Tech CSE',
       semester: '8th Semester',
-      email: portalId === 'student1' ? 'aditi@uudoon.in' : 'ambar@uudoon.in',
+      email: 'aditi@uudoon.in',
       phone: '+91 98765 43210',
-      avatar: `https://ui-avatars.com/api/?name=${portalId === 'student1' ? 'Aditi' : 'Ambar'}+Singh&background=0D8ABC&color=fff&size=128`,
+      avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
       role: 'student',
       joinDate: 'August 2023'
     };
@@ -67,7 +62,7 @@ export default function Profile() {
       reader.onloadend = () => {
         const updated = { ...profileData, avatar: reader.result };
         setProfileData(updated);
-        localStorage.setItem(storageKey, JSON.stringify(updated));
+        localStorage.setItem('student_profile', JSON.stringify(updated));
         window.dispatchEvent(new Event('profile-updated'));
       };
       reader.readAsDataURL(file);
@@ -77,7 +72,7 @@ export default function Profile() {
   const handleProfileSave = (e) => {
     e.preventDefault();
     setProfileData(editForm);
-    localStorage.setItem(storageKey, JSON.stringify(editForm));
+    localStorage.setItem('student_profile', JSON.stringify(editForm));
     window.dispatchEvent(new Event('profile-updated'));
     setIsEditing(false);
   };

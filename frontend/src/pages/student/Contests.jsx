@@ -1,28 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, ChevronLeft, ChevronRight, SlidersHorizontal, AlertCircle, X } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getContests } from '../../api';
 import { socket } from '../../socket';
 
 export default function Contests() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const portalId = location.pathname.split('/')[1]; // Extract student1 or student2
-  const storageKey = `student_profile_${portalId}`;
-  
   const [activeTab, setActiveTab] = useState('upcoming');
   const [allContests, setAllContests] = useState([]);
   const [toastMessage, setToastMessage] = useState('');
-  const [studentBatch, setStudentBatch] = useState(null);
-
-  // Get student's batch from localStorage using portal-specific key
-  useEffect(() => {
-    const studentProfile = localStorage.getItem(storageKey);
-    if (studentProfile) {
-      const profile = JSON.parse(studentProfile);
-      setStudentBatch(profile.batch);
-    }
-  }, [storageKey]);
 
   const fetchContests = async () => {
     try {
@@ -47,34 +33,21 @@ export default function Contests() {
 
   const handleContestClick = (contest) => {
     if (contest.status === 'Past') {
-      navigate(`/${portalId}/contests/${contest._id || contest.id}`);
+      navigate(`/student/contests/${contest._id || contest.id}`);
       return;
     }
     
     if (contest.status === 'Upcoming') {
-      navigate(`/${portalId}/arena/${contest._id || contest.id}`);
+      navigate(`/student/arena/${contest._id || contest.id}`);
       return;
     }
     
     // Within 30 mins or Live -> go to Arena
-    navigate(`/${portalId}/arena/${contest._id || contest.id}`);
+    navigate(`/student/arena/${contest._id || contest.id}`);
   };
 
-  // Filter contests based on batch assignment
-  const filterContestsByBatch = (contests) => {
-    return contests.filter(contest => {
-      // If no batches are assigned, show to all students
-      if (!contest.assignedBatches || contest.assignedBatches.length === 0) {
-        return true;
-      }
-      // Otherwise, only show if student's batch is in assigned batches
-      return studentBatch && contest.assignedBatches.includes(studentBatch);
-    });
-  };
-
-  const filteredContests = filterContestsByBatch(allContests);
-  const activeContests = filteredContests.filter(c => c.status === 'Live' || c.status === 'Upcoming');
-  const pastContests = filteredContests.filter(c => c.status === 'Past');
+  const activeContests = allContests.filter(c => c.status === 'Live' || c.status === 'Upcoming');
+  const pastContests = allContests.filter(c => c.status === 'Past');
 
   const displayedContests = activeTab === 'upcoming' ? activeContests : pastContests;
 
