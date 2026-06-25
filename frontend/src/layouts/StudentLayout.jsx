@@ -4,30 +4,29 @@ import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useDarkMode } from '../hooks/useDarkMode';
 
-export default function StudentLayout({ portalId = 'student1' }) {
+export default function StudentLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDark, toggleDark] = useDarkMode();
-  const storageKey = `student_profile_${portalId}`;
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem(storageKey);
+    const saved = localStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved);
     return {
-      name: portalId === 'student1' ? 'Aditi Singh' : 'Ambar Singh',
-      avatar: `https://ui-avatars.com/api/?name=${portalId === 'student1' ? 'Aditi' : 'Ambar'}+Singh&background=0D8ABC&color=fff&size=128`,
+      name: 'Aditi Singh',
+      avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
       role: 'student'
     };
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem(storageKey);
+      const saved = localStorage.getItem('student_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
     return () => window.removeEventListener('profile-updated', handleUpdate);
-  }, [storageKey]);
+  }, []);
 
   const toggleSidebar = () => {
     if (window.innerWidth < 1024) {
@@ -45,8 +44,7 @@ export default function StudentLayout({ portalId = 'student1' }) {
           role="student" 
           isCollapsed={isCollapsed} 
           isMobileOpen={isMobileOpen} 
-          setIsMobileOpen={setIsMobileOpen}
-          portalId={portalId}
+          setIsMobileOpen={setIsMobileOpen} 
         />
         <main className="flex-1 overflow-y-auto p-6 bg-slate-50/50">
           <Outlet />

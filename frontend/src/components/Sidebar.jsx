@@ -34,35 +34,19 @@ const facultyLinks = [
 
 import { faculty } from '../data/mockData';
 
-export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOpen, portalId = 'student1' }) {
+export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOpen }) {
   const navigate = useNavigate();
-  
-  // Generate student links based on portalId
-  const getStudentLinks = () => {
-    const basePath = `/${portalId}`;
-    return [
-      { name: 'Dashboard', path: `${basePath}/dashboard`, icon: LayoutDashboard },
-      { name: 'Notice Board', path: `${basePath}/notice`, icon: Megaphone },
-      { name: 'Courses', path: `${basePath}/courses`, icon: BookOpen },
-      { name: 'Contests', path: `${basePath}/contests`, icon: Trophy },
-      { name: 'Reports', path: `${basePath}/reports`, icon: FileBarChart },
-    ];
-  };
-
-  const links = role === 'student' ? getStudentLinks() : facultyLinks;
+  const links = role === 'student' ? studentLinks : facultyLinks;
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-  
-  // Use portal-specific localStorage key for student profiles
-  const storageKey = role === 'student' ? `student_profile_${portalId}` : 'faculty_profile';
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem(storageKey);
+    const saved = localStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
     if (saved) return JSON.parse(saved);
     
     return role === 'student' ? {
-      name: portalId === 'student1' ? 'Aditi Singh' : 'Ambar Singh',
-      rollNo: portalId === 'student1' ? '2023CSE1042' : '2023CSE1043',
-      regNo: portalId === 'student1' ? 'UU23104209' : 'UU23104210',
+      name: 'Aditi Singh',
+      rollNo: '2023CSE1042',
+      regNo: 'UU23104209',
       branch: 'B.Tech CSE',
       semester: '8th Semester',
       email: 'aditi@uudoon.in',
@@ -85,12 +69,12 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem(storageKey);
+      const saved = localStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
     return () => window.removeEventListener('profile-updated', handleUpdate);
-  }, [storageKey]);
+  }, [role]);
 
   // Close modal on ESC keypress
   useEffect(() => {
@@ -179,8 +163,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
           {/* Profile Card Section */}
           <div 
             onClick={() => {
-              const profilePath = role === 'student' ? `/${portalId}/profile` : '/faculty/profile';
-              navigate(profilePath);
+              navigate(role === 'student' ? '/student/profile' : '/faculty/profile');
               if (setIsMobileOpen) setIsMobileOpen(false);
             }}
             className={`flex items-center gap-3 p-3 border border-gray-100 rounded-xl hover:bg-slate-50 hover:border-blue-100 cursor-pointer transition-all duration-200 group relative w-full ${

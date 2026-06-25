@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
 import { getContests, getSubmissions } from '../../api';
 import { socket } from '../../socket';
@@ -7,10 +7,6 @@ import { socket } from '../../socket';
 export default function Arena() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const portalId = location.pathname.split('/')[1]; // Extract student1 or student2
-  const storageKey = `student_profile_${portalId}`;
-  
   const [contest, setContest] = useState(null);
   const [activeProblem, setActiveProblem] = useState(null);
   const [submittedResult, setSubmittedResult] = useState(null);
@@ -36,7 +32,7 @@ export default function Arena() {
       const current = res.data.find(c => (c._id || c.id).toString() === id);
       
       const subsRes = await getSubmissions();
-      const studentProfile = JSON.parse(localStorage.getItem(storageKey)) || { name: 'Student', id: 'ERP101', batch: 'Alpha 1' };
+      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
       const hasSubmitted = subsRes.data.some(sub => (sub.contestId === id) && (sub.studentId === studentProfile.id));
 
       if (hasSubmitted) {
@@ -64,7 +60,7 @@ export default function Arena() {
     fetchContestData();
     socket.on('CONTEST_UPDATED', fetchContestData);
     return () => socket.off('CONTEST_UPDATED');
-  }, [id, storageKey]);
+  }, [id]);
 
   useEffect(() => {
     if (!contest || contest.status !== 'Upcoming') return;
@@ -251,7 +247,7 @@ export default function Arena() {
     });
 
     try {
-      const studentProfile = JSON.parse(localStorage.getItem(storageKey)) || { name: 'Student', id: 'ERP101', batch: 'Alpha 1' };
+      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
       const { submitContestAnswers } = await import('../../api');
       
       const payload = {

@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Trophy, ChevronLeft, ChevronRight, SlidersHorizontal, AlertCircle, X } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getContests } from '../../api';
 import { socket } from '../../socket';
 
 export default function Contests() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const portalId = location.pathname.split('/')[1]; // Extract student1 or student2
-  const storageKey = `student_profile_${portalId}`;
-  
   const [activeTab, setActiveTab] = useState('upcoming');
   const [allContests, setAllContests] = useState([]);
   const [toastMessage, setToastMessage] = useState('');
   const [studentBatch, setStudentBatch] = useState(null);
 
-  // Get student's batch from localStorage using portal-specific key
+  // Get student's batch from localStorage
   useEffect(() => {
-    const studentProfile = localStorage.getItem(storageKey);
+    const studentProfile = localStorage.getItem('student_profile');
     if (studentProfile) {
       const profile = JSON.parse(studentProfile);
       setStudentBatch(profile.batch);
     }
-  }, [storageKey]);
+  }, []);
 
   const fetchContests = async () => {
     try {

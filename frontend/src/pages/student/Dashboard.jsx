@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { upcomingContests, user } from '../../data/mockData';
 import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests } from '../../api';
 import { socket } from '../../socket';
 
@@ -11,10 +11,6 @@ const iconMap = {
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const location = useLocation();
-  const portalId = location.pathname.split('/')[1]; // Extract student1 or student2
-  const storageKey = `student_profile_${portalId}`;
-  
   const [notices, setNotices] = useState([]);
   const [contests, setContests] = useState([]);
 
@@ -60,19 +56,19 @@ export default function Dashboard() {
   };
 
   const [studentProfile, setStudentProfile] = useState(() => {
-    const saved = localStorage.getItem(storageKey);
+    const saved = localStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved);
-    return { name: portalId === 'student1' ? 'Aditi Singh' : 'Ambar Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
+    return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem(storageKey);
+      const saved = localStorage.getItem('student_profile');
       if (saved) setStudentProfile(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
     return () => window.removeEventListener('profile-updated', handleUpdate);
-  }, [storageKey]);
+  }, []);
 
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
@@ -101,8 +97,8 @@ export default function Dashboard() {
           <div
             key={i}
             onClick={() => {
-              if (stat.label === 'Avg. Score') navigate(`/${portalId}/profile`);
-              else navigate(`/${portalId}/contests`);
+              if (stat.label === 'Avg. Score') navigate('/student/profile');
+              else navigate('/student/contests');
             }}
             className="bg-white rounded-xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-zinc-600 hover:-translate-y-1 transition-all cursor-pointer group"
           >
