@@ -2,6 +2,77 @@
   "notices": [],
   "contests": [
     {
+      "title": "gggg",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 13:50",
+      "endTime": "TBD",
+      "duration": "5 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782375582189,
+          "type": "MCQ",
+          "question": "ffff",
+          "options": [
+            "gg",
+            "t43t",
+            "sgsgsdsd",
+            "vdsgs"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "assignedBatches": [
+        "Alpha 1"
+      ],
+      "_id": "1782375563109",
+      "createdAt": "2026-06-25T08:19:23.109Z"
+    },
+    {
+      "title": "ddd",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 13:33",
+      "endTime": "TBD",
+      "duration": "5 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [
+        "no cheating "
+      ],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782374525909,
+          "type": "MCQ",
+          "question": "g3rgwr",
+          "options": [
+            "gwrgw",
+            "eef",
+            "fsgrwg",
+            "gsfgse"
+          ],
+          "correctOption": 1,
+          "marks": 1
+        }
+      ],
+      "assignedBatches": [
+        1,
+        3
+      ],
+      "_id": "1782374503727",
+      "createdAt": "2026-06-25T08:01:43.727Z"
+    },
+    {
       "title": "gwgwrgw",
       "type": "Mock Test",
       "status": "Upcoming",
