@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   ArrowLeft, Trophy, Save, CheckCircle2, Code, BookOpen, 
-  Plus, Minus, ChevronRight, X, Sparkles, ListChecks
+  Plus, Minus, ChevronRight, X, Sparkles, ListChecks, Trash2
 } from 'lucide-react';
 import { getContests, createContest, updateContest } from '../../api';
 
@@ -204,7 +204,7 @@ export default function ContestForm() {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: '', strictFullscreen: true, disableCopyPaste: true
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
@@ -226,7 +226,7 @@ export default function ContestForm() {
             startDate: datePart || '',
             startTime: timePart || '',
             duration: contest.duration ? parseInt(contest.duration) : '',
-            customRules: contest.customRules || '',
+            customRules: Array.isArray(contest.customRules) ? contest.customRules : (contest.customRules ? [contest.customRules] : []),
             strictFullscreen: contest.strictFullscreen !== false,
             disableCopyPaste: contest.disableCopyPaste !== false
           });
@@ -414,14 +414,41 @@ export default function ContestForm() {
                   </label>
                 </div>
                 <div>
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Custom Instructions for Students (Optional)</label>
-                  <textarea
-                    rows="3"
-                    value={formData.customRules}
-                    onChange={(e) => setFormData({ ...formData, customRules: e.target.value })}
-                    placeholder="e.g. You are allowed to use rough paper. Calculators are strictly prohibited."
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium resize-none"
-                  />
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-[13px] font-bold text-gray-700">Custom Instructions for Students (Optional)</label>
+                    <button type="button" onClick={() => setFormData({...formData, customRules: [...formData.customRules, '']})} className="text-blue-600 hover:text-blue-700 font-bold text-xs flex items-center gap-1">
+                      <Plus className="w-3.5 h-3.5" /> Add Instruction
+                    </button>
+                  </div>
+                  <div className="space-y-3">
+                    {formData.customRules.map((rule, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <textarea
+                          rows="2"
+                          value={rule}
+                          onChange={(e) => {
+                            const newRules = [...formData.customRules];
+                            newRules[idx] = e.target.value;
+                            setFormData({ ...formData, customRules: newRules });
+                          }}
+                          placeholder={`Instruction ${idx + 1}`}
+                          className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium resize-none"
+                        />
+                        <button type="button" onClick={() => {
+                          const newRules = [...formData.customRules];
+                          newRules.splice(idx, 1);
+                          setFormData({ ...formData, customRules: newRules });
+                        }} className="mt-2 text-gray-400 hover:text-red-500 transition-colors">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                    {formData.customRules.length === 0 && (
+                      <div className="text-center py-4 bg-gray-50 border border-gray-200 border-dashed rounded-xl">
+                        <p className="text-xs text-gray-500">No custom instructions added.</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

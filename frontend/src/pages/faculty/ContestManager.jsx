@@ -270,7 +270,7 @@ export default function ContestManager() {
             </div>
             <p className="text-sm text-gray-600 mb-5">How many extra minutes do you want to provide for this live contest?</p>
             
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-4">
               {[15, 30, 45, 60].map(mins => (
                 <button 
                   key={mins}
@@ -280,6 +280,18 @@ export default function ContestManager() {
                   +{mins}m
                 </button>
               ))}
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Custom Time (Minutes)</label>
+              <input 
+                type="number"
+                min="1"
+                placeholder="e.g. 20"
+                value={extendModal.minutes || ''}
+                onChange={(e) => setExtendModal({...extendModal, minutes: e.target.value ? parseInt(e.target.value) : ''})}
+                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-green-500 transition-all text-sm"
+              />
             </div>
 
             <div className="flex gap-3">

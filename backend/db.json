@@ -2,127 +2,65 @@
   "notices": [],
   "contests": [
     {
-      "title": "asa",
-      "type": "Assessment",
-      "status": "Upcoming",
-      "startTime": "2026-06-25, 01:37",
-      "endTime": "TBD",
-      "duration": "3 mins",
-      "registered": 0,
-      "questions": 0,
-      "submissions": 0,
-      "customRules": "dw",
-      "strictFullscreen": true,
-      "disableCopyPaste": true,
-      "questionList": [],
-      "_id": "1782328009676",
-      "createdAt": "2026-06-24T19:06:49.676Z"
-    },
-    {
-      "title": "mock",
+      "title": "rahul",
       "type": "Lab Exam",
       "status": "Upcoming",
-      "startTime": "2026-06-25, 00:31",
+      "startTime": "2026-06-25, 11:47",
       "endTime": "TBD",
-      "duration": "18 mins",
+      "duration": "11 mins",
       "registered": 0,
       "questions": 2,
       "submissions": 0,
-      "customRules": "stick",
+      "customRules": "rahul hello",
       "strictFullscreen": true,
       "disableCopyPaste": true,
       "questionList": [
         {
-          "id": 1782327654140,
+          "id": 1782368345903,
           "type": "MCQ",
           "question": "sum 2+2",
           "options": [
-            "3",
+            "2",
             "4",
-            "5",
-            "6"
+            "43",
+            "5"
           ],
-          "correctOption": 0,
+          "correctOption": 1,
           "marks": 1
         },
         {
-          "id": 1782327667008,
-          "type": "MCQ",
-          "question": "sum 3+6",
-          "options": [
-            "9",
-            "5",
-            "4",
-            "3"
+          "id": 1782368388978,
+          "type": "Coding",
+          "title": "sans ",
+          "problemStatement": "dbsaudw",
+          "inputFormat": "hsq",
+          "outputFormat": "hsq",
+          "constraints": "sha",
+          "testCases": [
+            {
+              "input": "12",
+              "output": "21"
+            },
+            {
+              "input": "23",
+              "output": "32"
+            }
           ],
-          "correctOption": 0,
-          "marks": 1
+          "hiddenTestCases": [
+            {
+              "input": "43",
+              "output": "34"
+            },
+            {
+              "input": "56",
+              "output": "65"
+            }
+          ],
+          "marks": 10
         }
       ],
-      "_id": "1782327621057",
-      "createdAt": "2026-06-24T19:00:21.057Z"
-    },
-    {
-      "title": "amsa",
-      "type": "Lab Exam",
-      "status": "Upcoming",
-      "startTime": "2026-06-25, 00:04",
-      "endTime": "TBD",
-      "duration": "3 mins",
-      "registered": 0,
-      "questions": 1,
-      "submissions": 0,
-      "customRules": "sd",
-      "strictFullscreen": true,
-      "disableCopyPaste": true,
-      "questionList": [
-        {
-          "id": 1782326021514,
-          "type": "MCQ",
-          "question": "rewf",
-          "options": [
-            "fd",
-            "fda",
-            "dsw",
-            "sa"
-          ],
-          "correctOption": 0,
-          "marks": 1
-        }
-      ],
-      "_id": "1782326007122",
-      "createdAt": "2026-06-24T18:33:27.122Z"
-    },
-    {
-      "title": "qw",
-      "type": "Lab Exam",
-      "status": "Upcoming",
-      "startTime": "2026-06-25, 00:01",
-      "endTime": "TBD",
-      "duration": "1 mins",
-      "registered": 0,
-      "questions": 1,
-      "submissions": 0,
-      "customRules": "ja",
-      "strictFullscreen": true,
-      "disableCopyPaste": true,
-      "questionList": [
-        {
-          "id": 1782325844068,
-          "type": "MCQ",
-          "question": "ndasdjda",
-          "options": [
-            "43",
-            "23",
-            "23",
-            "12"
-          ],
-          "correctOption": 0,
-          "marks": 1
-        }
-      ],
-      "_id": "1782325824703",
-      "createdAt": "2026-06-24T18:30:24.703Z"
+      "_id": "1782368149258",
+      "createdAt": "2026-06-25T06:15:49.258Z"
     },
     {
       "title": "ansh",
@@ -216,6 +154,34 @@
       ],
       "_id": "1782323626755",
       "createdAt": "2026-06-24T17:53:46.755Z"
+    }
+  ],
+  "submissions": [
+    {
+      "contestId": "1782368149258",
+      "contestName": "rahul",
+      "studentId": "ERP101",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782368345903": 1
+      },
+      "score": 1,
+      "submittedAt": "2026-06-25T06:24:38.569Z",
+      "_id": "1782368678601"
+    },
+    {
+      "contestId": "1782368149258",
+      "contestName": "rahul",
+      "studentId": "ERP101",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782368345903": 1
+      },
+      "score": 1,
+      "submittedAt": "2026-06-25T06:24:38.567Z",
+      "_id": "1782368678599"
     }
   ]
 }

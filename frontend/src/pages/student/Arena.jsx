@@ -343,6 +343,9 @@ export default function Arena() {
                 <p className="flex gap-3"><span className="text-blue-600 font-bold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
                 <p className="flex gap-3"><span className="text-blue-600 font-bold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
                 <p className="flex gap-3"><span className="text-blue-600 font-bold">5.</span> <span>Any malpractice or copying will lead to immediate disqualification.</span></p>
+                {contest?.customRules && (Array.isArray(contest.customRules) ? contest.customRules : [contest.customRules]).map((rule, idx) => rule.trim() !== '' && (
+                  <p key={idx} className="flex gap-3"><span className="text-blue-600 font-bold">{6 + idx}.</span> <span className="whitespace-pre-wrap"><strong className="text-blue-700">Faculty Instructions: </strong>{rule}</span></p>
+                ))}
               </div>
 
               {isWaiting ? (
@@ -468,9 +471,19 @@ export default function Arena() {
           activeProblem.type === 'MCQ' ? (
             <div className="flex-1 bg-[#0f172a] p-8 overflow-y-auto">
               <div className="max-w-3xl mx-auto">
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">MCQ</span>
-                  <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <span className="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">MCQ</span>
+                    <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
+                  </div>
+                  {answers[activeProblem.id] !== undefined && answers[activeProblem.id] !== '' && (
+                    <button 
+                      onClick={() => handleAnswerChange(activeProblem.id, undefined)}
+                      className="text-gray-400 hover:text-gray-200 text-xs font-bold uppercase tracking-wider transition-colors"
+                    >
+                      Clear Selection
+                    </button>
+                  )}
                 </div>
                 
                 <h2 className="text-xl font-medium text-white mb-8 leading-relaxed">
@@ -546,15 +559,19 @@ export default function Arena() {
                   <h3 className="text-lg font-bold text-white mt-6 mb-2">Output Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.outputFormat}</p>
                   
-                  <div className="grid grid-cols-2 gap-4 mt-8">
-                    <div>
-                      <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sample Input</h4>
-                      <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{activeProblem.sampleInput}</code></pre>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sample Output</h4>
-                      <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{activeProblem.sampleOutput}</code></pre>
-                    </div>
+                  <div className="space-y-6 mt-8">
+                    {(activeProblem.testCases || (activeProblem.sampleInput ? [{ input: activeProblem.sampleInput, output: activeProblem.sampleOutput }] : [])).map((tc, idx) => (
+                      <div key={idx} className="grid grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sample Input {idx + 1}</h4>
+                          <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{tc.input}</code></pre>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sample Output {idx + 1}</h4>
+                          <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{tc.output}</code></pre>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
