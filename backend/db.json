@@ -2,12 +2,12 @@
   "notices": [],
   "contests": [
     {
-      "title": "ams",
+      "title": "gggg",
       "type": "Mock Test",
       "status": "Upcoming",
-      "startTime": "2026-06-25, 13:26",
+      "startTime": "2026-06-25, 13:50",
       "endTime": "TBD",
-      "duration": "4 mins",
+      "duration": "5 mins",
       "registered": 0,
       "questions": 1,
       "submissions": 0,
@@ -16,69 +16,96 @@
       "disableCopyPaste": true,
       "questionList": [
         {
-          "id": 1782374115197,
+          "id": 1782375582189,
           "type": "MCQ",
-          "question": "12",
+          "question": "ffff",
           "options": [
-            "32",
-            "43",
-            "231",
-            "23"
-          ],
-          "correctOption": 2,
-          "marks": 1
-        }
-      ],
-      "_id": "1782374095488",
-      "createdAt": "2026-06-25T07:54:55.488Z"
-    },
-    {
-      "title": "conr",
-      "type": "Lab Exam",
-      "status": "Upcoming",
-      "startTime": "2026-06-25, 12:42",
-      "endTime": "TBD",
-      "duration": "3 mins",
-      "registered": 0,
-      "questions": 2,
-      "submissions": 0,
-      "customRules": [
-        "dbsdhe",
-        "fbjd",
-        "fb3hefe"
-      ],
-      "strictFullscreen": true,
-      "disableCopyPaste": true,
-      "questionList": [
-        {
-          "id": 1782371460437,
-          "type": "MCQ",
-          "question": "323",
-          "options": [
-            "323",
-            "434",
-            "2345",
-            "5453"
-          ],
-          "correctOption": 1,
-          "marks": 1
-        },
-        {
-          "id": 1782371602995,
-          "type": "MCQ",
-          "question": "23",
-          "options": [
-            "32",
-            "32",
-            "32",
-            "32"
+            "gg",
+            "t43t",
+            "sgsgsdsd",
+            "vdsgs"
           ],
           "correctOption": 0,
           "marks": 1
         }
       ],
-      "_id": "1782371436484",
-      "createdAt": "2026-06-25T07:10:36.484Z"
+      "assignedBatches": [
+        "Alpha 1"
+      ],
+      "_id": "1782375563109",
+      "createdAt": "2026-06-25T08:19:23.109Z"
+    },
+    {
+      "title": "ddd",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 13:33",
+      "endTime": "TBD",
+      "duration": "5 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [
+        "no cheating "
+      ],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782374525909,
+          "type": "MCQ",
+          "question": "g3rgwr",
+          "options": [
+            "gwrgw",
+            "eef",
+            "fsgrwg",
+            "gsfgse"
+          ],
+          "correctOption": 1,
+          "marks": 1
+        }
+      ],
+      "assignedBatches": [
+        1,
+        3
+      ],
+      "_id": "1782374503727",
+      "createdAt": "2026-06-25T08:01:43.727Z"
+    },
+    {
+      "title": "gwgwrgw",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 13:20",
+      "endTime": "TBD",
+      "duration": "3 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782373716712,
+          "type": "MCQ",
+          "question": "wegeqtew",
+          "options": [
+            "egewgw",
+            "fewfwewewewregc",
+            "fewgwe",
+            "dfwgtwrt"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "assignedBatches": [
+        1,
+        3
+      ],
+      "_id": "1782373695933",
+      "createdAt": "2026-06-25T07:48:15.933Z"
     },
     {
       "title": "rahul",
@@ -236,91 +263,6 @@
     }
   ],
   "submissions": [
-    {
-      "contestId": "1782374095488",
-      "contestName": "ams",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782374115197": 2
-      },
-      "score": 1,
-      "submittedAt": "2026-06-25T07:56:21.122Z",
-      "_id": "1782374181196"
-    },
-    {
-      "contestId": "1782374095488",
-      "contestName": "ams",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782374115197": 2
-      },
-      "score": 1,
-      "submittedAt": "2026-06-25T07:56:21.121Z",
-      "_id": "1782374181194"
-    },
-    {
-      "contestId": "1782374095488",
-      "contestName": "ams",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782374115197": 2
-      },
-      "score": 1,
-      "submittedAt": "2026-06-25T07:56:21.109Z",
-      "_id": "1782374181193"
-    },
-    {
-      "contestId": "1782372885493",
-      "contestName": "jdasd",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782372906612": 3,
-        "1782372929758": "public class main{\n\n\n}      "
-      },
-      "score": 1,
-      "submittedAt": "2026-06-25T07:36:50.541Z",
-      "_id": "1782373010579"
-    },
-    {
-      "contestId": "1782371436484",
-      "contestName": "conr",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782371460437": 2
-      },
-      "score": 0,
-      "submittedAt": "2026-06-25T07:12:56.446Z",
-      "_id": "1782371576475"
-    },
-    {
-      "contestId": "1782371436484",
-      "contestName": "conr",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782371460437": 2
-      },
-      "score": 0,
-      "submittedAt": "2026-06-25T07:12:56.445Z",
-      "_id": "1782371576473"
-    },
-    {
-      "contestId": "1782371436484",
-      "contestName": "conr",
-      "studentName": "Ambar Kumar",
-      "batch": "Beta 1",
-      "answers": {
-        "1782371460437": 2
-      },
-      "score": 0,
-      "submittedAt": "2026-06-25T07:12:56.444Z",
-      "_id": "1782371576471"
-    },
     {
       "contestId": "1782368149258",
       "contestName": "rahul",
