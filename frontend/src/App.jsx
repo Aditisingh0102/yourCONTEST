@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import StudentLayout from './layouts/StudentLayout';
+import Student1Layout from './layouts/Student1Layout';
 import FacultyLayout from './layouts/FacultyLayout';
 
 import StudentDashboard from './pages/student/Dashboard';
@@ -13,6 +14,16 @@ import CourseDetail from './pages/student/CourseDetail';
 import Profile from './pages/student/Profile';
 import Reports from './pages/student/Reports';
 import NoticeBoard from './pages/student/NoticeBoard';
+
+import Student1Dashboard from './pages/student1/Dashboard';
+import Student1Contests from './pages/student1/Contests';
+import Contest1Rules from './pages/student1/ContestRules';
+import Arena1 from './pages/student1/Arena';
+import Courses1 from './pages/student1/Courses';
+import CourseDetail1 from './pages/student1/CourseDetail';
+import Profile1 from './pages/student1/Profile';
+import Reports1 from './pages/student1/Reports';
+import NoticeBoard1 from './pages/student1/NoticeBoard';
 
 import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyNoticeBoard from './pages/faculty/NoticeBoard';
@@ -55,6 +66,23 @@ export default function App() {
 
         <Route path="/student/contests/:id" element={<ContestRules />} />
         <Route path="/student/arena/:id" element={<Arena />} />
+
+        {/* Student 1 Routes (Ambar) */}
+        <Route path="/student1" element={<Student1Layout />}>
+          <Route index element={<Navigate to="/student1/dashboard" replace />} />
+          <Route path="dashboard" element={<Student1Dashboard />} />
+          <Route path="notice" element={<NoticeBoard1 />} />
+          <Route path="courses" element={<Courses1 />} />
+          <Route path="courses/:id" element={<CourseDetail1 />} />
+          <Route path="contests" element={<Student1Contests />} />
+          <Route path="leaderboard" element={<Placeholder title="Leaderboard" />} />
+          <Route path="submissions" element={<Placeholder title="My Submissions" />} />
+          <Route path="reports" element={<Reports1 />} />
+          <Route path="profile" element={<Profile1 />} />
+        </Route>
+
+        <Route path="/student1/contests/:id" element={<Contest1Rules />} />
+        <Route path="/student1/arena/:id" element={<Arena1 />} />
 
         {/* Faculty Routes */}
         <Route path="/faculty" element={<FacultyLayout />}>

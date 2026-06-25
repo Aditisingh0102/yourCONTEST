@@ -15,13 +15,16 @@ import {
   GraduationCap
 } from 'lucide-react';
 
-const studentLinks = [
-  { name: 'Dashboard', path: '/student/dashboard', icon: LayoutDashboard },
-  { name: 'Notice Board', path: '/student/notice', icon: Megaphone },
-  { name: 'Courses', path: '/student/courses', icon: BookOpen },
-  { name: 'Contests', path: '/student/contests', icon: Trophy },
-  { name: 'Reports', path: '/student/reports', icon: FileBarChart },
-];
+const getStudentLinks = () => {
+  const base = window.location.pathname.startsWith('/student1') ? '/student1' : '/student';
+  return [
+    { name: 'Dashboard', path: `${base}/dashboard`, icon: LayoutDashboard },
+    { name: 'Notice Board', path: `${base}/notice`, icon: Megaphone },
+    { name: 'Courses', path: `${base}/courses`, icon: BookOpen },
+    { name: 'Contests', path: `${base}/contests`, icon: Trophy },
+    { name: 'Reports', path: `${base}/reports`, icon: FileBarChart },
+  ];
+};
 
 const facultyLinks = [
   { name: 'Dashboard', path: '/faculty/dashboard', icon: LayoutDashboard },
@@ -36,7 +39,7 @@ import { faculty } from '../data/mockData';
 
 export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOpen }) {
   const navigate = useNavigate();
-  const links = role === 'student' ? studentLinks : facultyLinks;
+  const links = role === 'student' ? getStudentLinks() : facultyLinks;
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
@@ -163,7 +166,8 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
           {/* Profile Card Section */}
           <div 
             onClick={() => {
-              navigate(role === 'student' ? '/student/profile' : '/faculty/profile');
+              const base = window.location.pathname.startsWith('/student1') ? '/student1' : '/student';
+              navigate(role === 'student' ? `${base}/profile` : '/faculty/profile');
               if (setIsMobileOpen) setIsMobileOpen(false);
             }}
             className={`flex items-center gap-3 p-3 border border-gray-100 rounded-xl hover:bg-slate-50 hover:border-blue-100 cursor-pointer transition-all duration-200 group relative w-full ${

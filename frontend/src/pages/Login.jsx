@@ -11,7 +11,7 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    if (erpId === '23210101548@uudoon.in') {
+    if (erpId === '23210101548@uudoon.in' || erpId === '2321010548@uudoon.in') {
       localStorage.setItem('student_profile', JSON.stringify({
         name: 'Aditi Singh',
         rollNo: '23210101548',
@@ -42,28 +42,11 @@ export default function Login() {
         batch: 'Beta 1'
       }));
       window.dispatchEvent(new Event('profile-updated'));
-      navigate('/student/dashboard');
-    } else if (/^\d{1,11}@uudoon\.in$/.test(erpId)) {
-      // Fallback for other valid student IDs
-      localStorage.setItem('student_profile', JSON.stringify({
-        name: 'Guest Student',
-        rollNo: 'GUEST123',
-        regNo: 'UU000000',
-        branch: 'General',
-        semester: '1st Semester',
-        email: erpId,
-        phone: '+91 00000 00000',
-        avatar: 'https://ui-avatars.com/api/?name=Guest+Student&background=0D8ABC&color=fff&size=128',
-        role: 'student',
-        joinDate: 'Today',
-        batch: 'General Batch'
-      }));
-      window.dispatchEvent(new Event('profile-updated'));
-      navigate('/student/dashboard');
+      navigate('/student1/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
       navigate('/faculty/dashboard');
     } else {
-      setError('Invalid ERP ID. Use the provided student IDs or @uumail.in for faculty.');
+      setError('Invalid ERP ID. Access is restricted to authorized users.');
     }
   };
 

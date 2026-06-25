@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { upcomingContests, user } from '../../data/mockData';
-import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target } from 'lucide-react';
+import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests } from '../../api';
 import { socket } from '../../socket';
@@ -97,8 +97,8 @@ export default function Dashboard() {
           <div
             key={i}
             onClick={() => {
-              if (stat.label === 'Avg. Score') navigate('/student/profile');
-              else navigate('/student/contests');
+              if (stat.label === 'Avg. Score') navigate(`/student/profile`);
+              else navigate(`/student/contests`);
             }}
             className="bg-white rounded-xl border border-gray-100 p-5 flex items-center gap-4 shadow-sm hover:shadow-md hover:border-blue-200 dark:hover:border-zinc-600 hover:-translate-y-1 transition-all cursor-pointer group"
           >
@@ -119,7 +119,7 @@ export default function Dashboard() {
           <div>
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-[15px] font-bold text-gray-800">Upcoming Contests</h2>
-              <button className="text-[13px] font-medium text-blue-600 hover:underline" onClick={() => navigate('/student/contests')}>View all</button>
+              <button className="text-[13px] font-medium text-blue-600 hover:underline" onClick={() => navigate(`/student/contests`)}>View all</button>
             </div>
 
             {contests.length === 0 ? (
@@ -127,7 +127,7 @@ export default function Dashboard() {
                 <Trophy className="w-12 h-12 text-gray-300 mb-3" />
                 <h3 className="text-lg font-bold text-gray-800 mb-1">No Upcoming Contests</h3>
                 <p className="text-sm text-gray-500 mb-4 max-w-sm">You're all caught up! Keep an eye out for new mock tests or assessments scheduled by your mentors.</p>
-                <button className="text-sm font-medium text-blue-600 flex items-center gap-1 hover:underline" onClick={() => navigate('/student/contests')}>
+                <button className="text-sm font-medium text-blue-600 flex items-center gap-1 hover:underline" onClick={() => navigate(`/student/contests`)}>
                   View Past Contests &rarr;
                 </button>
               </div>
@@ -144,7 +144,7 @@ export default function Dashboard() {
                         }`}>
                         {contest.status}
                       </span>
-                      <button onClick={() => navigate('/student/contests')} className="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-lg hover:bg-gray-800">
+                      <button onClick={() => navigate(`/student/contests`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-bold rounded-lg hover:bg-gray-800">
                         View Details
                       </button>
                     </div>
@@ -161,19 +161,19 @@ export default function Dashboard() {
                 <Megaphone className="w-5 h-5 text-orange-500" />
                 Notice Board
               </h2>
-              <button onClick={() => navigate('/student/notices')} className="text-[13px] font-medium text-blue-600 hover:underline">View all</button>
+              <button onClick={() => navigate(`/student/notices`)} className="text-[13px] font-medium text-blue-600 hover:underline">View all</button>
             </div>
 
             <div className="space-y-4">
               {notices.length === 0 ? (
-                <div onClick={() => navigate('/student/notices')} className="text-center py-8 rounded-xl border border-gray-100 border-dashed hover:bg-gray-50 transition-colors cursor-pointer group">
+                <div onClick={() => navigate(`/student/notices`)} className="text-center py-8 rounded-xl border border-gray-100 border-dashed hover:bg-gray-50 transition-colors cursor-pointer group">
                   <p className="text-sm text-gray-500 group-hover:text-blue-600 transition-colors">No new notices from your faculty.</p>
                 </div>
               ) : (
                 notices.map((notice) => {
                   const IconComponent = iconMap[notice.iconName] || Info;
                   return (
-                    <div key={notice._id} onClick={() => navigate('/student/notices')} className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-gray-300 dark:border-zinc-800/80 dark:hover:border-zinc-700 bg-gray-50/30 hover:bg-gray-100/50 dark:bg-[#121212] dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group">
+                    <div key={notice._id} onClick={() => navigate(`/student/notices`)} className="flex gap-4 p-4 rounded-xl border border-gray-100 hover:border-gray-300 dark:border-zinc-800/80 dark:hover:border-zinc-700 bg-gray-50/30 hover:bg-gray-100/50 dark:bg-[#121212] dark:hover:bg-zinc-800/50 transition-colors cursor-pointer group">
                       <div className={`w-10 h-10 rounded-full ${notice.bg} flex items-center justify-center shrink-0 ${notice.color} group-hover:scale-110 transition-transform`}>
                         <IconComponent className="w-5 h-5" />
                       </div>
@@ -197,7 +197,7 @@ export default function Dashboard() {
         <div className="space-y-6">
           {/* Batch & Mentor Info */}
           <div
-            onClick={() => navigate('/student/profile')}
+            onClick={() => navigate(`/student/profile`)}
             className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-200 hover:scale-[1.02] transition-all cursor-pointer group"
           >
             <div className="flex items-center justify-between mb-5 border-b border-gray-100 pb-4">
@@ -235,5 +235,3 @@ export default function Dashboard() {
     </div>
   );
 }
-// Adding missing icons required for above component
-import { Code, User } from 'lucide-react';
