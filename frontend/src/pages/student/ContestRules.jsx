@@ -98,12 +98,12 @@ export default function ContestRules() {
                      <span className="w-7 h-7 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center shrink-0 text-[13px] font-bold">3</span>
                      <p className="mt-0.5">The timer will start automatically once you click the 'Start Contest' button below and cannot be paused under any circumstances.</p>
                   </li>
-                  {contest.customRules && (
-                    <li className="flex items-start gap-4">
-                       <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-[13px] font-bold">4</span>
-                       <p className="mt-0.5 whitespace-pre-wrap"><strong className="text-blue-700">Faculty Rules:</strong> {contest.customRules}</p>
+                  {contest.customRules && (Array.isArray(contest.customRules) ? contest.customRules : [contest.customRules]).map((rule, idx) => rule.trim() !== '' && (
+                    <li key={idx} className="flex items-start gap-4">
+                       <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-[13px] font-bold">{4 + idx}</span>
+                       <p className="mt-0.5 whitespace-pre-wrap"><strong className="text-blue-700">Faculty Rules:</strong> {rule}</p>
                     </li>
-                  )}
+                  ))}
                </ul>
             </div>
          </div>

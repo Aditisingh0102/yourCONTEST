@@ -52,6 +52,98 @@
       "createdAt": "2026-06-25T07:23:47.742Z"
     },
     {
+      "title": "rahul",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-25, 11:47",
+      "endTime": "TBD",
+      "duration": "11 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": "rahul hello",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782368345903,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "2",
+            "4",
+            "43",
+            "5"
+          ],
+          "correctOption": 1,
+          "marks": 1
+        },
+        {
+          "id": 1782368388978,
+          "type": "Coding",
+          "title": "sans ",
+          "problemStatement": "dbsaudw",
+          "inputFormat": "hsq",
+          "outputFormat": "hsq",
+          "constraints": "sha",
+          "testCases": [
+            {
+              "input": "12",
+              "output": "21"
+            },
+            {
+              "input": "23",
+              "output": "32"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "43",
+              "output": "34"
+            },
+            {
+              "input": "56",
+              "output": "65"
+            }
+          ],
+          "marks": 10
+        }
+      ],
+      "_id": "1782368149258",
+      "createdAt": "2026-06-25T06:15:49.258Z"
+    },
+    {
+      "title": "ansh",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-24, 23:58",
+      "endTime": "TBD",
+      "duration": "1 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": "ds",
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "questionList": [
+        {
+          "id": 1782325615533,
+          "type": "MCQ",
+          "question": "ds",
+          "options": [
+            "sd",
+            "ds",
+            "sd",
+            "awe"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782325597977",
+      "createdAt": "2026-06-24T18:26:37.977Z"
+    },
+    {
       "title": "as",
       "type": "Mock Test",
       "status": "Upcoming",
@@ -112,6 +204,34 @@
       ],
       "_id": "1782323626755",
       "createdAt": "2026-06-24T17:53:46.755Z"
+    }
+  ],
+  "submissions": [
+    {
+      "contestId": "1782368149258",
+      "contestName": "rahul",
+      "studentId": "ERP101",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782368345903": 1
+      },
+      "score": 1,
+      "submittedAt": "2026-06-25T06:24:38.569Z",
+      "_id": "1782368678601"
+    },
+    {
+      "contestId": "1782368149258",
+      "contestName": "rahul",
+      "studentId": "ERP101",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782368345903": 1
+      },
+      "score": 1,
+      "submittedAt": "2026-06-25T06:24:38.567Z",
+      "_id": "1782368678599"
     }
   ]
 }

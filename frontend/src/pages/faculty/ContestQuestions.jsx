@@ -44,7 +44,7 @@ const TYPE_META = {
 /* ─── Empty forms ───────────────────────────────────────── */
 const emptyMCQ    = { question: '', options: ['', '', '', ''], correctOption: 0, marks: 1 };
 const emptyTheory = { question: '', answer: '', marks: 5 };
-const emptyCoding = { title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', sampleInput: '', sampleOutput: '', hiddenInput: '', hiddenOutput: '', marks: 10 };
+const emptyCoding = { title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', testCases: [{ input: '', output: '' }], hiddenTestCases: [{ input: '', output: '' }], marks: 10 };
 
 /* ─── MCQ form ──────────────────────────────────────────── */
 function MCQForm({ data, onChange, onSubmit, editing }) {
@@ -61,17 +61,10 @@ function MCQForm({ data, onChange, onSubmit, editing }) {
         />
       </div>
       <div className="space-y-3">
-        <label className="block text-[13px] font-bold text-gray-700">Options
-          <span className="text-gray-400 font-normal ml-1">(click radio to mark correct)</span>
-        </label>
+        <label className="block text-[13px] font-bold text-gray-700">Options</label>
         {data.options.map((opt, idx) => (
           <div key={idx} className="flex items-center gap-3">
-            <button type="button"
-              onClick={() => onChange({ ...data, correctOption: idx })}
-              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all
-                ${data.correctOption === idx ? 'border-blue-500 bg-blue-500' : 'border-gray-300'}`}>
-              {data.correctOption === idx && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
-            </button>
+            <span className="w-6 text-center text-sm font-bold text-gray-400">{idx + 1}.</span>
             <input
               required type="text"
               value={opt}
@@ -79,26 +72,35 @@ function MCQForm({ data, onChange, onSubmit, editing }) {
                 const opts = [...data.options]; opts[idx] = e.target.value;
                 onChange({ ...data, options: opts });
               }}
-              placeholder={`Option ${idx + 1}${data.correctOption === idx ? ' ✓ (Correct)' : ''}`}
-              className={`flex-1 px-4 py-2 rounded-xl border text-sm transition-all focus:outline-none
-                ${data.correctOption === idx
-                  ? 'border-blue-300 bg-blue-50 focus:border-blue-500'
-                  : 'border-gray-200 bg-white focus:border-blue-500'}`}
+              placeholder={`Option ${idx + 1}`}
+              className="flex-1 px-4 py-2 rounded-xl border border-gray-200 text-sm transition-all focus:outline-none focus:border-blue-500 bg-white"
             />
           </div>
         ))}
       </div>
       <div className="flex gap-4 items-end">
+        <div className="flex-1">
+          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Correct Option</label>
+          <select
+            value={data.correctOption}
+            onChange={e => onChange({ ...data, correctOption: parseInt(e.target.value) })}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 text-sm"
+          >
+            {data.options.map((_, idx) => (
+              <option key={idx} value={idx}>Option {idx + 1}</option>
+            ))}
+          </select>
+        </div>
         <div className="w-32">
           <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Marks</label>
           <input type="number" min="1"
             value={data.marks}
             onChange={e => onChange({ ...data, marks: parseInt(e.target.value) || 1 })}
-            className="w-full px-4 py-2 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 text-sm"
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 text-sm"
           />
         </div>
         <button type="submit"
-          className="flex-1 py-2.5 bg-blue-600 text-white font-bold text-[14px] rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2 transition-colors">
+          className="flex-[2] py-2.5 bg-blue-600 text-white font-bold text-[14px] rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2 transition-colors">
           {editing ? <><Edit2 className="w-4 h-4" /> Update MCQ</> : <><Check className="w-4 h-4" /> Save MCQ</>}
         </button>
       </div>
@@ -153,6 +155,37 @@ function TheoryForm({ data, onChange, onSubmit, editing }) {
 
 /* ─── Coding form ───────────────────────────────────────── */
 function CodingForm({ data, onChange, onSubmit, editing }) {
+  const testCases = data.testCases || [{ input: '', output: '' }];
+  const hiddenTestCases = data.hiddenTestCases || [{ input: '', output: '' }];
+
+  const addTestCase = () => {
+    onChange({ ...data, testCases: [...testCases, { input: '', output: '' }] });
+  };
+  const removeTestCase = (idx) => {
+    const newTestCases = [...testCases];
+    newTestCases.splice(idx, 1);
+    onChange({ ...data, testCases: newTestCases });
+  };
+  const updateTestCase = (idx, field, value) => {
+    const newTestCases = [...testCases];
+    newTestCases[idx][field] = value;
+    onChange({ ...data, testCases: newTestCases });
+  };
+
+  const addHiddenTestCase = () => {
+    onChange({ ...data, hiddenTestCases: [...hiddenTestCases, { input: '', output: '' }] });
+  };
+  const removeHiddenTestCase = (idx) => {
+    const newTestCases = [...hiddenTestCases];
+    newTestCases.splice(idx, 1);
+    onChange({ ...data, hiddenTestCases: newTestCases });
+  };
+  const updateHiddenTestCase = (idx, field, value) => {
+    const newTestCases = [...hiddenTestCases];
+    newTestCases[idx][field] = value;
+    onChange({ ...data, hiddenTestCases: newTestCases });
+  };
+
   return (
     <form onSubmit={onSubmit} className="space-y-5">
       <div>
@@ -202,44 +235,83 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-purple-500 text-sm"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Sample Input</label>
-          <textarea required rows="3"
-            value={data.sampleInput}
-            onChange={e => onChange({ ...data, sampleInput: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
-          />
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-[13px] font-bold text-gray-700">Sample Test Cases</label>
+          <button type="button" onClick={addTestCase} className="text-purple-600 hover:text-purple-700 font-bold text-sm flex items-center gap-1">
+            <Plus className="w-4 h-4" /> Add Test Case
+          </button>
         </div>
-        <div>
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Sample Output</label>
-          <textarea required rows="3"
-            value={data.sampleOutput}
-            onChange={e => onChange({ ...data, sampleOutput: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
-          />
-        </div>
+        {testCases.map((tc, idx) => (
+          <div key={idx} className="p-4 border border-gray-200 rounded-xl bg-gray-50/50 space-y-3 relative group">
+            {testCases.length > 1 && (
+              <button type="button" onClick={() => removeTestCase(idx)} className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+            <p className="text-xs font-bold text-gray-500">Test Case {idx + 1}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[12px] font-bold text-gray-600 mb-1">Input</label>
+                <textarea required rows="3"
+                  value={tc.input}
+                  onChange={e => updateTestCase(idx, 'input', e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
+                />
+              </div>
+              <div>
+                <label className="block text-[12px] font-bold text-gray-600 mb-1">Output</label>
+                <textarea required rows="3"
+                  value={tc.output}
+                  onChange={e => updateTestCase(idx, 'output', e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
+                />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Hidden Input (For Evaluation)</label>
-          <textarea rows="3"
-            value={data.hiddenInput}
-            onChange={e => onChange({ ...data, hiddenInput: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
-            placeholder="Hidden from student..."
-          />
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <label className="block text-[13px] font-bold text-gray-700">Hidden Test Cases (For Evaluation)</label>
+          <button type="button" onClick={addHiddenTestCase} className="text-purple-600 hover:text-purple-700 font-bold text-sm flex items-center gap-1">
+            <Plus className="w-4 h-4" /> Add Hidden Test Case
+          </button>
         </div>
-        <div>
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Hidden Output (Expected)</label>
-          <textarea rows="3"
-            value={data.hiddenOutput}
-            onChange={e => onChange({ ...data, hiddenOutput: e.target.value })}
-            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
-            placeholder="Hidden expected output..."
-          />
-        </div>
+        {hiddenTestCases.map((tc, idx) => (
+          <div key={idx} className="p-4 border border-gray-200 rounded-xl bg-gray-50/50 space-y-3 relative group">
+            {hiddenTestCases.length > 1 && (
+              <button type="button" onClick={() => removeHiddenTestCase(idx)} className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors">
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+            <p className="text-xs font-bold text-gray-500">Hidden Test Case {idx + 1}</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[12px] font-bold text-gray-600 mb-1">Hidden Input</label>
+                <textarea required rows="3"
+                  value={tc.input}
+                  onChange={e => updateHiddenTestCase(idx, 'input', e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
+                  placeholder="Hidden from student..."
+                />
+              </div>
+              <div>
+                <label className="block text-[12px] font-bold text-gray-600 mb-1">Hidden Output</label>
+                <textarea required rows="3"
+                  value={tc.output}
+                  onChange={e => updateHiddenTestCase(idx, 'output', e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 bg-white font-mono text-sm resize-none focus:outline-none focus:border-purple-500"
+                  placeholder="Hidden expected output..."
+                />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
+
       <div className="flex gap-4 items-end">
         <div className="w-32">
           <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Marks</label>
@@ -339,7 +411,7 @@ export default function ContestQuestions() {
       setEditingQId(slotQ.id);
       if (slot.type === 'mcq')    setMcqForm({ question: slotQ.question, options: slotQ.options, correctOption: slotQ.correctOption, marks: slotQ.marks });
       if (slot.type === 'theory') setTheoryForm({ question: slotQ.question, answer: slotQ.answer, marks: slotQ.marks });
-      if (slot.type === 'coding') setCodingForm({ title: slotQ.title, problemStatement: slotQ.problemStatement, inputFormat: slotQ.inputFormat, outputFormat: slotQ.outputFormat, constraints: slotQ.constraints || '', sampleInput: slotQ.sampleInput, sampleOutput: slotQ.sampleOutput, hiddenInput: slotQ.hiddenInput || '', hiddenOutput: slotQ.hiddenOutput || '', marks: slotQ.marks });
+      if (slot.type === 'coding') setCodingForm({ title: slotQ.title, problemStatement: slotQ.problemStatement, inputFormat: slotQ.inputFormat, outputFormat: slotQ.outputFormat, constraints: slotQ.constraints || '', testCases: slotQ.testCases || (slotQ.sampleInput ? [{ input: slotQ.sampleInput, output: slotQ.sampleOutput }] : [{ input: '', output: '' }]), hiddenTestCases: slotQ.hiddenTestCases || (slotQ.hiddenInput ? [{ input: slotQ.hiddenInput, output: slotQ.hiddenOutput }] : [{ input: '', output: '' }]), marks: slotQ.marks });
     } else {
       setEditingQId(null);
       setMcqForm({ ...emptyMCQ });
@@ -393,7 +465,7 @@ export default function ContestQuestions() {
     setEditingQId(q.id);
     if (q.type === 'MCQ')    setMcqForm({ question: q.question, options: q.options, correctOption: q.correctOption, marks: q.marks });
     if (q.type === 'Theory') setTheoryForm({ question: q.question, answer: q.answer, marks: q.marks });
-    if (q.type === 'Coding') setCodingForm({ title: q.title, problemStatement: q.problemStatement, inputFormat: q.inputFormat, outputFormat: q.outputFormat, constraints: q.constraints || '', sampleInput: q.sampleInput, sampleOutput: q.sampleOutput, hiddenInput: q.hiddenInput || '', hiddenOutput: q.hiddenOutput || '', marks: q.marks });
+    if (q.type === 'Coding') setCodingForm({ title: q.title, problemStatement: q.problemStatement, inputFormat: q.inputFormat, outputFormat: q.outputFormat, constraints: q.constraints || '', testCases: q.testCases || (q.sampleInput ? [{ input: q.sampleInput, output: q.sampleOutput }] : [{ input: '', output: '' }]), hiddenTestCases: q.hiddenTestCases || (q.hiddenInput ? [{ input: q.hiddenInput, output: q.hiddenOutput }] : [{ input: '', output: '' }]), marks: q.marks });
   };
 
   /* ── Free-list save (no slots) */
