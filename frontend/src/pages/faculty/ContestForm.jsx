@@ -204,7 +204,7 @@ export default function ContestForm() {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: '', strictFullscreen: true, disableCopyPaste: true
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: '', strictFullscreen: true, disableCopyPaste: true, batch: 'All'
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
@@ -228,7 +228,8 @@ export default function ContestForm() {
             duration: contest.duration ? parseInt(contest.duration) : '',
             customRules: contest.customRules || '',
             strictFullscreen: contest.strictFullscreen !== false,
-            disableCopyPaste: contest.disableCopyPaste !== false
+            disableCopyPaste: contest.disableCopyPaste !== false,
+            batch: contest.batch || 'All'
           });
         }
       });
@@ -256,7 +257,8 @@ export default function ContestForm() {
           duration: `${formData.duration} mins`,
           customRules: formData.customRules || '',
           strictFullscreen: formData.strictFullscreen,
-          disableCopyPaste: formData.disableCopyPaste
+          disableCopyPaste: formData.disableCopyPaste,
+          batch: formData.batch
         });
         setSavedContestId(dbContestId);
       } else {
@@ -274,6 +276,7 @@ export default function ContestForm() {
           customRules: formData.customRules || '',
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
+          batch: formData.batch,
           questionList: []
         };
         const res = await createContest(newContest);
@@ -320,7 +323,7 @@ export default function ContestForm() {
                 <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">1</span>
                 Basic Details
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pl-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pl-8">
                 <div>
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Contest Name</label>
                   <input
@@ -343,6 +346,19 @@ export default function ContestForm() {
                     <option value="Mock Test">Mock Test</option>
                     <option value="Coding Challenge">Weekly Coding Challenge</option>
                     <option value="Lab Exam">Lab Exam</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Select Batch</label>
+                  <select
+                    value={formData.batch}
+                    onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                  >
+                    <option value="All">All Batches</option>
+                    <option value="Alpha 1">Alpha 1</option>
+                    <option value="Alpha 2">Alpha 2</option>
+                    <option value="Beta 1">Beta 1</option>
                   </select>
                 </div>
               </div>

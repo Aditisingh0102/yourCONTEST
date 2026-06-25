@@ -14,10 +14,10 @@ export default function Login() {
     if (erpId === '23210101548@uudoon.in') {
       localStorage.setItem('student_profile', JSON.stringify({
         name: 'Aditi Singh',
-        rollNo: '2023CSE1042',
+        rollNo: '23210101548',
         regNo: 'UU23104209',
         branch: 'B.Tech CSE',
-        semester: '8th Semester',
+        semester: '7th Semester',
         email: '23210101548@uudoon.in',
         phone: '+91 98765 43210',
         avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
@@ -30,10 +30,10 @@ export default function Login() {
     } else if (erpId === '23210101763@uudoon.in') {
       localStorage.setItem('student_profile', JSON.stringify({
         name: 'Ambar Kumar',
-        rollNo: '2023IT1099',
+        rollNo: '23210101763',
         regNo: 'UU23104299',
         branch: 'B.Tech IT',
-        semester: '8th Semester',
+        semester: '7th Semester',
         email: '23210101763@uudoon.in',
         phone: '+91 98765 99999',
         avatar: 'https://ui-avatars.com/api/?name=Ambar+Kumar&background=0D8ABC&color=fff&size=128',

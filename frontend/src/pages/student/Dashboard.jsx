@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { upcomingContests, user } from '../../data/mockData';
-import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket } from 'lucide-react';
+import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests } from '../../api';
 import { socket } from '../../socket';
@@ -48,7 +48,8 @@ export default function Dashboard() {
   const fetchContests = async () => {
     try {
       const res = await getContests();
-      setContests(res.data.filter(c => c.status !== 'Ended').slice(0, 2)); // Show up to 2 active/upcoming
+      const studentBatch = JSON.parse(localStorage.getItem('student_profile'))?.batch || 'Alpha 1';
+      setContests(res.data.filter(c => c.status !== 'Ended' && (!c.batch || c.batch === 'All' || c.batch === studentBatch)).slice(0, 2)); // Show up to 2 active/upcoming
     } catch (error) {
       console.error("Failed to fetch contests", error);
     }
@@ -77,7 +78,7 @@ export default function Dashboard() {
         <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         <div className="relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 dark:bg-blue-500/10 rounded-full text-[11px] font-bold tracking-wider mb-3 shadow-sm border border-white/10 dark:border-blue-400/20 uppercase text-white dark:text-blue-200">
-            <Rocket className="w-3.5 h-3.5 text-white dark:text-blue-300" /> BATCH: {studentProfile.batch || 'ALPHA 1'}
+            {studentProfile.batch === 'Beta 1' ? <Target className="w-3.5 h-3.5 text-white dark:text-blue-300" /> : <Rocket className="w-3.5 h-3.5 text-white dark:text-blue-300" />} BATCH: {studentProfile.batch || 'ALPHA 1'}
           </div>
           <h1 className="text-3xl font-bold mb-1 text-white">{studentProfile.name}</h1>
           <p className="text-blue-100 dark:text-blue-200/60 text-sm mb-4">UIT • {studentProfile.branch || 'B.Tech CSE'} • 4th Year Student</p>
@@ -201,8 +202,8 @@ export default function Dashboard() {
           >
             <div className="flex items-center justify-between mb-5 border-b border-gray-100 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform">
-                  <Rocket className="w-5 h-5" />
+                <div className={`w-10 h-10 ${studentProfile.batch === 'Beta 1' ? 'bg-green-100 text-green-500' : 'bg-orange-100 text-orange-500'} rounded-lg flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform`}>
+                  {studentProfile.batch === 'Beta 1' ? <Target className="w-5 h-5" /> : <Rocket className="w-5 h-5" />}
                 </div>
                 <div>
                   <h2 className="text-[16px] font-bold text-gray-800 leading-none group-hover:text-blue-600 transition-colors">{studentProfile.batch || 'Alpha 1'}</h2>

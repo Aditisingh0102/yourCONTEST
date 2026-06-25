@@ -13,7 +13,8 @@ export default function Contests() {
   const fetchContests = async () => {
     try {
       const res = await getContests();
-      setAllContests(res.data);
+      const studentBatch = JSON.parse(localStorage.getItem('student_profile'))?.batch || 'Alpha 1';
+      setAllContests(res.data.filter(c => !c.batch || c.batch === 'All' || c.batch === studentBatch));
     } catch(err) {
       console.error(err);
     }

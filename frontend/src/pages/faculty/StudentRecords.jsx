@@ -3,14 +3,14 @@ import { Search, Filter, Download, UserCircle, CheckCircle, XCircle, MoreVertica
 import { getSubmissions } from '../../api';
 
 const mockStudents = [
-  { id: 'ERP101', name: 'Aarav Sharma', batch: 'Alpha 1', testsTaken: 12, avgScore: 85, status: 'Excellent' },
+  { id: '23210101548@uudoon.in', name: 'Aditi Singh', batch: 'Alpha 1', testsTaken: 12, avgScore: 85, status: 'Excellent' },
   { id: 'ERP102', name: 'Riya Gupta', batch: 'Alpha 1', testsTaken: 11, avgScore: 92, status: 'Excellent' },
   { id: 'ERP103', name: 'Vihaan Singh', batch: 'Alpha 1', testsTaken: 12, avgScore: 65, status: 'Average' },
   { id: 'ERP104', name: 'Ananya Patel', batch: 'Alpha 1', testsTaken: 8, avgScore: 45, status: 'Needs Attention' },
   { id: 'ERP201', name: 'Arjun Kumar', batch: 'Alpha 2', testsTaken: 10, avgScore: 78, status: 'Good' },
   { id: 'ERP202', name: 'Sneha Iyer', batch: 'Alpha 2', testsTaken: 9, avgScore: 88, status: 'Excellent' },
   { id: 'ERP203', name: 'Vivaan Joshi', batch: 'Alpha 2', testsTaken: 10, avgScore: 55, status: 'Average' },
-  { id: 'ERP301', name: 'Rohan Mehta', batch: 'Beta 1', testsTaken: 5, avgScore: 95, status: 'Excellent' },
+  { id: '23210101763@uudoon.in', name: 'Ambar Kumar', batch: 'Beta 1', testsTaken: 15, avgScore: 95, status: 'Excellent' },
   { id: 'ERP302', name: 'Neha Sharma', batch: 'Beta 1', testsTaken: 4, avgScore: 72, status: 'Good' },
 ];
 
