@@ -10,21 +10,60 @@ export default function Login() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-// Regex breakdown:
-  // ^      : Starts with
-  // \d     : Only digits (0-9)
-  // {1,10} : Between 1 and 10 characters long (change to {10} if it must be EXACTLY 10)
-  // @...   : Followed by the literal domain string
-  // $      : End of string
-  const isValidStudent = /^\d{1,11}@uudoon\.in$/.test(erpId);
-  const isValidFaculty = /^\d{1,11}@uumail\.in$/.test(erpId);
 
-  if (isValidStudent) {
-    navigate('/student/dashboard');
-  } else if (isValidFaculty) {
-    navigate('/faculty/dashboard');
-  } else {
-      setError('Invalid ERP ID domain. Use @uudoon.in for students or @uumail.in for faculty.');
+    if (erpId === '23210101548@uudoon.in') {
+      localStorage.setItem('student_profile', JSON.stringify({
+        name: 'Aditi Singh',
+        rollNo: '2023CSE1042',
+        regNo: 'UU23104209',
+        branch: 'B.Tech CSE',
+        semester: '8th Semester',
+        email: '23210101548@uudoon.in',
+        phone: '+91 98765 43210',
+        avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
+        role: 'student',
+        joinDate: 'August 2023',
+        batch: 'Alpha 1'
+      }));
+      window.dispatchEvent(new Event('profile-updated'));
+      navigate('/student/dashboard');
+    } else if (erpId === '23210101763@uudoon.in') {
+      localStorage.setItem('student_profile', JSON.stringify({
+        name: 'Ambar Kumar',
+        rollNo: '2023IT1099',
+        regNo: 'UU23104299',
+        branch: 'B.Tech IT',
+        semester: '8th Semester',
+        email: '23210101763@uudoon.in',
+        phone: '+91 98765 99999',
+        avatar: 'https://ui-avatars.com/api/?name=Ambar+Kumar&background=0D8ABC&color=fff&size=128',
+        role: 'student',
+        joinDate: 'August 2023',
+        batch: 'Beta 1'
+      }));
+      window.dispatchEvent(new Event('profile-updated'));
+      navigate('/student/dashboard');
+    } else if (/^\d{1,11}@uudoon\.in$/.test(erpId)) {
+      // Fallback for other valid student IDs
+      localStorage.setItem('student_profile', JSON.stringify({
+        name: 'Guest Student',
+        rollNo: 'GUEST123',
+        regNo: 'UU000000',
+        branch: 'General',
+        semester: '1st Semester',
+        email: erpId,
+        phone: '+91 00000 00000',
+        avatar: 'https://ui-avatars.com/api/?name=Guest+Student&background=0D8ABC&color=fff&size=128',
+        role: 'student',
+        joinDate: 'Today',
+        batch: 'General Batch'
+      }));
+      window.dispatchEvent(new Event('profile-updated'));
+      navigate('/student/dashboard');
+    } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
+      navigate('/faculty/dashboard');
+    } else {
+      setError('Invalid ERP ID. Use the provided student IDs or @uumail.in for faculty.');
     }
   };
 

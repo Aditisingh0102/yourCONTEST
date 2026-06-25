@@ -54,16 +54,16 @@ export default function Dashboard() {
     }
   };
 
-  const [studentName, setStudentName] = useState(() => {
+  const [studentProfile, setStudentProfile] = useState(() => {
     const saved = localStorage.getItem('student_profile');
-    if (saved) return JSON.parse(saved).name;
-    return 'Aditi Singh';
+    if (saved) return JSON.parse(saved);
+    return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
   });
 
   useEffect(() => {
     const handleUpdate = () => {
       const saved = localStorage.getItem('student_profile');
-      if (saved) setStudentName(JSON.parse(saved).name);
+      if (saved) setStudentProfile(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
     return () => window.removeEventListener('profile-updated', handleUpdate);
@@ -77,10 +77,10 @@ export default function Dashboard() {
         <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         <div className="relative z-10">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 dark:bg-blue-500/10 rounded-full text-[11px] font-bold tracking-wider mb-3 shadow-sm border border-white/10 dark:border-blue-400/20 uppercase text-white dark:text-blue-200">
-            <Rocket className="w-3.5 h-3.5 text-white dark:text-blue-300" /> BATCH: ALPHA 1
+            <Rocket className="w-3.5 h-3.5 text-white dark:text-blue-300" /> BATCH: {studentProfile.batch || 'ALPHA 1'}
           </div>
-          <h1 className="text-3xl font-bold mb-1 text-white">{studentName}</h1>
-          <p className="text-blue-100 dark:text-blue-200/60 text-sm mb-4">UIT • B.Tech CSE • 4th Year Student</p>
+          <h1 className="text-3xl font-bold mb-1 text-white">{studentProfile.name}</h1>
+          <p className="text-blue-100 dark:text-blue-200/60 text-sm mb-4">UIT • {studentProfile.branch || 'B.Tech CSE'} • 4th Year Student</p>
 
         </div>
       </div>
@@ -205,7 +205,7 @@ export default function Dashboard() {
                   <Rocket className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-[16px] font-bold text-gray-800 leading-none group-hover:text-blue-600 transition-colors">Alpha 1</h2>
+                  <h2 className="text-[16px] font-bold text-gray-800 leading-none group-hover:text-blue-600 transition-colors">{studentProfile.batch || 'Alpha 1'}</h2>
                   <p className="text-[11px] text-gray-500 font-medium mt-1">Session 2023-2027</p>
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function Dashboard() {
                 <BookOpen className="w-4 h-4 text-purple-500 mt-0.5" />
                 <div>
                   <p className="text-[10px] uppercase font-bold text-gray-400 leading-none mb-1">Program</p>
-                  <p className="text-[13px] font-bold text-gray-800">B.Tech CSE</p>
+                  <p className="text-[13px] font-bold text-gray-800">{studentProfile.branch || 'B.Tech CSE'}</p>
                 </div>
               </div>
             </div>
