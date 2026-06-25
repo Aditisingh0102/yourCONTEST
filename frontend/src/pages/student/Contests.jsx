@@ -9,6 +9,16 @@ export default function Contests() {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [allContests, setAllContests] = useState([]);
   const [toastMessage, setToastMessage] = useState('');
+  const [studentBatch, setStudentBatch] = useState(null);
+
+  // Get student's batch from localStorage
+  useEffect(() => {
+    const studentProfile = localStorage.getItem('student_profile');
+    if (studentProfile) {
+      const profile = JSON.parse(studentProfile);
+      setStudentBatch(profile.batch);
+    }
+  }, []);
 
   const fetchContests = async () => {
     try {
@@ -46,8 +56,21 @@ export default function Contests() {
     navigate(`/student/arena/${contest._id || contest.id}`);
   };
 
-  const activeContests = allContests.filter(c => c.status === 'Live' || c.status === 'Upcoming');
-  const pastContests = allContests.filter(c => c.status === 'Past');
+  // Filter contests based on batch assignment
+  const filterContestsByBatch = (contests) => {
+    return contests.filter(contest => {
+      // If no batches are assigned, show to all students
+      if (!contest.assignedBatches || contest.assignedBatches.length === 0) {
+        return true;
+      }
+      // Otherwise, only show if student's batch is in assigned batches
+      return studentBatch && contest.assignedBatches.includes(studentBatch);
+    });
+  };
+
+  const filteredContests = filterContestsByBatch(allContests);
+  const activeContests = filteredContests.filter(c => c.status === 'Live' || c.status === 'Upcoming');
+  const pastContests = filteredContests.filter(c => c.status === 'Past');
 
   const displayedContests = activeTab === 'upcoming' ? activeContests : pastContests;
 
