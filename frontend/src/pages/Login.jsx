@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
 
     if (erpId === '23210101548@uudoon.in') {
-      localStorage.setItem('student_profile', JSON.stringify({
+      localStorage.setItem('student_profile_student1', JSON.stringify({
         name: 'Aditi Singh',
         rollNo: '23210101548',
         regNo: 'UU23104209',
@@ -26,9 +26,9 @@ export default function Login() {
         batch: 'Alpha 1'
       }));
       window.dispatchEvent(new Event('profile-updated'));
-      navigate('/student/dashboard');
+      navigate('/student1/dashboard');
     } else if (erpId === '23210101763@uudoon.in') {
-      localStorage.setItem('student_profile', JSON.stringify({
+      localStorage.setItem('student_profile_student2', JSON.stringify({
         name: 'Ambar Kumar',
         rollNo: '23210101763',
         regNo: 'UU23104299',
@@ -42,10 +42,10 @@ export default function Login() {
         batch: 'Beta 1'
       }));
       window.dispatchEvent(new Event('profile-updated'));
-      navigate('/student/dashboard');
+      navigate('/student2/dashboard');
     } else if (/^\d{1,11}@uudoon\.in$/.test(erpId)) {
-      // Fallback for other valid student IDs
-      localStorage.setItem('student_profile', JSON.stringify({
+      // Fallback for other valid student IDs — direct to student1
+      localStorage.setItem('student_profile_student1', JSON.stringify({
         name: 'Guest Student',
         rollNo: 'GUEST123',
         regNo: 'UU000000',
@@ -59,7 +59,7 @@ export default function Login() {
         batch: 'General Batch'
       }));
       window.dispatchEvent(new Event('profile-updated'));
-      navigate('/student/dashboard');
+      navigate('/student1/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
       navigate('/faculty/dashboard');
     } else {
