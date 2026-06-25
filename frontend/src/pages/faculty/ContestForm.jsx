@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   ArrowLeft, Trophy, Save, CheckCircle2, Code, BookOpen, 
-  Plus, Minus, ChevronRight, X, Sparkles, ListChecks, Trash2, Users
+  Plus, Minus, ChevronRight, X, Sparkles, ListChecks, Trash2
 } from 'lucide-react';
 import { getContests, createContest, updateContest } from '../../api';
 
@@ -204,19 +204,12 @@ export default function ContestForm() {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, assignedBatches: []
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, batch: 'All'
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [savedContestId, setSavedContestId] = useState(null);
   const [saving, setSaving] = useState(false);
-
-  // Mock batches — in production this would come from API
-  const mockBatches = [
-    { id: 1, name: 'Alpha 1' },
-    { id: 2, name: 'Alpha 2' },
-    { id: 3, name: 'Beta 1' }
-  ];
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -236,7 +229,7 @@ export default function ContestForm() {
             customRules: Array.isArray(contest.customRules) ? contest.customRules : (contest.customRules ? [contest.customRules] : []),
             strictFullscreen: contest.strictFullscreen !== false,
             disableCopyPaste: contest.disableCopyPaste !== false,
-            assignedBatches: Array.isArray(contest.assignedBatches) ? contest.assignedBatches : []
+            batch: contest.batch || 'All'
           });
         }
       });
@@ -265,7 +258,7 @@ export default function ContestForm() {
           customRules: formData.customRules || [],
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
-          assignedBatches: formData.assignedBatches
+          batch: formData.batch
         });
         setSavedContestId(dbContestId);
       } else {
@@ -283,8 +276,8 @@ export default function ContestForm() {
           customRules: formData.customRules || [],
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
-          questionList: [],
-          assignedBatches: formData.assignedBatches
+          batch: formData.batch,
+          questionList: []
         };
         const res = await createContest(newContest);
         setSavedContestId(res.data._id || res.data.id);
@@ -413,56 +406,10 @@ export default function ContestForm() {
               </div>
             </div>
 
-            {/* ③ Batch Assignment */}
+            {/* ③ Rules & Proctoring */}
             <div className="pt-6 border-t border-gray-100">
               <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">3</span>
-                Assign to Batches
-              </h3>
-              <div className="pl-8">
-                <p className="text-[13px] text-gray-600 mb-4">Select which batches can see and attempt this contest:</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                  {mockBatches.map(batch => (
-                    <label
-                      key={batch.id}
-                      className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all ${
-                        formData.assignedBatches.includes(batch.id)
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 bg-white hover:border-gray-300'
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.assignedBatches.includes(batch.id)}
-                        onChange={(e) => {
-                          const newBatches = e.target.checked
-                            ? [...formData.assignedBatches, batch.id]
-                            : formData.assignedBatches.filter(b => b !== batch.id);
-                          setFormData({ ...formData, assignedBatches: newBatches });
-                        }}
-                        className="w-5 h-5 text-blue-600 rounded"
-                      />
-                      <div className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-gray-500" />
-                        <span className="text-[14px] font-bold text-gray-800">{batch.name}</span>
-                      </div>
-                    </label>
-                  ))}
-                </div>
-                {formData.assignedBatches.length === 0 && (
-                  <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-xl">
-                    <p className="text-[13px] text-yellow-700 font-medium">
-                      ⚠️ No batches selected. Students from any batch will see this contest.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* ④ Rules & Proctoring */}
-            <div className="pt-6 border-t border-gray-100">
-              <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">4</span>
                 Rules & Proctoring
               </h3>
               <div className="space-y-5 pl-8">
