@@ -47,17 +47,17 @@ export default function Contests() {
 
   const handleContestClick = (contest) => {
     if (contest.status === 'Past') {
-      navigate(`/${portalId}/contests/${contest._id || contest.id}`);
+      navigate(`/student/contests/${contest._id || contest.id}`);
       return;
     }
     
     if (contest.status === 'Upcoming') {
-      navigate(`/${portalId}/arena/${contest._id || contest.id}`);
+      navigate(`/student/arena/${contest._id || contest.id}`);
       return;
     }
     
     // Within 30 mins or Live -> go to Arena
-    navigate(`/${portalId}/arena/${contest._id || contest.id}`);
+    navigate(`/student/arena/${contest._id || contest.id}`);
   };
 
   // Filter contests based on batch assignment

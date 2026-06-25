@@ -218,17 +218,6 @@ export default function ContestForm() {
     { id: 3, name: 'Beta 1' }
   ];
 
-  const normalizeAssignedBatches = (assigned) => {
-    if (!Array.isArray(assigned)) return [];
-    return assigned.map((item) => {
-      if (typeof item === 'number') {
-        const found = mockBatches.find((batch) => batch.id === item);
-        return found ? found.name : item;
-      }
-      return item;
-    });
-  };
-
   const today = new Date().toISOString().split('T')[0];
 
   useEffect(() => {
@@ -247,7 +236,7 @@ export default function ContestForm() {
             customRules: Array.isArray(contest.customRules) ? contest.customRules : (contest.customRules ? [contest.customRules] : []),
             strictFullscreen: contest.strictFullscreen !== false,
             disableCopyPaste: contest.disableCopyPaste !== false,
-            assignedBatches: normalizeAssignedBatches(contest.assignedBatches)
+            assignedBatches: Array.isArray(contest.assignedBatches) ? contest.assignedBatches : []
           });
         }
       });
@@ -266,11 +255,6 @@ export default function ContestForm() {
     setSaving(true);
 
     try {
-      const assignedBatchNames = formData.assignedBatches.map((batchId) => {
-        const found = mockBatches.find((batch) => batch.id === batchId);
-        return found ? found.name : batchId;
-      });
-
       if (id && dbContestId) {
         // Edit mode — just save, then open modal
         await updateContest(dbContestId, {
@@ -281,7 +265,7 @@ export default function ContestForm() {
           customRules: formData.customRules || [],
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
-          assignedBatches: assignedBatchNames
+          assignedBatches: formData.assignedBatches
         });
         setSavedContestId(dbContestId);
       } else {
@@ -300,7 +284,7 @@ export default function ContestForm() {
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
           questionList: [],
-          assignedBatches: assignedBatchNames
+          assignedBatches: formData.assignedBatches
         };
         const res = await createContest(newContest);
         setSavedContestId(res.data._id || res.data.id);
