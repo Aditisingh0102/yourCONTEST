@@ -6,12 +6,12 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
   const navigate = useNavigate();
 
   return (
-    <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container transition-colors duration-300">
+    <div className="h-16 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container transition-colors duration-300">
       <div className="flex items-center gap-4">
         {/* Sidebar Hamburger Toggle Button */}
         <button
           onClick={onToggleSidebar}
-          className="p-2 text-gray-500 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-100"
+          className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-100"
           aria-label="Toggle Sidebar"
         >
           <Menu className="w-5 h-5" />
@@ -21,9 +21,9 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
           <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-lg logo-icon hidden sm:block shadow-sm border border-transparent dark:border-gray-600">
             <BookOpen className="w-5 h-5" />
           </div>
-          <div className="flex flex-col sm:border-l sm:border-gray-300 sm:pl-3 logo-text-container">
-            <span className="text-[15px] font-bold text-gray-800 leading-tight">University Platform</span>
-            <span className="text-[11px] text-gray-500 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Faculty Portal'}</span>
+          <div className="flex flex-col sm:border-l sm:border-gray-300 dark:sm:border-gray-600 sm:pl-3 logo-text-container">
+            <span className="text-[15px] font-bold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
+            <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Faculty Portal'}</span>
           </div>
         </div>
       </div>
@@ -62,16 +62,16 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
         </button>
 
         {/* Bell */}
-        <button className="text-gray-400 hover:text-blue-600 transition-colors p-2 rounded-full hover:bg-gray-100">
+        <button className="text-gray-400 dark:text-gray-500 hover:text-blue-600 transition-colors p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
           <Bell className="w-5 h-5" />
         </button>
 
         {/* Avatar */}
         <div className="flex items-center gap-3 pl-2 cursor-pointer">
-          <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-200" />
+          <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600" />
           <div className="text-left hidden sm:block">
-            <p className="text-[13px] font-semibold text-gray-800 leading-tight">{user.name}</p>
-            <p className="text-[11px] text-gray-500 capitalize leading-tight">{user.role}</p>
+            <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">{user.name}</p>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize leading-tight">{user.role}</p>
           </div>
         </div>
       </div>
