@@ -2,6 +2,40 @@
   "notices": [],
   "contests": [
     {
+      "title": "rahul",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-06-26, 13:16",
+      "endTime": "TBD",
+      "duration": "20 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": false,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "questionList": [
+        {
+          "id": 1782459947222,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "3",
+            "4",
+            "2",
+            "6"
+          ],
+          "correctOption": 1,
+          "marks": 1
+        }
+      ],
+      "_id": "1782459884173",
+      "createdAt": "2026-06-26T07:44:44.173Z"
+    },
+    {
       "title": "ams",
       "type": "Mock Test",
       "status": "Upcoming",
@@ -236,6 +270,18 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1782459884173",
+      "contestName": "rahul",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1782459947222": 1
+      },
+      "score": 1,
+      "submittedAt": "2026-06-26T07:47:09.539Z",
+      "_id": "1782460029544"
+    },
     {
       "contestId": "1782374095488",
       "contestName": "ams",

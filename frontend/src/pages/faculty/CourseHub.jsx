@@ -88,6 +88,17 @@ export default function CourseHub() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ title: '', subject: '', modules: '', status: 'Draft' });
+  
+  const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
+  const [selectedCourseForAnalytics, setSelectedCourseForAnalytics] = useState(null);
+
+  const mockProgressData = [
+    { id: 1, name: 'Aditi Singh', rollNo: '2023CSE1042', progress: 100, lastActive: '2 hrs ago' },
+    { id: 2, name: 'Ambar Kumar', rollNo: '2023CSE1043', progress: 65, lastActive: '1 day ago' },
+    { id: 3, name: 'Rahul Sharma', rollNo: '2023CSE1045', progress: 40, lastActive: '3 days ago' },
+    { id: 4, name: 'Sneha Gupta', rollNo: '2023CSE1046', progress: 10, lastActive: '1 week ago' },
+  ];
+
   const navigate = useNavigate();
 
   const filteredCourses = courses.filter(course => 
@@ -230,10 +241,10 @@ export default function CourseHub() {
 
               {/* Actions */}
               <div className="mt-auto pt-4 border-t border-gray-50 flex gap-2" onClick={e => e.stopPropagation()}>
-                <button className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-lg text-[12px] font-bold transition-colors">
+                <button onClick={() => navigate(`/faculty/course-hub/${course.id}`)} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-lg text-[12px] font-bold transition-colors">
                   <Edit3 className="w-3.5 h-3.5" /> Edit
                 </button>
-                <button className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-green-50 text-gray-700 hover:text-green-600 rounded-lg text-[12px] font-bold transition-colors">
+                <button onClick={() => { setSelectedCourseForAnalytics(course); setShowAnalyticsModal(true); }} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-green-50 text-gray-700 hover:text-green-600 rounded-lg text-[12px] font-bold transition-colors">
                   <BarChart2 className="w-3.5 h-3.5" /> Analytics
                 </button>
                 <button 
@@ -345,6 +356,55 @@ export default function CourseHub() {
           </div>
         </div>
       )}
+
+      {/* Analytics Modal */}
+      {showAnalyticsModal && selectedCourseForAnalytics && (
+        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden">
+             <div className="flex justify-between items-center p-5 border-b border-gray-100">
+               <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                 <BarChart2 className="w-5 h-5 text-green-600" /> Analytics: {selectedCourseForAnalytics.title}
+               </h2>
+               <button onClick={() => setShowAnalyticsModal(false)} className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                 <X className="w-5 h-5" />
+               </button>
+             </div>
+             <div className="p-0 max-h-[60vh] overflow-y-auto">
+               <table className="w-full text-left border-collapse">
+                 <thead>
+                   <tr className="bg-gray-50 text-gray-500 text-[11px] uppercase tracking-wider">
+                     <th className="p-4 font-bold border-b">Student</th>
+                     <th className="p-4 font-bold border-b">Progress</th>
+                     <th className="p-4 font-bold border-b">Last Active</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   {mockProgressData.map(student => (
+                     <tr key={student.id} className="border-b hover:bg-gray-50/50 transition-colors">
+                       <td className="p-4">
+                         <p className="font-bold text-sm text-gray-900">{student.name}</p>
+                         <p className="text-xs font-medium text-gray-500">{student.rollNo}</p>
+                       </td>
+                       <td className="p-4">
+                         <div className="flex items-center gap-3">
+                           <div className="w-full bg-gray-200 rounded-full h-2 max-w-[150px]">
+                             <div className={`h-2 rounded-full ${student.progress === 100 ? 'bg-green-500' : 'bg-blue-500'}`} style={{ width: `${student.progress}%` }}></div>
+                           </div>
+                           <span className="text-xs font-bold text-gray-700">{student.progress}%</span>
+                         </div>
+                       </td>
+                       <td className="p-4">
+                         <span className="text-xs font-medium text-gray-500">{student.lastActive}</span>
+                       </td>
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
