@@ -11,26 +11,26 @@ export default function Student1Layout() {
   const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('student_profile');
+    const saved = localStorage.getItem('student1_profile');
     if (saved) return JSON.parse(saved);
     return {
-      name: 'Aditi Singh',
-      avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
+      name: 'Ambar Kumar',
+      avatar: 'https://ui-avatars.com/api/?name=Ambar+Kumar&background=0D8ABC&color=fff&size=128',
       role: 'student'
     };
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem('student_profile');
+      const saved = localStorage.getItem('student1_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
-    window.addEventListener('profile-updated', handleUpdate);
-    return () => window.removeEventListener('profile-updated', handleUpdate);
+    window.addEventListener('profile1-updated', handleUpdate);
+    return () => window.removeEventListener('profile1-updated', handleUpdate);
   }, []);
 
   useEffect(() => {
-    const currentProfile = JSON.parse(localStorage.getItem('student_profile') || '{}');
+    const currentProfile = JSON.parse(localStorage.getItem('student1_profile') || '{}');
     if (currentProfile.batch !== 'Beta 1') {
       const ambarProfile = {
         name: 'Ambar Kumar',
@@ -41,9 +41,9 @@ export default function Student1Layout() {
         batch: 'Beta 1',
         role: 'student'
       };
-      localStorage.setItem('student_profile', JSON.stringify(ambarProfile));
+      localStorage.setItem('student1_profile', JSON.stringify(ambarProfile));
       setProfileData(ambarProfile);
-      window.dispatchEvent(new Event('profile-updated'));
+      window.dispatchEvent(new Event('profile1-updated'));
     }
   }, []);
 

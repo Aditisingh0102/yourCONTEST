@@ -211,6 +211,7 @@ export default function ContestForm() {
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [savedContestId, setSavedContestId] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [dateError, setDateError] = useState('');
 
   const [isBatchOpen, setIsBatchOpen] = useState(false);
   const batchDropdownRef = useRef(null);
@@ -250,12 +251,26 @@ export default function ContestForm() {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (formData.startDate && formData.startTime) {
+      const selectedDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
+      if (selectedDateTime < new Date()) {
+        setDateError("Start date and time cannot be in the past!");
+      } else {
+        setDateError('');
+      }
+    } else {
+      setDateError('');
+    }
+  }, [formData.startDate, formData.startTime]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setDateError('');
 
     const selectedDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
     if (selectedDateTime < new Date()) {
-      alert("Start date and time cannot be in the past!");
+      setDateError("Start date and time cannot be in the past!");
       return;
     }
 
@@ -446,6 +461,14 @@ export default function ContestForm() {
                   />
                 </div>
               </div>
+              {dateError && (
+                <div className="mt-4 pl-8">
+                  <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+                    <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
+                    {dateError}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* ③ Rules & Proctoring */}

@@ -3,9 +3,137 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Code, CheckCircle2, Trash2, BookOpen,
   HelpCircle, Edit2, XCircle, ChevronRight, ChevronLeft,
-  LayoutList, Sparkles, Check, Clock
+  LayoutList, Sparkles, Check, Clock, Upload, FileText
 } from 'lucide-react';
-import { getContests, updateContest } from '../../api';
+import { getContests, updateContest, uploadQuestionsDocument } from '../../api';
+
+/* ─── Import Modal ───────────────────────────────────────── */
+function ImportModal({ onClose, onImport }) {
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [parsed, setParsed] = useState([]);
+  const [selected, setSelected] = useState(new Set());
+
+  const handleUpload = async () => {
+    if (!file) return;
+    setLoading(true);
+    setError('');
+    const formData = new FormData();
+    formData.append('document', file);
+    
+    try {
+      const res = await uploadQuestionsDocument(formData);
+      if (res.data.questions && res.data.questions.length > 0) {
+        setParsed(res.data.questions);
+        setSelected(new Set(res.data.questions.map(q => q.id))); // select all by default
+      } else {
+        setError('No valid questions found in the document. Please check the format.');
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to upload document');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleSelect = (id) => {
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelected(next);
+  };
+
+  const handleImport = () => {
+    const toImport = parsed.filter(q => selected.has(q.id));
+    onImport(toImport);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-blue-500" /> Import Questions
+          </h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <XCircle className="w-6 h-6" />
+          </button>
+        </div>
+        
+        <div className="p-6 overflow-y-auto flex-1">
+          {parsed.length === 0 ? (
+            <div className="space-y-4">
+              <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors">
+                <input type="file" id="docUpload" className="hidden" accept=".txt,.pdf,.docx" onChange={e => setFile(e.target.files[0])} />
+                <label htmlFor="docUpload" className="cursor-pointer flex flex-col items-center">
+                  <Upload className="w-10 h-10 text-gray-400 mb-3" />
+                  <p className="text-sm font-bold text-gray-700">{file ? file.name : 'Click to select a document'}</p>
+                  <p className="text-xs text-gray-500 mt-1">Supports .txt, .pdf, .docx</p>
+                </label>
+              </div>
+              {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
+              
+              <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm">
+                <p className="font-bold mb-1">Expected Format Example:</p>
+                <pre className="font-mono text-xs opacity-80 whitespace-pre-wrap">
+{`1. What is React?
+a) Library
+b) Framework
+c) Language
+d) Tool
+Answer: a`}
+                </pre>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-sm font-bold text-gray-700">Found {parsed.length} questions</p>
+                <button 
+                  onClick={() => setSelected(selected.size === parsed.length ? new Set() : new Set(parsed.map(q => q.id)))}
+                  className="text-xs font-bold text-blue-600 hover:text-blue-700">
+                  {selected.size === parsed.length ? 'Deselect All' : 'Select All'}
+                </button>
+              </div>
+              {parsed.map((q, i) => (
+                <div key={q.id} className="flex gap-3 p-3 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors cursor-pointer" onClick={() => toggleSelect(q.id)}>
+                  <input type="checkbox" checked={selected.has(q.id)} onChange={() => toggleSelect(q.id)} className="mt-1" />
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-gray-800">Q{i+1}. {q.question}</p>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2">
+                      {q.options.map((opt, oIdx) => (
+                        <span key={oIdx} className={`text-xs ${oIdx === q.correctOption ? 'text-green-600 font-bold' : 'text-gray-500'}`}>
+                          {['A', 'B', 'C', 'D'][oIdx] || oIdx+1}. {opt}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div className="border-t border-gray-100 px-6 py-4 flex justify-end gap-3 bg-gray-50 rounded-b-2xl">
+          <button onClick={onClose} className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
+            Cancel
+          </button>
+          {parsed.length === 0 ? (
+            <button onClick={handleUpload} disabled={!file || loading} className="px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors flex items-center gap-2">
+              {loading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
+              Upload & Parse
+            </button>
+          ) : (
+            <button onClick={handleImport} disabled={selected.size === 0} className="px-5 py-2 text-sm font-bold text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 rounded-xl transition-colors">
+              Import Selected ({selected.size})
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 /* ─── Type meta ─────────────────────────────────────────── */
 const TYPE_META = {
@@ -47,9 +175,17 @@ const emptyTheory = { question: '', answer: '', marks: 5 };
 const emptyCoding = { title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', testCases: [{ input: '', output: '' }], hiddenTestCases: [{ input: '', output: '' }], marks: 10 };
 
 /* ─── MCQ form ──────────────────────────────────────────── */
-function MCQForm({ data, onChange, onSubmit, editing }) {
+function MCQForm({ data, onChange, onSubmit, editing, error }) {
   return (
     <form onSubmit={onSubmit} className="space-y-5">
+      {error && (
+        <div className="mb-2">
+          <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+            <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
+            {error}
+          </p>
+        </div>
+      )}
       <div>
         <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Question Text</label>
         <textarea
@@ -109,9 +245,17 @@ function MCQForm({ data, onChange, onSubmit, editing }) {
 }
 
 /* ─── Theory Q&A form ───────────────────────────────────── */
-function TheoryForm({ data, onChange, onSubmit, editing }) {
+function TheoryForm({ data, onChange, onSubmit, editing, error }) {
   return (
     <form onSubmit={onSubmit} className="space-y-5">
+      {error && (
+        <div className="mb-2">
+          <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+            <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
+            {error}
+          </p>
+        </div>
+      )}
       <div>
         <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Question / Topic</label>
         <textarea
@@ -188,6 +332,14 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-5">
+      {error && (
+        <div className="mb-2">
+          <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+            <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
+            {error}
+          </p>
+        </div>
+      )}
       <div>
         <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Problem Title</label>
         <input required type="text"
@@ -369,6 +521,7 @@ export default function ContestQuestions() {
   const [questions, setQuestions]   = useState([]);
   const [currentSlotIdx, setCurrentSlotIdx] = useState(0);
   const [editingQId, setEditingQId] = useState(null);
+  const [showImportModal, setShowImportModal] = useState(false);
 
   // Per-form state
   const [mcqForm,    setMcqForm]    = useState({ ...emptyMCQ });
@@ -432,6 +585,21 @@ export default function ContestQuestions() {
     }
   };
 
+  const isDuplicateQuestion = (newText, currentId, currentIndex) => {
+    if (!newText) return false;
+    const normalized = newText.toLowerCase().trim();
+    return questions.some((q, idx) => {
+      if (!q) return false;
+      if (currentId && q.id === currentId) return false;
+      if (currentIndex !== undefined && idx === currentIndex) return false;
+      
+      if (q.type === 'Coding') {
+        return q.title?.toLowerCase().trim() === normalized || q.problemStatement?.toLowerCase().trim() === normalized;
+      }
+      return q.question?.toLowerCase().trim() === normalized;
+    });
+  };
+
   /* Generic slot save — replaces or inserts at slotIdx */
   const saveSlot = (qData, advanceNext = true) => {
     const updated = [...questions];
@@ -442,16 +610,53 @@ export default function ContestQuestions() {
     }
   };
 
+  const currentMcqError = useMemo(() => {
+    const opts = mcqForm.options.map(o => o.trim()).filter(Boolean);
+    if (new Set(opts).size !== opts.length) return "Options cannot be repeated.";
+    if (isDuplicateQuestion(mcqForm.question, editingQId, currentSlotIdx)) return "This question already exists in the contest.";
+    return null;
+  }, [mcqForm, questions, editingQId, currentSlotIdx]);
+
+  const currentTheoryError = useMemo(() => {
+    if (isDuplicateQuestion(theoryForm.question, editingQId, currentSlotIdx)) return "This question already exists in the contest.";
+    return null;
+  }, [theoryForm, questions, editingQId, currentSlotIdx]);
+
+  const currentCodingError = useMemo(() => {
+    if (isDuplicateQuestion(codingForm.title, editingQId, currentSlotIdx) || isDuplicateQuestion(codingForm.problemStatement, editingQId, currentSlotIdx)) return "This problem already exists in the contest.";
+    return null;
+  }, [codingForm, questions, editingQId, currentSlotIdx]);
+
+  const freeMcqError = useMemo(() => {
+    const opts = mcqForm.options.map(o => o.trim()).filter(Boolean);
+    if (new Set(opts).size !== opts.length) return "Options cannot be repeated.";
+    if (isDuplicateQuestion(mcqForm.question, editingQId)) return "This question already exists in the contest.";
+    return null;
+  }, [mcqForm, questions, editingQId]);
+
+  const freeTheoryError = useMemo(() => {
+    if (isDuplicateQuestion(theoryForm.question, editingQId)) return "This question already exists in the contest.";
+    return null;
+  }, [theoryForm, questions, editingQId]);
+
+  const freeCodingError = useMemo(() => {
+    if (isDuplicateQuestion(codingForm.title, editingQId) || isDuplicateQuestion(codingForm.problemStatement, editingQId)) return "This problem already exists in the contest.";
+    return null;
+  }, [codingForm, questions, editingQId]);
+
   const handleMCQSubmit = (e) => {
     e.preventDefault();
+    if (currentMcqError) return;
     saveSlot({ type: 'MCQ', ...mcqForm });
   };
   const handleTheorySubmit = (e) => {
     e.preventDefault();
+    if (currentTheoryError) return;
     saveSlot({ type: 'Theory', ...theoryForm });
   };
   const handleCodingSubmit = (e) => {
     e.preventDefault();
+    if (currentCodingError) return;
     saveSlot({ type: 'Coding', ...codingForm });
   };
 
@@ -471,6 +676,10 @@ export default function ContestQuestions() {
   /* ── Free-list save (no slots) */
   const [freeTab, setFreeTab] = useState('MCQ');
   const handleFreeSave = (type, data) => {
+    if (type === 'MCQ' && freeMcqError) return;
+    if (type === 'Theory' && freeTheoryError) return;
+    if (type === 'Coding' && freeCodingError) return;
+
     if (editingQId) {
       persist(questions.map(q => q.id === editingQId ? { ...q, ...data } : q));
       setEditingQId(null);
@@ -515,6 +724,11 @@ export default function ContestQuestions() {
             <h1 className="text-2xl font-bold text-gray-900">Add Questions</h1>
             <p className="text-sm text-gray-500 mt-0.5">{contest.title}</p>
           </div>
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
+            <Upload className="w-4 h-4" /> Import Document
+          </button>
         </div>
 
         {/* Progress bar */}
@@ -589,13 +803,13 @@ export default function ContestQuestions() {
               {/* Form body */}
               <div className="p-6">
                 {slot.type === 'mcq' && (
-                  <MCQForm data={mcqForm} onChange={setMcqForm} onSubmit={handleMCQSubmit} editing={Boolean(editingQId && questions[currentSlotIdx])} />
+                  <MCQForm error={currentMcqError} data={mcqForm} onChange={setMcqForm} onSubmit={handleMCQSubmit} editing={Boolean(editingQId && questions[currentSlotIdx])} />
                 )}
                 {slot.type === 'theory' && (
-                  <TheoryForm data={theoryForm} onChange={setTheoryForm} onSubmit={handleTheorySubmit} editing={Boolean(editingQId && questions[currentSlotIdx])} />
+                  <TheoryForm error={currentTheoryError} data={theoryForm} onChange={setTheoryForm} onSubmit={handleTheorySubmit} editing={Boolean(editingQId && questions[currentSlotIdx])} />
                 )}
                 {slot.type === 'coding' && (
-                  <CodingForm data={codingForm} onChange={setCodingForm} onSubmit={handleCodingSubmit} editing={Boolean(editingQId && questions[currentSlotIdx])} />
+                  <CodingForm error={currentCodingError} data={codingForm} onChange={setCodingForm} onSubmit={handleCodingSubmit} editing={Boolean(editingQId && questions[currentSlotIdx])} />
                 )}
               </div>
 
@@ -648,6 +862,11 @@ export default function ContestQuestions() {
           <h1 className="text-2xl font-bold text-gray-900">Manage Questions</h1>
           <p className="text-sm text-gray-500 mt-1">{contest.title} • {questions.length} questions added</p>
         </div>
+        <button
+          onClick={() => setShowImportModal(true)}
+          className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
+          <Upload className="w-4 h-4" /> Import Document
+        </button>
         {editingQId && (
           <button
             onClick={() => { setEditingQId(null); setMcqForm({ ...emptyMCQ }); setTheoryForm({ ...emptyTheory }); setCodingForm({ ...emptyCoding }); }}
@@ -677,17 +896,17 @@ export default function ContestQuestions() {
             </div>
             <div className="p-6">
               {freeTab === 'MCQ' && (
-                <MCQForm data={mcqForm} onChange={setMcqForm}
+                <MCQForm error={freeMcqError} data={mcqForm} onChange={setMcqForm}
                   onSubmit={(e) => { e.preventDefault(); handleFreeSave('MCQ', mcqForm); }}
                   editing={Boolean(editingQId)} />
               )}
               {freeTab === 'Theory' && (
-                <TheoryForm data={theoryForm} onChange={setTheoryForm}
+                <TheoryForm error={freeTheoryError} data={theoryForm} onChange={setTheoryForm}
                   onSubmit={(e) => { e.preventDefault(); handleFreeSave('Theory', theoryForm); }}
                   editing={Boolean(editingQId)} />
               )}
               {freeTab === 'Coding' && (
-                <CodingForm data={codingForm} onChange={setCodingForm}
+                <CodingForm error={freeCodingError} data={codingForm} onChange={setCodingForm}
                   onSubmit={(e) => { e.preventDefault(); handleFreeSave('Coding', codingForm); }}
                   editing={Boolean(editingQId)} />
               )}
@@ -741,6 +960,17 @@ export default function ContestQuestions() {
           </div>
         </div>
       </div>
+      
+      {showImportModal && (
+        <ImportModal 
+          onClose={() => setShowImportModal(false)} 
+          onImport={(importedQuestions) => {
+            const nextQuestions = [...questions, ...importedQuestions];
+            persist(nextQuestions);
+            setShowImportModal(false);
+          }} 
+        />
+      )}
     </div>
   );
 }

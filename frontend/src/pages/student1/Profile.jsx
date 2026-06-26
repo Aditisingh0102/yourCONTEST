@@ -23,17 +23,17 @@ export default function Profile() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('student_profile');
+    const saved = localStorage.getItem('student1_profile');
     if (saved) return JSON.parse(saved);
     return {
-      name: 'Aditi Singh',
-      rollNo: '2023CSE1042',
-      regNo: 'UU23104209',
-      branch: 'B.Tech CSE',
-      semester: '8th Semester',
-      email: 'aditi@uudoon.in',
-      phone: '+91 98765 43210',
-      avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
+      name: 'Ambar Kumar',
+      rollNo: '23210101763',
+      regNo: 'UU23104210',
+      branch: 'B.Tech IT',
+      semester: '7th Semester',
+      email: 'ambar@uudoon.in',
+      phone: '+91 98765 99999',
+      avatar: 'https://ui-avatars.com/api/?name=Ambar+Kumar&background=0D8ABC&color=fff&size=128',
       role: 'student',
       joinDate: 'August 2023'
     };
@@ -62,8 +62,8 @@ export default function Profile() {
       reader.onloadend = () => {
         const updated = { ...profileData, avatar: reader.result };
         setProfileData(updated);
-        localStorage.setItem('student_profile', JSON.stringify(updated));
-        window.dispatchEvent(new Event('profile-updated'));
+        localStorage.setItem('student1_profile', JSON.stringify(updated));
+        window.dispatchEvent(new Event('profile1-updated'));
       };
       reader.readAsDataURL(file);
     }
@@ -72,8 +72,8 @@ export default function Profile() {
   const handleProfileSave = (e) => {
     e.preventDefault();
     setProfileData(editForm);
-    localStorage.setItem('student_profile', JSON.stringify(editForm));
-    window.dispatchEvent(new Event('profile-updated'));
+    localStorage.setItem('student1_profile', JSON.stringify(editForm));
+    window.dispatchEvent(new Event('profile1-updated'));
     setIsEditing(false);
   };
 

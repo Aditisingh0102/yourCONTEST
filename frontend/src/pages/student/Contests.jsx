@@ -14,7 +14,7 @@ export default function Contests() {
     try {
       const res = await getContests();
       const studentBatch = JSON.parse(localStorage.getItem('student_profile'))?.batch || 'Alpha 1';
-      setAllContests(res.data.filter(c => !c.batch || c.batch === 'All' || c.batch === studentBatch));
+      setAllContests(res.data.filter(c => !c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch))));
     } catch(err) {
       console.error(err);
     }

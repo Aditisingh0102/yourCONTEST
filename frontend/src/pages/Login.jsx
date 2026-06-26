@@ -28,7 +28,7 @@ export default function Login() {
       window.dispatchEvent(new Event('profile-updated'));
       navigate('/student/dashboard');
     } else if (erpId === '23210101763@uudoon.in') {
-      localStorage.setItem('student_profile', JSON.stringify({
+      localStorage.setItem('student1_profile', JSON.stringify({
         name: 'Ambar Kumar',
         rollNo: '23210101763',
         regNo: 'UU23104299',
@@ -41,7 +41,7 @@ export default function Login() {
         joinDate: 'August 2023',
         batch: 'Beta 1'
       }));
-      window.dispatchEvent(new Event('profile-updated'));
+      window.dispatchEvent(new Event('profile1-updated'));
       navigate('/student1/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
       navigate('/faculty/dashboard');

@@ -32,7 +32,14 @@ export default function StudentRecords() {
     fetchSubs();
   }, []);
 
-  const studentSubmissions = submissions.filter(sub => sub.studentId === selectedStudent?.id);
+  const studentSubmissionsRaw = submissions.filter(sub => sub.studentId === selectedStudent?.id);
+  const studentSubmissionsMap = {};
+  studentSubmissionsRaw.forEach(sub => {
+     if (!studentSubmissionsMap[sub.contestId] || new Date(sub.submittedAt) > new Date(studentSubmissionsMap[sub.contestId].submittedAt)) {
+        studentSubmissionsMap[sub.contestId] = sub;
+     }
+  });
+  const studentSubmissions = Object.values(studentSubmissionsMap).sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt));
 
   const handleDownloadPDF = (sub) => {
     const printWindow = window.open('', '', 'width=800,height=600');

@@ -32,7 +32,7 @@ export default function Arena() {
       const current = res.data.find(c => (c._id || c.id).toString() === id);
       
       const subsRes = await getSubmissions();
-      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+      const studentProfile = JSON.parse(localStorage.getItem('student1_profile')) || { name: 'Ambar Kumar', id: 'ERP102', batch: 'Beta 1' };
       const hasSubmitted = subsRes.data.some(sub => (sub.contestId === id) && (sub.studentId === studentProfile.id));
 
       if (hasSubmitted) {
@@ -247,7 +247,7 @@ export default function Arena() {
     });
 
     try {
-      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+      const studentProfile = JSON.parse(localStorage.getItem('student1_profile')) || { name: 'Ambar Kumar', id: 'ERP102', batch: 'Beta 1' };
       const { submitContestAnswers } = await import('../../api');
       
       const payload = {

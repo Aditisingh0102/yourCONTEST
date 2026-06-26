@@ -10,7 +10,7 @@ export default function Reports() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+        const studentProfile = JSON.parse(localStorage.getItem('student1_profile')) || { name: 'Ambar Kumar', id: 'ERP102', batch: 'Beta 1' };
         
         const [subRes, contRes] = await Promise.all([
           getSubmissions(),
@@ -25,7 +25,15 @@ export default function Reports() {
 
         const mySubs = (subRes.data || []).filter(sub => sub.studentName === studentProfile.name);
         
-        const formattedReports = mySubs.map(sub => {
+        const uniqueSubsMap = {};
+        mySubs.forEach(sub => {
+          if (!uniqueSubsMap[sub.contestId] || new Date(sub.submittedAt) > new Date(uniqueSubsMap[sub.contestId].submittedAt)) {
+            uniqueSubsMap[sub.contestId] = sub;
+          }
+        });
+        const uniqueSubs = Object.values(uniqueSubsMap);
+        
+        const formattedReports = uniqueSubs.map(sub => {
           const contest = cmap[sub.contestId];
           const totalMarks = contest?.questionList?.reduce((acc, q) => acc + q.marks, 0) || 0;
           
@@ -124,12 +132,18 @@ export default function Reports() {
                       </span>
                     </td>
                     <td className="p-4 text-right">
-                      <button 
-                        onClick={() => setSelectedReport(report)}
-                        className="text-[13px] font-bold text-blue-600 hover:text-blue-800 hover:underline"
-                      >
-                        View Analysis
-                      </button>
+                      {report.contest?.status === 'Live' || report.contest?.status === 'Upcoming' ? (
+                        <span className="text-[12px] font-medium text-gray-400 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 cursor-not-allowed whitespace-nowrap" title="Analysis will be available after the contest ends">
+                          Available After Contest
+                        </span>
+                      ) : (
+                        <button 
+                          onClick={() => setSelectedReport(report)}
+                          className="text-[13px] font-bold text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                          View Analysis
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

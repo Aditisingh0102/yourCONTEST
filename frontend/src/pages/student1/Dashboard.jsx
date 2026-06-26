@@ -49,7 +49,7 @@ export default function Dashboard() {
   const fetchContests = async () => {
     try {
       const res = await getContests();
-      const studentBatch = JSON.parse(localStorage.getItem('student_profile'))?.batch || 'Alpha 1';
+      const studentBatch = JSON.parse(localStorage.getItem('student1_profile'))?.batch || 'Beta 1';
       setContests(res.data.filter(c => c.status !== 'Ended' && (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)))).slice(0, 2)); // Show up to 2 active/upcoming
     } catch (error) {
       console.error("Failed to fetch contests", error);
@@ -57,18 +57,18 @@ export default function Dashboard() {
   };
 
   const [studentProfile, setStudentProfile] = useState(() => {
-    const saved = localStorage.getItem('student_profile');
+    const saved = localStorage.getItem('student1_profile');
     if (saved) return JSON.parse(saved);
-    return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
+    return { name: 'Ambar Kumar', batch: 'Beta 1', branch: 'B.Tech IT' };
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem('student_profile');
+      const saved = localStorage.getItem('student1_profile');
       if (saved) setStudentProfile(JSON.parse(saved));
     };
-    window.addEventListener('profile-updated', handleUpdate);
-    return () => window.removeEventListener('profile-updated', handleUpdate);
+    window.addEventListener('profile1-updated', handleUpdate);
+    return () => window.removeEventListener('profile1-updated', handleUpdate);
   }, []);
 
   return (

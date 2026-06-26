@@ -4,6 +4,11 @@ const cors = require('cors');
 const { Server } = require('socket.io');
 const fs = require('fs');
 const path = require('path');
+const multer = require('multer');
+const pdfParse = require('pdf-parse');
+const mammoth = require('mammoth');
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const app = express();
 const server = http.createServer(app);
@@ -133,6 +138,90 @@ app.delete('/api/submissions/:id', (req, res) => {
   io.emit('SUBMISSION_DELETED', req.params.id);
   res.json({ message: 'Submission deleted' });
 });
+
+// Document Parsing API
+app.post('/api/upload-questions', upload.single('document'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded' });
+  }
+
+  try {
+    let rawText = '';
+    const ext = path.extname(req.file.originalname).toLowerCase();
+
+    if (ext === '.pdf') {
+      const data = await pdfParse(req.file.buffer);
+      rawText = data.text;
+    } else if (ext === '.docx') {
+      const result = await mammoth.extractRawText({ buffer: req.file.buffer });
+      rawText = result.value;
+    } else if (ext === '.txt') {
+      rawText = req.file.buffer.toString('utf8');
+    } else {
+      return res.status(400).json({ error: 'Unsupported file format. Please upload .txt, .pdf, or .docx' });
+    }
+
+    const questions = parseQuestionsFromText(rawText);
+    res.json({ questions });
+  } catch (err) {
+    console.error('Error parsing document:', err);
+    res.status(500).json({ error: 'Failed to parse document' });
+  }
+});
+
+function parseQuestionsFromText(text) {
+  const questions = [];
+  // Split by digits followed by dot/parenthesis at the start of a line
+  const blocks = text.split(/(?=\n\s*\d+[\.\)])/i).filter(b => b.trim());
+
+  blocks.forEach((block, index) => {
+    block = block.trim();
+    if (!block) return;
+
+    const lines = block.split('\n').map(l => l.trim()).filter(l => l);
+    if (lines.length < 2) return;
+
+    // Remove the number prefix from the question line
+    const qLine = lines[0].replace(/^\d+[\.\)]\s*/, '').trim();
+    const options = [];
+    let correctOption = 0;
+    
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (line.toLowerCase().startsWith('answer:')) {
+        const ans = line.split(':')[1].trim().toLowerCase();
+        const idx = ['a', 'b', 'c', 'd'].indexOf(ans);
+        if (idx !== -1) {
+          correctOption = idx;
+        } else {
+          // attempt exact match
+          const matchIdx = options.findIndex(o => o.toLowerCase() === ans);
+          if (matchIdx !== -1) correctOption = matchIdx;
+        }
+      } else if (/^[a-d][\)\.]/i.test(line)) {
+        options.push(line.replace(/^[a-d][\)\.]\s*/i, '').trim());
+      }
+    }
+
+    if (qLine && options.length > 0) {
+      // Ensure exactly 4 options by padding with empty strings if necessary
+      while (options.length < 4) {
+          options.push('');
+      }
+      
+      questions.push({
+        id: Date.now() + Math.random(),
+        type: 'MCQ',
+        question: qLine,
+        options: options.slice(0, 4), // Take max 4
+        correctOption: correctOption,
+        marks: 1
+      });
+    }
+  });
+
+  return questions;
+}
 
 // Socket.IO Connection
 io.on('connection', (socket) => {
