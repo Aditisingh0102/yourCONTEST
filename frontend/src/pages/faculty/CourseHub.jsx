@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BookOpen, Video, FileText, Plus, Edit3, Trash2, Users, BarChart2, Search, Filter, X, Image as ImageIcon, UploadCloud } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const initialCourses = [
   {
@@ -10,18 +11,35 @@ const initialCourses = [
     modules: 12,
     status: 'Published',
     rating: 4.8,
-    thumbnail: 'bg-gradient-to-br from-blue-500 to-blue-600',
+    bgLight: 'bg-blue-50',
+    iconColor: 'text-blue-500',
+    tags: ['React', 'Node.js', 'MongoDB'],
     icon: BookOpen
   },
   {
     id: 2,
-    title: 'Advanced DSA & Algorithms',
+    title: 'Data Structures in Java',
     subject: 'Computer Science',
     students: 820,
-    modules: 15,
+    modules: 10,
     status: 'Published',
     rating: 4.9,
-    thumbnail: 'bg-gradient-to-br from-purple-500 to-purple-600',
+    bgLight: 'bg-indigo-50',
+    iconColor: 'text-indigo-500',
+    tags: ['Java', 'Algorithms', 'DSA'],
+    icon: BookOpen
+  },
+  {
+    id: 4,
+    title: 'Cloud Computing with AWS',
+    subject: 'Cloud & DevOps',
+    students: 310,
+    modules: 6,
+    status: 'Published',
+    rating: 4.7,
+    bgLight: 'bg-orange-50',
+    iconColor: 'text-orange-500',
+    tags: ['AWS', 'DevOps', 'Cloud'],
     icon: BookOpen
   },
   {
@@ -32,7 +50,35 @@ const initialCourses = [
     modules: 8,
     status: 'Draft',
     rating: 0,
-    thumbnail: 'bg-gradient-to-br from-green-500 to-green-600',
+    bgLight: 'bg-green-50',
+    iconColor: 'text-green-500',
+    tags: ['Python', 'AI', 'TensorFlow'],
+    icon: BookOpen
+  },
+  {
+    id: 5,
+    title: 'Advanced Database Systems',
+    subject: 'Database Management',
+    students: 540,
+    modules: 14,
+    status: 'Published',
+    rating: 4.6,
+    bgLight: 'bg-purple-50',
+    iconColor: 'text-purple-500',
+    tags: ['SQL', 'Postgres', 'Redis'],
+    icon: BookOpen
+  },
+  {
+    id: 6,
+    title: 'Operating Systems Core',
+    subject: 'Computer Science',
+    students: 630,
+    modules: 10,
+    status: 'Published',
+    rating: 4.9,
+    bgLight: 'bg-teal-50',
+    iconColor: 'text-teal-500',
+    tags: ['C', 'Linux', 'OS'],
     icon: BookOpen
   }
 ];
@@ -42,6 +88,7 @@ export default function CourseHub() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ title: '', subject: '', modules: '', status: 'Draft' });
+  const navigate = useNavigate();
 
   const filteredCourses = courses.filter(course => 
     course.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -60,7 +107,9 @@ export default function CourseHub() {
       modules: parseInt(formData.modules) || 0,
       status: formData.status,
       rating: 0,
-      thumbnail: 'bg-gradient-to-br from-orange-500 to-red-500', // random default
+      bgLight: 'bg-orange-50',
+      iconColor: 'text-orange-500',
+      tags: [formData.subject || 'New'],
       icon: BookOpen
     };
 
@@ -129,14 +178,27 @@ export default function CourseHub() {
       {/* Courses Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCourses.map((course) => (
-          <div key={course.id} className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-all group flex flex-col">
-            <div className={`h-32 ${course.thumbnail} p-5 relative`}>
-              <div className="absolute top-3 right-3 bg-white/20 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-bold text-white uppercase tracking-wider border border-white/20">
-                {course.status}
-              </div>
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-white border border-white/20 mt-4 shadow-sm">
-                <course.icon className="w-6 h-6" />
-              </div>
+          <div 
+            key={course.id} 
+            onClick={() => navigate(`/faculty/course-hub/${course.id}`)}
+            className="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] overflow-hidden hover:shadow-xl hover:border-blue-100 hover:-translate-y-1 transition-all group flex flex-col h-full cursor-pointer"
+          >
+            <div className={`h-32 ${course.bgLight || 'bg-blue-50'} relative p-6 flex flex-col justify-between shrink-0`}>
+               <div className="flex justify-between items-start">
+                  <div className={`p-2.5 bg-white rounded-xl shadow-sm group-hover:scale-110 transition-transform ${course.iconColor || 'text-blue-500'}`}>
+                    <course.icon className="w-5 h-5" />
+                  </div>
+                  <span className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase tracking-wider border shadow-sm ${course.status === 'Published' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                    {course.status}
+                  </span>
+               </div>
+               <div className="flex gap-2 mt-auto pt-4">
+                 {(course.tags || []).map((tag, i) => (
+                   <span key={i} className="text-[10px] font-bold text-gray-700 bg-white/70 px-2 py-0.5 rounded-md backdrop-blur-md border border-white/40 shadow-sm">
+                     {tag}
+                   </span>
+                 ))}
+               </div>
             </div>
             
             <div className="p-5 flex-1 flex flex-col">
@@ -167,7 +229,7 @@ export default function CourseHub() {
               </div>
 
               {/* Actions */}
-              <div className="mt-auto pt-4 border-t border-gray-50 flex gap-2">
+              <div className="mt-auto pt-4 border-t border-gray-50 flex gap-2" onClick={e => e.stopPropagation()}>
                 <button className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-lg text-[12px] font-bold transition-colors">
                   <Edit3 className="w-3.5 h-3.5" /> Edit
                 </button>

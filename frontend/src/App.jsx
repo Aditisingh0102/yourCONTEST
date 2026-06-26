@@ -28,6 +28,7 @@ import NoticeBoard1 from './pages/student1/NoticeBoard';
 import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyNoticeBoard from './pages/faculty/NoticeBoard';
 import FacultyCourseHub from './pages/faculty/CourseHub';
+import FacultyCourseDetail from './pages/faculty/CourseDetail';
 import FacultyContestManager from './pages/faculty/ContestManager';
 import ContestQuestions from './pages/faculty/ContestQuestions';
 import ContestForm from './pages/faculty/ContestForm';
@@ -90,6 +91,7 @@ export default function App() {
           <Route path="dashboard" element={<FacultyDashboard />} />
           <Route path="notice" element={<FacultyNoticeBoard />} />
           <Route path="course-hub" element={<FacultyCourseHub />} />
+          <Route path="course-hub/:id" element={<FacultyCourseDetail />} />
           <Route path="manage-contests" element={<FacultyContestManager />} />
           <Route path="create-contest" element={<ContestForm />} />
           <Route path="edit-contest/:id" element={<ContestForm />} />

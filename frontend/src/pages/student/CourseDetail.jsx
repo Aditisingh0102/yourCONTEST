@@ -1,36 +1,113 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Video, FileText, CheckCircle2, PlayCircle, Download, ChevronLeft, FileCode } from 'lucide-react';
+import { BookOpen, Video, FileText, CheckCircle2, PlayCircle, Download, ChevronLeft, FileCode, Image as ImageIcon, X } from 'lucide-react';
 
 export default function CourseDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('lectures'); // lectures, documentation
 
-  // Dummy data
+  const [activeFile, setActiveFile] = useState(null);
+
+  const courseBaseDetails = {
+    '1': { title: 'Full-Stack Web Development', professor: 'Dr. Sarah Jenkins', progress: 65, tags: ['React', 'Node.js', 'MongoDB'] },
+    '2': { title: 'Data Structures in Java', professor: 'Prof. Alan Turing', progress: 30, tags: ['Java', 'Algorithms', 'DSA'] },
+    '3': { title: 'Machine Learning Basics', professor: 'Dr. Andrew Ng', progress: 100, tags: ['Python', 'AI', 'TensorFlow'] },
+    '4': { title: 'Cloud Computing with AWS', professor: 'Ms. Emily Chen', progress: 10, tags: ['AWS', 'DevOps', 'Cloud'] },
+    '5': { title: 'Advanced Database Systems', professor: 'Dr. Robert Smith', progress: 0, tags: ['SQL', 'Postgres', 'Redis'] },
+    '6': { title: 'Operating Systems Core', professor: 'Dr. Linus Torvalds', progress: 100, tags: ['C', 'Linux', 'OS'] },
+  };
+
+  const base = courseBaseDetails[id] || courseBaseDetails['2'];
+
+  const savedLecturesStr = localStorage.getItem(`course_${id}_lectures`);
+  const savedNotesStr = localStorage.getItem(`course_${id}_notes`);
+  let savedLectures = null;
+  let savedNotes = null;
+  
+  if (savedLecturesStr && savedLecturesStr !== 'null') {
+    try {
+      const parsed = JSON.parse(savedLecturesStr);
+      if (Array.isArray(parsed)) {
+        savedLectures = parsed.map(l => ({ ...l, url: l.url?.startsWith('blob:') ? null : l.url }));
+      }
+    } catch (e) {}
+  }
+
+  if (savedNotesStr && savedNotesStr !== 'null') {
+    try {
+      const parsed = JSON.parse(savedNotesStr);
+      if (Array.isArray(parsed)) {
+        savedNotes = parsed.map(n => ({ ...n, url: n.url?.startsWith('blob:') ? null : n.url }));
+      }
+    } catch (e) {}
+  }
+
   const course = {
-    title: 'Data Structures in Java',
-    professor: 'Prof. Alan Turing',
-    progress: 30,
-    tags: ['Java', 'Algorithms', 'DSA'],
-    lectures: [
-      { id: 1, title: 'Lecture 1: Introduction to Time Complexity', duration: '45 mins', completed: true },
-      { id: 2, title: 'Lecture 2: Arrays and Strings deep dive', duration: '55 mins', completed: true },
-      { id: 3, title: 'Lecture 3: Linked Lists implementations', duration: '1h 10m', completed: true },
-      { id: 4, title: 'Lecture 4: Stacks & Queues', duration: '50 mins', completed: false },
-      { id: 5, title: 'Lecture 5: Recursion and Backtracking', duration: '1h 20m', completed: false },
-      { id: 6, title: 'Lecture 6: Trees and Graphs', duration: '2h', completed: false },
+    ...base,
+    lectures: savedLectures || [
+      { id: 1, title: 'Lecture 1: Introduction to Time Complexity', duration: '45 mins', completed: true, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 2, title: 'Lecture 2: Arrays and Strings deep dive', duration: '55 mins', completed: true, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 3, title: 'Lecture 3: Linked Lists implementations', duration: '1h 10m', completed: true, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 4, title: 'Lecture 4: Stacks & Queues', duration: '50 mins', completed: false, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 5, title: 'Lecture 5: Recursion and Backtracking', duration: '1h 20m', completed: false, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 6, title: 'Lecture 6: Trees and Graphs', duration: '2h', completed: false, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
     ],
-    documents: [
-      { id: 1, title: 'Unit 1: Complexity Notes.pdf', size: '2.4 MB', type: 'PDF' },
-      { id: 2, title: 'Unit 2: Linear Data Structures.pdf', size: '3.1 MB', type: 'PDF' },
-      { id: 3, title: 'Cheat Sheet: Big O Notation.pdf', size: '1.1 MB', type: 'PDF' },
+    documents: savedNotes || [
+      { id: 1, title: 'Unit 1: Complexity Notes.pdf', size: '2.4 MB', type: 'PDF', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+      { id: 2, title: 'Unit 2: Linear Data Structures.pdf', size: '3.1 MB', type: 'PDF', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
+      { id: 3, title: 'Cheat Sheet: Big O Notation.pdf', size: '1.1 MB', type: 'PDF', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ],
     tests: [
       { id: 101, title: 'Mid-Term Mock Test', type: 'Assessment', format: '40 MCQ + 3 Coding', status: 'Upcoming' },
       { id: 102, title: 'Unit 1 Quiz', type: 'Quiz', format: '15 MCQ', status: 'Live' },
       { id: 103, title: 'Arrays Practice Contest', type: 'Coding', format: '4 Coding Qs', status: 'Ended' },
     ]
+  };
+
+  const openFile = (file) => {
+    let finalUrl = file.url;
+    if (!finalUrl) {
+      if (file.type?.includes('pdf') || file.title?.includes('.pdf')) {
+        const dummyHtml = `<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;color:#666;background:#f9fafb;"><h2>This is a dummy file. Upload a real file in the Faculty portal.</h2></body></html>`;
+        finalUrl = URL.createObjectURL(new Blob([dummyHtml], {type: 'text/html'}));
+      } else {
+        finalUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
+      }
+    } else if (finalUrl.startsWith('data:')) {
+      // Chrome blocks data:application/pdf in iframes. Convert back to local blob to fix this.
+      try {
+        const arr = finalUrl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        const blob = new Blob([u8arr], {type: mime});
+        finalUrl = URL.createObjectURL(blob);
+      } catch (e) {
+        console.error("Failed to convert data URL to blob", e);
+      }
+    }
+    setActiveFile({ ...file, url: finalUrl });
+  };
+
+  const getFileIcon = (lec) => {
+    if (lec.completed) return <CheckCircle2 className="w-5 h-5" />;
+    const type = lec.type;
+    if (!type) return <PlayCircle className="w-5 h-5 ml-0.5" />;
+    if (type.includes('video') || type.includes('audio')) return <PlayCircle className="w-5 h-5 ml-0.5" />;
+    if (type.includes('image')) return <ImageIcon className="w-5 h-5" />;
+    return <FileText className="w-5 h-5" />;
+  };
+
+  const getDocIcon = (type) => {
+    if (!type) return <FileText className="w-5 h-5" />;
+    if (type.includes('video') || type.includes('audio')) return <PlayCircle className="w-5 h-5 ml-0.5" />;
+    if (type.includes('image')) return <ImageIcon className="w-5 h-5" />;
+    return <FileText className="w-5 h-5" />;
   };
 
   return (
@@ -112,12 +189,16 @@ export default function CourseDetail() {
               {activeTab === 'lectures' ? (
                 <div className="space-y-3">
                   {course.lectures.map((lec, idx) => (
-                    <div key={lec.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer group">
+                    <div 
+                      key={lec.id} 
+                      onClick={() => openFile(lec)}
+                      className="flex items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:bg-blue-50/30 transition-all cursor-pointer group"
+                    >
                        <div className="flex items-center gap-4">
                          <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                           lec.completed ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400 group-hover:bg-blue-100 group-hover:text-blue-600'
+                           lec.completed ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'
                          } transition-colors`}>
-                           {lec.completed ? <CheckCircle2 className="w-5 h-5" /> : <PlayCircle className="w-5 h-5 ml-0.5" />}
+                           {getFileIcon(lec)}
                          </div>
                          <div>
                            <h4 className={`text-[14px] font-bold ${lec.completed ? 'text-gray-900' : 'text-gray-700 group-hover:text-blue-600'} transition-colors`}>
@@ -126,10 +207,12 @@ export default function CourseDetail() {
                            <p className="text-[12px] font-medium text-gray-400 mt-0.5">{lec.duration}</p>
                          </div>
                        </div>
-                       <button className={`px-4 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); openFile(lec); }}
+                         className={`px-4 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${
                          lec.completed ? 'text-gray-400 bg-gray-50 hover:bg-gray-100' : 'text-blue-600 bg-blue-50 hover:bg-blue-100 opacity-0 group-hover:opacity-100'
                        }`}>
-                         {lec.completed ? 'Watch Again' : 'Play Video'}
+                         {lec.completed ? 'Watch Again' : (lec.type?.includes('image') ? 'View Image' : (lec.type?.includes('video') || lec.type?.includes('audio') || !lec.type) ? 'Play Video' : 'Open')}
                        </button>
                     </div>
                   ))}
@@ -137,17 +220,24 @@ export default function CourseDetail() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {course.documents.map((doc) => (
-                    <div key={doc.id} className="flex items-start gap-4 p-5 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/30 transition-all cursor-pointer group">
+                    <div 
+                      key={doc.id} 
+                      onClick={() => openFile(doc)}
+                      className="flex items-start gap-4 p-5 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/30 transition-all cursor-pointer group"
+                    >
                        <div className="w-10 h-10 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                         <FileText className="w-5 h-5" />
+                         {getDocIcon(doc.type)}
                        </div>
                        <div className="flex-1">
                          <h4 className="text-[14px] font-bold text-gray-900 group-hover:text-orange-600 transition-colors leading-tight mb-1">
                            {doc.title}
                          </h4>
-                         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{doc.type} • {doc.size}</p>
+                         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{doc.type?.split('/').pop() || doc.type} • {doc.size}</p>
                        </div>
-                       <button className="text-gray-400 hover:text-orange-600 transition-colors">
+                       <button 
+                         onClick={(e) => { e.stopPropagation(); openFile(doc); }}
+                         className="text-gray-400 hover:text-orange-600 transition-colors"
+                       >
                          <Download className="w-5 h-5" />
                        </button>
                     </div>
@@ -201,8 +291,38 @@ export default function CourseDetail() {
              </div>
            </div>
         </div>
-
       </div>
+
+      {/* File Viewer Modal */}
+      {activeFile && (
+        <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col">
+            <div className="flex justify-between items-center p-4 border-b">
+              <h3 className="font-bold text-lg truncate max-w-[80%]">{activeFile.title}</h3>
+              <button onClick={() => setActiveFile(null)} className="p-1 hover:bg-gray-100 rounded-lg">
+                 <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="flex-1 bg-gray-50 flex items-center justify-center p-4 relative" style={{ minHeight: '60vh' }}>
+              {(activeFile.type?.includes('video') || activeFile.type?.includes('audio') || activeFile.title?.match(/\.(mp4|webm|ogg|mkv|avi|mov)$/i) || (!activeFile.type && activeFile.title?.includes('Lecture'))) ? (
+                <video 
+                  src={activeFile.url} 
+                  controls 
+                  autoPlay 
+                  className="w-full max-h-[70vh] rounded-lg shadow-sm bg-black"
+                >
+                  <source src={activeFile.url} />
+                  Your browser does not support the video tag.
+                </video>
+              ) : activeFile.type?.includes('image') ? (
+                <img src={activeFile.url} alt={activeFile.title} className="max-w-full max-h-full object-contain" />
+              ) : (
+                <iframe src={activeFile.url} className="w-full h-full border-0" title={activeFile.title} />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
