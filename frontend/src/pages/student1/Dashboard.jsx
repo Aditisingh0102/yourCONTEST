@@ -50,7 +50,7 @@ export default function Dashboard() {
     try {
       const res = await getContests();
       const studentBatch = JSON.parse(localStorage.getItem('student_profile'))?.batch || 'Alpha 1';
-      setContests(res.data.filter(c => c.status !== 'Ended' && (!c.batch || c.batch === 'All' || c.batch === studentBatch)).slice(0, 2)); // Show up to 2 active/upcoming
+      setContests(res.data.filter(c => c.status !== 'Ended' && (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)))).slice(0, 2)); // Show up to 2 active/upcoming
     } catch (error) {
       console.error("Failed to fetch contests", error);
     }

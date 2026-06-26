@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   ArrowLeft, Trophy, Save, CheckCircle2, Code, BookOpen, 
-  Plus, Minus, ChevronRight, X, Sparkles, ListChecks, Trash2
+  Plus, Minus, ChevronRight, X, Sparkles, ListChecks, Trash2,
+  ChevronDown, Check
 } from 'lucide-react';
 import { getContests, createContest, updateContest } from '../../api';
 
@@ -204,12 +205,25 @@ export default function ContestForm() {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, batch: 'All'
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, batch: ['All']
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [savedContestId, setSavedContestId] = useState(null);
   const [saving, setSaving] = useState(false);
+
+  const [isBatchOpen, setIsBatchOpen] = useState(false);
+  const batchDropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (batchDropdownRef.current && !batchDropdownRef.current.contains(event.target)) {
+        setIsBatchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -229,7 +243,7 @@ export default function ContestForm() {
             customRules: Array.isArray(contest.customRules) ? contest.customRules : (contest.customRules ? [contest.customRules] : []),
             strictFullscreen: contest.strictFullscreen !== false,
             disableCopyPaste: contest.disableCopyPaste !== false,
-            batch: contest.batch || 'All'
+            batch: Array.isArray(contest.batch) ? contest.batch : (contest.batch ? [contest.batch] : ['All'])
           });
         }
       });
@@ -348,18 +362,46 @@ export default function ContestForm() {
                     <option value="Lab Exam">Lab Exam</option>
                   </select>
                 </div>
-                <div>
+                <div ref={batchDropdownRef} className="relative">
                   <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Select Batch</label>
-                  <select
-                    value={formData.batch}
-                    onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                  <div 
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white cursor-pointer flex justify-between items-center text-sm font-medium focus:outline-none focus:border-blue-500 transition-all"
+                    onClick={() => setIsBatchOpen(!isBatchOpen)}
                   >
-                    <option value="All">All Batches</option>
-                    <option value="Alpha 1">Alpha 1</option>
-                    <option value="Alpha 2">Alpha 2</option>
-                    <option value="Beta 1">Beta 1</option>
-                  </select>
+                    <span className="truncate text-gray-700">
+                      {formData.batch.includes('All') ? 'All Batches' : formData.batch.join(', ')}
+                    </span>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isBatchOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {isBatchOpen && (
+                    <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg py-1.5 overflow-hidden">
+                      {['All', 'Alpha 1', 'Alpha 2', 'Beta 1'].map(b => (
+                        <div 
+                          key={b} 
+                          className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-sm transition-colors"
+                          onClick={() => {
+                            if (b === 'All') {
+                              setFormData({ ...formData, batch: ['All'] });
+                            } else {
+                              let newBatch = formData.batch.filter(x => x !== 'All');
+                              if (newBatch.includes(b)) {
+                                newBatch = newBatch.filter(x => x !== b);
+                              } else {
+                                newBatch.push(b);
+                              }
+                              if (newBatch.length === 0) newBatch = ['All'];
+                              setFormData({ ...formData, batch: newBatch });
+                            }
+                          }}
+                        >
+                          <span className={formData.batch.includes(b) ? 'font-bold text-blue-600' : 'font-medium text-gray-700'}>
+                            {b === 'All' ? 'All Batches' : b}
+                          </span>
+                          {formData.batch.includes(b) && <Check className="w-4 h-4 text-blue-600" />}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
