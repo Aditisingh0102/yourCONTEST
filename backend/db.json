@@ -2,14 +2,14 @@
   "notices": [],
   "contests": [
     {
-      "title": "nashd",
-      "type": "Lab Exam",
+      "title": "test",
+      "type": "Mock Test",
       "status": "Upcoming",
-      "startTime": "2026-06-26, 14:35",
+      "startTime": "2026-06-26, 14:33",
       "endTime": "TBD",
-      "duration": "118 mins",
+      "duration": "120 mins",
       "registered": 0,
-      "questions": 1,
+      "questions": 2,
       "submissions": 0,
       "customRules": [],
       "strictFullscreen": true,
@@ -19,21 +19,34 @@
       ],
       "questionList": [
         {
-          "id": 1782464174118,
+          "id": 1782464508070,
           "type": "MCQ",
-          "question": "sum 2+2",
+          "question": "tft",
           "options": [
-            "4",
-            "2",
-            "5",
-            "6"
+            "h",
+            "j",
+            "k",
+            "l"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        },
+        {
+          "id": 1782464520195,
+          "type": "MCQ",
+          "question": "tft?",
+          "options": [
+            "h",
+            "t",
+            "r",
+            "e"
           ],
           "correctOption": 0,
           "marks": 1
         }
       ],
-      "_id": "1782464158740",
-      "createdAt": "2026-06-26T08:55:58.741Z"
+      "_id": "1782464440069",
+      "createdAt": "2026-06-26T09:00:40.069Z"
     },
     {
       "title": "rahul",
@@ -304,6 +317,26 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1782464440069",
+      "contestName": "test",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {},
+      "score": 0,
+      "submittedAt": "2026-06-26T09:27:06.687Z",
+      "_id": "1782466026734"
+    },
+    {
+      "contestId": "1782464440069",
+      "contestName": "test",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {},
+      "score": 0,
+      "submittedAt": "2026-06-26T09:27:06.687Z",
+      "_id": "1782466026731"
+    },
     {
       "contestId": "1782459884173",
       "contestName": "rahul",
