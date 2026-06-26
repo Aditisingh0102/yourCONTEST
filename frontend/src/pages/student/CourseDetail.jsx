@@ -22,10 +22,8 @@ export default function CourseDetail() {
 
   const savedLecturesStr = localStorage.getItem(`course_${id}_lectures`);
   const savedNotesStr = localStorage.getItem(`course_${id}_notes`);
-  const savedAssignmentsStr = localStorage.getItem(`course_${id}_assignments`);
   let savedLectures = null;
   let savedNotes = null;
-  let savedAssignments = null;
   
   if (savedLecturesStr && savedLecturesStr !== 'null') {
     try {
@@ -45,33 +43,25 @@ export default function CourseDetail() {
     } catch (e) {}
   }
 
-  if (savedAssignmentsStr && savedAssignmentsStr !== 'null') {
-    try {
-      const parsed = JSON.parse(savedAssignmentsStr);
-      if (Array.isArray(parsed)) {
-        savedAssignments = parsed.map(a => ({ ...a, url: a.url?.startsWith('blob:') ? null : a.url }));
-      }
-    } catch (e) {}
-  }
-
   const course = {
     ...base,
     lectures: savedLectures || [
-      { id: 1, title: 'Lecture 1: Introduction to Time Complexity', duration: '45 mins', completed: true, url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 2, title: 'Lecture 2: Arrays and Strings deep dive', duration: '55 mins', completed: true, url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 3, title: 'Lecture 3: Linked Lists implementations', duration: '1h 10m', completed: true, url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 4, title: 'Lecture 4: Stacks & Queues', duration: '50 mins', completed: false, url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 5, title: 'Lecture 5: Recursion and Backtracking', duration: '1h 20m', completed: false, url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 6, title: 'Lecture 6: Trees and Graphs', duration: '2h', completed: false, url: 'https://www.youtube.com/embed/1yrh60og6qc' },
+      { id: 1, title: 'Lecture 1: Introduction to Time Complexity', duration: '45 mins', completed: true, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 2, title: 'Lecture 2: Arrays and Strings deep dive', duration: '55 mins', completed: true, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 3, title: 'Lecture 3: Linked Lists implementations', duration: '1h 10m', completed: true, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 4, title: 'Lecture 4: Stacks & Queues', duration: '50 mins', completed: false, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 5, title: 'Lecture 5: Recursion and Backtracking', duration: '1h 20m', completed: false, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 6, title: 'Lecture 6: Trees and Graphs', duration: '2h', completed: false, url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
     ],
     documents: savedNotes || [
       { id: 1, title: 'Unit 1: Complexity Notes.pdf', size: '2.4 MB', type: 'PDF', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
       { id: 2, title: 'Unit 2: Linear Data Structures.pdf', size: '3.1 MB', type: 'PDF', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
       { id: 3, title: 'Cheat Sheet: Big O Notation.pdf', size: '1.1 MB', type: 'PDF', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
     ],
-    assignments: savedAssignments || [
-      { id: 101, title: 'Build a React Portfolio', type: 'Project', format: 'GitHub Repo Submission', status: 'Upcoming' },
-      { id: 102, title: 'Data Structures Problem Set', type: 'Homework', format: 'PDF Upload', status: 'Ended' }
+    tests: [
+      { id: 101, title: 'Mid-Term Mock Test', type: 'Assessment', format: '40 MCQ + 3 Coding', status: 'Upcoming' },
+      { id: 102, title: 'Unit 1 Quiz', type: 'Quiz', format: '15 MCQ', status: 'Live' },
+      { id: 103, title: 'Arrays Practice Contest', type: 'Coding', format: '4 Coding Qs', status: 'Ended' },
     ]
   };
 
@@ -82,7 +72,7 @@ export default function CourseDetail() {
         const dummyHtml = `<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;color:#666;background:#f9fafb;"><h2>This is a dummy file. Upload a real file in the Faculty portal.</h2></body></html>`;
         finalUrl = URL.createObjectURL(new Blob([dummyHtml], {type: 'text/html'}));
       } else {
-        finalUrl = 'https://www.youtube.com/embed/1yrh60og6qc';
+        finalUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
       }
     } else if (finalUrl.startsWith('data:')) {
       // Chrome blocks data:application/pdf in iframes. Convert back to local blob to fix this.
@@ -174,7 +164,7 @@ export default function CourseDetail() {
            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
               
               {/* Tabs */}
-              <div className="flex gap-8 border-b border-gray-100 mb-6 overflow-x-auto whitespace-nowrap">
+              <div className="flex gap-8 border-b border-gray-100 mb-6">
                 <button 
                   onClick={() => setActiveTab('lectures')}
                   className={`pb-4 text-[15px] font-bold transition-all relative ${
@@ -192,15 +182,6 @@ export default function CourseDetail() {
                 >
                   <span className="flex items-center gap-2"><FileText className="w-4 h-4" /> Documentation & PDFs</span>
                   {activeTab === 'documentation' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></div>}
-                </button>
-                <button 
-                  onClick={() => setActiveTab('assignments')}
-                  className={`pb-4 text-[15px] font-bold transition-all relative ${
-                    activeTab === 'assignments' ? 'text-purple-600' : 'text-gray-500 hover:text-gray-800'
-                  }`}
-                >
-                  <span className="flex items-center gap-2"><FileCode className="w-4 h-4" /> Assignments</span>
-                  {activeTab === 'assignments' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-purple-600 rounded-t-full"></div>}
                 </button>
               </div>
 
@@ -236,7 +217,7 @@ export default function CourseDetail() {
                     </div>
                   ))}
                 </div>
-              ) : activeTab === 'documentation' ? (
+              ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {course.documents.map((doc) => (
                     <div 
@@ -262,81 +243,48 @@ export default function CourseDetail() {
                     </div>
                   ))}
                 </div>
-              ) : (
-                <div className="space-y-4">
-                  {course.assignments.map((assignment) => (
-                    <div key={assignment.id} className="p-5 rounded-xl border border-gray-100 bg-gray-50/30 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all group">
-                       <div className="flex justify-between items-start mb-2">
-                         <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
-                           {assignment.type}
-                         </span>
-                         <span className="text-[11px] font-bold tracking-wider uppercase text-gray-400">
-                           {assignment.status || 'Upcoming'}
-                         </span>
-                       </div>
-                       <h4 className="text-[16px] font-bold text-gray-900 mb-1 leading-tight group-hover:text-purple-600 transition-colors">{assignment.title}</h4>
-                       <p className="text-[13px] font-medium text-gray-500 mb-2">{assignment.format}</p>
-                       
-                       {assignment.deadline && (
-                         <p className="text-[11px] font-bold text-red-500 mb-4 bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
-                           Due: {new Date(assignment.deadline).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                         </p>
-                       )}
-                       
-                       <div className="flex gap-3 mt-2">
-                         {assignment.url && (
-                           <button onClick={() => openFile({ url: assignment.url, title: assignment.title, type: assignment.fileType })} className="px-4 py-2 rounded-lg text-[13px] font-bold bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100 transition-colors shadow-sm">
-                             View Doc
-                           </button>
-                         )}
-                         <label className="flex-1 text-center cursor-pointer px-5 py-2 rounded-lg text-[13px] font-bold bg-purple-600 text-white hover:bg-purple-700 transition-colors shadow-sm">
-                           Start Submission
-                           <input 
-                             type="file" 
-                             className="hidden" 
-                             onChange={(e) => {
-                               if (e.target.files[0]) {
-                                 alert(`File "${e.target.files[0].name}" submitted successfully!`);
-                                 e.target.value = ''; // Reset so they can upload again if needed
-                               }
-                             }}
-                           />
-                         </label>
-                       </div>
-                    </div>
-                  ))}
-                </div>
               )}
 
            </div>
         </div>
 
-        {/* Sidebar (Right) - Related Assignments */}
+        {/* Sidebar (Right) - Related Tests */}
         <div className="lg:w-1/3">
            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sticky top-6">
              <h3 className="text-[16px] font-bold text-gray-900 mb-5 flex items-center gap-2">
-               <FileCode className="w-5 h-5 text-purple-600" /> Course Assignments
+               <FileCode className="w-5 h-5 text-purple-600" /> Related Tests
              </h3>
              
              <div className="space-y-4">
-               {course.assignments.map((assignment) => (
-                 <div key={assignment.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all cursor-pointer group">
+               {course.tests.map((test) => (
+                 <div key={test.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all cursor-pointer">
                     <div className="flex justify-between items-start mb-2">
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
-                        {assignment.type}
+                      <span className={`px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border ${
+                        test.type === 'Assessment' ? 'bg-purple-50 text-purple-700 border-purple-200' : 
+                        test.type === 'Quiz' ? 'bg-orange-50 text-orange-700 border-orange-200' : 
+                        'bg-blue-50 text-blue-700 border-blue-200'
+                      }`}>
+                        {test.type}
                       </span>
-                      <span className="text-[10px] font-bold tracking-wider uppercase text-gray-400">
-                        {assignment.status}
+                      <span className={`text-[10px] font-bold tracking-wider uppercase flex items-center gap-1 ${
+                        test.status === 'Live' ? 'text-red-600' : 'text-gray-400'
+                      }`}>
+                        {test.status === 'Live' && <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>}
+                        {test.status}
                       </span>
                     </div>
-                    <h4 className="text-[14px] font-bold text-gray-900 mb-1 leading-tight group-hover:text-purple-600 transition-colors">{assignment.title}</h4>
-                    <p className="text-[12px] font-medium text-gray-500 mb-4">{assignment.format}</p>
+                    <h4 className="text-[14px] font-bold text-gray-900 mb-1 leading-tight">{test.title}</h4>
+                    <p className="text-[12px] font-medium text-gray-500 mb-4">{test.format}</p>
                     
                     <button 
-                      onClick={() => navigate('/student/assignments')}
-                      className="w-full py-2.5 rounded-lg text-[12px] font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-100 transition-colors"
+                      onClick={() => navigate('/student/contests')}
+                      className={`w-full py-2.5 rounded-lg text-[12px] font-bold transition-colors ${
+                        test.status === 'Live' ? 'bg-purple-600 text-white hover:bg-purple-700 shadow-sm shadow-purple-200' : 
+                        test.status === 'Upcoming' ? 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-100' : 
+                        'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
+                      }`}
                     >
-                      View Details
+                      {test.status === 'Live' ? 'Start Test Now' : test.status === 'Upcoming' ? 'View Details' : 'View Results'}
                     </button>
                  </div>
                ))}
@@ -356,15 +304,7 @@ export default function CourseDetail() {
               </button>
             </div>
             <div className="flex-1 bg-gray-50 flex items-center justify-center p-4 relative" style={{ minHeight: '60vh' }}>
-              {activeFile.url?.includes('youtube.com') ? (
-                <iframe 
-                  src={activeFile.url} 
-                  title={activeFile.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-[70vh] rounded-lg shadow-sm bg-black border-0"
-                />
-              ) : (activeFile.type?.includes('video') || activeFile.type?.includes('audio') || activeFile.title?.match(/\.(mp4|webm|ogg|mkv|avi|mov)$/i) || (!activeFile.type && activeFile.title?.includes('Lecture'))) ? (
+              {(activeFile.type?.includes('video') || activeFile.type?.includes('audio') || activeFile.title?.match(/\.(mp4|webm|ogg|mkv|avi|mov)$/i) || (!activeFile.type && activeFile.title?.includes('Lecture'))) ? (
                 <video 
                   src={activeFile.url} 
                   controls 

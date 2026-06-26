@@ -38,12 +38,12 @@ export default function CourseDetail() {
       } catch (e) {}
     }
     return [
-      { id: 1, title: 'Lecture 1: Introduction', duration: '45 mins', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 2, title: 'Lecture 2: Core Concepts', duration: '55 mins', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 3, title: 'Lecture 3: Advanced Techniques', duration: '1h 10m', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 4, title: 'Lecture 4: Real-world Applications', duration: '50 mins', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 5, title: 'Lecture 5: Best Practices', duration: '1h 5m', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
-      { id: 6, title: 'Lecture 6: Summary and Q&A', duration: '1h 30m', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
+      { id: 1, title: 'Lecture 1: Introduction', duration: '45 mins', type: 'video/mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 2, title: 'Lecture 2: Core Concepts', duration: '55 mins', type: 'video/mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 3, title: 'Lecture 3: Advanced Techniques', duration: '1h 10m', type: 'video/mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 4, title: 'Lecture 4: Real-world Applications', duration: '50 mins', type: 'video/mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 5, title: 'Lecture 5: Best Practices', duration: '1h 5m', type: 'video/mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
+      { id: 6, title: 'Lecture 6: Summary and Q&A', duration: '1h 30m', type: 'video/mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4' },
     ];
   });
 
@@ -68,33 +68,13 @@ export default function CourseDetail() {
     ];
   });
 
-  const [assignments, setAssignments] = useState(() => {
-    const saved = localStorage.getItem(`course_${id}_assignments`);
-    if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
-    }
-    return [
-      { id: 101, title: 'Build a React Portfolio', type: 'Project', format: 'GitHub Repo Submission', status: 'Upcoming' },
-      { id: 102, title: 'Data Structures Problem Set', type: 'Homework', format: 'PDF Upload', status: 'Ended' }
-    ];
-  });
+  const [assignments, setAssignments] = useState([
+    { id: 101, title: 'Mid-Term Mock Test', type: 'Assessment', format: '40 MCQ + 3 Coding', status: 'Upcoming' },
+  ]);
 
   const [activeFile, setActiveFile] = useState(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadData, setUploadData] = useState({ title: '', duration: '', file: null });
-  const [showAssignmentModal, setShowAssignmentModal] = useState(false);
-  const [assignmentData, setAssignmentData] = useState({ title: '', type: 'Project', format: 'GitHub Repo Submission', file: null, deadline: '' });
-  const [assignmentError, setAssignmentError] = useState('');
-  
-  const [showSubmissionsModal, setShowSubmissionsModal] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState(null);
-
-  const mockSubmissions = [
-    { id: 1, name: 'Aditi Singh', rollNo: '2023CSE1042', status: 'Submitted', time: '2 mins ago', file: 'portfolio_aditi.pdf', grade: '-' },
-    { id: 2, name: 'Ambar', rollNo: '2023CSE1043', status: 'Submitted', time: '1 hour ago', file: 'project_ambar.zip', grade: '95/100' },
-    { id: 3, name: 'Rahul Sharma', rollNo: '2023CSE1045', status: 'Pending', time: '-', file: null, grade: '-' },
-    { id: 4, name: 'Sneha Gupta', rollNo: '2023CSE1046', status: 'Submitted', time: 'Yesterday', file: 'assignment_final.pdf', grade: '88/100' },
-  ];
 
   React.useEffect(() => {
     localStorage.setItem(`course_${id}_lectures`, JSON.stringify(lectures));
@@ -103,10 +83,6 @@ export default function CourseDetail() {
   React.useEffect(() => {
     localStorage.setItem(`course_${id}_notes`, JSON.stringify(notes));
   }, [notes, id]);
-
-  React.useEffect(() => {
-    localStorage.setItem(`course_${id}_assignments`, JSON.stringify(assignments));
-  }, [assignments, id]);
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -169,54 +145,9 @@ export default function CourseDetail() {
     setShowUploadModal(true);
   };
 
-  const handleAssignmentSubmit = (e) => {
-    e.preventDefault();
-    if (!assignmentData.title) return alert("Please enter a title");
-    
-    if (assignmentData.deadline) {
-      if (new Date(assignmentData.deadline) < new Date()) {
-        return alert("Error: The deadline date and time cannot be in the past.");
-      }
-    }
-    
-    const finalizeSubmit = (url, size, type) => {
-      const newAssignment = {
-        id: Date.now(),
-        title: assignmentData.title,
-        type: assignmentData.type,
-        format: assignmentData.format,
-        deadline: assignmentData.deadline,
-        status: 'Upcoming',
-        url: url,
-        fileSize: size,
-        fileType: type
-      };
-      
-      setAssignments([...assignments, newAssignment]);
-      setShowAssignmentModal(false);
-    };
-
-    if (assignmentData.file) {
-      const file = assignmentData.file;
-      if (file.size > 2 * 1024 * 1024) {
-        alert("Note: File is over 2MB. It will be temporarily saved.");
-        finalizeSubmit(URL.createObjectURL(file), (file.size / (1024 * 1024)).toFixed(2) + ' MB', file.type);
-      } else {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          finalizeSubmit(reader.result, (file.size / (1024 * 1024)).toFixed(2) + ' MB', file.type);
-        };
-        reader.readAsDataURL(file);
-      }
-    } else {
-      finalizeSubmit(null, null, null);
-    }
-  };
-
   const handleDelete = (type, itemId) => {
     if (type === 'lecture') setLectures(lectures.filter(l => l.id !== itemId));
     if (type === 'note') setNotes(notes.filter(n => n.id !== itemId));
-    if (type === 'assignment') setAssignments(assignments.filter(a => a.id !== itemId));
   };
 
   const openFile = (file) => {
@@ -226,7 +157,7 @@ export default function CourseDetail() {
         const dummyHtml = `<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;color:#666;background:#f9fafb;"><h2>This is a dummy file. Upload a real file in the Faculty portal.</h2></body></html>`;
         finalUrl = URL.createObjectURL(new Blob([dummyHtml], {type: 'text/html'}));
       } else {
-        finalUrl = 'https://www.youtube.com/embed/1yrh60og6qc';
+        finalUrl = 'https://www.w3schools.com/html/mov_bbb.mp4';
       }
     } else if (finalUrl.startsWith('data:')) {
       // Chrome blocks data:application/pdf in iframes. Convert back to local blob to fix this.
@@ -415,50 +346,28 @@ export default function CourseDetail() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-bold text-gray-800">Course Assignments</h3>
-                    <button 
-                      onClick={() => {
-                        setAssignmentData({ title: '', type: 'Project', format: 'GitHub Repo Submission', file: null, deadline: '' });
-                        setAssignmentError('');
-                        setShowAssignmentModal(true);
-                      }}
-                      className="flex items-center gap-1.5 text-sm font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg hover:bg-purple-100 transition-colors"
-                    >
+                    <button className="flex items-center gap-1.5 text-sm font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg hover:bg-purple-100 transition-colors">
                       <Plus className="w-4 h-4" /> Create Assignment
                     </button>
                   </div>
                   {assignments.map((test) => (
                     <div key={test.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all">
-                        <div className="flex justify-between items-start mb-2">
-                          <span className="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
-                            {test.type}
-                          </span>
-                          <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-bold tracking-wider uppercase text-gray-400">
-                              {test.status}
-                            </span>
-                            <button onClick={() => handleDelete('assignment', test.id)} className="text-gray-400 hover:text-red-500 transition-colors">
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </div>
+                       <div className="flex justify-between items-start mb-2">
+                         <span className="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
+                           {test.type}
+                         </span>
+                         <span className="text-[10px] font-bold tracking-wider uppercase text-gray-400">
+                           {test.status}
+                         </span>
+                       </div>
                        <h4 className="text-[14px] font-bold text-gray-900 mb-1 leading-tight">{test.title}</h4>
-                       <p className="text-[12px] font-medium text-gray-500 mb-2">{test.format}</p>
-                       {test.deadline && (
-                         <p className="text-[11px] font-bold text-red-500 mb-4 bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
-                           Due: {new Date(test.deadline).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
-                         </p>
-                       )}
-                       <div className="flex gap-2 mt-2">
-                         {test.url && (
-                           <button onClick={() => openFile({ url: test.url, title: test.title, type: test.fileType })} className="flex-1 py-2 rounded-lg text-[11px] font-bold bg-blue-50 border border-blue-100 text-blue-700 hover:bg-blue-100 transition-colors">
-                             Open Doc
-                           </button>
-                         )}
-                         <button className="flex-1 py-2 rounded-lg text-[11px] font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
-                           Edit
+                       <p className="text-[12px] font-medium text-gray-500 mb-4">{test.format}</p>
+                       <div className="flex gap-2">
+                         <button className="flex-1 py-2 rounded-lg text-[12px] font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                           Edit Assignment
                          </button>
-                         <button onClick={() => { setSelectedAssignment(test); setShowSubmissionsModal(true); }} className="flex-1 py-2 rounded-lg text-[11px] font-bold bg-purple-50 border border-purple-100 text-purple-700 hover:bg-purple-100 transition-colors">
-                           Submissions
+                         <button className="flex-1 py-2 rounded-lg text-[12px] font-bold bg-purple-50 border border-purple-100 text-purple-700 hover:bg-purple-100 transition-colors">
+                           View Submissions
                          </button>
                        </div>
                     </div>
@@ -510,15 +419,7 @@ export default function CourseDetail() {
               </button>
             </div>
             <div className="flex-1 bg-gray-50 flex items-center justify-center p-4 relative" style={{ minHeight: '60vh' }}>
-              {activeFile.url?.includes('youtube.com') ? (
-                <iframe 
-                  src={activeFile.url} 
-                  title={activeFile.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-[70vh] rounded-lg shadow-sm bg-black border-0"
-                />
-              ) : (activeFile.type?.includes('video') || activeFile.type?.includes('audio') || activeFile.title?.match(/\.(mp4|webm|ogg|mkv|avi|mov)$/i) || (!activeFile.type && activeFile.title?.includes('Lecture'))) ? (
+              {(activeFile.type?.includes('video') || activeFile.type?.includes('audio') || activeFile.title?.match(/\.(mp4|webm|ogg|mkv|avi|mov)$/i) || (!activeFile.type && activeFile.title?.includes('Lecture'))) ? (
                 <video 
                   src={activeFile.url} 
                   controls 
@@ -598,157 +499,6 @@ export default function CourseDetail() {
           </div>
         </div>
       )}
-
-      {/* Create Assignment Modal */}
-      {showAssignmentModal && (
-        <div className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center p-5 border-b">
-              <h3 className="font-bold text-lg">Create New Assignment</h3>
-              <button onClick={() => { setShowAssignmentModal(false); setAssignmentError(''); }} className="p-1 hover:bg-gray-100 rounded-lg text-gray-500">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <form onSubmit={handleAssignmentSubmit} className="p-5 space-y-4">
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Assignment Title</label>
-                <input 
-                  type="text" 
-                  value={assignmentData.title}
-                  onChange={(e) => setAssignmentData({...assignmentData, title: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="e.g. Final Project"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Type</label>
-                <select
-                  value={assignmentData.type}
-                  onChange={(e) => setAssignmentData({...assignmentData, type: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                >
-                  <option value="Project">Project</option>
-                  <option value="Homework">Homework</option>
-                  <option value="Quiz">Quiz</option>
-                  <option value="Assignment">Assignment</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Submission Format</label>
-                <input 
-                  type="text" 
-                  value={assignmentData.format}
-                  onChange={(e) => setAssignmentData({...assignmentData, format: e.target.value})}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  placeholder="e.g. PDF Upload, GitHub Repo..."
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Deadline</label>
-                <input 
-                  type="datetime-local" 
-                  value={assignmentData.deadline}
-                  min={new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)}
-                  onChange={(e) => {
-                    const newDate = e.target.value;
-                    setAssignmentData({...assignmentData, deadline: newDate});
-                    if (newDate && new Date(newDate) < new Date()) {
-                      setAssignmentError('Error: Deadline cannot be in the past.');
-                    } else {
-                      setAssignmentError('');
-                    }
-                  }}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${assignmentError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`}
-                  required
-                />
-                {assignmentError && <p className="text-red-500 text-xs font-bold mt-1">{assignmentError}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Assignment Document (Optional)</label>
-                <input 
-                  type="file" 
-                  onChange={(e) => setAssignmentData({...assignmentData, file: e.target.files[0]})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
-                  accept="application/pdf,application/msword,.docx,text/*"
-                />
-              </div>
-              <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => { setShowAssignmentModal(false); setAssignmentError(''); }} className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-lg font-bold hover:bg-gray-200 transition-colors">
-                  Cancel
-                </button>
-                <button type="submit" disabled={!!assignmentError} className={`flex-1 px-4 py-2.5 text-white rounded-lg font-bold transition-colors shadow-sm ${assignmentError ? 'bg-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'}`}>
-                  Create
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showSubmissionsModal && selectedAssignment && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center p-5 border-b">
-              <div>
-                <h3 className="font-bold text-lg text-gray-900">Submissions</h3>
-                <p className="text-sm text-gray-500 font-medium">{selectedAssignment.title}</p>
-              </div>
-              <button onClick={() => setShowSubmissionsModal(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-500">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="p-0 max-h-[60vh] overflow-y-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50 text-gray-500 text-[11px] uppercase tracking-wider">
-                    <th className="p-4 font-bold border-b">Student</th>
-                    <th className="p-4 font-bold border-b">Status</th>
-                    <th className="p-4 font-bold border-b">File</th>
-                    <th className="p-4 font-bold border-b">Grade</th>
-                    <th className="p-4 font-bold border-b text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {mockSubmissions.map(sub => (
-                    <tr key={sub.id} className="border-b hover:bg-gray-50/50 transition-colors">
-                      <td className="p-4">
-                        <p className="font-bold text-sm text-gray-900">{sub.name}</p>
-                        <p className="text-xs font-medium text-gray-500">{sub.rollNo}</p>
-                      </td>
-                      <td className="p-4">
-                        {sub.status === 'Submitted' ? (
-                          <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">Submitted</span>
-                        ) : (
-                          <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-yellow-50 text-yellow-700 border border-yellow-100">Pending</span>
-                        )}
-                        {sub.time !== '-' && <p className="text-[10px] font-bold text-gray-400 mt-1">{sub.time}</p>}
-                      </td>
-                      <td className="p-4">
-                        {sub.file ? (
-                          <button className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
-                            <FileText className="w-4 h-4" /> {sub.file}
-                          </button>
-                        ) : <span className="text-gray-400 font-bold text-xs">-</span>}
-                      </td>
-                      <td className="p-4 font-bold text-sm text-gray-700">{sub.grade}</td>
-                      <td className="p-4 text-right">
-                        {sub.status === 'Submitted' && (
-                          <button className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-                            Grade
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }
