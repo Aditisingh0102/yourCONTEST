@@ -23,7 +23,7 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
           </div>
           <div className="flex flex-col sm:border-l sm:border-gray-300 dark:sm:border-gray-600 sm:pl-3 logo-text-container">
             <span className="text-[15px] font-bold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
-            <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Faculty Portal'}</span>
+            <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Technical Trainer Portal'}</span>
           </div>
         </div>
       </div>
@@ -71,7 +71,7 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
           <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600" />
           <div className="text-left hidden sm:block">
             <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">{user.name}</p>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize leading-tight">{user.role}</p>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize leading-tight">{user.role === 'faculty' ? 'Technical Trainer' : user.role}</p>
           </div>
         </div>
       </div>
