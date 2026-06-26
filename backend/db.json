@@ -83,6 +83,38 @@
       "createdAt": "2026-06-26T07:44:44.173Z"
     },
     {
+      "title": "dsa ",
+      "type": "Assessment",
+      "status": "Upcoming",
+      "startTime": "2026-06-26, 12:15",
+      "endTime": "TBD",
+      "duration": "2 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": "Alpha 1",
+      "questionList": [
+        {
+          "id": 1782413025899,
+          "type": "MCQ",
+          "question": "vnjkndvr",
+          "options": [
+            "dsfe",
+            "feew",
+            "dsffdr",
+            "dcaV"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782413000102",
+      "createdAt": "2026-06-25T18:43:20.102Z"
+    },
+    {
       "title": "ams",
       "type": "Mock Test",
       "status": "Upcoming",

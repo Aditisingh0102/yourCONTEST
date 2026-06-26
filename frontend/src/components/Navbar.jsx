@@ -17,7 +17,7 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+        <div className="flex items-center gap-3">
           <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-lg logo-icon hidden sm:block shadow-sm border border-transparent dark:border-gray-600">
             <BookOpen className="w-5 h-5" />
           </div>
@@ -68,7 +68,18 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, isDark, onT
 
         {/* Avatar */}
         <div className="flex items-center gap-3 pl-2 cursor-pointer">
-          <img src={user.avatar} alt="Avatar" className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600" />
+          {user?.role === 'faculty' ? (
+            <img 
+              src={user.avatar} 
+              alt="Avatar" 
+              className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 object-cover" 
+              onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=0D8ABC&textColor=fff`; }} 
+            />
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[13px] shrink-0 border border-blue-700 shadow-sm">
+              {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+            </div>
+          )}
           <div className="text-left hidden sm:block">
             <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">{user.name}</p>
             <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize leading-tight">{user.role === 'faculty' ? 'Technical Trainer' : user.role}</p>

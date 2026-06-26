@@ -173,7 +173,7 @@ export default function FacultyBatches() {
                                 </div>
                               </td>
                               <td className="px-6 py-3 text-right">
-                                <button className="text-[12px] font-bold text-blue-600 hover:text-blue-800 transition-colors px-3 py-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg">
+                                <button className="text-[12px] font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 transition-all px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95">
                                   View Profile
                                 </button>
                               </td>

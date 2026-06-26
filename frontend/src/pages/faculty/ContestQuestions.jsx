@@ -236,7 +236,7 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
           />
         </div>
         <button type="submit"
-          className="flex-[2] py-2.5 bg-blue-600 text-white font-bold text-[14px] rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2 transition-colors">
+          className="flex-[2] py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[14px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2">
           {editing ? <><Edit2 className="w-4 h-4" /> Update MCQ</> : <><Check className="w-4 h-4" /> Save MCQ</>}
         </button>
       </div>
