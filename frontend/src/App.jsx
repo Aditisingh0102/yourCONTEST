@@ -73,8 +73,6 @@ export default function App() {
           <Route path="course-hub" element={<FacultyCourseHub />} />
           <Route path="course-hub/:id" element={<FacultyCourseDetail />} />
           <Route path="manage-contests" element={<FacultyContestManager />} />
-          <Route path="create-contest" element={<ContestForm />} />
-          <Route path="edit-contest/:id" element={<ContestForm />} />
           <Route path="manage-contests/:id/questions" element={<ContestQuestions />} />
           <Route path="batches" element={<FacultyBatches />} />
           <Route path="students" element={<StudentRecords />} />
@@ -83,6 +81,8 @@ export default function App() {
           <Route path="question-bank" element={<QuestionBank />} />
           <Route path="profile" element={<FacultyProfile />} />
         </Route>
+        <Route path="/faculty/create-contest" element={<ContestForm />} />
+        <Route path="/faculty/edit-contest/:id" element={<ContestForm />} />
       </Routes>
     </BrowserRouter>
   );

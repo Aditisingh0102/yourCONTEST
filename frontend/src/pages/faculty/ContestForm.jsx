@@ -321,7 +321,8 @@ export default function ContestForm() {
   };
 
   return (
-    <div className="max-w-[800px] mx-auto py-6">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 py-10 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[800px] mx-auto">
 
       {/* Page Header */}
       <div className="flex items-center gap-4 border-b border-gray-100 pb-6 mb-6">
@@ -562,6 +563,7 @@ export default function ContestForm() {
           onClose={() => setShowTypeModal(false)}
         />
       )}
+      </div>
     </div>
   );
 }
