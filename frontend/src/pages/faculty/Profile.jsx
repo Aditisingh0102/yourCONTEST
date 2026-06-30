@@ -37,9 +37,7 @@ export default function FacultyProfile() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = sessionStorage.getItem('faculty_profile');
-    if (saved) return JSON.parse(saved);
-    return {
+    const defaultData = {
       name: faculty.name,
       facultyId: 'UU-FAC-2018-042',
       department: 'Computer Science',
@@ -58,6 +56,17 @@ export default function FacultyProfile() {
         { id: 3, name: 'Beta 1', course: 'Java Programming', students: 15, iconName: 'Target', color: 'text-green-500', bg: 'bg-green-100' }
       ]
     };
+
+    const saved = sessionStorage.getItem('faculty_profile');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return { ...defaultData, ...parsed };
+      } catch (e) {
+        console.error("Failed to parse faculty_profile", e);
+      }
+    }
+    return defaultData;
   });
 
   const [editForm, setEditForm] = useState({ ...profileData });
