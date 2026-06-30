@@ -24,6 +24,7 @@ import FacultyCourseDetail from './pages/faculty/CourseDetail';
 import FacultyContestManager from './pages/faculty/ContestManager';
 import ContestQuestions from './pages/faculty/ContestQuestions';
 import ContestForm from './pages/faculty/ContestForm';
+import NoticeForm from './pages/faculty/NoticeForm';
 import FacultyBatches from './pages/faculty/Batches';
 import StudentRecords from './pages/faculty/StudentRecords';
 import FacultyProfile from './pages/faculty/Profile';
@@ -67,6 +68,8 @@ export default function App() {
           <Route index element={<Navigate to="/faculty/dashboard" replace />} />
           <Route path="dashboard" element={<FacultyDashboard />} />
           <Route path="notice" element={<FacultyNoticeBoard />} />
+          <Route path="create-notice" element={<NoticeForm />} />
+          <Route path="edit-notice/:id" element={<NoticeForm />} />
           <Route path="course-hub" element={<FacultyCourseHub />} />
           <Route path="course-hub/:id" element={<FacultyCourseDetail />} />
           <Route path="manage-contests" element={<FacultyContestManager />} />
