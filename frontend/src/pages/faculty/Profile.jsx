@@ -337,7 +337,7 @@ export default function FacultyProfile() {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <h2 className="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-5">Areas of Expertise</h2>
               <div className="flex flex-wrap gap-2">
-                {profileData.expertise.map((skill, idx) => (
+                {(profileData.expertise || []).map((skill, idx) => (
                   <span key={idx} className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-gray-700 text-[13px] font-bold rounded-lg">
                     {skill}
                   </span>
@@ -441,8 +441,8 @@ export default function FacultyProfile() {
             </div>
 
             <div className="space-y-3">
-              {profileData.allocatedBatchesList.map((batch) => {
-                const Icon = iconMap[batch.iconName] || BookOpen;
+              {(profileData.allocatedBatchesList || []).map((batch) => {
+                const Icon = iconMap[batch?.iconName] || BookOpen;
                 return (
                   <div key={batch.id} className="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md hover:border-gray-200 transition-all cursor-pointer">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${batch.bg} ${batch.color} group-hover:scale-110 transition-transform`}>
