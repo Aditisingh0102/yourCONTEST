@@ -106,6 +106,7 @@ export default function Arena() {
   }, [contest]);
 
   const questions = contest?.questionList || [];
+  const currentIndex = activeProblem ? questions.findIndex(q => q.id === activeProblem.id) : -1;
 
   useEffect(() => {
     if (!isWaiting && hasAgreed && questions.length > 0 && !activeProblem) {
@@ -523,6 +524,24 @@ export default function Arena() {
                     </label>
                   ))}
                 </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-800">
+                  <button 
+                    onClick={() => setActiveProblem(questions[currentIndex - 1])}
+                    disabled={currentIndex <= 0}
+                    className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                  >
+                    Previous
+                  </button>
+                  <button 
+                    onClick={() => setActiveProblem(questions[currentIndex + 1])}
+                    disabled={currentIndex === questions.length - 1}
+                    className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
             </div>
           ) : activeProblem.type === 'Theory' ? (
@@ -548,6 +567,24 @@ export default function Arena() {
                     onChange={(e) => handleAnswerChange(activeProblem.id, e.target.value)}
                   />
                   <p className="text-xs text-gray-500 mt-2">Write a clear and complete answer. Your response will be evaluated by the faculty.</p>
+                </div>
+
+                {/* Navigation Buttons */}
+                <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-800">
+                  <button 
+                    onClick={() => setActiveProblem(questions[currentIndex - 1])}
+                    disabled={currentIndex <= 0}
+                    className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                  >
+                    Previous
+                  </button>
+                  <button 
+                    onClick={() => setActiveProblem(questions[currentIndex + 1])}
+                    disabled={currentIndex === questions.length - 1}
+                    className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                  >
+                    Next
+                  </button>
                 </div>
               </div>
             </div>
@@ -583,6 +620,24 @@ export default function Arena() {
                         </div>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Navigation Buttons */}
+                  <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-800 pb-8">
+                    <button 
+                      onClick={() => setActiveProblem(questions[currentIndex - 1])}
+                      disabled={currentIndex <= 0}
+                      className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                    >
+                      Previous
+                    </button>
+                    <button 
+                      onClick={() => setActiveProblem(questions[currentIndex + 1])}
+                      disabled={currentIndex === questions.length - 1}
+                      className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                    >
+                      Next
+                    </button>
                   </div>
                 </div>
               </div>

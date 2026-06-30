@@ -117,7 +117,7 @@ export default function FacultyNoticeBoard() {
         </div>
         <button 
           onClick={openNewModal}
-          className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-sm shadow-blue-200"
+          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
         >
           <Plus className="w-5 h-5" /> Create Notice
         </button>
@@ -316,7 +316,7 @@ export default function FacultyNoticeBoard() {
                   </button>
                   <button 
                     type="submit" 
-                    className="flex-1 py-2.5 bg-blue-600 text-white font-bold text-[14px] rounded-xl hover:bg-blue-700 shadow-sm shadow-blue-200 transition-colors"
+                    className="flex-1 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[14px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
                   >
                     Publish Notice
                   </button>

@@ -176,11 +176,18 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
           >
             {isCollapsed ? (
               <div className="relative">
-                <img 
-                  src={profileData.avatar} 
-                  alt="Avatar" 
-                  className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-600 object-cover"
-                />
+                {profileData?.role === 'faculty' ? (
+                  <img 
+                    src={profileData.avatar} 
+                    alt="Avatar" 
+                    className="w-10 h-10 rounded-full border border-gray-200 dark:border-gray-600 object-cover bg-white dark:bg-gray-800"
+                    onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${profileData.name}&backgroundColor=0D8ABC&textColor=fff`; }}
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[15px] shrink-0 border border-blue-700 shadow-sm">
+                    {profileData?.name ? profileData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+                  </div>
+                )}
                 <div className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
                 
                 {/* Tooltip for collapsed Profile Card */}
@@ -192,11 +199,18 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
             ) : (
               <>
                 <div className="relative shrink-0">
-                  <img 
-                    src={profileData.avatar} 
-                    alt="Avatar" 
-                    className="w-11 h-11 rounded-full border border-gray-200 dark:border-gray-600 object-cover"
-                  />
+                  {profileData?.role === 'faculty' ? (
+                    <img 
+                      src={profileData.avatar} 
+                      alt="Avatar" 
+                      className="w-11 h-11 rounded-full border border-gray-200 dark:border-gray-600 object-cover bg-white dark:bg-gray-800"
+                      onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${profileData.name}&backgroundColor=0D8ABC&textColor=fff`; }}
+                    />
+                  ) : (
+                    <div className="w-11 h-11 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[16px] shrink-0 border border-blue-700 shadow-sm">
+                      {profileData?.name ? profileData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+                    </div>
+                  )}
                   <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
                 </div>
                 <div className="flex-1 min-w-0 text-left">
@@ -205,7 +219,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
                       role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700' : 'bg-purple-50 text-purple-600 border border-purple-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700'
                     }`}>
-                      {role}
+                      {role === 'faculty' ? 'Technical Trainer' : role}
                     </span>
                     <span className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{role === 'student' ? profileData.rollNo : profileData.facultyId}</span>
                   </div>

@@ -547,7 +547,7 @@ export default function ContestForm() {
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-3 bg-blue-600 text-white font-bold text-[15px] rounded-xl hover:bg-blue-700 shadow-sm shadow-blue-200 transition-colors flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[15px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
               <Save className="w-5 h-5" />
               {saving ? 'Saving...' : 'Save & Proceed to Questions'}
             </button>
