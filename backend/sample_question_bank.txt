@@ -1,0 +1,13 @@
+
+1. What is the time complexity of binary search?
+A) O(n)
+B) O(n log n)
+C) O(log n)
+D) O(1)
+Correct Option: C
+
+2. Explain the concept of Polymorphism in OOP.
+Answer: Polymorphism allows objects to be treated as instances of their parent class rather than their actual class.
+
+3. Two Sum
+Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.

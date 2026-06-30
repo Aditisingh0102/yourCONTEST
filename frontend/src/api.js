@@ -56,3 +56,8 @@ export const uploadQuestionsDocument = (formData) => axios.post(`${API_URL}/uplo
     'Content-Type': 'multipart/form-data'
   }
 });
+
+export const getQuestions = () => axios.get(`${API_URL}/questions`);
+export const createQuestion = (data) => axios.post(`${API_URL}/questions`, data);
+export const updateQuestion = (id, data) => axios.put(`${API_URL}/questions/${id}`, data);
+export const deleteQuestion = (id) => axios.delete(`${API_URL}/questions/${id}`);

@@ -6,6 +6,7 @@ import {
   LayoutList, Sparkles, Check, Clock, Upload, FileText
 } from 'lucide-react';
 import { getContests, updateContest, uploadQuestionsDocument } from '../../api';
+import QuestionBankImportModal from './QuestionBankImportModal';
 
 /* ─── Import Modal ───────────────────────────────────────── */
 function ImportModal({ onClose, onImport }) {
@@ -65,11 +66,11 @@ function ImportModal({ onClose, onImport }) {
           {parsed.length === 0 ? (
             <div className="space-y-4">
               <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 text-center hover:bg-gray-50 transition-colors">
-                <input type="file" id="docUpload" className="hidden" accept=".txt,.pdf,.docx" onChange={e => setFile(e.target.files[0])} />
+                <input type="file" id="docUpload" className="hidden" accept=".txt,.pdf,.docx,.xlsx,.csv" onChange={e => setFile(e.target.files[0])} />
                 <label htmlFor="docUpload" className="cursor-pointer flex flex-col items-center">
                   <Upload className="w-10 h-10 text-gray-400 mb-3" />
                   <p className="text-sm font-bold text-gray-700">{file ? file.name : 'Click to select a document'}</p>
-                  <p className="text-xs text-gray-500 mt-1">Supports .txt, .pdf, .docx</p>
+                  <p className="text-xs text-gray-500 mt-1">Supports .txt, .pdf, .docx, .xlsx, .csv</p>
                 </label>
               </div>
               {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
@@ -522,6 +523,7 @@ export default function ContestQuestions() {
   const [currentSlotIdx, setCurrentSlotIdx] = useState(0);
   const [editingQId, setEditingQId] = useState(null);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showQuestionBankModal, setShowQuestionBankModal] = useState(false);
 
   // Per-form state
   const [mcqForm,    setMcqForm]    = useState({ ...emptyMCQ });
@@ -724,11 +726,18 @@ export default function ContestQuestions() {
             <h1 className="text-2xl font-bold text-gray-900">Add Questions</h1>
             <p className="text-sm text-gray-500 mt-0.5">{contest.title}</p>
           </div>
-          <button
-            onClick={() => setShowImportModal(true)}
-            className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
-            <Upload className="w-4 h-4" /> Import Document
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowQuestionBankModal(true)}
+              className="px-4 py-2 bg-indigo-50 text-indigo-600 font-bold text-sm rounded-lg hover:bg-indigo-100 flex items-center gap-2">
+              <BookOpen className="w-4 h-4" /> Import from Bank
+            </button>
+            <button
+              onClick={() => setShowImportModal(true)}
+              className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
+              <Upload className="w-4 h-4" /> Import Document
+            </button>
+          </div>
         </div>
 
         {/* Progress bar */}
@@ -862,11 +871,18 @@ export default function ContestQuestions() {
           <h1 className="text-2xl font-bold text-gray-900">Manage Questions</h1>
           <p className="text-sm text-gray-500 mt-1">{contest.title} • {questions.length} questions added</p>
         </div>
-        <button
-          onClick={() => setShowImportModal(true)}
-          className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
-          <Upload className="w-4 h-4" /> Import Document
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowQuestionBankModal(true)}
+            className="px-4 py-2 bg-indigo-50 text-indigo-600 font-bold text-sm rounded-lg hover:bg-indigo-100 flex items-center gap-2">
+            <BookOpen className="w-4 h-4" /> Import from Bank
+          </button>
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
+            <Upload className="w-4 h-4" /> Import Document
+          </button>
+        </div>
         {editingQId && (
           <button
             onClick={() => { setEditingQId(null); setMcqForm({ ...emptyMCQ }); setTheoryForm({ ...emptyTheory }); setCodingForm({ ...emptyCoding }); }}
@@ -969,6 +985,17 @@ export default function ContestQuestions() {
             persist(nextQuestions);
             setShowImportModal(false);
           }} 
+        />
+      )}
+
+      {showQuestionBankModal && (
+        <QuestionBankImportModal 
+          onClose={() => setShowQuestionBankModal(false)}
+          onImport={(importedQuestions) => {
+            const nextQuestions = [...questions, ...importedQuestions];
+            persist(nextQuestions);
+            setShowQuestionBankModal(false);
+          }}
         />
       )}
     </div>

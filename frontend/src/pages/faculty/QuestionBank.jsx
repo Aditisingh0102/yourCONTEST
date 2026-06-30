@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Search, BookOpen, CheckCircle2, Code, HelpCircle, Trophy, Filter } from 'lucide-react';
-import { getContests } from '../../api';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, BookOpen, CheckCircle2, Code, HelpCircle, Trophy, Filter, Plus, Upload, Layers } from 'lucide-react';
+import { getContests, getQuestions } from '../../api';
+import QuestionFormModal from './QuestionFormModal';
+import BulkUploadModal from './BulkUploadModal';
 
 const TYPE_CONFIG = {
   mcq: {
@@ -34,6 +36,21 @@ export default function QuestionBank() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState('All');
+  
+  const [showAddMenu, setShowAddMenu] = useState(false);
+  const [showQuestionModal, setShowQuestionModal] = useState(false);
+  const [showBulkModal, setShowBulkModal] = useState(false);
+  const addMenuRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (addMenuRef.current && !addMenuRef.current.contains(event.target)) {
+        setShowAddMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetchAllQuestions();
@@ -41,8 +58,12 @@ export default function QuestionBank() {
 
   const fetchAllQuestions = async () => {
     try {
-      const res = await getContests();
-      const contests = res.data || [];
+      const [resContests, resQuestions] = await Promise.all([
+        getContests(),
+        getQuestions()
+      ]);
+      const contests = resContests.data || [];
+      const independentQs = resQuestions.data || [];
 
       // Pull every question from every contest and tag it with contest info
       const aggregated = [];
@@ -59,6 +80,14 @@ export default function QuestionBank() {
         });
       });
 
+      independentQs.forEach((q) => {
+        aggregated.push({
+          ...q,
+          contestName: 'Independent (Question Bank)',
+          contestStatus: 'Bank',
+        });
+      });
+
       setAllQuestions(aggregated);
     } catch (err) {
       console.error('Failed to fetch questions', err);
@@ -71,20 +100,21 @@ export default function QuestionBank() {
     const text = (q.question || q.title || q.problemStatement || '').toLowerCase();
     const matchesSearch = text.includes(search.toLowerCase()) ||
       q.contestName.toLowerCase().includes(search.toLowerCase());
-    const matchesType = filterType === 'All' || q.type === filterType.toLowerCase();
+    const matchesType = filterType === 'All' || q.type?.toLowerCase() === filterType.toLowerCase();
     return matchesSearch && matchesType;
   });
 
   const counts = {
     All: allQuestions.length,
-    MCQ: allQuestions.filter((q) => q.type === 'mcq').length,
-    Theory: allQuestions.filter((q) => q.type === 'theory').length,
-    Coding: allQuestions.filter((q) => q.type === 'coding').length,
+    MCQ: allQuestions.filter((q) => q.type?.toLowerCase() === 'mcq').length,
+    Theory: allQuestions.filter((q) => q.type?.toLowerCase() === 'theory').length,
+    Coding: allQuestions.filter((q) => q.type?.toLowerCase() === 'coding').length,
   };
 
   const getQuestionText = (q) => {
-    if (q.type === 'mcq' || q.type === 'theory') return q.question || '—';
-    if (q.type === 'coding') return q.title || q.problemStatement || '—';
+    const t = q.type?.toLowerCase();
+    if (t === 'mcq' || t === 'theory') return q.question || '—';
+    if (t === 'coding') return q.title || q.problemStatement || '—';
     return '—';
   };
 
@@ -102,12 +132,38 @@ export default function QuestionBank() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Question Bank</h1>
           <p className="text-sm text-gray-500 mt-1">
-            All questions from all your contests — in one place
+            All questions from all your contests and independent pool — in one place
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-purple-50 border border-purple-200 text-purple-700 px-4 py-2 rounded-xl text-sm font-bold">
-          <BookOpen className="w-4 h-4" />
-          {allQuestions.length} Total Questions
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 bg-purple-50 border border-purple-200 text-purple-700 px-4 py-2 rounded-xl text-sm font-bold">
+            <BookOpen className="w-4 h-4" />
+            {allQuestions.length} Total Questions
+          </div>
+          <div className="relative" ref={addMenuRef}>
+            <button 
+              onClick={() => setShowAddMenu(!showAddMenu)}
+              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors"
+            >
+              <Plus className="w-4 h-4" /> Add Questions
+            </button>
+            {showAddMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-10">
+                <button 
+                  onClick={() => { setShowAddMenu(false); setShowQuestionModal(true); }}
+                  className="w-full text-left px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <Layers className="w-4 h-4 text-blue-500" /> Create Manually
+                </button>
+                <button 
+                  onClick={() => { setShowAddMenu(false); setShowBulkModal(true); }}
+                  className="w-full text-left px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                >
+                  <Upload className="w-4 h-4 text-green-500" /> Bulk Upload (JSON)
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -169,7 +225,8 @@ export default function QuestionBank() {
           </div>
         ) : (
           filtered.map((q, i) => {
-            const cfg = TYPE_CONFIG[q.type] || TYPE_CONFIG.mcq;
+            const qType = q.type?.toLowerCase() || 'theory';
+            const cfg = TYPE_CONFIG[qType] || TYPE_CONFIG.theory;
             const Icon = cfg.icon;
             const questionText = getQuestionText(q);
 
@@ -215,7 +272,7 @@ export default function QuestionBank() {
                     </p>
 
                     {/* MCQ options preview */}
-                    {q.type === 'mcq' && q.options && (
+                    {q.type?.toLowerCase() === 'mcq' && q.options && (
                       <div className="mt-3 grid grid-cols-2 gap-1.5">
                         {q.options.map((opt, oi) => (
                           <div
@@ -232,7 +289,7 @@ export default function QuestionBank() {
                     )}
 
                     {/* Coding preview */}
-                    {q.type === 'coding' && q.problemStatement && (
+                    {q.type?.toLowerCase() === 'coding' && q.problemStatement && (
                       <p className="mt-2 text-[12px] text-gray-400 line-clamp-1">
                         {q.problemStatement}
                       </p>
@@ -244,6 +301,27 @@ export default function QuestionBank() {
           })
         )}
       </div>
+
+      {/* Modals */}
+      {showQuestionModal && (
+        <QuestionFormModal 
+          onClose={() => setShowQuestionModal(false)} 
+          onSuccess={() => {
+            setShowQuestionModal(false);
+            fetchAllQuestions();
+          }} 
+        />
+      )}
+      {showBulkModal && (
+        <BulkUploadModal 
+          onClose={() => setShowBulkModal(false)}
+          onSuccess={(count) => {
+            setShowBulkModal(false);
+            fetchAllQuestions();
+            alert(`Successfully added ${count} questions!`);
+          }}
+        />
+      )}
     </div>
   );
 }

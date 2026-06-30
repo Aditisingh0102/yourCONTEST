@@ -2,6 +2,74 @@
   "notices": [],
   "contests": [
     {
+      "title": "exam practice",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-26, 16:02",
+      "endTime": "TBD",
+      "duration": "53 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "questionList": [
+        {
+          "id": 1782469819037,
+          "type": "MCQ",
+          "question": "2+2",
+          "options": [
+            "4",
+            "2",
+            "3",
+            "6"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782469789526",
+      "createdAt": "2026-06-26T10:29:49.526Z"
+    },
+    {
+      "title": "mid term practice",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-26, 15:54",
+      "endTime": "TBD",
+      "duration": "10 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "questionList": [
+        {
+          "id": 1782469235373,
+          "type": "MCQ",
+          "question": "2+2",
+          "options": [
+            "4",
+            "5",
+            "6",
+            "7"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782469213076",
+      "createdAt": "2026-06-26T10:20:13.076Z"
+    },
+    {
       "title": "test",
       "type": "Mock Test",
       "status": "Upcoming",
@@ -349,6 +417,26 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1782469789526",
+      "contestName": "exam practice",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {},
+      "score": 0,
+      "submittedAt": "2026-06-26T10:32:17.260Z",
+      "_id": "1782469937311"
+    },
+    {
+      "contestId": "1782469789526",
+      "contestName": "exam practice",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {},
+      "score": 0,
+      "submittedAt": "2026-06-26T10:32:17.259Z",
+      "_id": "1782469937309"
+    },
     {
       "contestId": "1782464440069",
       "contestName": "test",
