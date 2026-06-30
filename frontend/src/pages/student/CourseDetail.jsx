@@ -20,9 +20,9 @@ export default function CourseDetail() {
 
   const base = courseBaseDetails[id] || courseBaseDetails['2'];
 
-  const savedLecturesStr = localStorage.getItem(`course_${id}_lectures`);
-  const savedNotesStr = localStorage.getItem(`course_${id}_notes`);
-  const savedAssignmentsStr = localStorage.getItem(`course_${id}_assignments`);
+  const savedLecturesStr = sessionStorage.getItem(`course_${id}_lectures`);
+  const savedNotesStr = sessionStorage.getItem(`course_${id}_notes`);
+  const savedAssignmentsStr = sessionStorage.getItem(`course_${id}_assignments`);
   let savedLectures = null;
   let savedNotes = null;
   let savedAssignments = null;

@@ -25,7 +25,7 @@ export default function CourseDetail() {
   });
 
   const [lectures, setLectures] = useState(() => {
-    const saved = localStorage.getItem(`course_${id}_lectures`);
+    const saved = sessionStorage.getItem(`course_${id}_lectures`);
     if (saved && saved !== 'null') {
       try {
         const parsed = JSON.parse(saved);
@@ -48,7 +48,7 @@ export default function CourseDetail() {
   });
 
   const [notes, setNotes] = useState(() => {
-    const saved = localStorage.getItem(`course_${id}_notes`);
+    const saved = sessionStorage.getItem(`course_${id}_notes`);
     if (saved && saved !== 'null') {
       try {
         const parsed = JSON.parse(saved);
@@ -69,7 +69,7 @@ export default function CourseDetail() {
   });
 
   const [assignments, setAssignments] = useState(() => {
-    const saved = localStorage.getItem(`course_${id}_assignments`);
+    const saved = sessionStorage.getItem(`course_${id}_assignments`);
     if (saved) {
       try { return JSON.parse(saved); } catch (e) {}
     }
@@ -97,15 +97,15 @@ export default function CourseDetail() {
   ];
 
   React.useEffect(() => {
-    localStorage.setItem(`course_${id}_lectures`, JSON.stringify(lectures));
+    sessionStorage.setItem(`course_${id}_lectures`, JSON.stringify(lectures));
   }, [lectures, id]);
 
   React.useEffect(() => {
-    localStorage.setItem(`course_${id}_notes`, JSON.stringify(notes));
+    sessionStorage.setItem(`course_${id}_notes`, JSON.stringify(notes));
   }, [notes, id]);
 
   React.useEffect(() => {
-    localStorage.setItem(`course_${id}_assignments`, JSON.stringify(assignments));
+    sessionStorage.setItem(`course_${id}_assignments`, JSON.stringify(assignments));
   }, [assignments, id]);
 
   const handleFileSelect = (e) => {

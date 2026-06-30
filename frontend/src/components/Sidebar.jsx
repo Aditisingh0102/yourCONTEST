@@ -43,7 +43,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
+    const saved = sessionStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
     if (saved) return JSON.parse(saved);
     
     return role === 'student' ? {
@@ -72,7 +72,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
+      const saved = sessionStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);

@@ -1,6 +1,136 @@
 {
-  "notices": [],
+  "notices": [
+    {
+      "title": "aditi batli hai ",
+      "content": "iska proof karo ",
+      "type": "Important",
+      "batch": [
+        "Alpha 1"
+      ],
+      "author": "Arun Kudiyal",
+      "iconName": "AlertCircle",
+      "color": "text-red-600",
+      "bg": "bg-red-50",
+      "borderColor": "border-red-100",
+      "_id": "1782839433335",
+      "date": "2026-06-30T17:10:33.335Z"
+    },
+    {
+      "title": "mock test ",
+      "content": "test for beta batch is scheduled \n",
+      "type": "Important",
+      "author": "Arun Kudiyal",
+      "iconName": "AlertCircle",
+      "color": "text-red-600",
+      "bg": "bg-red-50",
+      "borderColor": "border-red-100",
+      "_id": "1782838771012",
+      "date": "2026-06-30T16:59:31.012Z"
+    }
+  ],
   "contests": [
+    {
+      "title": "test",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-30, 22:30",
+      "endTime": "TBD",
+      "duration": "5 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Beta 1"
+      ],
+      "questionList": [
+        {
+          "id": 1782838713491,
+          "type": "MCQ",
+          "question": "cnjiw",
+          "options": [
+            "akfb",
+            "cika",
+            "jiok",
+            "jjj"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782838687132",
+      "createdAt": "2026-06-30T16:58:07.132Z"
+    },
+    {
+      "title": "xyz",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-06-30, 22:17",
+      "endTime": "TBD",
+      "duration": "5 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "questionList": [
+        {
+          "id": 1782837956937,
+          "type": "MCQ",
+          "question": "aseeqwa",
+          "options": [
+            "aa",
+            "aad",
+            "cdaf",
+            "cc"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782837933495",
+      "createdAt": "2026-06-30T16:45:33.495Z"
+    },
+    {
+      "title": "bdjhfb",
+      "type": "Assessment",
+      "status": "Upcoming",
+      "startTime": "2026-06-26, 13:48",
+      "endTime": "TBD",
+      "duration": "2 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "questionList": [
+        {
+          "id": 1782461824755,
+          "type": "MCQ",
+          "question": "dsadsf",
+          "options": [
+            "sxasfscsd",
+            "sxasfscsdds",
+            "dvssdcsdsc",
+            "dsf"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782461798953",
+      "createdAt": "2026-06-26T08:16:38.953Z"
+    },
     {
       "title": "test",
       "type": "Mock Test",
@@ -550,6 +680,30 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1782837933495",
+      "contestName": "xyz",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782837956937": 0
+      },
+      "score": 1,
+      "submittedAt": "2026-06-30T16:47:21.689Z",
+      "_id": "1782838041724"
+    },
+    {
+      "contestId": "1782461798953",
+      "contestName": "bdjhfb",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782461824755": 0
+      },
+      "score": 1,
+      "submittedAt": "2026-06-26T08:18:07.191Z",
+      "_id": "1782461887260"
+    },
     {
       "contestId": "1782457464711",
       "contestName": "beta ",

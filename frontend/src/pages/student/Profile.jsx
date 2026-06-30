@@ -23,7 +23,7 @@ export default function Profile() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('student_profile');
+    const saved = sessionStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved);
     return {
       name: 'Aditi Singh',
@@ -62,7 +62,7 @@ export default function Profile() {
       reader.onloadend = () => {
         const updated = { ...profileData, avatar: reader.result };
         setProfileData(updated);
-        localStorage.setItem('student_profile', JSON.stringify(updated));
+        sessionStorage.setItem('student_profile', JSON.stringify(updated));
         window.dispatchEvent(new Event('profile-updated'));
       };
       reader.readAsDataURL(file);
@@ -72,7 +72,7 @@ export default function Profile() {
   const handleProfileSave = (e) => {
     e.preventDefault();
     setProfileData(editForm);
-    localStorage.setItem('student_profile', JSON.stringify(editForm));
+    sessionStorage.setItem('student_profile', JSON.stringify(editForm));
     window.dispatchEvent(new Event('profile-updated'));
     setIsEditing(false);
   };

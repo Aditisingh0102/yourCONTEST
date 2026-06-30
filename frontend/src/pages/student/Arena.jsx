@@ -12,6 +12,13 @@ export default function Arena() {
   const [submittedResult, setSubmittedResult] = useState(null);
   const [answers, setAnswers] = useState({});
   const answersRef = React.useRef(answers);
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('student_profile')) {
+      navigate('/');
+    }
+  }, [navigate]);
+
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
@@ -32,7 +39,9 @@ export default function Arena() {
       const current = res.data.find(c => (c._id || c.id).toString() === id);
       
       const subsRes = await getSubmissions();
-      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+      const profileStr = sessionStorage.getItem('student_profile');
+      if (!profileStr) return; // Prevent execution if not logged in (will be redirected)
+      const studentProfile = JSON.parse(profileStr);
       const hasSubmitted = subsRes.data.some(sub => (sub.contestId === id) && (sub.studentId === studentProfile.id));
 
       if (hasSubmitted) {
@@ -166,11 +175,11 @@ export default function Arena() {
     if (!contest || !hasAgreed) return;
 
     const storageKey = `contest_${contest.id || contest._id}_startTime`;
-    let studentStartTime = localStorage.getItem(storageKey);
+    let studentStartTime = sessionStorage.getItem(storageKey);
 
     if (!studentStartTime) {
       studentStartTime = Date.now().toString();
-      localStorage.setItem(storageKey, studentStartTime);
+      sessionStorage.setItem(storageKey, studentStartTime);
     }
     
     studentStartTime = parseInt(studentStartTime, 10);
@@ -247,7 +256,9 @@ export default function Arena() {
     });
 
     try {
-      const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+      const profileStr = sessionStorage.getItem('student_profile');
+      if (!profileStr) return;
+      const studentProfile = JSON.parse(profileStr);
       const { submitContestAnswers } = await import('../../api');
       
       const payload = {
@@ -267,7 +278,7 @@ export default function Arena() {
     }
 
     const storageKey = `contest_${contest?.id || contest?._id}_startTime`;
-    localStorage.removeItem(storageKey);
+    sessionStorage.removeItem(storageKey);
     setSubmittedResult({ score, total: questions.length });
   };
 

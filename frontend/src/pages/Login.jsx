@@ -12,7 +12,7 @@ export default function Login() {
     e.preventDefault();
 
     if (erpId === '23210101548@uudoon.in' || erpId === '2321010548@uudoon.in') {
-      localStorage.setItem('student_profile', JSON.stringify({
+      sessionStorage.setItem('student_profile', JSON.stringify({
         name: 'Aditi Singh',
         rollNo: '23210101548',
         regNo: 'UU23104209',
@@ -25,10 +25,11 @@ export default function Login() {
         joinDate: 'August 2023',
         batch: 'Alpha 1'
       }));
+      sessionStorage.removeItem('hasSeenNoticePopup');
       window.dispatchEvent(new Event('profile-updated'));
       navigate('/student/dashboard');
     } else if (erpId === '23210101763@uudoon.in') {
-      localStorage.setItem('student1_profile', JSON.stringify({
+      sessionStorage.setItem('student_profile', JSON.stringify({
         name: 'Ambar Kumar',
         rollNo: '23210101763',
         regNo: 'UU23104299',
@@ -41,9 +42,18 @@ export default function Login() {
         joinDate: 'August 2023',
         batch: 'Beta 1'
       }));
-      window.dispatchEvent(new Event('profile1-updated'));
-      navigate('/student1/dashboard');
+      sessionStorage.removeItem('hasSeenNoticePopup');
+      window.dispatchEvent(new Event('profile-updated'));
+      navigate('/student/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
+      sessionStorage.setItem('faculty_profile', JSON.stringify({
+        name: 'Arun Kudiyal',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Arun',
+        role: 'Senior Faculty & Trainer',
+        erp: erpId,
+        university: 'Uttaranchal University, Dehradun'
+      }));
+      window.dispatchEvent(new Event('profile-updated'));
       navigate('/faculty/dashboard');
     } else {
       setError('Invalid ERP ID. Access is restricted to authorized users.');

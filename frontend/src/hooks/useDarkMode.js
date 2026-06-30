@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
 /**
- * useDarkMode – Reads/writes the dark-mode preference to localStorage
+ * useDarkMode – Reads/writes the dark-mode preference to sessionStorage
  * and syncs the `dark` class on <html>.
  *
  * Returns [isDark, toggle]
  */
 export function useDarkMode() {
   const [isDark, setIsDark] = useState(() => {
-    const saved = localStorage.getItem('theme');
+    const saved = sessionStorage.getItem('theme');
     if (saved) return saved === 'dark';
     // Default to dark mode on first visit
     return true;
@@ -18,10 +18,10 @@ export function useDarkMode() {
     const root = document.documentElement;
     if (isDark) {
       root.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
+      sessionStorage.setItem('theme', 'dark');
     } else {
       root.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+      sessionStorage.setItem('theme', 'light');
     }
   }, [isDark]);
 

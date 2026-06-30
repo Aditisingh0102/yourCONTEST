@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { upcomingContests, user } from '../../data/mockData';
-import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User } from 'lucide-react';
+import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests } from '../../api';
 import { socket } from '../../socket';
@@ -13,6 +13,8 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [notices, setNotices] = useState([]);
   const [contests, setContests] = useState([]);
+  const [showNoticePopup, setShowNoticePopup] = useState(false);
+  const [latestNotice, setLatestNotice] = useState(null);
 
   useEffect(() => {
     fetchNotices();
@@ -39,7 +41,32 @@ export default function Dashboard() {
   const fetchNotices = async () => {
     try {
       const res = await getNotices();
-      setNotices(res.data.slice(0, 3));
+      const profileStr = sessionStorage.getItem('student_profile');
+      let studentBatch = 'All';
+      if (profileStr) {
+        try {
+          const profile = JSON.parse(profileStr);
+          studentBatch = profile.batch || 'All';
+        } catch(e) {}
+      }
+
+      const filteredNotices = res.data.filter(n => {
+        if (!n.batch || n.batch.length === 0) return true; // Backward compatibility
+        if (Array.isArray(n.batch)) {
+          return n.batch.includes('All') || n.batch.includes(studentBatch);
+        }
+        return n.batch === 'All' || n.batch === studentBatch;
+      });
+
+      if (filteredNotices.length > 0) {
+        if (sessionStorage.getItem('hasSeenNoticePopup') !== 'true') {
+          setLatestNotice(filteredNotices[0]);
+          setShowNoticePopup(true);
+          sessionStorage.setItem('hasSeenNoticePopup', 'true');
+        }
+      }
+
+      setNotices(filteredNotices.slice(0, 3));
     } catch (error) {
       console.error("Failed to fetch notices", error);
     }
@@ -48,7 +75,7 @@ export default function Dashboard() {
   const fetchContests = async () => {
     try {
       const res = await getContests();
-      const studentBatch = JSON.parse(localStorage.getItem('student_profile'))?.batch || 'Alpha 1';
+      const studentBatch = JSON.parse(sessionStorage.getItem('student_profile'))?.batch || 'Alpha 1';
       setContests(res.data.filter(c => c.status !== 'Ended' && (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)))).slice(0, 2)); // Show up to 2 active/upcoming
     } catch (error) {
       console.error("Failed to fetch contests", error);
@@ -56,14 +83,14 @@ export default function Dashboard() {
   };
 
   const [studentProfile, setStudentProfile] = useState(() => {
-    const saved = localStorage.getItem('student_profile');
+    const saved = sessionStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved);
     return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem('student_profile');
+      const saved = sessionStorage.getItem('student_profile');
       if (saved) setStudentProfile(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
@@ -232,6 +259,50 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {showNoticePopup && latestNotice && (
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+            <div className={`h-2 ${latestNotice.bg} w-full`}></div>
+            <div className="p-6 relative">
+              <button 
+                onClick={() => setShowNoticePopup(false)}
+                className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              
+              <div className="flex items-center gap-3 mb-4 pr-8">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${latestNotice.bg} ${latestNotice.color}`}>
+                  <Megaphone className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 leading-tight">New Announcement</h3>
+                  <p className="text-sm text-gray-500 font-medium">From {latestNotice.author}</p>
+                </div>
+              </div>
+              
+              <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 mb-5">
+                <h4 className="text-[16px] font-bold text-gray-900 mb-2">{latestNotice.title}</h4>
+                <p className="text-[14px] text-gray-700 leading-relaxed whitespace-pre-wrap">{latestNotice.content}</p>
+              </div>
+              
+              <div className="flex items-center justify-between">
+                <span className={`px-2.5 py-1 rounded text-[11px] font-bold tracking-wider uppercase border w-max ${latestNotice.bg} ${latestNotice.color} ${latestNotice.borderColor}`}>
+                  {latestNotice.type}
+                </span>
+                <button 
+                  onClick={() => setShowNoticePopup(false)}
+                  className="px-5 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
+                >
+                  Got it
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

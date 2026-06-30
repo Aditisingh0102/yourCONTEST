@@ -25,7 +25,24 @@ export default function NoticeBoard() {
   const fetchNotices = async () => {
     try {
       const res = await getNotices();
-      setNotices(res.data);
+      const profileStr = sessionStorage.getItem('student_profile');
+      let studentBatch = 'All';
+      if (profileStr) {
+        try {
+          const profile = JSON.parse(profileStr);
+          studentBatch = profile.batch || 'All';
+        } catch(e) {}
+      }
+
+      const filteredNotices = res.data.filter(n => {
+        if (!n.batch || n.batch.length === 0) return true; // Backward compatibility
+        if (Array.isArray(n.batch)) {
+          return n.batch.includes('All') || n.batch.includes(studentBatch);
+        }
+        return n.batch === 'All' || n.batch === studentBatch;
+      });
+
+      setNotices(filteredNotices);
     } catch (error) {
       console.error("Failed to fetch notices", error);
     }

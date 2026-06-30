@@ -31,7 +31,7 @@ export default function FacultyProfile() {
   const [passwordSuccess, setPasswordSuccess] = useState(false);
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('faculty_profile');
+    const saved = sessionStorage.getItem('faculty_profile');
     if (saved) return JSON.parse(saved);
     return {
       name: faculty.name,
@@ -64,7 +64,7 @@ export default function FacultyProfile() {
         designation: profileData.designation.replace('Corporate Trainer', 'Trainer')
       };
       setProfileData(updated);
-      localStorage.setItem('faculty_profile', JSON.stringify(updated));
+      sessionStorage.setItem('faculty_profile', JSON.stringify(updated));
     }
   }, [profileData.designation]);
 
@@ -89,7 +89,7 @@ export default function FacultyProfile() {
       reader.onloadend = () => {
         const updated = { ...profileData, avatar: reader.result };
         setProfileData(updated);
-        localStorage.setItem('faculty_profile', JSON.stringify(updated));
+        sessionStorage.setItem('faculty_profile', JSON.stringify(updated));
         window.dispatchEvent(new Event('profile-updated'));
       };
       reader.readAsDataURL(file);
@@ -99,7 +99,7 @@ export default function FacultyProfile() {
   const handleProfileSave = (e) => {
     e.preventDefault();
     setProfileData(editForm);
-    localStorage.setItem('faculty_profile', JSON.stringify(editForm));
+    sessionStorage.setItem('faculty_profile', JSON.stringify(editForm));
     window.dispatchEvent(new Event('profile-updated'));
     setIsEditing(false);
   };

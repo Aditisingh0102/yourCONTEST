@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import { faculty } from '../data/mockData';
 import { useDarkMode } from '../hooks/useDarkMode';
 
 export default function FacultyLayout() {
@@ -10,19 +9,22 @@ export default function FacultyLayout() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [isDark, toggleDark] = useDarkMode();
 
+  const navigate = useNavigate();
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('faculty_profile');
+    const saved = sessionStorage.getItem('faculty_profile');
     if (saved) return JSON.parse(saved);
-    return {
-      name: faculty.name,
-      avatar: faculty.avatar,
-      role: 'faculty'
-    };
+    return null;
   });
 
   useEffect(() => {
+    if (!sessionStorage.getItem('faculty_profile')) {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem('faculty_profile');
+      const saved = sessionStorage.getItem('faculty_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
@@ -36,6 +38,8 @@ export default function FacultyLayout() {
       setIsCollapsed(!isCollapsed);
     }
   };
+
+  if (!profileData) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">

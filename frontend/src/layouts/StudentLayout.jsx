@@ -11,18 +11,14 @@ export default function StudentLayout() {
   const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('student_profile');
+    const saved = sessionStorage.getItem('student_profile');
     if (saved) return JSON.parse(saved);
-    return {
-      name: 'Aditi Singh',
-      avatar: 'https://ui-avatars.com/api/?name=Aditi+Singh&background=0D8ABC&color=fff&size=128',
-      role: 'student'
-    };
+    return null;
   });
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem('student_profile');
+      const saved = sessionStorage.getItem('student_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
@@ -30,22 +26,10 @@ export default function StudentLayout() {
   }, []);
 
   useEffect(() => {
-    const currentProfile = JSON.parse(localStorage.getItem('student_profile') || '{}');
-    if (currentProfile.batch !== 'Alpha 1') {
-      const aditiProfile = {
-        name: 'Aditi Singh',
-        rollNo: '23210101548',
-        regNo: 'UU23104209',
-        branch: 'B.Tech CSE',
-        semester: '7th Semester',
-        batch: 'Alpha 1',
-        role: 'student'
-      };
-      localStorage.setItem('student_profile', JSON.stringify(aditiProfile));
-      setProfileData(aditiProfile);
-      window.dispatchEvent(new Event('profile-updated'));
+    if (!sessionStorage.getItem('student_profile')) {
+      navigate('/');
     }
-  }, []);
+  }, [navigate]);
 
   const toggleSidebar = () => {
     if (window.innerWidth < 1024) {
@@ -54,6 +38,8 @@ export default function StudentLayout() {
       setIsCollapsed(!isCollapsed);
     }
   };
+
+  if (!profileData) return null;
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { faculty } from '../../data/mockData';
 import { Trophy, Users, FileCheck, CheckSquare, BarChart, Calendar, Edit3, PlusCircle, AlertCircle, Library, Eye, Trash2, Save, X, Plus, Rocket, Zap, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { getContests } from '../../api';
+import { socket } from '../../socket';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -15,7 +17,7 @@ export default function Dashboard() {
   ];
 
   const [notes, setNotes] = useState(() => {
-    const saved = localStorage.getItem('faculty_notes');
+    const saved = sessionStorage.getItem('faculty_notes');
     return saved ? JSON.parse(saved) : [
       { id: 1, text: 'Prepare questions for Alpha 1 Mid-Term' },
       { id: 2, text: 'Review Beta 1 assignment submissions' }
@@ -25,13 +27,26 @@ export default function Dashboard() {
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [editingNoteText, setEditingNoteText] = useState('');
 
-  const [managedContests, setManagedContests] = useState(() => {
-    const saved = localStorage.getItem('app_contests');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [managedContests, setManagedContests] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem('faculty_notes', JSON.stringify(notes));
+    const fetchContests = async () => {
+      try {
+        const res = await getContests();
+        setManagedContests(res.data);
+      } catch (error) {
+        console.error("Failed to fetch contests", error);
+      }
+    };
+    
+    fetchContests();
+
+    socket.on('CONTEST_UPDATED', fetchContests);
+    return () => socket.off('CONTEST_UPDATED');
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem('faculty_notes', JSON.stringify(notes));
   }, [notes]);
 
   const addNote = (e) => {
@@ -52,7 +67,7 @@ export default function Dashboard() {
   };
 
   const [profileData, setProfileData] = useState(() => {
-    const saved = localStorage.getItem('faculty_profile');
+    const saved = sessionStorage.getItem('faculty_profile');
     if (saved) return JSON.parse(saved);
     return {
       name: faculty.name,
@@ -62,7 +77,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     const handleUpdate = () => {
-      const saved = localStorage.getItem('faculty_profile');
+      const saved = sessionStorage.getItem('faculty_profile');
       if (saved) setProfileData(JSON.parse(saved));
     };
     window.addEventListener('profile-updated', handleUpdate);
@@ -89,7 +104,7 @@ export default function Dashboard() {
           { label: 'Total Students', value: 98, icon: Users, color: 'text-blue-500', bg: 'bg-blue-50', path: '/faculty/student-records' },
           { label: 'Batches Allocated', value: 3, icon: Library, color: 'text-indigo-500', bg: 'bg-indigo-50', path: '/faculty/my-batches' },
           { label: 'Active Contests', value: managedContests.filter(c => c.status === 'Live').length, icon: Trophy, color: 'text-purple-500', bg: 'bg-purple-50', path: '/faculty/manage-contests' },
-          { label: 'Upcoming Contests', value: managedContests.filter(c => c.status !== 'Live').length, icon: Calendar, color: 'text-orange-500', bg: 'bg-orange-50', path: '/faculty/manage-contests' },
+          { label: 'Upcoming Contests', value: managedContests.filter(c => c.status === 'Upcoming').length, icon: Calendar, color: 'text-orange-500', bg: 'bg-orange-50', path: '/faculty/manage-contests' },
         ].map((stat, i) => (
           <div
             key={i}

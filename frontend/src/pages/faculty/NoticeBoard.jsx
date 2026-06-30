@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, AlertCircle, Calendar, Briefcase, Info, BookOpen, Plus, X, Edit3, Trash2 } from 'lucide-react';
+import { FileText, AlertCircle, Calendar, Briefcase, Info, BookOpen, Plus, X, Edit3, Trash2, ChevronDown, Check } from 'lucide-react';
 import { getNotices, createNotice, updateNotice, deleteNotice } from '../../api';
 import { socket } from '../../socket';
 
@@ -11,7 +11,20 @@ export default function FacultyNoticeBoard() {
   const [notices, setNotices] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ title: '', content: '', type: 'Important' });
+  const [formData, setFormData] = useState({ title: '', content: '', type: 'Important', batch: ['All'] });
+  
+  const [isBatchOpen, setIsBatchOpen] = useState(false);
+  const batchDropdownRef = React.useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (batchDropdownRef.current && !batchDropdownRef.current.contains(event.target)) {
+        setIsBatchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetchNotices();
@@ -55,6 +68,7 @@ export default function FacultyNoticeBoard() {
       title: formData.title,
       content: formData.content,
       type: formData.type, // backend schema priority but we can store as type or adjust model
+      batch: formData.batch,
       author: 'Arun Kudiyal',
       iconName, color, bg, borderColor
     };
@@ -74,7 +88,7 @@ export default function FacultyNoticeBoard() {
   };
 
   const handleEdit = (notice) => {
-    setFormData({ title: notice.title, content: notice.content, type: notice.type || 'Important' });
+    setFormData({ title: notice.title, content: notice.content, type: notice.type || 'Important', batch: Array.isArray(notice.batch) ? notice.batch : (notice.batch ? [notice.batch] : ['All']) });
     setEditingId(notice._id);
     setShowModal(true);
   };
@@ -90,7 +104,7 @@ export default function FacultyNoticeBoard() {
 
   const openNewModal = () => {
     setEditingId(null);
-    setFormData({ title: '', content: '', type: 'Important' });
+    setFormData({ title: '', content: '', type: 'Important', batch: ['All'] });
     setShowModal(true);
   };
 
@@ -138,9 +152,21 @@ export default function FacultyNoticeBoard() {
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row justify-between sm:items-start mb-2 gap-2 pr-8">
                       <h3 className="text-[16px] font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">{notice.title}</h3>
-                      <span className={`px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max ${notice.bg} ${notice.color} ${notice.borderColor}`}>
-                        {notice.type}
-                      </span>
+                      <div className="flex gap-2 flex-wrap">
+                        <span className={`px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max ${notice.bg} ${notice.color} ${notice.borderColor}`}>
+                          {notice.type}
+                        </span>
+                        {notice.batch && notice.batch.length > 0 && !notice.batch.includes('All') && (
+                          <span className="px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max bg-gray-50 text-gray-600 border-gray-200">
+                            {Array.isArray(notice.batch) ? notice.batch.join(', ') : notice.batch}
+                          </span>
+                        )}
+                        {(!notice.batch || notice.batch.includes('All')) && (
+                          <span className="px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max bg-gray-50 text-gray-600 border-gray-200">
+                            All Batches
+                          </span>
+                        )}
+                      </div>
                     </div>
                     
                     <p className="text-[14px] text-gray-600 mb-4 leading-relaxed">
@@ -209,6 +235,48 @@ export default function FacultyNoticeBoard() {
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm font-medium"
                     required
                   />
+                </div>
+
+                <div ref={batchDropdownRef} className="relative z-20">
+                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Target Batch</label>
+                  <div 
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 cursor-pointer flex justify-between items-center text-sm font-medium focus:outline-none focus:border-blue-500 transition-all"
+                    onClick={() => setIsBatchOpen(!isBatchOpen)}
+                  >
+                    <span className="truncate text-gray-700">
+                      {formData.batch.includes('All') ? 'All Batches' : formData.batch.join(', ')}
+                    </span>
+                    <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isBatchOpen ? 'rotate-180' : ''}`} />
+                  </div>
+                  {isBatchOpen && (
+                    <div className="absolute z-30 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg py-1.5 overflow-hidden">
+                      {['All', 'Alpha 1', 'Alpha 2', 'Beta 1'].map(b => (
+                        <div 
+                          key={b} 
+                          className="px-4 py-2 hover:bg-gray-50 cursor-pointer flex items-center justify-between text-sm transition-colors"
+                          onClick={() => {
+                            if (b === 'All') {
+                              setFormData({ ...formData, batch: ['All'] });
+                            } else {
+                              let newBatch = formData.batch.filter(x => x !== 'All');
+                              if (newBatch.includes(b)) {
+                                newBatch = newBatch.filter(x => x !== b);
+                              } else {
+                                newBatch.push(b);
+                              }
+                              if (newBatch.length === 0) newBatch = ['All'];
+                              setFormData({ ...formData, batch: newBatch });
+                            }
+                          }}
+                        >
+                          <span className={formData.batch.includes(b) ? 'font-bold text-blue-600' : 'font-medium text-gray-700'}>
+                            {b === 'All' ? 'All Batches' : b}
+                          </span>
+                          {formData.batch.includes(b) && <Check className="w-4 h-4 text-blue-600" />}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 <div>

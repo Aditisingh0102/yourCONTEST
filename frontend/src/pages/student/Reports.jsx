@@ -10,7 +10,7 @@ export default function Reports() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const studentProfile = JSON.parse(localStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
+        const studentProfile = JSON.parse(sessionStorage.getItem('student_profile')) || { name: 'Aditi Singh', id: 'ERP101', batch: 'Alpha 1' };
         
         const [subRes, contRes] = await Promise.all([
           getSubmissions(),

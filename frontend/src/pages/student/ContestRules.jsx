@@ -10,7 +10,13 @@ export default function ContestRules() {
   const [contest, setContest] = useState(null);
 
   React.useEffect(() => {
-    const saved = localStorage.getItem('app_contests');
+    if (!sessionStorage.getItem('student_profile')) {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  React.useEffect(() => {
+    const saved = sessionStorage.getItem('app_contests');
     if (saved) {
       const all = JSON.parse(saved);
       const current = all.find(c => c.id === parseInt(id));
