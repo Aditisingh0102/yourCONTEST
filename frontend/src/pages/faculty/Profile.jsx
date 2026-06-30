@@ -21,6 +21,12 @@ import {
 import { faculty } from '../../data/mockData';
 import { useNavigate } from 'react-router-dom';
 
+const iconMap = {
+  Rocket,
+  Zap,
+  Target
+};
+
 export default function FacultyProfile() {
   const navigate = useNavigate();
   const [showBatches, setShowBatches] = useState(false);
@@ -47,9 +53,9 @@ export default function FacultyProfile() {
       totalStudents: 98,
       expertise: ['Data Structures', 'Machine Learning', 'Java Programming'],
       allocatedBatchesList: [
-        { id: 1, name: 'Alpha 1', course: 'Data Structures & Algorithms', students: 45, icon: Rocket, color: 'text-orange-500', bg: 'bg-orange-100' },
-        { id: 2, name: 'Alpha 2', course: 'Machine Learning', students: 38, icon: Zap, color: 'text-blue-500', bg: 'bg-blue-100' },
-        { id: 3, name: 'Beta 1', course: 'Java Programming', students: 15, icon: Target, color: 'text-green-500', bg: 'bg-green-100' }
+        { id: 1, name: 'Alpha 1', course: 'Data Structures & Algorithms', students: 45, iconName: 'Rocket', color: 'text-orange-500', bg: 'bg-orange-100' },
+        { id: 2, name: 'Alpha 2', course: 'Machine Learning', students: 38, iconName: 'Zap', color: 'text-blue-500', bg: 'bg-blue-100' },
+        { id: 3, name: 'Beta 1', course: 'Java Programming', students: 15, iconName: 'Target', color: 'text-green-500', bg: 'bg-green-100' }
       ]
     };
   });
@@ -427,7 +433,7 @@ export default function FacultyProfile() {
 
             <div className="space-y-3">
               {profileData.allocatedBatchesList.map((batch) => {
-                const Icon = batch.icon;
+                const Icon = iconMap[batch.iconName] || BookOpen;
                 return (
                   <div key={batch.id} className="group flex items-center gap-4 p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-md hover:border-gray-200 transition-all cursor-pointer">
                     <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${batch.bg} ${batch.color} group-hover:scale-110 transition-transform`}>
