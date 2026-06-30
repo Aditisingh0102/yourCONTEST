@@ -256,3 +256,76 @@ html:not(.dark) textarea::placeholder { color: #94a3b8 !important; }
   background-color: #0f172a !important;
   border-color: #1e293b !important;
 }
+ 
+ 
+/* ---------------------------------------------------------------
+   WARM THEME
+   --------------------------------------------------------------- */
+.warm { color-scheme: light; }
+
+.warm body {
+  background-color: #fdfbf7 !important; /* Warm light beige */
+  color: #4a4036 !important; /* Warm dark brown */
+}
+
+/* Backgrounds */
+.warm .bg-white { background-color: #fffdfa !important; border-color: #e8e4d9 !important; }
+.warm .bg-slate-50, .warm .bg-gray-50 { background-color: #f6f3eb !important; }
+.warm .bg-slate-100, .warm .bg-gray-100 { background-color: #eee8d5 !important; }
+.warm .bg-slate-50\/50, .warm .bg-gray-50\/50 { background-color: rgba(246,243,235,0.7) !important; border-color: #e8e4d9 !important; }
+
+.warm .bg-white\/70 { background-color: rgba(255,253,250,0.8) !important; backdrop-filter: blur(8px); }
+
+/* Buttons & Accents */
+.warm .bg-gray-900 { background-color: #8c7255 !important; color: #fff !important; }
+.warm .bg-blue-600 { background-color: #d18d4f !important; color: #fff !important; }
+.warm .text-blue-600 { color: #b87130 !important; }
+.warm .border-blue-200 { border-color: #e8c9a8 !important; }
+
+/* Text */
+.warm .text-gray-900, .warm .text-slate-900 { color: #3b3026 !important; }
+.warm .text-gray-800, .warm .text-slate-800 { color: #4a4036 !important; }
+.warm .text-gray-700, .warm .text-slate-700 { color: #5c5042 !important; }
+.warm .text-gray-600, .warm .text-slate-600 { color: #786959 !important; }
+.warm .text-gray-500, .warm .text-slate-500 { color: #948574 !important; }
+.warm .text-gray-400, .warm .text-slate-400 { color: #afa191 !important; }
+
+/* Hover */
+.warm .hover\:bg-gray-50:hover { background-color: #eee8d5 !important; }
+.warm .hover\:bg-gray-100:hover { background-color: #e4dccc !important; }
+.warm .hover\:text-blue-600:hover { color: #91541c !important; }
+
+/* Borders */
+.warm .border-gray-100, .warm .border-gray-200 { border-color: #e8e4d9 !important; }
+
+/* Inputs */
+.warm input, .warm textarea, .warm select {
+  background-color: #ffffff !important;
+  color: #4a4036 !important;
+  border-color: #dcd6c8 !important;
+}
+
+/* Glass Panels */
+.warm .glass-panel {
+  background-color: rgba(255,253,250,0.85) !important;
+  border-color: rgba(232,228,217,0.8) !important;
+  box-shadow: 0 10px 25px rgba(140,114,85,0.08) !important;
+}
+
+/* Cards */
+.warm .glass-card {
+  background-color: #fffdfa !important;
+  border-color: #e8e4d9 !important;
+  box-shadow: 0 4px 15px rgba(140,114,85,0.04) !important;
+}
+.warm .glass-card:hover {
+  border-color: #d18d4f !important;
+  box-shadow: 0 8px 25px rgba(209,141,79,0.15) !important;
+}
+
+/* Navbar/Sidebar */
+.warm .navbar-container, .warm .sidebar-container {
+  background-color: #fffdfa !important;
+  border-color: #e8e4d9 !important;
+}
+

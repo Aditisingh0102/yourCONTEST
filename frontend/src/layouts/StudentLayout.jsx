@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
-import { useDarkMode } from '../hooks/useDarkMode';
+import { useTheme } from '../hooks/useTheme';
 
 export default function StudentLayout() {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isDark, toggleDark] = useDarkMode();
+  const [theme, cycleTheme] = useTheme();
   const navigate = useNavigate();
 
   const [profileData, setProfileData] = useState(() => {
@@ -43,7 +43,7 @@ export default function StudentLayout() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col h-screen overflow-hidden">
-      <Navbar user={profileData} onToggleSidebar={toggleSidebar} isCollapsed={isCollapsed} isDark={isDark} onToggleDark={toggleDark} />
+      <Navbar user={profileData} onToggleSidebar={toggleSidebar} isCollapsed={isCollapsed} theme={theme} onCycleTheme={cycleTheme} />
       <div className="flex flex-1 overflow-hidden relative">
         <Sidebar 
           role="student" 
