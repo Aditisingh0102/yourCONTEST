@@ -53,7 +53,7 @@ function ImportModal({ onClose, onImport }) {
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-xl">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
             <FileText className="w-5 h-5 text-blue-500" /> Import Questions
           </h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
@@ -68,14 +68,14 @@ function ImportModal({ onClose, onImport }) {
                 <input type="file" id="docUpload" className="hidden" accept=".txt,.pdf,.docx" onChange={e => setFile(e.target.files[0])} />
                 <label htmlFor="docUpload" className="cursor-pointer flex flex-col items-center">
                   <Upload className="w-10 h-10 text-gray-400 mb-3" />
-                  <p className="text-sm font-bold text-gray-700">{file ? file.name : 'Click to select a document'}</p>
+                  <p className="text-sm font-semibold text-gray-700">{file ? file.name : 'Click to select a document'}</p>
                   <p className="text-xs text-gray-500 mt-1">Supports .txt, .pdf, .docx</p>
                 </label>
               </div>
               {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
               
               <div className="bg-blue-50 text-blue-800 p-4 rounded-xl text-sm">
-                <p className="font-bold mb-1">Expected Format Example:</p>
+                <p className="font-semibold mb-1">Expected Format Example:</p>
                 <pre className="font-mono text-xs opacity-80 whitespace-pre-wrap">
 {`1. What is React?
 a) Library
@@ -89,10 +89,10 @@ Answer: a`}
           ) : (
             <div className="space-y-4">
               <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-bold text-gray-700">Found {parsed.length} questions</p>
+                <p className="text-sm font-semibold text-gray-700">Found {parsed.length} questions</p>
                 <button 
                   onClick={() => setSelected(selected.size === parsed.length ? new Set() : new Set(parsed.map(q => q.id)))}
-                  className="text-xs font-bold text-blue-600 hover:text-blue-700">
+                  className="text-xs font-semibold text-blue-600 hover:text-blue-700">
                   {selected.size === parsed.length ? 'Deselect All' : 'Select All'}
                 </button>
               </div>
@@ -100,10 +100,10 @@ Answer: a`}
                 <div key={q.id} className="flex gap-3 p-3 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors cursor-pointer" onClick={() => toggleSelect(q.id)}>
                   <input type="checkbox" checked={selected.has(q.id)} onChange={() => toggleSelect(q.id)} className="mt-1" />
                   <div className="flex-1">
-                    <p className="text-sm font-bold text-gray-800">Q{i+1}. {q.question}</p>
+                    <p className="text-sm font-semibold text-gray-800">Q{i+1}. {q.question}</p>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-1 mt-2">
                       {q.options.map((opt, oIdx) => (
-                        <span key={oIdx} className={`text-xs ${oIdx === q.correctOption ? 'text-green-600 font-bold' : 'text-gray-500'}`}>
+                        <span key={oIdx} className={`text-xs ${oIdx === q.correctOption ? 'text-green-600 font-semibold' : 'text-gray-500'}`}>
                           {['A', 'B', 'C', 'D'][oIdx] || oIdx+1}. {opt}
                         </span>
                       ))}
@@ -116,16 +116,16 @@ Answer: a`}
         </div>
         
         <div className="border-t border-gray-100 px-6 py-4 flex justify-end gap-3 bg-gray-50 rounded-b-2xl">
-          <button onClick={onClose} className="px-4 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
+          <button onClick={onClose} className="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
             Cancel
           </button>
           {parsed.length === 0 ? (
-            <button onClick={handleUpload} disabled={!file || loading} className="px-5 py-2 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors flex items-center gap-2">
+            <button onClick={handleUpload} disabled={!file || loading} className="px-5 py-2 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors flex items-center gap-2">
               {loading && <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />}
               Upload & Parse
             </button>
           ) : (
-            <button onClick={handleImport} disabled={selected.size === 0} className="px-5 py-2 text-sm font-bold text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 rounded-xl transition-colors">
+            <button onClick={handleImport} disabled={selected.size === 0} className="px-5 py-2 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 disabled:opacity-50 rounded-xl transition-colors">
               Import Selected ({selected.size})
             </button>
           )}
@@ -180,14 +180,14 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
     <form onSubmit={onSubmit} className="space-y-5">
       {error && (
         <div className="mb-2">
-          <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+          <p className="text-sm font-semibold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
             <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
             {error}
           </p>
         </div>
       )}
       <div>
-        <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Question Text</label>
+        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Question Text</label>
         <textarea
           required rows="3"
           value={data.question}
@@ -197,10 +197,10 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
         />
       </div>
       <div className="space-y-3">
-        <label className="block text-[13px] font-bold text-gray-700">Options</label>
+        <label className="block text-[13px] font-semibold text-gray-700">Options</label>
         {data.options.map((opt, idx) => (
           <div key={idx} className="flex items-center gap-3">
-            <span className="w-6 text-center text-sm font-bold text-gray-400">{idx + 1}.</span>
+            <span className="w-6 text-center text-sm font-semibold text-gray-400">{idx + 1}.</span>
             <input
               required type="text"
               value={opt}
@@ -216,7 +216,7 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
       </div>
       <div className="flex gap-4 items-end">
         <div className="flex-1">
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Correct Option</label>
+          <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Correct Option</label>
           <select
             value={data.correctOption}
             onChange={e => onChange({ ...data, correctOption: parseInt(e.target.value) })}
@@ -228,7 +228,7 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
           </select>
         </div>
         <div className="w-32">
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Marks</label>
+          <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Marks</label>
           <input type="number" min="1"
             value={data.marks}
             onChange={e => onChange({ ...data, marks: parseInt(e.target.value) || 1 })}
@@ -236,7 +236,7 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
           />
         </div>
         <button type="submit"
-          className="flex-[2] py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[14px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2">
+          className="flex-[2] py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-[14px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2">
           {editing ? <><Edit2 className="w-4 h-4" /> Update MCQ</> : <><Check className="w-4 h-4" /> Save MCQ</>}
         </button>
       </div>
@@ -250,14 +250,14 @@ function TheoryForm({ data, onChange, onSubmit, editing, error }) {
     <form onSubmit={onSubmit} className="space-y-5">
       {error && (
         <div className="mb-2">
-          <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+          <p className="text-sm font-semibold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
             <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
             {error}
           </p>
         </div>
       )}
       <div>
-        <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Question / Topic</label>
+        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Question / Topic</label>
         <textarea
           required rows="2"
           value={data.question}
@@ -267,7 +267,7 @@ function TheoryForm({ data, onChange, onSubmit, editing, error }) {
         />
       </div>
       <div>
-        <label className="block text-[13px] font-bold text-gray-700 mb-1.5">
+        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">
           Expected Answer / Definition
           <span className="text-gray-400 font-normal ml-1">(Model answer for evaluation)</span>
         </label>
@@ -281,7 +281,7 @@ function TheoryForm({ data, onChange, onSubmit, editing, error }) {
       </div>
       <div className="flex gap-4 items-end">
         <div className="w-32">
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Marks</label>
+          <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Marks</label>
           <input type="number" min="1"
             value={data.marks}
             onChange={e => onChange({ ...data, marks: parseInt(e.target.value) || 1 })}
@@ -289,7 +289,7 @@ function TheoryForm({ data, onChange, onSubmit, editing, error }) {
           />
         </div>
         <button type="submit"
-          className="flex-1 py-2.5 bg-amber-500 text-white font-bold text-[14px] rounded-xl hover:bg-amber-600 flex items-center justify-center gap-2 transition-colors">
+          className="flex-1 py-2.5 bg-amber-500 text-white font-semibold text-[14px] rounded-xl hover:bg-amber-600 flex items-center justify-center gap-2 transition-colors">
           {editing ? <><Edit2 className="w-4 h-4" /> Update Question</> : <><Check className="w-4 h-4" /> Save Question</>}
         </button>
       </div>
@@ -334,14 +334,14 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
     <form onSubmit={onSubmit} className="space-y-5">
       {error && (
         <div className="mb-2">
-          <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+          <p className="text-sm font-semibold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
             <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
             {error}
           </p>
         </div>
       )}
       <div>
-        <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Problem Title</label>
+        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Problem Title</label>
         <input required type="text"
           value={data.title}
           onChange={e => onChange({ ...data, title: e.target.value })}
@@ -350,7 +350,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
         />
       </div>
       <div>
-        <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Problem Statement</label>
+        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Problem Statement</label>
         <textarea required rows="4"
           value={data.problemStatement}
           onChange={e => onChange({ ...data, problemStatement: e.target.value })}
@@ -360,7 +360,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Input Format</label>
+          <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Input Format</label>
           <textarea required rows="2"
             value={data.inputFormat}
             onChange={e => onChange({ ...data, inputFormat: e.target.value })}
@@ -368,7 +368,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
           />
         </div>
         <div>
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Output Format</label>
+          <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Output Format</label>
           <textarea required rows="2"
             value={data.outputFormat}
             onChange={e => onChange({ ...data, outputFormat: e.target.value })}
@@ -377,7 +377,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
         </div>
       </div>
       <div>
-        <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Constraints
+        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Constraints
           <span className="text-gray-400 font-normal ml-1">(Optional)</span>
         </label>
         <input type="text"
@@ -390,8 +390,8 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <label className="block text-[13px] font-bold text-gray-700">Sample Test Cases</label>
-          <button type="button" onClick={addTestCase} className="text-purple-600 hover:text-purple-700 font-bold text-sm flex items-center gap-1">
+          <label className="block text-[13px] font-semibold text-gray-700">Sample Test Cases</label>
+          <button type="button" onClick={addTestCase} className="text-purple-600 hover:text-purple-700 font-semibold text-sm flex items-center gap-1">
             <Plus className="w-4 h-4" /> Add Test Case
           </button>
         </div>
@@ -402,10 +402,10 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
                 <Trash2 className="w-4 h-4" />
               </button>
             )}
-            <p className="text-xs font-bold text-gray-500">Test Case {idx + 1}</p>
+            <p className="text-xs font-semibold text-gray-500">Test Case {idx + 1}</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[12px] font-bold text-gray-600 mb-1">Input</label>
+                <label className="block text-[12px] font-semibold text-gray-600 mb-1">Input</label>
                 <textarea required rows="3"
                   value={tc.input}
                   onChange={e => updateTestCase(idx, 'input', e.target.value)}
@@ -413,7 +413,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-bold text-gray-600 mb-1">Output</label>
+                <label className="block text-[12px] font-semibold text-gray-600 mb-1">Output</label>
                 <textarea required rows="3"
                   value={tc.output}
                   onChange={e => updateTestCase(idx, 'output', e.target.value)}
@@ -427,8 +427,8 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
 
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <label className="block text-[13px] font-bold text-gray-700">Hidden Test Cases (For Evaluation)</label>
-          <button type="button" onClick={addHiddenTestCase} className="text-purple-600 hover:text-purple-700 font-bold text-sm flex items-center gap-1">
+          <label className="block text-[13px] font-semibold text-gray-700">Hidden Test Cases (For Evaluation)</label>
+          <button type="button" onClick={addHiddenTestCase} className="text-purple-600 hover:text-purple-700 font-semibold text-sm flex items-center gap-1">
             <Plus className="w-4 h-4" /> Add Hidden Test Case
           </button>
         </div>
@@ -439,10 +439,10 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
                 <Trash2 className="w-4 h-4" />
               </button>
             )}
-            <p className="text-xs font-bold text-gray-500">Hidden Test Case {idx + 1}</p>
+            <p className="text-xs font-semibold text-gray-500">Hidden Test Case {idx + 1}</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-[12px] font-bold text-gray-600 mb-1">Hidden Input</label>
+                <label className="block text-[12px] font-semibold text-gray-600 mb-1">Hidden Input</label>
                 <textarea required rows="3"
                   value={tc.input}
                   onChange={e => updateHiddenTestCase(idx, 'input', e.target.value)}
@@ -451,7 +451,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
                 />
               </div>
               <div>
-                <label className="block text-[12px] font-bold text-gray-600 mb-1">Hidden Output</label>
+                <label className="block text-[12px] font-semibold text-gray-600 mb-1">Hidden Output</label>
                 <textarea required rows="3"
                   value={tc.output}
                   onChange={e => updateHiddenTestCase(idx, 'output', e.target.value)}
@@ -466,7 +466,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
 
       <div className="flex gap-4 items-end">
         <div className="w-32">
-          <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Marks</label>
+          <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Marks</label>
           <input type="number" min="1"
             value={data.marks}
             onChange={e => onChange({ ...data, marks: parseInt(e.target.value) || 1 })}
@@ -474,7 +474,7 @@ function CodingForm({ data, onChange, onSubmit, editing }) {
           />
         </div>
         <button type="submit"
-          className="flex-1 py-2.5 bg-purple-600 text-white font-bold text-[14px] rounded-xl hover:bg-purple-700 flex items-center justify-center gap-2 transition-colors">
+          className="flex-1 py-2.5 bg-purple-600 text-white font-semibold text-[14px] rounded-xl hover:bg-purple-700 flex items-center justify-center gap-2 transition-colors">
           {editing ? <><Edit2 className="w-4 h-4" /> Update Problem</> : <><Check className="w-4 h-4" /> Save Problem</>}
         </button>
       </div>
@@ -498,7 +498,7 @@ function SlotItem({ slot, slotIdx, active, filled, onClick }) {
           : <Icon className="w-3.5 h-3.5 text-white" />}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`text-[12px] font-bold truncate ${active ? 'text-white' : 'text-gray-800'}`}>
+        <p className={`text-[12px] font-semibold truncate ${active ? 'text-white' : 'text-gray-800'}`}>
           {meta.label} #{slot.localIdx}
         </p>
         <p className={`text-[11px] truncate ${active ? 'text-gray-300' : 'text-gray-400'}`}>
@@ -721,12 +721,12 @@ export default function ContestQuestions() {
             <ArrowLeft className="w-5 h-5" />
           </button>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">Add Questions</h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Add Questions</h1>
             <p className="text-sm text-gray-500 mt-0.5">{contest.title}</p>
           </div>
           <button
             onClick={() => setShowImportModal(true)}
-            className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
+            className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
             <Upload className="w-4 h-4" /> Import Document
           </button>
         </div>
@@ -734,8 +734,8 @@ export default function ContestQuestions() {
         {/* Progress bar */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[13px] font-bold text-gray-700">Progress</span>
-            <span className="text-[13px] font-bold text-gray-500">{doneCount} / {totalSlots} questions saved</span>
+            <span className="text-[13px] font-semibold text-gray-700">Progress</span>
+            <span className="text-[13px] font-semibold text-gray-500">{doneCount} / {totalSlots} questions saved</span>
           </div>
           <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
             <div
@@ -749,7 +749,7 @@ export default function ContestQuestions() {
               if (!count) return null;
               const m = TYPE_META[t];
               return (
-                <span key={t} className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border ${m.badgeCls}`}>
+                <span key={t} className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border ${m.badgeCls}`}>
                   <m.icon className="w-3 h-3" /> {count} {m.label}
                 </span>
               );
@@ -762,7 +762,7 @@ export default function ContestQuestions() {
           {/* ── Left sidebar: slot list */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-3 sticky top-4">
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-2 mb-2">
+              <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider px-2 mb-2">
                 All Slots
               </p>
               <div className="space-y-1 max-h-[70vh] overflow-y-auto">
@@ -791,11 +791,11 @@ export default function ContestQuestions() {
                     <Icon className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <p className="text-white font-black text-[15px]">{meta.label} #{slot.localIdx}</p>
+                    <p className="text-white font-semibold text-[15px]">{meta.label} #{slot.localIdx}</p>
                     <p className="text-white/70 text-[12px]">{meta.fullLabel}</p>
                   </div>
                 </div>
-                <span className="bg-white/20 text-white text-[12px] font-bold px-3 py-1 rounded-full">
+                <span className="bg-white/20 text-white text-[12px] font-semibold px-3 py-1 rounded-full">
                   {currentSlotIdx + 1} of {totalSlots}
                 </span>
               </div>
@@ -818,20 +818,20 @@ export default function ContestQuestions() {
                 <button
                   disabled={currentSlotIdx === 0}
                   onClick={() => setCurrentSlotIdx(i => i - 1)}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
                   <ChevronLeft className="w-4 h-4" /> Previous
                 </button>
                 <div className="flex items-center gap-3">
                   <button
                     disabled={currentSlotIdx === totalSlots - 1}
                     onClick={() => setCurrentSlotIdx(i => i + 1)}
-                    className="flex items-center gap-1.5 px-4 py-2 text-sm font-bold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
                     Next <ChevronRight className="w-4 h-4" />
                   </button>
                   {allDone && (
                     <button
                       onClick={() => navigate('/faculty/manage-contests')}
-                      className="px-5 py-2 bg-green-600 text-white font-bold text-sm rounded-xl hover:bg-green-700 flex items-center gap-2 shadow-sm shadow-green-200 transition-colors">
+                      className="px-5 py-2 bg-green-600 text-white font-semibold text-sm rounded-xl hover:bg-green-700 flex items-center gap-2 shadow-sm shadow-green-200 transition-colors">
                       <Sparkles className="w-4 h-4" /> Finish & Publish
                     </button>
                   )}
@@ -859,18 +859,18 @@ export default function ContestQuestions() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div className="flex-1">
-          <h1 className="text-2xl font-bold text-gray-900">Manage Questions</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Manage Questions</h1>
           <p className="text-sm text-gray-500 mt-1">{contest.title} • {questions.length} questions added</p>
         </div>
         <button
           onClick={() => setShowImportModal(true)}
-          className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
+          className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
           <Upload className="w-4 h-4" /> Import Document
         </button>
         {editingQId && (
           <button
             onClick={() => { setEditingQId(null); setMcqForm({ ...emptyMCQ }); setTheoryForm({ ...emptyTheory }); setCodingForm({ ...emptyCoding }); }}
-            className="px-4 py-2 bg-red-50 text-red-600 font-bold text-sm rounded-lg hover:bg-red-100 flex items-center gap-2">
+            className="px-4 py-2 bg-red-50 text-red-600 font-semibold text-sm rounded-lg hover:bg-red-100 flex items-center gap-2">
             <XCircle className="w-4 h-4" /> Cancel Edit
           </button>
         )}
@@ -887,7 +887,7 @@ export default function ContestQuestions() {
                 return (
                   <button key={key}
                     onClick={() => setFreeTab(key)}
-                    className={`pb-3 px-4 text-[13px] font-bold border-b-2 transition-colors flex items-center gap-2 mr-1
+                    className={`pb-3 px-4 text-[13px] font-semibold border-b-2 transition-colors flex items-center gap-2 mr-1
                       ${freeTab === key ? meta.tabActive : 'border-transparent text-gray-400 hover:text-gray-600'}`}>
                     <Icon className="w-4 h-4" /> {label}
                   </button>
@@ -916,7 +916,7 @@ export default function ContestQuestions() {
 
         {/* Question list */}
         <div className="lg:col-span-1 space-y-4">
-          <h3 className="text-lg font-bold text-gray-900 flex items-center justify-between">
+          <h3 className="text-lg font-semibold text-gray-900 flex items-center justify-between">
             Added Questions
             <span className="bg-blue-100 text-blue-600 text-xs px-2.5 py-1 rounded-full">{questions.length}</span>
           </h3>
@@ -924,7 +924,7 @@ export default function ContestQuestions() {
             {questions.length === 0 ? (
               <div className="bg-gray-50 border border-gray-100 border-dashed rounded-xl p-8 text-center">
                 <HelpCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-                <p className="text-sm font-bold text-gray-600">No questions yet</p>
+                <p className="text-sm font-semibold text-gray-600">No questions yet</p>
                 <p className="text-xs text-gray-400 mt-1">Add your first question using the form.</p>
               </div>
             ) : (
@@ -945,10 +945,10 @@ export default function ContestQuestions() {
                       </button>
                     </div>
                     <div className="flex items-center gap-2 mb-2">
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${meta.badgeCls}`}>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border uppercase ${meta.badgeCls}`}>
                         {meta.label}
                       </span>
-                      <span className="text-xs font-bold text-gray-400">Q{idx + 1} • {q.marks} Marks</span>
+                      <span className="text-xs font-semibold text-gray-400">Q{idx + 1} • {q.marks} Marks</span>
                     </div>
                     <p className="text-sm font-medium text-gray-800 line-clamp-2">
                       {q.type === 'Coding' ? q.title : q.question}

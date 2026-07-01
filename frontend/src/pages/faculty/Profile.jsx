@@ -170,7 +170,7 @@ export default function FacultyProfile() {
               </div>
               <div className="pb-2">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-black text-gray-900">{profileData.name}</h1>
+                  <h1 className="text-2xl font-semibold text-gray-900">{profileData.name}</h1>
                   <CheckCircle2 className="w-5 h-5 text-blue-500 animate-pulse" />
                 </div>
                 <p className="text-[15px] font-medium text-gray-500 mt-1">{profileData.designation}</p>
@@ -206,13 +206,13 @@ export default function FacultyProfile() {
       {isEditing ? (
         /* Edit Profile Form Panel */
         <form onSubmit={handleProfileSave} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
-          <h3 className="text-lg font-bold text-gray-900 border-b border-gray-50 pb-3 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-50 pb-3 flex items-center gap-2">
             <Edit className="w-5 h-5 text-blue-500" /> Edit Faculty Profile Details
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Faculty Name</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Faculty Name</label>
               <input
                 type="text"
                 required
@@ -223,7 +223,7 @@ export default function FacultyProfile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">University Email</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">University Email</label>
               <input
                 type="email"
                 required
@@ -234,7 +234,7 @@ export default function FacultyProfile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
               <input
                 type="text"
                 required
@@ -245,7 +245,7 @@ export default function FacultyProfile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Faculty ID / ERP</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Faculty ID / ERP</label>
               <input
                 type="text"
                 required
@@ -256,7 +256,7 @@ export default function FacultyProfile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Designation / Role</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Designation / Role</label>
               <input
                 type="text"
                 required
@@ -267,7 +267,7 @@ export default function FacultyProfile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Department / College</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Department / College</label>
               <input
                 type="text"
                 required
@@ -300,7 +300,7 @@ export default function FacultyProfile() {
           {/* Left Column: Stats & Skills */}
           <div className="space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-5">Overview Stats</h2>
+              <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-5">Overview Stats</h2>
 
               <div className="space-y-4">
                 <div
@@ -311,11 +311,11 @@ export default function FacultyProfile() {
                     <BookOpen className="w-5 h-5" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-xs font-bold text-gray-500">Batches Allocated</p>
-                    <p className="text-lg font-black text-gray-900">{profileData.batchesAllocated}</p>
+                    <p className="text-xs font-semibold text-gray-500">Batches Allocated</p>
+                    <p className="text-lg font-semibold text-gray-900">{profileData.batchesAllocated}</p>
                   </div>
                   <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[10px] font-bold">View</span>
+                    <span className="text-[10px] font-semibold">View</span>
                   </div>
                 </div>
 
@@ -327,18 +327,18 @@ export default function FacultyProfile() {
                     <Users className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-gray-500">Total Students</p>
-                    <p className="text-lg font-black text-gray-900">{profileData.totalStudents}</p>
+                    <p className="text-xs font-semibold text-gray-500">Total Students</p>
+                    <p className="text-lg font-semibold text-gray-900">{profileData.totalStudents}</p>
                   </div>
                 </div>
               </div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-5">Areas of Expertise</h2>
+              <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-5">Areas of Expertise</h2>
               <div className="flex flex-wrap gap-2">
                 {(profileData.expertise || []).map((skill, idx) => (
-                  <span key={idx} className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-gray-700 text-[13px] font-bold rounded-lg">
+                  <span key={idx} className="px-3 py-1.5 bg-gray-50 border border-gray-200 text-gray-700 text-[13px] font-semibold rounded-lg">
                     {skill}
                   </span>
                 ))}
@@ -349,7 +349,7 @@ export default function FacultyProfile() {
           {/* Right Column: Information */}
           <div className="md:col-span-2 space-y-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-5">Contact Information</h2>
+              <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-5">Contact Information</h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex gap-4">
@@ -357,7 +357,7 @@ export default function FacultyProfile() {
                     <Mail className="w-4 h-4 text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-gray-500 mb-0.5">University Email</p>
+                    <p className="text-[12px] font-semibold text-gray-500 mb-0.5">University Email</p>
                     <p className="text-[14px] font-semibold text-gray-900">{profileData.email}</p>
                   </div>
                 </div>
@@ -367,7 +367,7 @@ export default function FacultyProfile() {
                     <User className="w-4 h-4 text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-gray-500 mb-0.5">ERP Faculty ID</p>
+                    <p className="text-[12px] font-semibold text-gray-500 mb-0.5">ERP Faculty ID</p>
                     <p className="text-[14px] font-semibold text-gray-900">{profileData.facultyId}</p>
                   </div>
                 </div>
@@ -377,7 +377,7 @@ export default function FacultyProfile() {
                     <Phone className="w-4 h-4 text-gray-500" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-gray-500 mb-0.5">Phone Number</p>
+                    <p className="text-[12px] font-semibold text-gray-500 mb-0.5">Phone Number</p>
                     <p className="text-[14px] font-semibold text-gray-900">{profileData.phone}</p>
                   </div>
                 </div>
@@ -385,7 +385,7 @@ export default function FacultyProfile() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-              <h2 className="text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-5">Institutional Details</h2>
+              <h2 className="text-[13px] font-semibold text-gray-400 uppercase tracking-wider mb-5">Institutional Details</h2>
 
               <div className="space-y-6">
                 <div className="flex gap-4">
@@ -393,7 +393,7 @@ export default function FacultyProfile() {
                     <Building2 className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-gray-500 mb-0.5">University</p>
+                    <p className="text-[12px] font-semibold text-gray-500 mb-0.5">University</p>
                     <p className="text-[15px] font-semibold text-gray-900">Uttaranchal University</p>
                   </div>
                 </div>
@@ -403,7 +403,7 @@ export default function FacultyProfile() {
                     <Building2 className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-gray-500 mb-0.5">Department / Designation</p>
+                    <p className="text-[12px] font-semibold text-gray-500 mb-0.5">Department / Designation</p>
                     <p className="text-[15px] font-semibold text-gray-900">{profileData.department} • {profileData.designation}</p>
                   </div>
                 </div>
@@ -413,7 +413,7 @@ export default function FacultyProfile() {
                     <Award className="w-5 h-5 text-purple-600" />
                   </div>
                   <div>
-                    <p className="text-[12px] font-bold text-gray-500 mb-0.5">Joining Date</p>
+                    <p className="text-[12px] font-semibold text-gray-500 mb-0.5">Joining Date</p>
                     <p className="text-[15px] font-semibold text-gray-900">{profileData.joinDate}</p>
                   </div>
                 </div>
@@ -429,7 +429,7 @@ export default function FacultyProfile() {
           <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-xl font-black text-gray-900">Allocated Batches</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Allocated Batches</h3>
                 <p className="text-sm text-gray-500 font-medium mt-1">Batches currently assigned to you</p>
               </div>
               <button
@@ -449,13 +449,13 @@ export default function FacultyProfile() {
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-[15px] font-bold text-gray-900">{batch.name}</h4>
+                      <h4 className="text-[15px] font-semibold text-gray-900">{batch.name}</h4>
                       <p className="text-[13px] font-medium text-gray-500">{batch.course}</p>
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white border border-gray-200 rounded-lg shadow-sm">
                         <Users className="w-3.5 h-3.5 text-gray-400" />
-                        <span className="text-[12px] font-bold text-gray-700">{batch.students}</span>
+                        <span className="text-[12px] font-semibold text-gray-700">{batch.students}</span>
                       </div>
                     </div>
                   </div>
@@ -466,7 +466,7 @@ export default function FacultyProfile() {
             <div className="mt-6 pt-6 border-t border-gray-100 flex justify-end">
               <button
                 onClick={() => setShowBatches(false)}
-                className="px-5 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
+                className="px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
               >
                 Close
               </button>
@@ -485,7 +485,7 @@ export default function FacultyProfile() {
 
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative z-10 animate-in fade-in zoom-in-95 duration-200 border border-gray-100">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-50">
-              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2"><Lock className="w-5 h-5 text-orange-500" /> Change Password</h3>
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2"><Lock className="w-5 h-5 text-orange-500" /> Change Password</h3>
               <button onClick={() => setShowPasswordModal(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-400"><X className="w-4 h-4" /></button>
             </div>
 
@@ -503,7 +503,7 @@ export default function FacultyProfile() {
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Current Password</label>
+                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Current Password</label>
                 <input
                   type="password"
                   required
@@ -514,7 +514,7 @@ export default function FacultyProfile() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">New Password</label>
+                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">New Password</label>
                 <input
                   type="password"
                   required
@@ -525,7 +525,7 @@ export default function FacultyProfile() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Confirm New Password</label>
+                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Confirm New Password</label>
                 <input
                   type="password"
                   required

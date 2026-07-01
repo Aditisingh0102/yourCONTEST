@@ -49,7 +49,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
               <FileBarChart className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-gray-900 leading-tight">Analytics: {contest?.title || contest?.name}</h2>
+              <h2 className="text-lg font-semibold text-gray-900 leading-tight">Analytics: {contest?.title || contest?.name}</h2>
               <p className="text-sm text-gray-500 font-medium mt-0.5">
                 {uniqueSubmissions.length} {uniqueSubmissions.length === 1 ? 'Submission' : 'Submissions'}
               </p>
@@ -95,8 +95,8 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                       className={`w-full text-left p-4 hover:bg-white transition-colors focus:outline-none ${isSelected ? 'bg-white border-l-4 border-blue-600' : 'border-l-4 border-transparent'}`}
                     >
                       <div className="flex justify-between items-start mb-1">
-                        <span className="font-bold text-gray-900 text-sm">{sub.studentName}</span>
-                        <span className="text-[13px] font-black text-blue-600">{calculatedScore} <span className="text-gray-400 text-[11px]">/ {totalMarks}</span></span>
+                        <span className="font-semibold text-gray-900 text-sm">{sub.studentName}</span>
+                        <span className="text-[13px] font-semibold text-blue-600">{calculatedScore} <span className="text-gray-400 text-[11px]">/ {totalMarks}</span></span>
                       </div>
                       <div className="flex items-center gap-1.5 text-[12px] text-gray-500">
                         <Clock className="w-3.5 h-3.5" />
@@ -114,7 +114,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
             {!selectedStudent ? (
               <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
                 <FileBarChart className="w-12 h-12 text-gray-200 mb-4" />
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Select a Submission</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Select a Submission</h3>
                 <p className="text-sm text-gray-500 max-w-sm">Choose a student from the list to view their detailed question-by-question analysis.</p>
               </div>
             ) : (
@@ -122,7 +122,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                 <div className="md:hidden mb-4">
                   <button 
                     onClick={() => setSelectedStudent(null)}
-                    className="text-sm font-bold text-blue-600 hover:underline flex items-center gap-1"
+                    className="text-sm font-semibold text-blue-600 hover:underline flex items-center gap-1"
                   >
                     &larr; Back to Student List
                   </button>
@@ -130,7 +130,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                 
                 <div className="flex items-start justify-between mb-2 pb-4 border-b border-gray-100">
                   <div>
-                    <h3 className="text-xl font-black text-gray-900 mb-1">{selectedStudent.studentName}'s Report</h3>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{selectedStudent.studentName}'s Report</h3>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600 font-medium mb-3">
                       {selectedStudent.studentId && (
                         <span className="bg-gray-100 px-2 py-1 rounded border border-gray-200 text-gray-700">ID: {selectedStudent.studentId}</span>
@@ -145,7 +145,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                     </div>
                     <button 
                       onClick={handleRetest}
-                      className="px-3 py-1.5 bg-orange-50 text-orange-600 border border-orange-200 hover:bg-orange-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                      className="px-3 py-1.5 bg-orange-50 text-orange-600 border border-orange-200 hover:bg-orange-100 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
                       title="Delete this submission so the student can re-take the contest"
                     >
                       <RefreshCcw className="w-3.5 h-3.5" />
@@ -153,8 +153,8 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                     </button>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Score</p>
-                    <p className="text-2xl font-black text-blue-600 leading-none">{selectedStudent.calculatedScore} <span className="text-base text-gray-400 font-bold">/ {totalMarks}</span></p>
+                    <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Score</p>
+                    <p className="text-2xl font-semibold text-blue-600 leading-none">{selectedStudent.calculatedScore} <span className="text-base text-gray-400 font-semibold">/ {totalMarks}</span></p>
                   </div>
                 </div>
 
@@ -170,31 +170,31 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                       <div key={prob.id} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                         <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <span className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-[12px] font-bold shrink-0">
+                            <span className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-[12px] font-semibold shrink-0">
                               Q{index + 1}
                             </span>
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded">
+                            <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded">
                               {prob.type}
                             </span>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className="text-sm font-bold text-gray-600">
+                            <span className="text-sm font-semibold text-gray-600">
                               {isCorrect ? prob.marks : 0} <span className="text-gray-400 font-medium">/ {prob.marks} Marks</span>
                             </span>
                             {prob.type === 'MCQ' && (
                               isCorrect ? (
                                 <div className="flex items-center gap-1.5 text-green-600 bg-green-50 px-2.5 py-1 rounded border border-green-200">
                                   <CheckCircle className="w-3.5 h-3.5" />
-                                  <span className="text-[11px] font-bold uppercase tracking-wider">Correct</span>
+                                  <span className="text-[11px] font-semibold uppercase tracking-wider">Correct</span>
                                 </div>
                               ) : isAttempted ? (
                                 <div className="flex items-center gap-1.5 text-red-600 bg-red-50 px-2.5 py-1 rounded border border-red-200">
                                   <XCircle className="w-3.5 h-3.5" />
-                                  <span className="text-[11px] font-bold uppercase tracking-wider">Incorrect</span>
+                                  <span className="text-[11px] font-semibold uppercase tracking-wider">Incorrect</span>
                                 </div>
                               ) : (
                                 <div className="flex items-center gap-1.5 text-gray-500 bg-gray-100 px-2.5 py-1 rounded border border-gray-200">
-                                  <span className="text-[11px] font-bold uppercase tracking-wider">Skipped</span>
+                                  <span className="text-[11px] font-semibold uppercase tracking-wider">Skipped</span>
                                 </div>
                               )
                             )}
@@ -231,7 +231,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                                       }`}>
                                         {isStudentChoice && <div className={`w-2.5 h-2.5 rounded-full ${isActualCorrect ? 'bg-green-500' : 'bg-red-500'}`}></div>}
                                       </div>
-                                      <span className={`text-[14px] ${isActualCorrect ? 'text-green-600 font-bold' : isStudentChoice ? 'text-red-600 font-medium' : 'text-gray-700'}`}>
+                                      <span className={`text-[14px] ${isActualCorrect ? 'text-green-600 font-semibold' : isStudentChoice ? 'text-red-600 font-medium' : 'text-gray-700'}`}>
                                         {opt}
                                       </span>
                                     </div>
@@ -244,7 +244,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
 
                           {prob.type === 'Coding' && (
                             <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">
-                              <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-bold text-gray-500 uppercase tracking-wider">
+                              <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">
                                 Student's Submitted Code
                               </div>
                               <div className="bg-[#1e293b] p-4 overflow-x-auto">
@@ -257,7 +257,7 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                           
                           {prob.type === 'Theory' && (
                             <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">
-                              <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-bold text-gray-500 uppercase tracking-wider">
+                              <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">
                                 Student's Answer
                               </div>
                               <div className="bg-white p-4">

@@ -294,16 +294,16 @@ export default function Arena() {
           <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-green-500" />
           </div>
-          <h2 className="text-2xl font-black text-white mb-3">Assessment Submitted</h2>
+          <h2 className="text-2xl font-semibold text-white mb-3">Assessment Submitted</h2>
           <p className="text-slate-400 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
           
           <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 mb-8">
-             <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Total Score</p>
-             <p className="text-4xl font-black text-white">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
+             <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Score</p>
+             <p className="text-4xl font-semibold text-white">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
              <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
           </div>
 
-          <button onClick={() => navigate('/student/dashboard')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
+          <button onClick={() => navigate('/student/dashboard')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
              Return to Dashboard
           </button>
         </div>
@@ -318,9 +318,9 @@ export default function Arena() {
           <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShieldAlert className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
-          <h2 className="text-2xl font-black text-white mb-3">Oops!</h2>
+          <h2 className="text-2xl font-semibold text-white mb-3">Oops!</h2>
           <p className="text-slate-400 font-medium mb-8 leading-relaxed">{error}</p>
-          <button onClick={() => navigate('/student/contests')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
+          <button onClick={() => navigate('/student/contests')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
              Go Back to Dashboard
           </button>
         </div>
@@ -332,7 +332,7 @@ export default function Arena() {
     return (
       <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50">
          <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-6"></div>
-         <p className="text-slate-400 font-bold tracking-widest uppercase">Loading Arena...</p>
+         <p className="text-slate-400 font-semibold tracking-widest uppercase">Loading Arena...</p>
       </div>
     );
   }
@@ -347,16 +347,16 @@ export default function Arena() {
         </div>
         <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center">
            <div className="bg-white max-w-3xl w-full rounded-2xl shadow-xl border border-gray-100 p-8">
-              <h1 className="text-2xl font-black text-gray-900 mb-6 border-b pb-4">Rules & Regulations</h1>
+              <h1 className="text-2xl font-semibold text-gray-900 mb-6 border-b pb-4">Rules & Regulations</h1>
               
               <div className="space-y-4 text-gray-600 text-sm mb-8">
-                <p className="flex gap-3"><span className="text-blue-600 font-bold">1.</span> <span>Do not switch tabs or minimize the browser window during the assessment. Doing so may result in automatic submission.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-bold">2.</span> <span>Ensure you have a stable internet connection before starting the contest.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-bold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-bold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-bold">5.</span> <span>Any malpractice or copying will lead to immediate disqualification.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-semibold">1.</span> <span>Do not switch tabs or minimize the browser window during the assessment. Doing so may result in automatic submission.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-semibold">2.</span> <span>Ensure you have a stable internet connection before starting the contest.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-semibold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-semibold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-semibold">5.</span> <span>Any malpractice or copying will lead to immediate disqualification.</span></p>
                 {contest?.customRules && (Array.isArray(contest.customRules) ? contest.customRules : [contest.customRules]).map((rule, idx) => rule.trim() !== '' && (
-                  <p key={idx} className="flex gap-3"><span className="text-blue-600 font-bold">{6 + idx}.</span> <span className="whitespace-pre-wrap"><strong className="text-blue-700">Faculty Instructions: </strong>{rule}</span></p>
+                  <p key={idx} className="flex gap-3"><span className="text-blue-600 font-semibold">{6 + idx}.</span> <span className="whitespace-pre-wrap"><strong className="text-blue-700">Faculty Instructions: </strong>{rule}</span></p>
                 ))}
               </div>
 
@@ -365,8 +365,8 @@ export default function Arena() {
                    <div className="w-16 h-16 bg-orange-500/20 text-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                      <Clock className="w-8 h-8" />
                    </div>
-                   <h2 className="text-xl font-bold mb-2">Assessment Starts In</h2>
-                   <div className="text-5xl font-mono font-bold tracking-tight text-orange-400">{timeRemaining || "Loading..."}</div>
+                   <h2 className="text-xl font-semibold mb-2">Assessment Starts In</h2>
+                   <div className="text-5xl font-mono font-semibold tracking-tight text-orange-400">{timeRemaining || "Loading..."}</div>
                 </div>
               ) : (
                 <div className="mt-8 bg-blue-50 border border-blue-100 p-6 rounded-xl">
@@ -385,7 +385,7 @@ export default function Arena() {
                   <button 
                     disabled={!rulesChecked}
                     onClick={handleStartAssessment}
-                    className={`mt-6 w-full py-3.5 rounded-xl font-bold text-white transition-all ${
+                    className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-white transition-all ${
                       rulesChecked 
                         ? 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/30' 
                         : 'bg-gray-300 cursor-not-allowed'
@@ -407,9 +407,9 @@ export default function Arena() {
         <div className="fixed inset-0 bg-red-900/95 z-[9999] flex items-center justify-center p-6 backdrop-blur-md">
           <div className="bg-black/80 border border-red-500/30 p-10 rounded-2xl max-w-lg text-center shadow-2xl shadow-red-900/50">
             <ShieldAlert className="w-20 h-20 text-red-500 mx-auto mb-6 animate-pulse" />
-            <h1 className="text-3xl font-black text-white mb-4 tracking-tight">Violation Detected!</h1>
+            <h1 className="text-3xl font-semibold text-white mb-4 tracking-tight">Violation Detected!</h1>
             <p className="text-red-200 text-lg mb-2">You have exited fullscreen or switched tabs.</p>
-            <p className="text-red-400 font-bold mb-8">Warning 1 of 1. If this happens again, your test will be automatically submitted.</p>
+            <p className="text-red-400 font-semibold mb-8">Warning 1 of 1. If this happens again, your test will be automatically submitted.</p>
             <button 
               onClick={() => {
                 document.documentElement.requestFullscreen().then(() => {
@@ -417,7 +417,7 @@ export default function Arena() {
                   setTimeout(() => { isViolatingRef.current = false; }, 500);
                 }).catch(() => alert("Fullscreen required!"));
               }}
-              className="px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl shadow-lg shadow-red-900/50 transition-all active:scale-95"
+              className="px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-xl shadow-lg shadow-red-900/50 transition-all active:scale-95"
             >
               Return to Fullscreen & Continue
             </button>
@@ -430,7 +430,7 @@ export default function Arena() {
           <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-white transition-colors">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="font-bold text-white tracking-wide">{contest.title}</span>
+          <span className="font-semibold text-white tracking-wide">{contest.title}</span>
         </div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2 text-orange-400 font-mono bg-gray-800 px-3 py-1.5 rounded-lg">
@@ -485,13 +485,13 @@ export default function Arena() {
               <div className="max-w-3xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <span className="bg-blue-600 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">MCQ</span>
+                    <span className="bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide">MCQ</span>
                     <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
                   </div>
                   {answers[activeProblem.id] !== undefined && answers[activeProblem.id] !== '' && (
                     <button 
                       onClick={() => handleAnswerChange(activeProblem.id, undefined)}
-                      className="text-gray-400 hover:text-gray-200 text-xs font-bold uppercase tracking-wider transition-colors"
+                      className="text-gray-400 hover:text-gray-200 text-xs font-semibold uppercase tracking-wider transition-colors"
                     >
                       Clear Selection
                     </button>
@@ -548,7 +548,7 @@ export default function Arena() {
             <div className="flex-1 bg-[#0f172a] p-8 overflow-y-auto">
               <div className="max-w-3xl mx-auto">
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1.5">
                     <BookOpen className="w-3 h-3" /> Theory
                   </span>
                   <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
@@ -559,7 +559,7 @@ export default function Arena() {
                 </h2>
 
                 <div className="space-y-3">
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Your Answer</label>
+                  <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Your Answer</label>
                   <textarea
                     className="w-full min-h-[240px] bg-[#1e293b] border border-gray-700 focus:border-amber-500 rounded-xl p-4 text-gray-200 text-sm resize-y outline-none transition-colors placeholder-gray-600 leading-relaxed"
                     placeholder="Write your answer here..."
@@ -593,29 +593,29 @@ export default function Arena() {
               {/* Coding Question Viewer */}
               <div className="flex-1 bg-[#0f172a] border-r border-gray-700 overflow-y-auto p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h1 className="text-2xl font-bold text-white">{activeProblem.title}</h1>
-                  <span className="px-3 py-1 bg-purple-900/40 text-purple-400 border border-purple-700/50 rounded-full text-xs font-bold tracking-wide">
+                  <h1 className="text-2xl font-semibold text-white">{activeProblem.title}</h1>
+                  <span className="px-3 py-1 bg-purple-900/40 text-purple-400 border border-purple-700/50 rounded-full text-xs font-semibold tracking-wide">
                     {activeProblem.marks} Marks
                   </span>
                 </div>
                 <div className="prose prose-invert max-w-none text-gray-300">
                   <p className="whitespace-pre-wrap">{activeProblem.problemStatement}</p>
                   
-                  <h3 className="text-lg font-bold text-white mt-8 mb-2">Input Format</h3>
+                  <h3 className="text-lg font-semibold text-white mt-8 mb-2">Input Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.inputFormat}</p>
                   
-                  <h3 className="text-lg font-bold text-white mt-6 mb-2">Output Format</h3>
+                  <h3 className="text-lg font-semibold text-white mt-6 mb-2">Output Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.outputFormat}</p>
                   
                   <div className="space-y-6 mt-8">
                     {(activeProblem.testCases || (activeProblem.sampleInput ? [{ input: activeProblem.sampleInput, output: activeProblem.sampleOutput }] : [])).map((tc, idx) => (
                       <div key={idx} className="grid grid-cols-2 gap-4">
                         <div>
-                          <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sample Input {idx + 1}</h4>
+                          <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Sample Input {idx + 1}</h4>
                           <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{tc.input}</code></pre>
                         </div>
                         <div>
-                          <h4 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Sample Output {idx + 1}</h4>
+                          <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Sample Output {idx + 1}</h4>
                           <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{tc.output}</code></pre>
                         </div>
                       </div>

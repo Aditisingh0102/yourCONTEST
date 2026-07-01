@@ -34,7 +34,7 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCy
             <BookOpen className="w-5 h-5" />
           </div>
           <div className="flex flex-col sm:border-l sm:border-gray-300 dark:sm:border-gray-600 sm:pl-3 logo-text-container">
-            <span className="text-[15px] font-bold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
+            <span className="text-[15px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
             <span className="text-[11px] text-gray-500 dark:text-gray-400 leading-tight">{user.role === 'student' ? 'Student Portal' : 'Technical Trainer Portal'}</span>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCy
                 onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=0D8ABC&textColor=fff`; }} 
               />
             ) : (
-              <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[13px] shrink-0 border border-blue-700 shadow-sm">
+              <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-semibold text-[13px] shrink-0 border border-blue-700 shadow-sm">
                 {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
               </div>
             )}

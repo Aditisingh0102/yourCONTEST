@@ -52,7 +52,7 @@ export default function NoticeBoard() {
     <div className="max-w-[1000px] mx-auto py-6 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Notice Board</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Notice Board</h1>
           <p className="text-sm text-gray-500 mt-1">Updates and announcements from your mentors and university</p>
         </div>
       </div>
@@ -63,7 +63,7 @@ export default function NoticeBoard() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
               <MegaphoneIcon className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-1">No Recent Notices</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">No Recent Notices</h3>
             <p className="text-sm text-gray-500 max-w-sm">You're all caught up! There are no new announcements from your mentors or university at this moment.</p>
           </div>
         ) : (
@@ -78,8 +78,8 @@ export default function NoticeBoard() {
                   
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row justify-between sm:items-start mb-2 gap-2">
-                      <h3 className="text-[16px] font-bold text-gray-900 leading-tight">{notice.title}</h3>
-                      <span className={`px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max ${notice.bg} ${notice.color} ${notice.borderColor}`}>
+                      <h3 className="text-[16px] font-semibold text-gray-900 leading-tight">{notice.title}</h3>
+                      <span className={`px-2.5 py-1 rounded text-[10px] font-semibold tracking-wider uppercase border w-max ${notice.bg} ${notice.color} ${notice.borderColor}`}>
                         {notice.type}
                       </span>
                     </div>
@@ -88,7 +88,7 @@ export default function NoticeBoard() {
                       {notice.content}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-[12px] font-bold text-gray-400">
+                    <div className="flex items-center gap-4 text-[12px] font-semibold text-gray-400">
                       <div className="flex items-center gap-1.5">
                         <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] text-gray-600 uppercase">
                           {notice.author.charAt(0)}

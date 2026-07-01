@@ -89,7 +89,7 @@ export default function NoticeForm() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6 text-blue-600">
               <path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
             </svg>
@@ -108,7 +108,7 @@ export default function NoticeForm() {
           <div className="space-y-6">
             
             <div>
-              <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Notice Title</label>
+              <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Notice Title</label>
               <input 
                 type="text" 
                 value={formData.title}
@@ -121,7 +121,7 @@ export default function NoticeForm() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div ref={batchDropdownRef} className="relative z-20">
-                <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Target Batch</label>
+                <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Target Batch</label>
                 <div 
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 cursor-pointer flex justify-between items-center text-sm font-medium focus:outline-none focus:border-blue-500 transition-all"
                   onClick={() => setIsBatchOpen(!isBatchOpen)}
@@ -152,7 +152,7 @@ export default function NoticeForm() {
                           }
                         }}
                       >
-                        <span className={formData.batch.includes(b) ? 'font-bold text-blue-600' : 'font-medium text-gray-700'}>
+                        <span className={formData.batch.includes(b) ? 'font-semibold text-blue-600' : 'font-medium text-gray-700'}>
                           {b === 'All' ? 'All Batches' : b}
                         </span>
                         {formData.batch.includes(b) && <Check className="w-4 h-4 text-blue-600" />}
@@ -163,7 +163,7 @@ export default function NoticeForm() {
               </div>
               
               <div>
-                <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Notice Type</label>
+                <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Notice Type</label>
                 <select 
                   value={formData.type}
                   onChange={(e) => setFormData({...formData, type: e.target.value})}
@@ -179,7 +179,7 @@ export default function NoticeForm() {
             </div>
 
             <div>
-              <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Notice Content</label>
+              <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Notice Content</label>
               <textarea 
                 value={formData.content}
                 onChange={(e) => setFormData({...formData, content: e.target.value})}
@@ -197,13 +197,13 @@ export default function NoticeForm() {
             <button
               type="button"
               onClick={() => navigate('/faculty/notice')}
-              className="px-8 py-3 bg-gray-100 text-gray-700 font-bold text-[15px] rounded-xl hover:bg-gray-200 transition-colors">
+              className="px-8 py-3 bg-gray-100 text-gray-700 font-semibold text-[15px] rounded-xl hover:bg-gray-200 transition-colors">
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[15px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
+              className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-[15px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed">
               <Save className="w-5 h-5" />
               {saving ? 'Saving...' : (id ? 'Update Notice' : 'Publish Notice')}
             </button>

@@ -127,7 +127,7 @@ export default function CourseDetail() {
       <div>
         <button 
           onClick={() => navigate('/student/courses')}
-          className="flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition-colors mb-4"
+          className="flex items-center text-sm font-semibold text-gray-500 hover:text-blue-600 transition-colors mb-4"
         >
           <ChevronLeft className="w-4 h-4 mr-1" /> Back to Courses
         </button>
@@ -140,12 +140,12 @@ export default function CourseDetail() {
             <div>
               <div className="flex gap-2 mb-4">
                  {course.tags.map((tag, i) => (
-                   <span key={i} className="text-[10px] font-bold text-indigo-900 bg-indigo-100 px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm">
+                   <span key={i} className="text-[10px] font-semibold text-indigo-900 bg-indigo-100 px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm">
                      {tag}
                    </span>
                  ))}
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">{course.title}</h1>
+              <h1 className="text-3xl md:text-4xl font-semibold mb-2">{course.title}</h1>
               <p className="text-indigo-100 text-sm md:text-base font-medium flex items-center gap-2">
                 <BookOpen className="w-4 h-4" /> Instructed by {course.professor}
               </p>
@@ -153,13 +153,13 @@ export default function CourseDetail() {
             
             <div className="bg-black/20 backdrop-blur-md border border-white/20 p-5 rounded-2xl w-full md:w-64 shrink-0">
                <div className="flex justify-between items-end mb-2">
-                 <span className="text-[11px] font-bold text-indigo-100 uppercase tracking-wider">Course Progress</span>
-                 <span className="text-lg font-bold">{course.progress}%</span>
+                 <span className="text-[11px] font-semibold text-indigo-100 uppercase tracking-wider">Course Progress</span>
+                 <span className="text-lg font-semibold">{course.progress}%</span>
                </div>
                <div className="h-2 bg-black/30 rounded-full overflow-hidden">
                  <div className="h-full bg-green-400 rounded-full" style={{ width: `${course.progress}%` }}></div>
                </div>
-               <button className="w-full mt-4 py-2 bg-white text-indigo-600 text-sm font-bold rounded-lg hover:bg-indigo-50 transition-colors">
+               <button className="w-full mt-4 py-2 bg-white text-indigo-600 text-sm font-semibold rounded-lg hover:bg-indigo-50 transition-colors">
                  Resume Course
                </button>
             </div>
@@ -177,7 +177,7 @@ export default function CourseDetail() {
               <div className="flex gap-8 border-b border-gray-100 mb-6 overflow-x-auto whitespace-nowrap">
                 <button 
                   onClick={() => setActiveTab('lectures')}
-                  className={`pb-4 text-[15px] font-bold transition-all relative ${
+                  className={`pb-4 text-[15px] font-semibold transition-all relative ${
                     activeTab === 'lectures' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
@@ -186,7 +186,7 @@ export default function CourseDetail() {
                 </button>
                 <button 
                   onClick={() => setActiveTab('documentation')}
-                  className={`pb-4 text-[15px] font-bold transition-all relative ${
+                  className={`pb-4 text-[15px] font-semibold transition-all relative ${
                     activeTab === 'documentation' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
@@ -195,7 +195,7 @@ export default function CourseDetail() {
                 </button>
                 <button 
                   onClick={() => setActiveTab('assignments')}
-                  className={`pb-4 text-[15px] font-bold transition-all relative ${
+                  className={`pb-4 text-[15px] font-semibold transition-all relative ${
                     activeTab === 'assignments' ? 'text-purple-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
@@ -220,7 +220,7 @@ export default function CourseDetail() {
                            {getFileIcon(lec)}
                          </div>
                          <div>
-                           <h4 className={`text-[14px] font-bold ${lec.completed ? 'text-gray-900' : 'text-gray-700 group-hover:text-blue-600'} transition-colors`}>
+                           <h4 className={`text-[14px] font-semibold ${lec.completed ? 'text-gray-900' : 'text-gray-700 group-hover:text-blue-600'} transition-colors`}>
                              {lec.title}
                            </h4>
                            <p className="text-[12px] font-medium text-gray-400 mt-0.5">{lec.duration}</p>
@@ -228,7 +228,7 @@ export default function CourseDetail() {
                        </div>
                        <button 
                          onClick={(e) => { e.stopPropagation(); openFile(lec); }}
-                         className={`px-4 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${
+                         className={`px-4 py-1.5 rounded-lg text-[12px] font-semibold transition-colors ${
                          lec.completed ? 'text-gray-400 bg-gray-50 hover:bg-gray-100' : 'text-blue-600 bg-blue-50 hover:bg-blue-100 opacity-0 group-hover:opacity-100'
                        }`}>
                          {lec.completed ? 'Watch Again' : (lec.type?.includes('image') ? 'View Image' : (lec.type?.includes('video') || lec.type?.includes('audio') || !lec.type) ? 'Play Video' : 'Open')}
@@ -248,10 +248,10 @@ export default function CourseDetail() {
                          {getDocIcon(doc.type)}
                        </div>
                        <div className="flex-1">
-                         <h4 className="text-[14px] font-bold text-gray-900 group-hover:text-orange-600 transition-colors leading-tight mb-1">
+                         <h4 className="text-[14px] font-semibold text-gray-900 group-hover:text-orange-600 transition-colors leading-tight mb-1">
                            {doc.title}
                          </h4>
-                         <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{doc.type?.split('/').pop() || doc.type} • {doc.size}</p>
+                         <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{doc.type?.split('/').pop() || doc.type} • {doc.size}</p>
                        </div>
                        <button 
                          onClick={(e) => { e.stopPropagation(); openFile(doc); }}
@@ -267,29 +267,29 @@ export default function CourseDetail() {
                   {course.assignments.map((assignment) => (
                     <div key={assignment.id} className="p-5 rounded-xl border border-gray-100 bg-gray-50/30 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all group">
                        <div className="flex justify-between items-start mb-2">
-                         <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
+                         <span className="px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
                            {assignment.type}
                          </span>
-                         <span className="text-[11px] font-bold tracking-wider uppercase text-gray-400">
+                         <span className="text-[11px] font-semibold tracking-wider uppercase text-gray-400">
                            {assignment.status || 'Upcoming'}
                          </span>
                        </div>
-                       <h4 className="text-[16px] font-bold text-gray-900 mb-1 leading-tight group-hover:text-purple-600 transition-colors">{assignment.title}</h4>
+                       <h4 className="text-[16px] font-semibold text-gray-900 mb-1 leading-tight group-hover:text-purple-600 transition-colors">{assignment.title}</h4>
                        <p className="text-[13px] font-medium text-gray-500 mb-2">{assignment.format}</p>
                        
                        {assignment.deadline && (
-                         <p className="text-[11px] font-bold text-red-500 mb-4 bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
+                         <p className="text-[11px] font-semibold text-red-500 mb-4 bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
                            Due: {new Date(assignment.deadline).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                          </p>
                        )}
                        
                        <div className="flex gap-3 mt-2">
                          {assignment.url && (
-                           <button onClick={() => openFile({ url: assignment.url, title: assignment.title, type: assignment.fileType })} className="px-4 py-2 rounded-lg text-[13px] font-bold bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100 transition-colors shadow-sm">
+                           <button onClick={() => openFile({ url: assignment.url, title: assignment.title, type: assignment.fileType })} className="px-4 py-2 rounded-lg text-[13px] font-semibold bg-blue-50 text-blue-700 border border-blue-100 hover:bg-blue-100 transition-colors shadow-sm">
                              View Doc
                            </button>
                          )}
-                         <label className="flex-1 text-center cursor-pointer px-5 py-2 rounded-lg text-[13px] font-bold bg-purple-600 text-white hover:bg-purple-700 transition-colors shadow-sm">
+                         <label className="flex-1 text-center cursor-pointer px-5 py-2 rounded-lg text-[13px] font-semibold bg-purple-600 text-white hover:bg-purple-700 transition-colors shadow-sm">
                            Start Submission
                            <input 
                              type="file" 
@@ -314,7 +314,7 @@ export default function CourseDetail() {
         {/* Sidebar (Right) - Related Assignments */}
         <div className="lg:w-1/3">
            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sticky top-6">
-             <h3 className="text-[16px] font-bold text-gray-900 mb-5 flex items-center gap-2">
+             <h3 className="text-[16px] font-semibold text-gray-900 mb-5 flex items-center gap-2">
                <FileCode className="w-5 h-5 text-purple-600" /> Course Assignments
              </h3>
              
@@ -322,19 +322,19 @@ export default function CourseDetail() {
                {course.assignments.map((assignment) => (
                  <div key={assignment.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all cursor-pointer group">
                     <div className="flex justify-between items-start mb-2">
-                      <span className="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
+                      <span className="px-2 py-0.5 rounded text-[9px] font-semibold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
                         {assignment.type}
                       </span>
-                      <span className="text-[10px] font-bold tracking-wider uppercase text-gray-400">
+                      <span className="text-[10px] font-semibold tracking-wider uppercase text-gray-400">
                         {assignment.status}
                       </span>
                     </div>
-                    <h4 className="text-[14px] font-bold text-gray-900 mb-1 leading-tight group-hover:text-purple-600 transition-colors">{assignment.title}</h4>
+                    <h4 className="text-[14px] font-semibold text-gray-900 mb-1 leading-tight group-hover:text-purple-600 transition-colors">{assignment.title}</h4>
                     <p className="text-[12px] font-medium text-gray-500 mb-4">{assignment.format}</p>
                     
                     <button 
                       onClick={() => navigate('/student/assignments')}
-                      className="w-full py-2.5 rounded-lg text-[12px] font-bold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-100 transition-colors"
+                      className="w-full py-2.5 rounded-lg text-[12px] font-semibold bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-100 transition-colors"
                     >
                       View Details
                     </button>
@@ -350,7 +350,7 @@ export default function CourseDetail() {
         <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="font-bold text-lg truncate max-w-[80%]">{activeFile.title}</h3>
+              <h3 className="font-semibold text-lg truncate max-w-[80%]">{activeFile.title}</h3>
               <button onClick={() => setActiveFile(null)} className="p-1 hover:bg-gray-100 rounded-lg">
                  <X className="w-5 h-5" />
               </button>

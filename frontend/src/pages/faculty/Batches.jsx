@@ -56,7 +56,7 @@ export default function FacultyBatches() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Batches</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">My Batches</h1>
           <p className="text-sm text-gray-500 mt-1">View and manage all your assigned student batches</p>
         </div>
       </div>
@@ -68,8 +68,8 @@ export default function FacultyBatches() {
             <Users className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Assigned Batches</p>
-            <p className="text-2xl font-black text-gray-900">{mockBatches.length}</p>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Total Assigned Batches</p>
+            <p className="text-2xl font-semibold text-gray-900">{mockBatches.length}</p>
           </div>
         </div>
         <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
@@ -77,8 +77,8 @@ export default function FacultyBatches() {
             <UserCircle className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Total Students</p>
-            <p className="text-2xl font-black text-gray-900">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">Total Students</p>
+            <p className="text-2xl font-semibold text-gray-900">
               {mockBatches.reduce((acc, curr) => acc + curr.studentsCount, 0)}
             </p>
           </div>
@@ -102,7 +102,7 @@ export default function FacultyBatches() {
                   <Icon className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-gray-900">{batch.name}</h3>
+                  <h3 className="text-base font-semibold text-gray-900">{batch.name}</h3>
                   <p className="text-sm text-gray-500 font-medium">{batch.course}</p>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export default function FacultyBatches() {
               <div className="flex items-center gap-6">
                 <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-gray-100 rounded-lg">
                   <Users className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm font-bold text-gray-700">{batch.studentsCount} Students</span>
+                  <span className="text-sm font-semibold text-gray-700">{batch.studentsCount} Students</span>
                 </div>
                 <button className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-colors">
                   {expandedBatch === batch.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
@@ -122,7 +122,7 @@ export default function FacultyBatches() {
             {expandedBatch === batch.id && (
               <div className="border-t border-gray-100 bg-gray-50/50 p-5">
                 <div className="flex justify-between items-center mb-4">
-                  <h4 className="text-sm font-bold text-gray-800">Enrolled Students</h4>
+                  <h4 className="text-sm font-semibold text-gray-800">Enrolled Students</h4>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input 
@@ -140,10 +140,10 @@ export default function FacultyBatches() {
                     <table className="w-full text-left border-collapse">
                       <thead className="bg-gray-50 sticky top-0 z-10 border-b border-gray-200">
                         <tr>
-                          <th className="px-6 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">ERP ID</th>
-                          <th className="px-6 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Student Name</th>
-                          <th className="px-6 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider">Attendance</th>
-                          <th className="px-6 py-3 text-[11px] font-bold text-gray-500 uppercase tracking-wider text-right">Actions</th>
+                          <th className="px-6 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">ERP ID</th>
+                          <th className="px-6 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Student Name</th>
+                          <th className="px-6 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider">Attendance</th>
+                          <th className="px-6 py-3 text-[11px] font-semibold text-gray-500 uppercase tracking-wider text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-100">
@@ -152,7 +152,7 @@ export default function FacultyBatches() {
                           .map((student) => (
                             <tr key={student.erpId} className="hover:bg-gray-50 transition-colors">
                               <td className="px-6 py-3">
-                                <span className="text-[13px] font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
+                                <span className="text-[13px] font-semibold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100">
                                   {student.erpId}
                                 </span>
                               </td>
@@ -167,13 +167,13 @@ export default function FacultyBatches() {
                                       style={{ width: `${student.attendance}%` }}
                                     ></div>
                                   </div>
-                                  <span className={`text-[12px] font-bold ${student.attendance >= 75 ? 'text-green-600' : 'text-red-600'}`}>
+                                  <span className={`text-[12px] font-semibold ${student.attendance >= 75 ? 'text-green-600' : 'text-red-600'}`}>
                                     {student.attendance}%
                                   </span>
                                 </div>
                               </td>
                               <td className="px-6 py-3 text-right">
-                                <button className="text-[12px] font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 transition-all px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95">
+                                <button className="text-[12px] font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 transition-all px-4 py-2 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-95">
                                   View Profile
                                 </button>
                               </td>

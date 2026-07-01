@@ -71,7 +71,7 @@ export default function Contests() {
           <div className="flex gap-6">
             <button 
               onClick={() => setActiveTab('upcoming')}
-              className={`pb-4 text-sm font-bold transition-all relative ${
+              className={`pb-4 text-sm font-semibold transition-all relative ${
                 activeTab === 'upcoming' 
                   ? 'text-blue-600' 
                   : 'text-gray-500 hover:text-gray-800'
@@ -84,7 +84,7 @@ export default function Contests() {
             </button>
             <button 
               onClick={() => setActiveTab('past')}
-              className={`pb-4 text-sm font-bold transition-all relative ${
+              className={`pb-4 text-sm font-semibold transition-all relative ${
                 activeTab === 'past' 
                   ? 'text-blue-600' 
                   : 'text-gray-500 hover:text-gray-800'
@@ -126,9 +126,9 @@ export default function Contests() {
                 {/* Details */}
                 <div>
                   <div className="flex items-center gap-3 mb-1.5">
-                    <h3 className="text-[16px] font-bold text-gray-900 leading-none group-hover:text-blue-600 transition-colors">{contest.name || contest.title || "Untitled Contest"}</h3>
+                    <h3 className="text-[16px] font-semibold text-gray-900 leading-none group-hover:text-blue-600 transition-colors">{contest.name || contest.title || "Untitled Contest"}</h3>
                     {contest.status === 'Live' && (
-                       <span className="px-2 py-0.5 rounded text-[10px] font-bold tracking-wider uppercase bg-red-50 text-red-600 border border-red-200 flex items-center gap-1">
+                       <span className="px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-red-50 text-red-600 border border-red-200 flex items-center gap-1">
                          <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>
                          Live
                        </span>
@@ -142,12 +142,12 @@ export default function Contests() {
 
               {/* Actions */}
               <div className="flex items-center gap-4">
-                <div className="hidden sm:flex items-center justify-center px-3 py-1 bg-gray-100 rounded-lg text-[13px] font-bold text-gray-600">
+                <div className="hidden sm:flex items-center justify-center px-3 py-1 bg-gray-100 rounded-lg text-[13px] font-semibold text-gray-600">
                   {contest.participants} <span className="font-normal text-gray-500 ml-1">Joined</span>
                 </div>
                 
                 {/* Type Tag */}
-                <div className="text-[11px] font-bold tracking-wider uppercase hidden sm:block">
+                <div className="text-[11px] font-semibold tracking-wider uppercase hidden sm:block">
                      {contest.type === 'Assessment' ? (
                        <span className="text-purple-600 bg-purple-50 px-2.5 py-1.5 rounded-lg border border-purple-200">★ Assessment</span>
                      ) : (
@@ -156,7 +156,7 @@ export default function Contests() {
                 </div>
 
                 <button 
-                  className={`px-6 py-1.5 rounded-lg text-[13px] font-bold border transition-colors ${
+                  className={`px-6 py-1.5 rounded-lg text-[13px] font-semibold border transition-colors ${
                     contest.status === 'Live' 
                       ? 'bg-blue-600 border-blue-600 text-white group-hover:bg-blue-700 shadow-sm' 
                       : contest.status === 'Upcoming'
@@ -176,20 +176,20 @@ export default function Contests() {
            <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 transition-colors">
               <ChevronLeft className="w-4 h-4" />
            </button>
-           <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white text-[13px] font-bold shadow-sm">
+           <button className="w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white text-[13px] font-semibold shadow-sm">
               1
            </button>
-           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-bold">
+           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-semibold">
               2
            </button>
-           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-bold">
+           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-semibold">
               3
            </button>
-           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-bold">
+           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-semibold">
               4
            </button>
-           <span className="text-gray-400 px-1 text-sm font-bold">...</span>
-           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-bold">
+           <span className="text-gray-400 px-1 text-sm font-semibold">...</span>
+           <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-600 hover:bg-gray-100 transition-colors text-[13px] font-semibold">
               87
            </button>
            <button className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 transition-colors">

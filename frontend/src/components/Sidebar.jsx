@@ -102,7 +102,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
             <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-lg logo-icon shadow-sm border border-transparent dark:border-gray-600">
               <BookOpen className="w-5 h-5" />
             </div>
-            <span className="text-[15px] font-bold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
+            <span className="text-[15px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
           </div>
           <button 
             onClick={() => setIsMobileOpen(false)}
@@ -168,7 +168,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                     onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${profileData.name}&backgroundColor=0D8ABC&textColor=fff`; }}
                   />
                 ) : (
-                  <div className="w-10 h-10 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[15px] shrink-0 border border-blue-700 shadow-sm">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-semibold text-[15px] shrink-0 border border-blue-700 shadow-sm">
                     {profileData?.name ? profileData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
                   </div>
                 )}
@@ -176,7 +176,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                 
                 {/* Tooltip for collapsed Profile Card */}
                 <div className="absolute left-16 top-1/2 -translate-y-1/2 ml-2 px-2.5 py-1.5 bg-gray-900 text-white text-xs rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-md z-50">
-                  <p className="font-bold">{profileData.name}</p>
+                  <p className="font-semibold">{profileData.name}</p>
                   <p className="text-[10px] text-gray-400 capitalize">{profileData.role}</p>
                 </div>
               </div>
@@ -191,16 +191,16 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                       onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${profileData.name}&backgroundColor=0D8ABC&textColor=fff`; }}
                     />
                   ) : (
-                    <div className="w-11 h-11 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[16px] shrink-0 border border-blue-700 shadow-sm">
+                    <div className="w-11 h-11 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-semibold text-[16px] shrink-0 border border-blue-700 shadow-sm">
                       {profileData?.name ? profileData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
                     </div>
                   )}
                   <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></div>
                 </div>
                 <div className="flex-1 min-w-0 text-left">
-                  <h4 className="text-sm font-bold text-gray-800 dark:text-gray-100 truncate leading-snug">{profileData.name}</h4>
+                  <h4 className="text-sm font-semibold text-gray-800 dark:text-gray-100 truncate leading-snug">{profileData.name}</h4>
                   <div className="flex items-center gap-1.5 mt-0.5">
-                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider ${
                       role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700' : 'bg-purple-50 text-purple-600 border border-purple-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700'
                     }`}>
                       {role === 'faculty' ? 'Technical Trainer' : role}

@@ -96,7 +96,7 @@ export default function Courses() {
     <div className="space-y-6 max-w-[1200px] mx-auto py-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Courses</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">My Courses</h1>
           <p className="text-sm text-gray-500 mt-1">Access lectures, documentation, and related tests</p>
         </div>
         
@@ -117,7 +117,7 @@ export default function Courses() {
       <div className="flex bg-gray-100/80 p-1 rounded-xl w-max">
         <button 
           onClick={() => setActiveTab('ongoing')}
-          className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+          className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
             activeTab === 'ongoing' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -125,7 +125,7 @@ export default function Courses() {
         </button>
         <button 
           onClick={() => setActiveTab('completed')}
-          className={`px-6 py-2 rounded-lg text-sm font-bold transition-all ${
+          className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${
             activeTab === 'completed' ? 'bg-white text-green-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -155,14 +155,14 @@ export default function Courses() {
                     <BookOpen className="w-5 h-5" />
                   </div>
                   {course.progress === 100 && (
-                    <span className="bg-green-100 text-green-700 text-[11px] font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-green-200">
+                    <span className="bg-green-100 text-green-700 text-[11px] font-semibold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-green-200">
                       <CheckCircle className="w-3.5 h-3.5" /> Completed
                     </span>
                   )}
                </div>
                <div className="flex gap-2 mt-auto pt-4">
                  {course.tags.map((tag, i) => (
-                   <span key={i} className="text-[10px] font-bold text-gray-700 bg-white/70 px-2 py-0.5 rounded-md backdrop-blur-md border border-white/40 shadow-sm">
+                   <span key={i} className="text-[10px] font-semibold text-gray-700 bg-white/70 px-2 py-0.5 rounded-md backdrop-blur-md border border-white/40 shadow-sm">
                      {tag}
                    </span>
                  ))}
@@ -171,7 +171,7 @@ export default function Courses() {
 
             {/* Course Info */}
             <div className="p-5 flex flex-col flex-1">
-              <h3 className="text-[16px] font-bold text-gray-900 mb-1.5 leading-tight group-hover:text-blue-600 transition-colors">
+              <h3 className="text-[16px] font-semibold text-gray-900 mb-1.5 leading-tight group-hover:text-blue-600 transition-colors">
                 {course.title}
               </h3>
               <p className="text-[13px] text-gray-500 mb-5">{course.professor}</p>
@@ -179,8 +179,8 @@ export default function Courses() {
               {/* Progress */}
               <div className="mb-5 mt-auto">
                  <div className="flex justify-between items-end mb-2">
-                   <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Progress</span>
-                   <span className="text-[12px] font-bold text-gray-700">{course.progress}%</span>
+                   <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Progress</span>
+                   <span className="text-[12px] font-semibold text-gray-700">{course.progress}%</span>
                  </div>
                  <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                    <div className={`h-full ${course.color} rounded-full transition-all duration-1000 ease-out`} style={{ width: `${course.progress}%` }}></div>
@@ -199,7 +199,7 @@ export default function Courses() {
                      {course.totalModules * 2}h
                    </div>
                 </div>
-                <button className={`text-[12px] font-bold px-4 py-1.5 rounded-lg transition-colors ${
+                <button className={`text-[12px] font-semibold px-4 py-1.5 rounded-lg transition-colors ${
                   course.progress === 100 
                     ? 'text-green-600 bg-green-50 group-hover:bg-green-100' 
                     : course.progress > 0 

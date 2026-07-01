@@ -80,7 +80,7 @@ function QuestionTypeModal({ contestId, onClose }) {
                 <ListChecks className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h2 className="text-lg font-black text-gray-900">Configure Questions</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Configure Questions</h2>
                 <p className="text-[13px] text-gray-500 mt-0.5">Choose question types & how many of each</p>
               </div>
             </div>
@@ -110,7 +110,7 @@ function QuestionTypeModal({ contestId, onClose }) {
                 {/* Labels */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-[14px] text-gray-900">{label}</span>
+                    <span className="font-semibold text-[14px] text-gray-900">{label}</span>
                     <span className="text-[11px] text-gray-500 font-medium">— {sublabel}</span>
                   </div>
                   <p className="text-[12px] text-gray-400 mt-0.5">{description}</p>
@@ -129,7 +129,7 @@ function QuestionTypeModal({ contestId, onClose }) {
         {/* Count steppers — only shown for selected types */}
         {anySelected && (
           <div className="px-7 pb-6">
-            <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-3">
+            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-3">
               How many questions?
             </p>
             <div className="space-y-2">
@@ -139,14 +139,14 @@ function QuestionTypeModal({ contestId, onClose }) {
                     <div className={`w-7 h-7 rounded-lg flex items-center justify-center bg-gradient-to-br ${gradient}`}>
                       <Icon className="w-3.5 h-3.5 text-white" />
                     </div>
-                    <span className="text-[13px] font-bold text-gray-800">{label}</span>
+                    <span className="text-[13px] font-semibold text-gray-800">{label}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button onClick={(e) => { e.stopPropagation(); changeCount(key, -1); }}
                       className="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors">
                       <Minus className="w-3.5 h-3.5" />
                     </button>
-                    <span className="w-8 text-center text-[15px] font-black text-gray-900">{counts[key]}</span>
+                    <span className="w-8 text-center text-[15px] font-semibold text-gray-900">{counts[key]}</span>
                     <button onClick={(e) => { e.stopPropagation(); changeCount(key, 1); }}
                       className="w-7 h-7 rounded-lg border border-gray-200 bg-white flex items-center justify-center text-gray-600 hover:bg-gray-100 transition-colors">
                       <Plus className="w-3.5 h-3.5" />
@@ -158,10 +158,10 @@ function QuestionTypeModal({ contestId, onClose }) {
 
             {/* Total badge */}
             <div className="mt-4 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl px-4 py-3 border border-blue-100">
-              <span className="text-[13px] font-bold text-blue-800 flex items-center gap-1.5">
+              <span className="text-[13px] font-semibold text-blue-800 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" /> Total Questions
               </span>
-              <span className="text-[18px] font-black text-blue-700">
+              <span className="text-[18px] font-semibold text-blue-700">
                 {TYPE_CONFIG.filter(({ key }) => selected[key]).reduce((sum, { key }) => sum + counts[key], 0)}
               </span>
             </div>
@@ -171,13 +171,13 @@ function QuestionTypeModal({ contestId, onClose }) {
         {/* Footer */}
         <div className="px-7 pb-7 pt-1 flex gap-3">
           <button onClick={onClose}
-            className="flex-1 py-2.5 bg-gray-100 text-gray-700 font-bold text-sm rounded-xl hover:bg-gray-200 transition-colors">
+            className="flex-1 py-2.5 bg-gray-100 text-gray-700 font-semibold text-sm rounded-xl hover:bg-gray-200 transition-colors">
             Back
           </button>
           <button
             onClick={handleConfirm}
             disabled={!anySelected}
-            className={`flex-1 py-2.5 font-bold text-sm rounded-xl flex items-center justify-center gap-2 transition-all
+            className={`flex-1 py-2.5 font-semibold text-sm rounded-xl flex items-center justify-center gap-2 transition-all
               ${anySelected
                 ? 'bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-200'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'}`}>
@@ -331,7 +331,7 @@ export default function ContestForm() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-semibold text-gray-900 flex items-center gap-2">
             <Trophy className="w-6 h-6 text-blue-600" />
             {id ? 'Edit Contest Details' : 'Configure New Contest'}
           </h1>
@@ -349,13 +349,13 @@ export default function ContestForm() {
 
             {/* ① Basic Details */}
             <div>
-              <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">1</span>
+              <h3 className="text-[15px] font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">1</span>
                 Basic Details
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pl-8">
                 <div>
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Contest Name</label>
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Contest Name</label>
                   <input
                     type="text"
                     value={formData.title}
@@ -366,7 +366,7 @@ export default function ContestForm() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Contest Type</label>
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Contest Type</label>
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
@@ -379,7 +379,7 @@ export default function ContestForm() {
                   </select>
                 </div>
                 <div ref={batchDropdownRef} className="relative">
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Select Batch</label>
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Select Batch</label>
                   <div 
                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white cursor-pointer flex justify-between items-center text-sm font-medium focus:outline-none focus:border-blue-500 transition-all"
                     onClick={() => setIsBatchOpen(!isBatchOpen)}
@@ -410,7 +410,7 @@ export default function ContestForm() {
                             }
                           }}
                         >
-                          <span className={formData.batch.includes(b) ? 'font-bold text-blue-600' : 'font-medium text-gray-700'}>
+                          <span className={formData.batch.includes(b) ? 'font-semibold text-blue-600' : 'font-medium text-gray-700'}>
                             {b === 'All' ? 'All Batches' : b}
                           </span>
                           {formData.batch.includes(b) && <Check className="w-4 h-4 text-blue-600" />}
@@ -424,13 +424,13 @@ export default function ContestForm() {
 
             {/* ② Scheduling */}
             <div className="pt-6 border-t border-gray-100">
-              <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">2</span>
+              <h3 className="text-[15px] font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">2</span>
                 Scheduling
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pl-8">
                 <div>
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Start Date</label>
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Start Date</label>
                   <input
                     type="date"
                     min={today}
@@ -441,7 +441,7 @@ export default function ContestForm() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Start Time</label>
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Start Time</label>
                   <input
                     type="time"
                     value={formData.startTime}
@@ -451,7 +451,7 @@ export default function ContestForm() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[13px] font-bold text-gray-700 mb-1.5">Duration (Mins)</label>
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Duration (Mins)</label>
                   <input
                     type="number"
                     value={formData.duration}
@@ -464,7 +464,7 @@ export default function ContestForm() {
               </div>
               {dateError && (
                 <div className="mt-4 pl-8">
-                  <p className="text-sm font-bold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
+                  <p className="text-sm font-semibold text-red-500 flex items-center gap-2 bg-red-50 py-2 px-3 rounded-lg border border-red-100 inline-flex">
                     <span className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center text-xs">!</span>
                     {dateError}
                   </p>
@@ -474,8 +474,8 @@ export default function ContestForm() {
 
             {/* ③ Rules & Proctoring */}
             <div className="pt-6 border-t border-gray-100">
-              <h3 className="text-[15px] font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-black">3</span>
+              <h3 className="text-[15px] font-semibold text-gray-800 mb-4 flex items-center gap-2">
+                <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">3</span>
                 Rules & Proctoring
               </h3>
               <div className="space-y-5 pl-8">
@@ -485,20 +485,20 @@ export default function ContestForm() {
                       checked={formData.strictFullscreen} 
                       onChange={(e) => setFormData({...formData, strictFullscreen: e.target.checked})} 
                     />
-                    <span className="text-[14px] font-bold text-gray-800">Strict Fullscreen Mode</span>
+                    <span className="text-[14px] font-semibold text-gray-800">Strict Fullscreen Mode</span>
                   </label>
                   <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
                     <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
                       checked={formData.disableCopyPaste} 
                       onChange={(e) => setFormData({...formData, disableCopyPaste: e.target.checked})} 
                     />
-                    <span className="text-[14px] font-bold text-gray-800">Disable Copy/Paste</span>
+                    <span className="text-[14px] font-semibold text-gray-800">Disable Copy/Paste</span>
                   </label>
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-[13px] font-bold text-gray-700">Custom Instructions for Students (Optional)</label>
-                    <button type="button" onClick={() => setFormData({...formData, customRules: [...formData.customRules, '']})} className="text-blue-600 hover:text-blue-700 font-bold text-xs flex items-center gap-1">
+                    <label className="block text-[13px] font-semibold text-gray-700">Custom Instructions for Students (Optional)</label>
+                    <button type="button" onClick={() => setFormData({...formData, customRules: [...formData.customRules, '']})} className="text-blue-600 hover:text-blue-700 font-semibold text-xs flex items-center gap-1">
                       <Plus className="w-3.5 h-3.5" /> Add Instruction
                     </button>
                   </div>
@@ -542,13 +542,13 @@ export default function ContestForm() {
             <button
               type="button"
               onClick={() => navigate('/faculty/manage-contests')}
-              className="px-8 py-3 bg-gray-100 text-gray-700 font-bold text-[15px] rounded-xl hover:bg-gray-200 transition-colors">
+              className="px-8 py-3 bg-gray-100 text-gray-700 font-semibold text-[15px] rounded-xl hover:bg-gray-200 transition-colors">
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-[15px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
+              className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-[15px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
               <Save className="w-5 h-5" />
               {saving ? 'Saving...' : 'Save & Proceed to Questions'}
             </button>

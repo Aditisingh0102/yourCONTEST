@@ -262,7 +262,7 @@ export default function CourseDetail() {
       <div>
         <button 
           onClick={() => navigate('/faculty/course-hub')}
-          className="flex items-center text-sm font-bold text-gray-500 hover:text-blue-600 transition-colors mb-4"
+          className="flex items-center text-sm font-semibold text-gray-500 hover:text-blue-600 transition-colors mb-4"
         >
           <ChevronLeft className="w-4 h-4 mr-1" /> Back to Course Hub
         </button>
@@ -275,12 +275,12 @@ export default function CourseDetail() {
             <div>
               <div className="flex gap-2 mb-4">
                  {course.tags.map((tag, i) => (
-                   <span key={i} className="text-[10px] font-bold text-blue-900 bg-blue-100 px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm">
+                   <span key={i} className="text-[10px] font-semibold text-blue-900 bg-blue-100 px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm">
                      {tag}
                    </span>
                  ))}
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">{course.title}</h1>
+              <h1 className="text-3xl md:text-4xl font-semibold mb-2">{course.title}</h1>
               <p className="text-blue-100 text-sm md:text-base font-medium flex items-center gap-2">
                 <BookOpen className="w-4 h-4" /> Manage your course content
               </p>
@@ -288,16 +288,16 @@ export default function CourseDetail() {
             
             <div className="bg-black/20 backdrop-blur-md border border-white/20 p-5 rounded-2xl w-full md:w-64 shrink-0">
                <div className="flex justify-between items-center mb-3">
-                 <span className="text-[11px] font-bold text-blue-100 uppercase tracking-wider">Total Lectures</span>
-                 <span className="text-lg font-bold">{lectures.length}</span>
+                 <span className="text-[11px] font-semibold text-blue-100 uppercase tracking-wider">Total Lectures</span>
+                 <span className="text-lg font-semibold">{lectures.length}</span>
                </div>
                <div className="flex justify-between items-center">
-                 <span className="text-[11px] font-bold text-blue-100 uppercase tracking-wider">Total Notes</span>
-                 <span className="text-lg font-bold">{notes.length}</span>
+                 <span className="text-[11px] font-semibold text-blue-100 uppercase tracking-wider">Total Notes</span>
+                 <span className="text-lg font-semibold">{notes.length}</span>
                </div>
                <button 
                  onClick={triggerFileInput}
-                 className="w-full mt-4 py-2 bg-white text-blue-600 flex items-center justify-center gap-2 text-sm font-bold rounded-lg hover:bg-blue-50 transition-colors"
+                 className="w-full mt-4 py-2 bg-white text-blue-600 flex items-center justify-center gap-2 text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors"
                >
                  <UploadCloud className="w-4 h-4" /> Upload Material
                </button>
@@ -317,7 +317,7 @@ export default function CourseDetail() {
               <div className="flex gap-8 border-b border-gray-100 mb-6 overflow-x-auto no-scrollbar">
                 <button 
                   onClick={() => setActiveTab('lectures')}
-                  className={`pb-4 text-[15px] font-bold transition-all whitespace-nowrap relative ${
+                  className={`pb-4 text-[15px] font-semibold transition-all whitespace-nowrap relative ${
                     activeTab === 'lectures' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
@@ -326,7 +326,7 @@ export default function CourseDetail() {
                 </button>
                 <button 
                   onClick={() => setActiveTab('notes')}
-                  className={`pb-4 text-[15px] font-bold transition-all whitespace-nowrap relative ${
+                  className={`pb-4 text-[15px] font-semibold transition-all whitespace-nowrap relative ${
                     activeTab === 'notes' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
@@ -335,7 +335,7 @@ export default function CourseDetail() {
                 </button>
                 <button 
                   onClick={() => setActiveTab('assignments')}
-                  className={`pb-4 text-[15px] font-bold transition-all whitespace-nowrap relative ${
+                  className={`pb-4 text-[15px] font-semibold transition-all whitespace-nowrap relative ${
                     activeTab === 'assignments' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
@@ -358,14 +358,14 @@ export default function CourseDetail() {
                            {getFileIcon(lec.type)}
                          </div>
                          <div>
-                           <h4 className="text-[14px] font-bold text-gray-700 group-hover:text-blue-600 transition-colors">
+                           <h4 className="text-[14px] font-semibold text-gray-700 group-hover:text-blue-600 transition-colors">
                              {lec.title}
                            </h4>
                            <p className="text-[12px] font-medium text-gray-400 mt-0.5">{lec.duration}</p>
                          </div>
                        </div>
                        <div className="flex items-center gap-2">
-                         <button onClick={() => openFile(lec)} className="px-3 py-1.5 rounded-lg text-[12px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-1.5">
+                         <button onClick={() => openFile(lec)} className="px-3 py-1.5 rounded-lg text-[12px] font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition-colors flex items-center gap-1.5">
                            <ExternalLink className="w-3.5 h-3.5" /> Open
                          </button>
                          <button onClick={() => handleDelete('lecture', lec.id)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
@@ -374,7 +374,7 @@ export default function CourseDetail() {
                        </div>
                     </div>
                   ))}
-                  <button onClick={() => { setActiveTab('lectures'); triggerFileInput(); }} className="w-full mt-2 py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 font-bold text-sm hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 flex items-center justify-center gap-2 transition-all">
+                  <button onClick={() => { setActiveTab('lectures'); triggerFileInput(); }} className="w-full mt-2 py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 font-semibold text-sm hover:bg-gray-50 hover:border-blue-300 hover:text-blue-600 flex items-center justify-center gap-2 transition-all">
                     <Plus className="w-4 h-4" /> Add New Lecture Video
                   </button>
                 </div>
@@ -391,14 +391,14 @@ export default function CourseDetail() {
                            {getFileIcon(doc.type)}
                          </div>
                          <div>
-                           <h4 className="text-[14px] font-bold text-gray-900 group-hover:text-orange-600 transition-colors leading-tight mb-1">
+                           <h4 className="text-[14px] font-semibold text-gray-900 group-hover:text-orange-600 transition-colors leading-tight mb-1">
                              {doc.title}
                            </h4>
-                           <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{doc.type?.split('/').pop() || 'File'} • {doc.size}</p>
+                           <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">{doc.type?.split('/').pop() || 'File'} • {doc.size}</p>
                          </div>
                        </div>
                        <div className="flex items-center gap-2">
-                         <button onClick={() => openFile(doc)} className="px-3 py-1.5 rounded-lg text-[12px] font-bold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors flex items-center gap-1.5">
+                         <button onClick={() => openFile(doc)} className="px-3 py-1.5 rounded-lg text-[12px] font-semibold text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors flex items-center gap-1.5">
                            <ExternalLink className="w-3.5 h-3.5" /> Open
                          </button>
                          <button onClick={() => handleDelete('note', doc.id)} className="text-gray-400 hover:text-red-500 p-1.5 rounded-lg hover:bg-red-50 transition-colors">
@@ -407,21 +407,21 @@ export default function CourseDetail() {
                        </div>
                     </div>
                   ))}
-                  <button onClick={() => { setActiveTab('notes'); triggerFileInput(); }} className="w-full mt-2 py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 font-bold text-sm hover:bg-gray-50 hover:border-orange-300 hover:text-orange-600 flex items-center justify-center gap-2 transition-all">
+                  <button onClick={() => { setActiveTab('notes'); triggerFileInput(); }} className="w-full mt-2 py-4 border-2 border-dashed border-gray-200 rounded-xl text-gray-500 font-semibold text-sm hover:bg-gray-50 hover:border-orange-300 hover:text-orange-600 flex items-center justify-center gap-2 transition-all">
                     <Plus className="w-4 h-4" /> Upload Note/PDF
                   </button>
                 </div>
               ) : (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-gray-800">Course Assignments</h3>
+                    <h3 className="font-semibold text-gray-800">Course Assignments</h3>
                     <button 
                       onClick={() => {
                         setAssignmentData({ title: '', type: 'Project', format: 'GitHub Repo Submission', file: null, deadline: '' });
                         setAssignmentError('');
                         setShowAssignmentModal(true);
                       }}
-                      className="flex items-center gap-1.5 text-sm font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg hover:bg-purple-100 transition-colors"
+                      className="flex items-center gap-1.5 text-sm font-semibold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg hover:bg-purple-100 transition-colors"
                     >
                       <Plus className="w-4 h-4" /> Create Assignment
                     </button>
@@ -429,11 +429,11 @@ export default function CourseDetail() {
                   {assignments.map((test) => (
                     <div key={test.id} className="p-4 rounded-xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:border-purple-200 hover:shadow-md transition-all">
                         <div className="flex justify-between items-start mb-2">
-                          <span className="px-2 py-0.5 rounded text-[9px] font-bold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
+                          <span className="px-2 py-0.5 rounded text-[9px] font-semibold tracking-wider uppercase border bg-purple-50 text-purple-700 border-purple-200">
                             {test.type}
                           </span>
                           <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-bold tracking-wider uppercase text-gray-400">
+                            <span className="text-[10px] font-semibold tracking-wider uppercase text-gray-400">
                               {test.status}
                             </span>
                             <button onClick={() => handleDelete('assignment', test.id)} className="text-gray-400 hover:text-red-500 transition-colors">
@@ -441,23 +441,23 @@ export default function CourseDetail() {
                             </button>
                           </div>
                         </div>
-                       <h4 className="text-[14px] font-bold text-gray-900 mb-1 leading-tight">{test.title}</h4>
+                       <h4 className="text-[14px] font-semibold text-gray-900 mb-1 leading-tight">{test.title}</h4>
                        <p className="text-[12px] font-medium text-gray-500 mb-2">{test.format}</p>
                        {test.deadline && (
-                         <p className="text-[11px] font-bold text-red-500 mb-4 bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
+                         <p className="text-[11px] font-semibold text-red-500 mb-4 bg-red-50 inline-block px-2 py-0.5 rounded border border-red-100">
                            Due: {new Date(test.deadline).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
                          </p>
                        )}
                        <div className="flex gap-2 mt-2">
                          {test.url && (
-                           <button onClick={() => openFile({ url: test.url, title: test.title, type: test.fileType })} className="flex-1 py-2 rounded-lg text-[11px] font-bold bg-blue-50 border border-blue-100 text-blue-700 hover:bg-blue-100 transition-colors">
+                           <button onClick={() => openFile({ url: test.url, title: test.title, type: test.fileType })} className="flex-1 py-2 rounded-lg text-[11px] font-semibold bg-blue-50 border border-blue-100 text-blue-700 hover:bg-blue-100 transition-colors">
                              Open Doc
                            </button>
                          )}
-                         <button className="flex-1 py-2 rounded-lg text-[11px] font-bold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                         <button className="flex-1 py-2 rounded-lg text-[11px] font-semibold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
                            Edit
                          </button>
-                         <button onClick={() => { setSelectedAssignment(test); setShowSubmissionsModal(true); }} className="flex-1 py-2 rounded-lg text-[11px] font-bold bg-purple-50 border border-purple-100 text-purple-700 hover:bg-purple-100 transition-colors">
+                         <button onClick={() => { setSelectedAssignment(test); setShowSubmissionsModal(true); }} className="flex-1 py-2 rounded-lg text-[11px] font-semibold bg-purple-50 border border-purple-100 text-purple-700 hover:bg-purple-100 transition-colors">
                            Submissions
                          </button>
                        </div>
@@ -472,22 +472,22 @@ export default function CourseDetail() {
         {/* Sidebar (Right) - Quick Stats/Actions */}
         <div className="lg:w-1/3">
            <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sticky top-6">
-             <h3 className="text-[16px] font-bold text-gray-900 mb-5 flex items-center gap-2">
+             <h3 className="text-[16px] font-semibold text-gray-900 mb-5 flex items-center gap-2">
                <Users className="w-5 h-5 text-green-600" /> Class Insights
              </h3>
              
              <div className="space-y-4">
                 <div className="p-4 bg-green-50 rounded-xl border border-green-100">
-                  <p className="text-[11px] font-bold text-green-600 uppercase tracking-wider mb-1">Enrolled Students</p>
-                  <p className="text-2xl font-bold text-gray-900">124</p>
+                  <p className="text-[11px] font-semibold text-green-600 uppercase tracking-wider mb-1">Enrolled Students</p>
+                  <p className="text-2xl font-semibold text-gray-900">124</p>
                 </div>
                 
                 <div className="p-4 bg-orange-50 rounded-xl border border-orange-100">
-                  <p className="text-[11px] font-bold text-orange-600 uppercase tracking-wider mb-1">Avg. Assignment Score</p>
-                  <p className="text-2xl font-bold text-gray-900">82%</p>
+                  <p className="text-[11px] font-semibold text-orange-600 uppercase tracking-wider mb-1">Avg. Assignment Score</p>
+                  <p className="text-2xl font-semibold text-gray-900">82%</p>
                 </div>
                 
-                <button className="w-full mt-4 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-md">
+                <button className="w-full mt-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-md">
                   View Full Analytics
                 </button>
              </div>
@@ -501,7 +501,7 @@ export default function CourseDetail() {
         <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="font-bold text-lg truncate max-w-[80%]">{activeFile.title}</h3>
+              <h3 className="font-semibold text-lg truncate max-w-[80%]">{activeFile.title}</h3>
               <button 
                 onClick={() => setActiveFile(null)}
                 className="p-1 hover:bg-gray-100 rounded-lg text-gray-500 transition-colors"
@@ -548,14 +548,14 @@ export default function CourseDetail() {
         <div className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center p-5 border-b">
-              <h3 className="font-bold text-lg">Add New {activeTab === 'lectures' ? 'Lecture Video' : 'Document'}</h3>
+              <h3 className="font-semibold text-lg">Add New {activeTab === 'lectures' ? 'Lecture Video' : 'Document'}</h3>
               <button onClick={() => setShowUploadModal(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-500">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleModalSubmit} className="p-5 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Title / Name</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Title / Name</label>
                 <input 
                   type="text" 
                   value={uploadData.title}
@@ -566,17 +566,17 @@ export default function CourseDetail() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">File</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">File</label>
                 <input 
                   type="file" 
                   onChange={handleFileSelect}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
                   accept="video/*,audio/*,image/*,application/pdf,application/msword,.docx,text/*"
                 />
               </div>
               {activeTab === 'lectures' && (
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 mb-1">Duration (Optional)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Duration (Optional)</label>
                   <input 
                     type="text" 
                     value={uploadData.duration}
@@ -587,10 +587,10 @@ export default function CourseDetail() {
                 </div>
               )}
               <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => setShowUploadModal(false)} className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-lg font-bold hover:bg-gray-200 transition-colors">
+                <button type="button" onClick={() => setShowUploadModal(false)} className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
                   Cancel
                 </button>
-                <button type="submit" className="flex-1 px-4 py-2.5 text-white bg-blue-600 rounded-lg font-bold hover:bg-blue-700 transition-colors shadow-sm">
+                <button type="submit" className="flex-1 px-4 py-2.5 text-white bg-blue-600 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-sm">
                   Upload
                 </button>
               </div>
@@ -604,14 +604,14 @@ export default function CourseDetail() {
         <div className="fixed inset-0 z-[110] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center p-5 border-b">
-              <h3 className="font-bold text-lg">Create New Assignment</h3>
+              <h3 className="font-semibold text-lg">Create New Assignment</h3>
               <button onClick={() => { setShowAssignmentModal(false); setAssignmentError(''); }} className="p-1 hover:bg-gray-100 rounded-lg text-gray-500">
                 <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleAssignmentSubmit} className="p-5 space-y-4">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Assignment Title</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Assignment Title</label>
                 <input 
                   type="text" 
                   value={assignmentData.title}
@@ -622,7 +622,7 @@ export default function CourseDetail() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Type</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Type</label>
                 <select
                   value={assignmentData.type}
                   onChange={(e) => setAssignmentData({...assignmentData, type: e.target.value})}
@@ -635,7 +635,7 @@ export default function CourseDetail() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Submission Format</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Submission Format</label>
                 <input 
                   type="text" 
                   value={assignmentData.format}
@@ -646,7 +646,7 @@ export default function CourseDetail() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Deadline</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Deadline</label>
                 <input 
                   type="datetime-local" 
                   value={assignmentData.deadline}
@@ -663,22 +663,22 @@ export default function CourseDetail() {
                   className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${assignmentError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-purple-500'}`}
                   required
                 />
-                {assignmentError && <p className="text-red-500 text-xs font-bold mt-1">{assignmentError}</p>}
+                {assignmentError && <p className="text-red-500 text-xs font-semibold mt-1">{assignmentError}</p>}
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-1">Assignment Document (Optional)</label>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">Assignment Document (Optional)</label>
                 <input 
                   type="file" 
                   onChange={(e) => setAssignmentData({...assignmentData, file: e.target.files[0]})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-bold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100 cursor-pointer"
                   accept="application/pdf,application/msword,.docx,text/*"
                 />
               </div>
               <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => { setShowAssignmentModal(false); setAssignmentError(''); }} className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-lg font-bold hover:bg-gray-200 transition-colors">
+                <button type="button" onClick={() => { setShowAssignmentModal(false); setAssignmentError(''); }} className="flex-1 px-4 py-2.5 text-gray-700 bg-gray-100 rounded-lg font-semibold hover:bg-gray-200 transition-colors">
                   Cancel
                 </button>
-                <button type="submit" disabled={!!assignmentError} className={`flex-1 px-4 py-2.5 text-white rounded-lg font-bold transition-colors shadow-sm ${assignmentError ? 'bg-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'}`}>
+                <button type="submit" disabled={!!assignmentError} className={`flex-1 px-4 py-2.5 text-white rounded-lg font-semibold transition-colors shadow-sm ${assignmentError ? 'bg-gray-400 cursor-not-allowed' : 'bg-purple-600 hover:bg-purple-700'}`}>
                   Create
                 </button>
               </div>
@@ -692,7 +692,7 @@ export default function CourseDetail() {
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="flex justify-between items-center p-5 border-b">
               <div>
-                <h3 className="font-bold text-lg text-gray-900">Submissions</h3>
+                <h3 className="font-semibold text-lg text-gray-900">Submissions</h3>
                 <p className="text-sm text-gray-500 font-medium">{selectedAssignment.title}</p>
               </div>
               <button onClick={() => setShowSubmissionsModal(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-500">
@@ -703,39 +703,39 @@ export default function CourseDetail() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50 text-gray-500 text-[11px] uppercase tracking-wider">
-                    <th className="p-4 font-bold border-b">Student</th>
-                    <th className="p-4 font-bold border-b">Status</th>
-                    <th className="p-4 font-bold border-b">File</th>
-                    <th className="p-4 font-bold border-b">Grade</th>
-                    <th className="p-4 font-bold border-b text-right">Action</th>
+                    <th className="p-4 font-semibold border-b">Student</th>
+                    <th className="p-4 font-semibold border-b">Status</th>
+                    <th className="p-4 font-semibold border-b">File</th>
+                    <th className="p-4 font-semibold border-b">Grade</th>
+                    <th className="p-4 font-semibold border-b text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {mockSubmissions.map(sub => (
                     <tr key={sub.id} className="border-b hover:bg-gray-50/50 transition-colors">
                       <td className="p-4">
-                        <p className="font-bold text-sm text-gray-900">{sub.name}</p>
+                        <p className="font-semibold text-sm text-gray-900">{sub.name}</p>
                         <p className="text-xs font-medium text-gray-500">{sub.rollNo}</p>
                       </td>
                       <td className="p-4">
                         {sub.status === 'Submitted' ? (
-                          <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">Submitted</span>
+                          <span className="px-2 py-1 rounded-md text-[10px] font-semibold bg-green-50 text-green-700 border border-green-100">Submitted</span>
                         ) : (
-                          <span className="px-2 py-1 rounded-md text-[10px] font-bold bg-yellow-50 text-yellow-700 border border-yellow-100">Pending</span>
+                          <span className="px-2 py-1 rounded-md text-[10px] font-semibold bg-yellow-50 text-yellow-700 border border-yellow-100">Pending</span>
                         )}
-                        {sub.time !== '-' && <p className="text-[10px] font-bold text-gray-400 mt-1">{sub.time}</p>}
+                        {sub.time !== '-' && <p className="text-[10px] font-semibold text-gray-400 mt-1">{sub.time}</p>}
                       </td>
                       <td className="p-4">
                         {sub.file ? (
-                          <button className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                          <button className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">
                             <FileText className="w-4 h-4" /> {sub.file}
                           </button>
-                        ) : <span className="text-gray-400 font-bold text-xs">-</span>}
+                        ) : <span className="text-gray-400 font-semibold text-xs">-</span>}
                       </td>
-                      <td className="p-4 font-bold text-sm text-gray-700">{sub.grade}</td>
+                      <td className="p-4 font-semibold text-sm text-gray-700">{sub.grade}</td>
                       <td className="p-4 text-right">
                         {sub.status === 'Submitted' && (
-                          <button className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
+                          <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
                             Grade
                           </button>
                         )}

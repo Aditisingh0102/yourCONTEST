@@ -54,12 +54,12 @@ export default function FacultyNoticeBoard() {
     <div className="max-w-[1000px] mx-auto py-6 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manage Notices</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Manage Notices</h1>
           <p className="text-sm text-gray-500 mt-1">Publish announcements and view existing notices</p>
         </div>
         <button 
           onClick={openNewModal}
-          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
         >
           <Plus className="w-5 h-5" /> Create Notice
         </button>
@@ -71,7 +71,7 @@ export default function FacultyNoticeBoard() {
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
               <MegaphoneIcon className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-1">No Notices Published</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">No Notices Published</h3>
             <p className="text-sm text-gray-500 max-w-sm">You haven't published any announcements yet. Click 'Create Notice' to broadcast a message to students.</p>
           </div>
         ) : (
@@ -93,18 +93,18 @@ export default function FacultyNoticeBoard() {
                   
                   <div className="flex-1">
                     <div className="flex flex-col sm:flex-row justify-between sm:items-start mb-2 gap-2 pr-8">
-                      <h3 className="text-[16px] font-bold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">{notice.title}</h3>
+                      <h3 className="text-[16px] font-semibold text-gray-900 leading-tight group-hover:text-blue-600 transition-colors">{notice.title}</h3>
                       <div className="flex gap-2 flex-wrap">
-                        <span className={`px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max ${notice.bg} ${notice.color} ${notice.borderColor}`}>
+                        <span className={`px-2.5 py-1 rounded text-[10px] font-semibold tracking-wider uppercase border w-max ${notice.bg} ${notice.color} ${notice.borderColor}`}>
                           {notice.type}
                         </span>
                         {notice.batch && notice.batch.length > 0 && !notice.batch.includes('All') && (
-                          <span className="px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max bg-gray-50 text-gray-600 border-gray-200">
+                          <span className="px-2.5 py-1 rounded text-[10px] font-semibold tracking-wider uppercase border w-max bg-gray-50 text-gray-600 border-gray-200">
                             {Array.isArray(notice.batch) ? notice.batch.join(', ') : notice.batch}
                           </span>
                         )}
                         {(!notice.batch || notice.batch.includes('All')) && (
-                          <span className="px-2.5 py-1 rounded text-[10px] font-bold tracking-wider uppercase border w-max bg-gray-50 text-gray-600 border-gray-200">
+                          <span className="px-2.5 py-1 rounded text-[10px] font-semibold tracking-wider uppercase border w-max bg-gray-50 text-gray-600 border-gray-200">
                             All Batches
                           </span>
                         )}
@@ -115,7 +115,7 @@ export default function FacultyNoticeBoard() {
                       {notice.content}
                     </p>
                     
-                    <div className="flex items-center gap-4 text-[12px] font-bold text-gray-400 border-t border-gray-50 pt-3 mt-4">
+                    <div className="flex items-center gap-4 text-[12px] font-semibold text-gray-400 border-t border-gray-50 pt-3 mt-4">
                       <div className="flex items-center gap-1.5">
                         <span className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-[10px] text-gray-600 uppercase">
                           {notice.author.charAt(0)}

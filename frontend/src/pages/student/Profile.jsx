@@ -129,8 +129,8 @@ export default function Profile() {
           <div className="pt-16 flex flex-col md:flex-row md:justify-between md:items-start gap-6">
             <div className="flex-1">
               <div className="flex items-center gap-3">
-                <h1 className="text-3xl font-bold text-gray-900">{profileData.name}</h1>
-                <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100 capitalize">
+                <h1 className="text-3xl font-semibold text-gray-900">{profileData.name}</h1>
+                <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-100 capitalize">
                   {profileData.role}
                 </span>
               </div>
@@ -170,13 +170,13 @@ export default function Profile() {
       {isEditing ? (
         /* Edit Profile Form Panel */
         <form onSubmit={handleProfileSave} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-6">
-          <h3 className="text-lg font-bold text-gray-900 border-b border-gray-50 pb-3 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-50 pb-3 flex items-center gap-2">
             <Edit className="w-5 h-5 text-blue-500" /> Edit Profile Details
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Student Name</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Student Name</label>
               <input
                 type="text"
                 required
@@ -187,7 +187,7 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email Address</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Email Address</label>
               <input
                 type="email"
                 required
@@ -198,7 +198,7 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Contact Number</label>
               <input
                 type="text"
                 required
@@ -209,7 +209,7 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Course / Branch</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Course / Branch</label>
               <input
                 type="text"
                 required
@@ -220,7 +220,7 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Current Semester</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Current Semester</label>
               <input
                 type="text"
                 required
@@ -231,7 +231,7 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Roll Number</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Roll Number</label>
               <input
                 type="text"
                 required
@@ -242,7 +242,7 @@ export default function Profile() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Registration Number</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Registration Number</label>
               <input
                 type="text"
                 required
@@ -275,31 +275,31 @@ export default function Profile() {
           {/* Left Column: Academic Info */}
           <div className="md:col-span-1 space-y-6">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <h3 className="text-[15px] font-bold text-gray-900 mb-5">Academic Details</h3>
+              <h3 className="text-[15px] font-semibold text-gray-900 mb-5">Academic Details</h3>
               <ul className="space-y-4">
                 <li className="flex justify-between items-center border-b border-gray-50 pb-3">
                   <span className="text-sm text-gray-500">Program / Branch</span>
-                  <span className="text-sm font-bold text-gray-800 text-right">{profileData.branch}</span>
+                  <span className="text-sm font-semibold text-gray-800 text-right">{profileData.branch}</span>
                 </li>
                 <li className="flex justify-between items-center border-b border-gray-50 pb-3">
                   <span className="text-sm text-gray-500">Current Semester</span>
-                  <span className="text-sm font-bold text-gray-800">{profileData.semester}</span>
+                  <span className="text-sm font-semibold text-gray-800">{profileData.semester}</span>
                 </li>
                 <li className="flex justify-between items-center border-b border-gray-50 pb-3">
                   <span className="text-sm text-gray-500">Roll Number</span>
-                  <span className="text-sm font-bold text-gray-800">{profileData.rollNo}</span>
+                  <span className="text-sm font-semibold text-gray-800">{profileData.rollNo}</span>
                 </li>
                 <li className="flex justify-between items-center border-b border-gray-50 pb-3">
                   <span className="text-sm text-gray-500">Registration ID</span>
-                  <span className="text-sm font-bold text-gray-800">{profileData.regNo}</span>
+                  <span className="text-sm font-semibold text-gray-800">{profileData.regNo}</span>
                 </li>
                 <li className="flex justify-between items-center border-b border-gray-50 pb-3">
                   <span className="text-sm text-gray-500">University Join Date</span>
-                  <span className="text-sm font-bold text-gray-800">{profileData.joinDate}</span>
+                  <span className="text-sm font-semibold text-gray-800">{profileData.joinDate}</span>
                 </li>
                 <li className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">Assigned Mentors</span>
-                  <span className="text-sm font-bold text-gray-800 text-right">Arun Kudiyal Sir<br />Mahi Sir</span>
+                  <span className="text-sm font-semibold text-gray-800 text-right">Arun Kudiyal Sir<br />Mahi Sir</span>
                 </li>
               </ul>
             </div>
@@ -308,27 +308,27 @@ export default function Profile() {
           {/* Right Column: Platform Stats */}
           <div className="md:col-span-2 space-y-6">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-              <h3 className="text-[15px] font-bold text-gray-900 mb-5">Platform Statistics</h3>
+              <h3 className="text-[15px] font-semibold text-gray-900 mb-5">Platform Statistics</h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 bg-blue-50 rounded-xl border border-blue-100 hover:shadow-md transition-shadow">
                   <Trophy className="w-6 h-6 text-blue-600 mb-3" />
-                  <p className="text-2xl font-bold text-gray-900">0</p>
-                  <p className="text-xs font-bold text-gray-500 mt-1 uppercase tracking-wider">Total Contests</p>
+                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wider">Total Contests</p>
                 </div>
                 <div className="p-4 bg-orange-50 rounded-xl border border-orange-100 hover:shadow-md transition-shadow">
                   <Clock className="w-6 h-6 text-orange-600 mb-3" />
-                  <p className="text-2xl font-bold text-gray-900">0</p>
-                  <p className="text-xs font-bold text-gray-500 mt-1 uppercase tracking-wider">Mock Tests Taken</p>
+                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wider">Mock Tests Taken</p>
                 </div>
                 <div className="p-4 bg-purple-50 rounded-xl border border-purple-100 hover:shadow-md transition-shadow">
                   <Shield className="w-6 h-6 text-purple-600 mb-3" />
-                  <p className="text-2xl font-bold text-gray-900">0</p>
-                  <p className="text-xs font-bold text-gray-500 mt-1 uppercase tracking-wider">Assessments Given</p>
+                  <p className="text-2xl font-semibold text-gray-900">0</p>
+                  <p className="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wider">Assessments Given</p>
                 </div>
                 <div className="p-4 bg-green-50 rounded-xl border border-green-100 hover:shadow-md transition-shadow">
                   <CheckCircle className="w-6 h-6 text-green-600 mb-3" />
-                  <p className="text-2xl font-bold text-gray-900">0%</p>
-                  <p className="text-xs font-bold text-gray-500 mt-1 uppercase tracking-wider">Avg. Score</p>
+                  <p className="text-2xl font-semibold text-gray-900">0%</p>
+                  <p className="text-xs font-semibold text-gray-500 mt-1 uppercase tracking-wider">Avg. Score</p>
                 </div>
               </div>
             </div>
@@ -346,7 +346,7 @@ export default function Profile() {
 
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative z-10 animate-in fade-in zoom-in-95 duration-200 border border-gray-100">
             <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-50">
-              <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2"><Lock className="w-5 h-5 text-orange-500" /> Change Password</h3>
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2"><Lock className="w-5 h-5 text-orange-500" /> Change Password</h3>
               <button onClick={() => setShowPasswordModal(false)} className="p-1 hover:bg-gray-100 rounded-lg text-gray-400"><X className="w-4 h-4" /></button>
             </div>
 
@@ -364,7 +364,7 @@ export default function Profile() {
 
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Current Password</label>
+                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Current Password</label>
                 <input
                   type="password"
                   required
@@ -375,7 +375,7 @@ export default function Profile() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">New Password</label>
+                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">New Password</label>
                 <input
                   type="password"
                   required
@@ -386,7 +386,7 @@ export default function Profile() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1.5">Confirm New Password</label>
+                <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Confirm New Password</label>
                 <input
                   type="password"
                   required

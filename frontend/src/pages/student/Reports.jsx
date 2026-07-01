@@ -80,20 +80,20 @@ export default function Reports() {
     <div className="max-w-[1000px] mx-auto py-6 space-y-6">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">My Reports</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">My Reports</h1>
           <p className="text-sm text-gray-500 mt-1">Detailed analysis of your assessments and mock tests</p>
         </div>
       </div>
 
       <div className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
         {loading ? (
-          <div className="p-12 text-center text-gray-500 font-bold animate-pulse">Loading reports...</div>
+          <div className="p-12 text-center text-gray-500 font-semibold animate-pulse">Loading reports...</div>
         ) : reports.length === 0 ? (
           <div className="p-12 flex flex-col items-center justify-center text-center">
             <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4 text-gray-300">
               <FileBarChart className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900 mb-1">No Reports Available</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">No Reports Available</h3>
             <p className="text-sm text-gray-500 max-w-sm">You haven't completed any assessments yet. Your detailed performance reports will appear here once you take a test.</p>
           </div>
         ) : (
@@ -101,11 +101,11 @@ export default function Reports() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-100 text-[12px] uppercase tracking-wider text-gray-500">
-                  <th className="p-4 font-bold">Assessment Name</th>
-                  <th className="p-4 font-bold">Date Taken</th>
-                  <th className="p-4 font-bold">Score</th>
-                  <th className="p-4 font-bold">Status</th>
-                  <th className="p-4 font-bold text-right">Action</th>
+                  <th className="p-4 font-semibold">Assessment Name</th>
+                  <th className="p-4 font-semibold">Date Taken</th>
+                  <th className="p-4 font-semibold">Score</th>
+                  <th className="p-4 font-semibold">Status</th>
+                  <th className="p-4 font-semibold text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
@@ -116,18 +116,18 @@ export default function Reports() {
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${report.bg} ${report.color}`}>
                           <FileBarChart className="w-4 h-4" />
                         </div>
-                        <span className="font-bold text-gray-900 text-sm">{report.title}</span>
+                        <span className="font-semibold text-gray-900 text-sm">{report.title}</span>
                       </div>
                     </td>
                     <td className="p-4 text-sm text-gray-600">
                       <div>{report.date}</div>
                       <div className="text-xs text-gray-400 mt-0.5">{report.time}</div>
                     </td>
-                    <td className="p-4 text-sm font-bold text-gray-900">
+                    <td className="p-4 text-sm font-semibold text-gray-900">
                       {report.score} <span className="text-gray-400 font-medium">/ {report.total}</span>
                     </td>
                     <td className="p-4">
-                      <span className={`px-2.5 py-1 rounded text-[11px] font-bold tracking-wider uppercase border border-white/0 ${report.bg} ${report.color}`}>
+                      <span className={`px-2.5 py-1 rounded text-[11px] font-semibold tracking-wider uppercase border border-white/0 ${report.bg} ${report.color}`}>
                         {report.status}
                       </span>
                     </td>
@@ -139,7 +139,7 @@ export default function Reports() {
                       ) : (
                         <button 
                           onClick={() => setSelectedReport(report)}
-                          className="text-[13px] font-bold text-blue-600 hover:text-blue-800 hover:underline"
+                          className="text-[13px] font-semibold text-blue-600 hover:text-blue-800 hover:underline"
                         >
                           View Analysis
                         </button>
@@ -165,14 +165,14 @@ export default function Reports() {
                   <FileBarChart className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-gray-900 leading-tight">{selectedReport.title}</h2>
+                  <h2 className="text-lg font-semibold text-gray-900 leading-tight">{selectedReport.title}</h2>
                   <p className="text-sm text-gray-500 font-medium mt-0.5">Submitted on {selectedReport.date} at {selectedReport.time}</p>
                 </div>
               </div>
               <div className="flex items-center gap-6">
                 <div className="text-right">
-                  <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Total Score</p>
-                  <p className="text-xl font-black text-blue-600 leading-none">{selectedReport.score} <span className="text-sm text-gray-400 font-bold">/ {selectedReport.total}</span></p>
+                  <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Total Score</p>
+                  <p className="text-xl font-semibold text-blue-600 leading-none">{selectedReport.score} <span className="text-sm text-gray-400 font-semibold">/ {selectedReport.total}</span></p>
                 </div>
                 <button 
                   onClick={closeAnalysis}
@@ -199,31 +199,31 @@ export default function Reports() {
                     <div key={prob.id} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
                       <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-[12px] font-bold shrink-0">
+                          <span className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-[12px] font-semibold shrink-0">
                             Q{index + 1}
                           </span>
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded">
+                          <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded">
                             {prob.type}
                           </span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-sm font-bold text-gray-600">
+                          <span className="text-sm font-semibold text-gray-600">
                             {isCorrect ? prob.marks : 0} <span className="text-gray-400 font-medium">/ {prob.marks} Marks</span>
                           </span>
                           {prob.type === 'MCQ' && (
                             isCorrect ? (
                               <div className="flex items-center gap-1.5 text-green-600 bg-green-50 px-2.5 py-1 rounded border border-green-200">
                                 <CheckCircle className="w-3.5 h-3.5" />
-                                <span className="text-[11px] font-bold uppercase tracking-wider">Correct</span>
+                                <span className="text-[11px] font-semibold uppercase tracking-wider">Correct</span>
                               </div>
                             ) : isAttempted ? (
                               <div className="flex items-center gap-1.5 text-red-600 bg-red-50 px-2.5 py-1 rounded border border-red-200">
                                 <XCircle className="w-3.5 h-3.5" />
-                                <span className="text-[11px] font-bold uppercase tracking-wider">Incorrect</span>
+                                <span className="text-[11px] font-semibold uppercase tracking-wider">Incorrect</span>
                               </div>
                             ) : (
                               <div className="flex items-center gap-1.5 text-gray-500 bg-gray-100 px-2.5 py-1 rounded border border-gray-200">
-                                <span className="text-[11px] font-bold uppercase tracking-wider">Skipped</span>
+                                <span className="text-[11px] font-semibold uppercase tracking-wider">Skipped</span>
                               </div>
                             )
                           )}
@@ -260,7 +260,7 @@ export default function Reports() {
                                     }`}>
                                       {isStudentChoice && <div className={`w-2.5 h-2.5 rounded-full ${isActualCorrect ? 'bg-green-500' : 'bg-red-500'}`}></div>}
                                     </div>
-                                    <span className={`text-[14px] ${isActualCorrect ? 'text-green-600 font-bold' : isStudentChoice ? 'text-red-600 font-medium' : 'text-gray-700'}`}>
+                                    <span className={`text-[14px] ${isActualCorrect ? 'text-green-600 font-semibold' : isStudentChoice ? 'text-red-600 font-medium' : 'text-gray-700'}`}>
                                       {opt}
                                     </span>
                                   </div>
@@ -273,7 +273,7 @@ export default function Reports() {
 
                         {prob.type === 'Coding' && (
                           <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">
-                            <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-bold text-gray-500 uppercase tracking-wider">
+                            <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">
                               Your Submitted Code
                             </div>
                             <div className="bg-[#1e293b] p-4 overflow-x-auto">
@@ -286,7 +286,7 @@ export default function Reports() {
                         
                         {prob.type === 'Theory' && (
                           <div className="mt-4 border border-gray-200 rounded-lg overflow-hidden">
-                            <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-bold text-gray-500 uppercase tracking-wider">
+                            <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 text-[12px] font-semibold text-gray-500 uppercase tracking-wider">
                               Your Answer
                             </div>
                             <div className="bg-white p-4">

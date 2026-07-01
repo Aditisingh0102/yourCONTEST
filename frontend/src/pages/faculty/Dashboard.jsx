@@ -93,7 +93,7 @@ export default function Dashboard() {
         
         <img src={profileData.avatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white/20 dark:border-blue-500/30 shadow-sm relative z-10 object-cover bg-white dark:bg-[#0b1120]" />
         <div className="relative z-10">
-          <h1 className="text-3xl font-bold mb-1 text-white">{profileData.name}</h1>
+          <h1 className="text-3xl font-semibold mb-1 text-white">{profileData.name}</h1>
           <p className="text-blue-100 dark:text-blue-200/60 text-sm">{faculty.role} • {faculty.university}</p>
         </div>
       </div>
@@ -119,8 +119,8 @@ export default function Dashboard() {
               <stat.icon className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-0.5 group-hover:text-blue-500 transition-colors">{stat.label}</p>
-              <p className="text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{stat.value}</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5 group-hover:text-blue-500 transition-colors">{stat.label}</p>
+              <p className="text-2xl font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">{stat.value}</p>
             </div>
           </div>
         ))}
@@ -133,23 +133,23 @@ export default function Dashboard() {
           {/* Active & Upcoming Contests */}
           <div>
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2"><Trophy className="w-4 h-4 text-blue-600" /> Managed Contests</h2>
-              <button onClick={() => navigate('/faculty/manage-contests')} className="text-[13px] font-bold text-blue-600 hover:text-blue-700">View All</button>
+              <h2 className="text-[15px] font-semibold text-gray-800 flex items-center gap-2"><Trophy className="w-4 h-4 text-blue-600" /> Managed Contests</h2>
+              <button onClick={() => navigate('/faculty/manage-contests')} className="text-[13px] font-semibold text-blue-600 hover:text-blue-700">View All</button>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
               {managedContests.length === 0 ? (
-                <div className="col-span-2 py-8 text-center bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                <div className="col-span-2 py-8 text-center bg-gray-50 dark:bg-slate-900 border border-dashed border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-500 font-medium">No contests created yet.</p>
-                  <button onClick={() => navigate('/faculty/create-contest')} className="mt-3 text-[13px] font-bold text-blue-600 hover:text-blue-700">Create your first contest</button>
+                  <button onClick={() => navigate('/faculty/create-contest')} className="mt-3 text-[13px] font-semibold text-blue-600 hover:text-blue-700">Create your first contest</button>
                 </div>
               ) : (
                 managedContests.slice(0, 4).map((contest) => (
                   <div
                     key={contest.id}
                     onClick={() => navigate('/faculty/manage-contests')}
-                    className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm hover:shadow-md hover:border-blue-100 dark:hover:border-zinc-600 transition-all cursor-pointer relative overflow-hidden group"
+                    className="bg-white dark:bg-slate-900 p-5 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all cursor-pointer relative group"
                   >
-                    <div className={`absolute top-4 right-4 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider border ${contest.status === 'Live' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-600 border-gray-200'
+                    <div className={`absolute top-4 right-4 text-[9px] font-semibold px-2 py-1 rounded uppercase tracking-wider border ${contest.status === 'Live' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-600 border-gray-200'
                       }`}>
                       {contest.status === 'Live' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse mr-1"></span>}
                       {contest.status === 'Live' ? 'Live Now' : contest.date || 'Upcoming'}
@@ -158,12 +158,12 @@ export default function Dashboard() {
                     <div className={`p-2 w-max rounded-lg mb-3 ${contest.type === 'Assessment' ? 'bg-purple-50 text-purple-600' : 'bg-orange-50 text-orange-500'}`}>
                       <Trophy className="w-4 h-4" />
                     </div>
-                    <h3 className="text-[14px] font-bold text-gray-800 leading-tight mb-1 group-hover:text-blue-600 transition-colors truncate" title={contest.title}>{contest.title}</h3>
-                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">{contest.type}</p>
+                    <h3 className="text-[14px] font-semibold text-gray-800 leading-tight mb-1 group-hover:text-blue-600 transition-colors truncate" title={contest.title}>{contest.title}</h3>
+                    <p className="text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-4">{contest.type}</p>
 
-                    <div className="text-[11px] font-bold text-gray-500 flex justify-between items-center border-t border-gray-50 pt-3">
+                    <div className="text-[11px] font-medium text-gray-500 flex justify-between items-center border-t border-gray-50 pt-3">
                       <span className="flex items-center gap-1.5"><CheckSquare className="w-3.5 h-3.5 text-gray-400" /> {contest.questions} Questions</span>
-                      <span className="text-blue-600 hover:underline">Manage</span>
+                      <span className="text-blue-600 font-semibold hover:underline">Manage</span>
                     </div>
                   </div>
                 ))
@@ -180,7 +180,7 @@ export default function Dashboard() {
 
           {/* Quick Actions */}
           <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
-            <h2 className="text-[15px] font-bold text-gray-800 mb-4">Quick Actions</h2>
+            <h2 className="text-[15px] font-semibold text-gray-800 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
               {[
                 { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20', path: '/faculty/create-contest' },
@@ -194,7 +194,7 @@ export default function Dashboard() {
                   className={`flex flex-col items-center justify-center p-5 transition-all gap-2 ${action.bg} hover:brightness-95 dark:hover:brightness-110`}
                 >
                   <action.icon className={`w-5 h-5 ${action.color}`} />
-                  <span className={`text-[11px] font-bold ${action.color}`}>{action.name}</span>
+                  <span className={`text-[11px] font-medium ${action.color}`}>{action.name}</span>
                 </button>
               ))}
             </div>
@@ -203,7 +203,7 @@ export default function Dashboard() {
           {/* Quick Notes */}
           <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm flex flex-col h-[350px]">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-[15px] font-bold text-gray-800 flex items-center gap-2"><CheckSquare className="w-4 h-4 text-green-600" /> Quick Notes</h2>
+              <h2 className="text-[15px] font-semibold text-gray-800 flex items-center gap-2"><CheckSquare className="w-4 h-4 text-green-600" /> Quick Notes</h2>
             </div>
 
             <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1 scrollbar-thin scrollbar-thumb-gray-200">
@@ -279,7 +279,7 @@ export default function Dashboard() {
           <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-xl font-black text-gray-900">Allocated Batches</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Allocated Batches</h3>
                 <p className="text-sm text-gray-500 font-medium mt-1">Batches currently assigned to you</p>
               </div>
               <button
@@ -299,13 +299,13 @@ export default function Dashboard() {
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-[15px] font-bold text-gray-900">{batch.name}</h4>
+                      <h4 className="text-[15px] font-semibold text-gray-900">{batch.name}</h4>
                       <p className="text-[13px] font-medium text-gray-500">{batch.course}</p>
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white border border-gray-200 rounded-lg shadow-sm">
                         <Users className="w-3.5 h-3.5 text-gray-400" />
-                        <span className="text-[12px] font-bold text-gray-700">{batch.students}</span>
+                        <span className="text-[12px] font-semibold text-gray-700">{batch.students}</span>
                       </div>
                     </div>
                   </div>
@@ -316,7 +316,7 @@ export default function Dashboard() {
             <div className="mt-6 pt-6 border-t border-gray-100 flex justify-end">
               <button
                 onClick={() => setShowBatches(false)}
-                className="px-5 py-2.5 bg-gray-900 text-white text-sm font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
+                className="px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
               >
                 Close
               </button>
@@ -331,7 +331,7 @@ export default function Dashboard() {
           <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 animate-in fade-in zoom-in-95 duration-200">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h3 className="text-xl font-black text-gray-900">Total Students Overview</h3>
+                <h3 className="text-xl font-semibold text-gray-900">Total Students Overview</h3>
                 <p className="text-sm text-gray-500 font-medium mt-1">Breakdown of students across your allocated batches</p>
               </div>
               <button
@@ -351,13 +351,13 @@ export default function Dashboard() {
                       <Icon className="w-6 h-6" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-[15px] font-bold text-gray-900">{batch.name} Students</h4>
+                      <h4 className="text-[15px] font-semibold text-gray-900">{batch.name} Students</h4>
                       <p className="text-[13px] font-medium text-gray-500">{batch.course}</p>
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-700 border border-blue-100 rounded-lg shadow-sm">
                         <Users className="w-4 h-4" />
-                        <span className="text-[14px] font-black">{batch.students}</span>
+                        <span className="text-[14px] font-semibold">{batch.students}</span>
                       </div>
                     </div>
                   </div>
@@ -367,15 +367,15 @@ export default function Dashboard() {
 
             <div className="mt-6 pt-6 border-t border-gray-100 flex justify-between items-center">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
-                <span className="text-xs font-bold text-gray-500 uppercase">Total:</span>
-                <span className="text-sm font-black text-gray-900">
+                <span className="text-xs font-semibold text-gray-500 uppercase">Total:</span>
+                <span className="text-sm font-semibold text-gray-900">
                   {allocatedBatchesList.reduce((acc, b) => acc + b.students, 0)} Students
                 </span>
               </div>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowStudents(false)}
-                  className="px-4 py-2 text-gray-500 hover:bg-gray-100 text-sm font-bold rounded-xl transition-colors"
+                  className="px-4 py-2 text-gray-500 hover:bg-gray-100 text-sm font-semibold rounded-xl transition-colors"
                 >
                   Close
                 </button>
@@ -384,7 +384,7 @@ export default function Dashboard() {
                     setShowStudents(false);
                     navigate('/faculty/student-records');
                   }}
-                  className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center gap-2"
+                  className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center gap-2"
                 >
                   View Detailed Records
                 </button>
