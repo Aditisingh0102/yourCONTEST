@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FileText, AlertCircle, Calendar, Briefcase, Info, BookOpen } from 'lucide-react';
 import { getNotices } from '../../api';
 import { socket } from '../../socket';
@@ -12,6 +12,16 @@ export default function NoticeBoard() {
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await getNotices();
+        const studentBatch = getStudentBatchFromSession();
+        setNotices(filterNoticesForStudent(res.data, studentBatch));
+      } catch (error) {
+        console.error("Failed to fetch notices", error);
+      }
+    };
+    
     fetchNotices();
 
     const handleNoticeUpdate = (data) => {
@@ -40,16 +50,6 @@ export default function NoticeBoard() {
 
     return () => socket.off('NOTICE_UPDATED', handleNoticeUpdate);
   }, []);
-
-  const fetchNotices = async () => {
-    try {
-      const res = await getNotices();
-      const studentBatch = getStudentBatchFromSession();
-      setNotices(filterNoticesForStudent(res.data, studentBatch));
-    } catch (error) {
-      console.error("Failed to fetch notices", error);
-    }
-  };
 
   return (
     <div className="max-w-[1000px] mx-auto py-6 space-y-6">

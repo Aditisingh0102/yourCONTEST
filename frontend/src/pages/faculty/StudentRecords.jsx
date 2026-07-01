@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, Download, UserCircle, CheckCircle, XCircle, MoreVertical } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Filter, Download, UserCircle, CheckCircle, XCircle } from 'lucide-react';
 import { getSubmissions } from '../../api';
 
 const mockStudents = [

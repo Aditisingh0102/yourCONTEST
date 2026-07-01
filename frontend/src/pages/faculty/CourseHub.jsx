@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { BookOpen, Video, FileText, Plus, Edit3, Trash2, Users, BarChart2, Search, Filter, X, Image as ImageIcon, UploadCloud } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, Video, FileText, Plus, Edit3, Trash2, Users, BarChart2, Search, Filter, X, UploadCloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const initialCourses = [

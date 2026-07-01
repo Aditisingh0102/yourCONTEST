@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { BookOpen, Moon, Sun, Bell, Menu, Coffee, LogOut, Key, X, ExternalLink, Megaphone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices } from '../api';
 import { socket } from '../socket';
 import { filterNoticesForStudent, getStudentBatchFromSession } from '../utils/noticeUtils';
 
-export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCycleTheme }) {
+export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -27,6 +27,18 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCy
   }, []);
 
   useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await getNotices();
+        const notices = user?.role === 'student'
+          ? filterNoticesForStudent(res.data, getStudentBatchFromSession())
+          : res.data;
+        setNotifications(notices.slice(0, 8));
+      } catch (error) {
+        console.error('Failed to load notifications', error);
+      }
+    };
+    
     fetchNotices();
 
     const handleNoticeUpdate = (data) => {
@@ -58,18 +70,6 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCy
     socket.on('NOTICE_UPDATED', handleNoticeUpdate);
     return () => socket.off('NOTICE_UPDATED', handleNoticeUpdate);
   }, [user?.role]);
-
-  const fetchNotices = async () => {
-    try {
-      const res = await getNotices();
-      const notices = user?.role === 'student'
-        ? filterNoticesForStudent(res.data, getStudentBatchFromSession())
-        : res.data;
-      setNotifications(notices.slice(0, 8));
-    } catch (error) {
-      console.error('Failed to load notifications', error);
-    }
-  };
 
   const handleNotificationToggle = () => {
     setIsNotificationsOpen((prev) => !prev);

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { upcomingContests, user } from '../../data/mockData';
-import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Trophy, CheckCircle, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests, getSubmissions } from '../../api';
 import { socket } from '../../socket';
@@ -13,11 +12,90 @@ const iconMap = {
 export default function Dashboard() {
   const navigate = useNavigate();
   const [notices, setNotices] = useState([]);
+  // eslint-disable-next-line no-unused-vars
   const [contests, setContests] = useState([]);
+  const [upcomingContestsList, setUpcomingContestsList] = useState([]);
+  const [pastContestsList, setPastContestsList] = useState([]);
+  const [stats, setStats] = useState({ totalContests: 0, mockTestsTaken: 0, assessmentsGiven: 0, avgScore: 0 });
   const [showNoticePopup, setShowNoticePopup] = useState(false);
   const [latestNotice, setLatestNotice] = useState(null);
 
   useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await getNotices();
+        const studentBatch = getStudentBatchFromSession();
+        const filteredNotices = filterNoticesForStudent(res.data, studentBatch);
+
+        if (filteredNotices.length > 0) {
+          if (sessionStorage.getItem('hasSeenNoticePopup') !== 'true') {
+            setLatestNotice(filteredNotices[0]);
+            setShowNoticePopup(true);
+            sessionStorage.setItem('hasSeenNoticePopup', 'true');
+          }
+        }
+
+        setNotices(filteredNotices.slice(0, 3));
+      } catch (error) {
+        console.error("Failed to fetch notices", error);
+      }
+    };
+
+    const fetchContests = async () => {
+      try {
+        const [res, subRes] = await Promise.all([getContests(), getSubmissions()]);
+        const studentProfileStr = sessionStorage.getItem('student_profile');
+        const studentProfile = studentProfileStr ? JSON.parse(studentProfileStr) : { name: 'Aditi Singh', id: '23210101548', batch: 'Alpha 1' };
+        const studentBatch = studentProfile.batch || 'Alpha 1';
+        
+        const filtered = res.data.filter(c => (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch))));
+        
+        setUpcomingContestsList(filtered.filter(c => c.status === 'Live' || c.status === 'Upcoming').slice(0, 2));
+        setPastContestsList(filtered.filter(c => c.status === 'Past').slice(0, 2));
+
+        let totalContests = filtered.length;
+        let mockTestsTaken = 0;
+        let assessmentsGiven = 0;
+        let totalScore = 0;
+        let totalMaxMarks = 0;
+
+        const mySubs = (subRes.data || []).filter(sub => {
+          if (sub.studentId && studentProfile.id) return sub.studentId === studentProfile.id;
+          return sub.studentName === studentProfile.name;
+        });
+
+        mySubs.forEach(sub => {
+          const contest = res.data.find(c => (c._id || c.id) === sub.contestId);
+          if (contest) {
+            if (contest.type === 'Mock Test' || contest.type === 'Mock') mockTestsTaken++;
+            if (contest.type === 'Assessment') assessmentsGiven++;
+            
+            if (sub.status === 'submitted') {
+              let maxMarks = contest.questionList?.reduce((acc, q) => acc + (q.marks || 0), 0) || 0;
+              
+              let calcScore = 0;
+              if (sub.score !== undefined) {
+                 calcScore = sub.score;
+              } else if (sub.answers && contest.questionList) {
+                 contest.questionList.forEach(q => {
+                   if (q.type === 'MCQ' && sub.answers[q.id] === q.correctOption) calcScore += q.marks || 0;
+                 });
+              }
+
+              totalMaxMarks += maxMarks;
+              totalScore += calcScore;
+            }
+          }
+        });
+
+        let avgScore = totalMaxMarks > 0 ? Math.round((totalScore / totalMaxMarks) * 100) : 0;
+        setStats({ totalContests, mockTestsTaken, assessmentsGiven, avgScore });
+
+      } catch (error) {
+        console.error("Failed to fetch contests", error);
+      }
+    };
+
     fetchNotices();
     fetchContests();
 
@@ -56,86 +134,6 @@ export default function Dashboard() {
       socket.off('CONTEST_UPDATED');
     };
   }, []);
-
-  const fetchNotices = async () => {
-    try {
-      const res = await getNotices();
-      const studentBatch = getStudentBatchFromSession();
-      const filteredNotices = filterNoticesForStudent(res.data, studentBatch);
-
-      if (filteredNotices.length > 0) {
-        if (sessionStorage.getItem('hasSeenNoticePopup') !== 'true') {
-          setLatestNotice(filteredNotices[0]);
-          setShowNoticePopup(true);
-          sessionStorage.setItem('hasSeenNoticePopup', 'true');
-        }
-      }
-
-      setNotices(filteredNotices.slice(0, 3));
-    } catch (error) {
-      console.error("Failed to fetch notices", error);
-    }
-  };
-
-  const [upcomingContestsList, setUpcomingContestsList] = useState([]);
-  const [pastContestsList, setPastContestsList] = useState([]);
-  const [stats, setStats] = useState({ totalContests: 0, mockTestsTaken: 0, assessmentsGiven: 0, avgScore: 0 });
-
-  const fetchContests = async () => {
-    try {
-      const [res, subRes] = await Promise.all([getContests(), getSubmissions()]);
-      const studentProfileStr = sessionStorage.getItem('student_profile');
-      const studentProfile = studentProfileStr ? JSON.parse(studentProfileStr) : { name: 'Aditi Singh', id: '23210101548', batch: 'Alpha 1' };
-      const studentBatch = studentProfile.batch || 'Alpha 1';
-      
-      const filtered = res.data.filter(c => (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch))));
-      
-      setUpcomingContestsList(filtered.filter(c => c.status === 'Live' || c.status === 'Upcoming').slice(0, 2));
-      setPastContestsList(filtered.filter(c => c.status === 'Past').slice(0, 2));
-
-      let totalContests = filtered.length;
-      let mockTestsTaken = 0;
-      let assessmentsGiven = 0;
-      let totalScore = 0;
-      let totalMaxMarks = 0;
-
-      const mySubs = (subRes.data || []).filter(sub => {
-        if (sub.studentId && studentProfile.id) return sub.studentId === studentProfile.id;
-        return sub.studentName === studentProfile.name;
-      });
-
-      mySubs.forEach(sub => {
-        const contest = res.data.find(c => (c._id || c.id) === sub.contestId);
-        if (contest) {
-          if (contest.type === 'Mock Test' || contest.type === 'Mock') mockTestsTaken++;
-          if (contest.type === 'Assessment') assessmentsGiven++;
-          
-          if (sub.status === 'submitted') {
-            let maxMarks = contest.questionList?.reduce((acc, q) => acc + (q.marks || 0), 0) || 0;
-            
-            // Recalculate score if not explicitly stored correctly (fallback)
-            let calcScore = 0;
-            if (sub.score !== undefined) {
-               calcScore = sub.score;
-            } else if (sub.answers && contest.questionList) {
-               contest.questionList.forEach(q => {
-                 if (q.type === 'MCQ' && sub.answers[q.id] === q.correctOption) calcScore += q.marks || 0;
-               });
-            }
-
-            totalMaxMarks += maxMarks;
-            totalScore += calcScore;
-          }
-        }
-      });
-
-      let avgScore = totalMaxMarks > 0 ? Math.round((totalScore / totalMaxMarks) * 100) : 0;
-      setStats({ totalContests, mockTestsTaken, assessmentsGiven, avgScore });
-
-    } catch (error) {
-      console.error("Failed to fetch contests", error);
-    }
-  };
 
   const [studentProfile, setStudentProfile] = useState(() => {
     const saved = sessionStorage.getItem('student_profile');

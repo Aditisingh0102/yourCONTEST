@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Users, BookOpen, ChevronDown, ChevronUp, Search, UserCircle, Rocket, Zap, Target, Plus, X, Briefcase } from 'lucide-react';
+import { useState } from 'react';
+import { Users, ChevronDown, ChevronUp, Search, UserCircle, Rocket, Zap, Target, Plus, X, Briefcase } from 'lucide-react';
 
 const mockBatches = [
   {

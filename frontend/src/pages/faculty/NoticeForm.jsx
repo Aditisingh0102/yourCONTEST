@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, MegaphoneIcon, Save, ChevronDown, Check } from 'lucide-react';
+import { ArrowLeft, Save, ChevronDown, Check } from 'lucide-react';
 import { getNotices, createNotice, updateNotice } from '../../api';
 
 export default function NoticeForm() {

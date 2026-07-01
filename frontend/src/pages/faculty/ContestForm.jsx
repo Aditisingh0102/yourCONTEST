@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { 
   ArrowLeft, Trophy, Save, CheckCircle2, Code, BookOpen, 
@@ -258,6 +258,7 @@ export default function ContestForm() {
     if (formData.startDate && formData.startTime) {
       const selectedDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
       if (selectedDateTime < new Date()) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDateError("Start date and time cannot be in the past!");
       } else {
         setDateError('');

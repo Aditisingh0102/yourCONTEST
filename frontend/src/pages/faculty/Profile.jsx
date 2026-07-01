@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   User,
   Mail,
@@ -6,7 +6,6 @@ import {
   BookOpen,
   Users,
   Phone,
-  MapPin,
   Award,
   CheckCircle2,
   Rocket,
@@ -61,6 +60,10 @@ export default function FacultyProfile() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
+        if (parsed.designation && parsed.designation.includes('Corporate Trainer')) {
+          parsed.designation = parsed.designation.replace('Corporate Trainer', 'Trainer');
+          sessionStorage.setItem('faculty_profile', JSON.stringify({ ...defaultData, ...parsed }));
+        }
         return { ...defaultData, ...parsed };
       } catch (e) {
         console.error("Failed to parse faculty_profile", e);
@@ -70,23 +73,6 @@ export default function FacultyProfile() {
   });
 
   const [editForm, setEditForm] = useState({ ...profileData });
-
-  // Auto-fix legacy cached 'Corporate Trainer' designation
-  useEffect(() => {
-    if (profileData.designation?.includes('Corporate Trainer')) {
-      const updated = { 
-        ...profileData, 
-        designation: profileData.designation.replace('Corporate Trainer', 'Trainer')
-      };
-      setProfileData(updated);
-      sessionStorage.setItem('faculty_profile', JSON.stringify(updated));
-    }
-  }, [profileData.designation]);
-
-  // Sync edits when profile changes
-  useEffect(() => {
-    setEditForm({ ...profileData });
-  }, [profileData]);
 
   // ESC key for password modal
   useEffect(() => {
@@ -177,10 +163,12 @@ export default function FacultyProfile() {
               </div>
             </div>
 
-            {/* Profile Action Buttons */}
             <div className="flex gap-3 pb-2">
               <button
-                onClick={() => setIsEditing(!isEditing)}
+                onClick={() => {
+                  if (!isEditing) setEditForm({ ...profileData });
+                  setIsEditing(!isEditing);
+                }}
                 className="px-4 py-2 bg-white text-gray-700 text-sm font-semibold rounded-xl border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all flex items-center gap-2 shadow-sm outline-none cursor-pointer"
               >
                 {isEditing ? <X className="w-4 h-4" /> : <Edit className="w-4 h-4" />}

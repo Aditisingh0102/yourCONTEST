@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { FileText, AlertCircle, Calendar, Briefcase, Info, BookOpen, Plus, X, Edit3, Trash2, MegaphoneIcon as MegaphoneIconSvg } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileText, AlertCircle, Calendar, Briefcase, Info, BookOpen, Plus, X, Edit3, Trash2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, deleteNotice } from '../../api';
 import { socket } from '../../socket';
@@ -13,6 +13,15 @@ export default function FacultyNoticeBoard() {
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
+    const fetchNotices = async () => {
+      try {
+        const res = await getNotices();
+        setNotices(res.data);
+      } catch (error) {
+        console.error("Failed to fetch notices", error);
+      }
+    };
+    
     fetchNotices();
 
     const handleNoticeUpdate = (data) => {
@@ -35,15 +44,6 @@ export default function FacultyNoticeBoard() {
 
     return () => socket.off('NOTICE_UPDATED', handleNoticeUpdate);
   }, []);
-
-  const fetchNotices = async () => {
-    try {
-      const res = await getNotices();
-      setNotices(res.data);
-    } catch (error) {
-      console.error("Failed to fetch notices", error);
-    }
-  };
 
   const handleEdit = (notice) => {
     navigate(`/faculty/edit-notice/${notice._id || notice.id}`);

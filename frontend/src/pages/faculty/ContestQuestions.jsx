@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Code, CheckCircle2, Trash2, BookOpen,
   HelpCircle, Edit2, XCircle, ChevronRight, ChevronLeft,
-  LayoutList, Sparkles, Check, Clock, Upload, FileText
+  Sparkles, Check, Upload, FileText
 } from 'lucide-react';
 import { getContests, updateContest, uploadQuestionsDocument } from '../../api';
 
@@ -221,7 +221,7 @@ function QuestionBankModal({ onClose, onImport, currentQuestions = [] }) {
              <div className="text-center text-gray-500 text-sm py-10">No questions found.</div>
           ) : (
             <div className="space-y-3">
-              {filtered.map((q, i) => (
+              {filtered.map((q) => (
                 <div key={q.id} className={`flex gap-3 p-4 bg-white border rounded-xl hover:border-purple-300 transition-colors cursor-pointer shadow-sm ${selected.has(q.id) ? 'border-purple-500 bg-purple-50/30' : 'border-gray-200'}`} onClick={() => toggleSelect(q.id)}>
                   <input type="checkbox" checked={selected.has(q.id)} onChange={() => toggleSelect(q.id)} className="mt-1" />
                   <div className="flex-1 min-w-0">
@@ -414,7 +414,7 @@ function TheoryForm({ data, onChange, onSubmit, editing, error }) {
 }
 
 /* ─── Coding form ───────────────────────────────────────── */
-function CodingForm({ data, onChange, onSubmit, editing }) {
+function CodingForm({ data, onChange, onSubmit, editing, error }) {
   const testCases = data.testCases || [{ input: '', output: '' }];
   const hiddenTestCases = data.hiddenTestCases || [{ input: '', output: '' }];
 
@@ -646,7 +646,7 @@ export default function ContestQuestions() {
   const [codingForm, setCodingForm] = useState({ ...emptyCoding });
 
   /* Build slot queue from URL params */
-  const slots = useMemo(() => {
+  const slots = (() => {
     const mcqCount    = parseInt(searchParams.get('mcq'))    || 0;
     const theoryCount = parseInt(searchParams.get('theory')) || 0;
     const codingCount = parseInt(searchParams.get('coding')) || 0;
@@ -656,7 +656,7 @@ export default function ContestQuestions() {
     for (let i = 1; i <= theoryCount; i++) result.push({ type: 'theory', localIdx: i });
     for (let i = 1; i <= codingCount; i++) result.push({ type: 'coding', localIdx: i });
     return result;
-  }, [searchParams]);
+  })();
 
   const hasSlots = slots.length > 0;
 
@@ -673,11 +673,13 @@ export default function ContestQuestions() {
   }, [id]);
 
   /* When slot changes, preload its existing question (if already saved) */
+  /* When slot changes, preload its existing question (if already saved) */
   useEffect(() => {
     if (!hasSlots) return;
     const slot = slots[currentSlotIdx];
     const slotQ = questions[currentSlotIdx];
     if (slotQ) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setEditingQId(slotQ.id);
       if (slot.type === 'mcq')    setMcqForm({ question: slotQ.question, options: slotQ.options, correctOption: slotQ.correctOption, marks: slotQ.marks });
       if (slot.type === 'theory') setTheoryForm({ question: slotQ.question, answer: slotQ.answer, marks: slotQ.marks });
@@ -688,6 +690,7 @@ export default function ContestQuestions() {
       setTheoryForm({ ...emptyTheory });
       setCodingForm({ ...emptyCoding });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSlotIdx, hasSlots]);
 
   /* Save questions to DB */
@@ -727,39 +730,39 @@ export default function ContestQuestions() {
     }
   };
 
-  const currentMcqError = useMemo(() => {
+  const currentMcqError = (() => {
     const opts = mcqForm.options.map(o => o.trim()).filter(Boolean);
     if (new Set(opts).size !== opts.length) return "Options cannot be repeated.";
     if (isDuplicateQuestion(mcqForm.question, editingQId, currentSlotIdx)) return "This question already exists in the contest.";
     return null;
-  }, [mcqForm, questions, editingQId, currentSlotIdx]);
+  })();
 
-  const currentTheoryError = useMemo(() => {
+  const currentTheoryError = (() => {
     if (isDuplicateQuestion(theoryForm.question, editingQId, currentSlotIdx)) return "This question already exists in the contest.";
     return null;
-  }, [theoryForm, questions, editingQId, currentSlotIdx]);
+  })();
 
-  const currentCodingError = useMemo(() => {
+  const currentCodingError = (() => {
     if (isDuplicateQuestion(codingForm.title, editingQId, currentSlotIdx) || isDuplicateQuestion(codingForm.problemStatement, editingQId, currentSlotIdx)) return "This problem already exists in the contest.";
     return null;
-  }, [codingForm, questions, editingQId, currentSlotIdx]);
+  })();
 
-  const freeMcqError = useMemo(() => {
+  const freeMcqError = (() => {
     const opts = mcqForm.options.map(o => o.trim()).filter(Boolean);
     if (new Set(opts).size !== opts.length) return "Options cannot be repeated.";
     if (isDuplicateQuestion(mcqForm.question, editingQId)) return "This question already exists in the contest.";
     return null;
-  }, [mcqForm, questions, editingQId]);
+  })();
 
-  const freeTheoryError = useMemo(() => {
+  const freeTheoryError = (() => {
     if (isDuplicateQuestion(theoryForm.question, editingQId)) return "This question already exists in the contest.";
     return null;
-  }, [theoryForm, questions, editingQId]);
+  })();
 
-  const freeCodingError = useMemo(() => {
+  const freeCodingError = (() => {
     if (isDuplicateQuestion(codingForm.title, editingQId) || isDuplicateQuestion(codingForm.problemStatement, editingQId)) return "This problem already exists in the contest.";
     return null;
-  }, [codingForm, questions, editingQId]);
+  })();
 
   const handleMCQSubmit = (e) => {
     e.preventDefault();
@@ -1085,7 +1088,6 @@ export default function ContestQuestions() {
               questions.map((q, idx) => {
                 const typeKey = (q.type || '').toLowerCase();
                 const meta    = TYPE_META[typeKey] || TYPE_META.mcq;
-                const Icon    = meta.icon;
                 return (
                   <div key={q.id} className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm relative group">
                     <div className="absolute top-3 right-3 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

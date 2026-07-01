@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, BookOpen, CheckCircle2, Code, HelpCircle, Trophy, Filter } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, BookOpen, CheckCircle2, Code, HelpCircle, Trophy } from 'lucide-react';
 import { getContests } from '../../api';
 
 const TYPE_CONFIG = {
@@ -36,36 +36,41 @@ export default function QuestionBank() {
   const [filterType, setFilterType] = useState('All');
 
   useEffect(() => {
-    fetchAllQuestions();
-  }, []);
-
-  const fetchAllQuestions = async () => {
-    try {
-      const res = await getContests();
-      const contests = res.data || [];
-
-      // Pull every question from every contest and tag it with contest info
-      const aggregated = [];
-      contests.forEach((contest) => {
-        const qs = contest.questionList || [];
-        qs.forEach((q, idx) => {
-          aggregated.push({
-            ...q,
-            contestName: contest.title || contest.name || 'Untitled Contest',
-            contestId: contest._id || contest.id,
-            contestStatus: contest.status || 'Unknown',
-            slotIndex: idx + 1,
+    async function fetchAllQuestions() {
+      try {
+        const res = await getContests();
+        const contests = res.data || [];
+        const aggregated = [];
+        contests.forEach((contest) => {
+          const qs = contest.questionList || [];
+          qs.forEach((q) => {
+            aggregated.push({
+              ...q,
+              contestName: contest.title || contest.name || 'Untitled Contest',
+              contestId: contest._id || contest.id,
+              contestStatus: contest.status || 'Unknown',
+            });
           });
         });
-      });
 
-      setAllQuestions(aggregated);
-    } catch (err) {
-      console.error('Failed to fetch questions', err);
-    } finally {
-      setLoading(false);
+        const unique = [];
+        const seen = new Set();
+        aggregated.forEach(q => {
+           const identifier = q._id || q.id || q.question || q.title;
+           if (!seen.has(identifier)) {
+              seen.add(identifier);
+              unique.push(q);
+           }
+        });
+        setAllQuestions(unique);
+      } catch (err) {
+        console.error('Failed to fetch questions', err);
+      } finally {
+        setLoading(false);
+      }
     }
-  };
+    fetchAllQuestions();
+  }, []);
 
   const filtered = allQuestions.filter((q) => {
     const text = (q.question || q.title || q.problemStatement || '').toLowerCase();

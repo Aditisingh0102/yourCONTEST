@@ -1,13 +1,12 @@
-import React, { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Video, FileText, PlayCircle, Download, ChevronLeft, FileCode, UploadCloud, Plus, Trash2, ExternalLink, Image as ImageIcon, X, Users } from 'lucide-react';
+import { BookOpen, Video, FileText, PlayCircle, ChevronLeft, FileCode, UploadCloud, Plus, Trash2, ExternalLink, Image as ImageIcon, X, Users } from 'lucide-react';
 
 export default function CourseDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('lectures'); // lectures, notes, assignments
 
-  const fileInputRef = useRef(null);
 
   const courseBaseDetails = {
     '1': { title: 'Full-Stack Web Development', professor: 'Dr. Sarah Jenkins', progress: 65, tags: ['React', 'Node.js', 'MongoDB'] },
@@ -35,7 +34,7 @@ export default function CourseDetail() {
             url: item.url?.startsWith('blob:') ? null : item.url
           }));
         }
-      } catch (e) {}
+      } catch (e) { console.error("Failed to parse lectures", e); }
     }
     return [
       { id: 1, title: 'Lecture 1: Introduction', duration: '45 mins', type: 'video/mp4', url: 'https://www.youtube.com/embed/1yrh60og6qc' },
@@ -58,7 +57,7 @@ export default function CourseDetail() {
             url: item.url?.startsWith('blob:') ? null : item.url
           }));
         }
-      } catch (e) {}
+      } catch (e) { console.error("Failed to parse notes", e); }
     }
     return [
       { id: 1, title: 'Unit 1 Notes.pdf', size: '2.4 MB', type: 'application/pdf', url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf' },
@@ -71,7 +70,7 @@ export default function CourseDetail() {
   const [assignments, setAssignments] = useState(() => {
     const saved = sessionStorage.getItem(`course_${id}_assignments`);
     if (saved) {
-      try { return JSON.parse(saved); } catch (e) {}
+      try { return JSON.parse(saved); } catch (e) { console.error("Failed to parse assignments", e); }
     }
     return [
       { id: 101, title: 'Build a React Portfolio', type: 'Project', format: 'GitHub Repo Submission', status: 'Upcoming' },
@@ -96,15 +95,15 @@ export default function CourseDetail() {
     { id: 4, name: 'Sneha Gupta', rollNo: '2023CSE1046', status: 'Submitted', time: 'Yesterday', file: 'assignment_final.pdf', grade: '88/100' },
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
     sessionStorage.setItem(`course_${id}_lectures`, JSON.stringify(lectures));
   }, [lectures, id]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     sessionStorage.setItem(`course_${id}_notes`, JSON.stringify(notes));
   }, [notes, id]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     sessionStorage.setItem(`course_${id}_assignments`, JSON.stringify(assignments));
   }, [assignments, id]);
 

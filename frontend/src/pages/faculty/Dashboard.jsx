@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { faculty } from '../../data/mockData';
-import { Trophy, Users, FileCheck, CheckSquare, BarChart, Calendar, Edit3, PlusCircle, AlertCircle, Library, Eye, Trash2, Save, X, Plus, Rocket, Zap, Target } from 'lucide-react';
+import { Trophy, Users, FileCheck, CheckSquare, BarChart, Calendar, Edit3, PlusCircle, Library, Trash2, Save, X, Plus, Rocket, Zap, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getContests } from '../../api';
 import { socket } from '../../socket';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { X, Check, CheckCircle, XCircle, FileBarChart, Clock, RefreshCcw, AlertCircle } from 'lucide-react';
 import { deleteSubmission, updateSubmission } from '../../api';
 
@@ -10,7 +10,7 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
   const totalMarks = contest?.questionList?.reduce((acc, q) => acc + q.marks, 0) || 0;
 
   // Deduplicate submissions strictly by studentName/studentId keeping the most recent
-  const uniqueSubmissions = React.useMemo(() => {
+  const uniqueSubmissions = useMemo(() => {
     const map = new Map();
     submissions.forEach(sub => {
       const key = `${sub.studentId || sub.studentName}`;
@@ -28,7 +28,7 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
     return arr;
   }, [submissions]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedStudent) {
       const updatedSub = uniqueSubmissions.find(s => s._id === selectedStudent._id);
       if (updatedSub && JSON.stringify(updatedSub.answers) !== JSON.stringify(selectedStudent.answers)) {
@@ -40,9 +40,11 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
             }
           });
         }
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedStudent({...updatedSub, calculatedScore});
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uniqueSubmissions]);
 
   const handleRetest = async () => {

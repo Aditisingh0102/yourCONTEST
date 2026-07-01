@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BookOpen, Video, FileText, Plus, Edit3, Trash2, ChevronLeft, FileCode, Users, X, Save, CheckSquare, PlusCircle, Library, FileCheck, BarChart, Link } from 'lucide-react';
 import { getCourses, updateCourse } from '../../api';
@@ -44,22 +44,21 @@ export default function CourseHubDetail() {
   }, [notes]);
 
   useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const res = await getCourses();
+        const found = res.data.find(c => c._id === id);
+        if (found) {
+          setCourse(found);
+        }
+      } catch (error) {
+        console.error('Failed to fetch course', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchCourse();
   }, [id]);
-
-  const fetchCourse = async () => {
-    try {
-      const res = await getCourses();
-      const found = res.data.find(c => c._id === id);
-      if (found) {
-        setCourse(found);
-      }
-    } catch (error) {
-      console.error('Failed to fetch course', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleAddLecture = async (e) => {
     e.preventDefault();
@@ -334,7 +333,7 @@ export default function CourseHubDetail() {
               {/* Tab Content */}
               {activeTab === 'lectures' ? (
                 <div className="space-y-3">
-                  {(course.lectures || []).map((lec, idx) => (
+                  {(course.lectures || []).map((lec) => (
                     <div key={lec.id} onClick={() => handleLectureClick(lec)} className="flex items-center justify-between p-4 rounded-xl border border-[#3b3d46] bg-[#25262b] hover:border-blue-500 transition-all cursor-pointer group">
                        <div className="flex items-center gap-4">
                          <div className="w-10 h-10 rounded-lg bg-[#3b3d46] border border-blue-500/30 text-blue-400 flex items-center justify-center shrink-0">

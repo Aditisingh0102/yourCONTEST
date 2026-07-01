@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
   Megaphone, 
   BookOpen, 
-  Code, 
-  Trophy, 
-  Video, 
-  Briefcase, 
-  User, 
+  Trophy,
   FileBarChart,
-  LogOut,
+  Briefcase,
   X,
   GraduationCap
 } from 'lucide-react';

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Calendar, Clock, Users, PlayCircle, Plus, Edit3, Trash2, Search, Filter, X, CheckCircle2, AlertCircle, FileText, BarChart2 } from 'lucide-react';
+import { Trophy, Calendar, Clock, Users, PlayCircle, Plus, Edit3, Trash2, Search, Filter, CheckCircle2, AlertCircle, FileText, BarChart2 } from 'lucide-react';
 import { getContests, updateContest, deleteContest, getSubmissions, updateSubmission, deleteSubmission } from '../../api';
 import { socket } from '../../socket';
 import AnalyticsModal from './AnalyticsModal';
@@ -47,6 +47,7 @@ export default function ContestManager() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchContests();
 
     const handleUpdate = () => {
@@ -261,7 +262,7 @@ export default function ContestManager() {
             <tbody className="divide-y divide-gray-100">
               {filteredContests.length > 0 ? (
                 filteredContests.map((contest) => (
-                  <React.Fragment key={contest.id}>
+                  <Fragment key={contest.id || contest._id}>
                     <tr 
                       className="hover:bg-gray-50/50 transition-colors group cursor-pointer"
                       onClick={(e) => {
@@ -429,7 +430,7 @@ export default function ContestManager() {
                       </td>
                     </tr>
                   )}
-                  </React.Fragment>
+                  </Fragment>
                 ))
               ) : (
                 <tr>
