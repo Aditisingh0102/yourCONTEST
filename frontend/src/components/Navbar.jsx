@@ -1,9 +1,21 @@
-import React from 'react';
-import { BookOpen, Moon, Sun, Bell, Menu, Coffee } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { BookOpen, Moon, Sun, Bell, Menu, Coffee, LogOut, Key } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCycleTheme }) {
   const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <div className="h-16 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container transition-colors duration-300">
@@ -58,23 +70,56 @@ export default function Navbar({ user, onToggleSidebar, isCollapsed, theme, onCy
         </button>
 
         {/* Avatar */}
-        <div className="flex items-center gap-3 pl-2 cursor-pointer">
-          {user?.role === 'faculty' ? (
-            <img 
-              src={user.avatar} 
-              alt="Avatar" 
-              className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 object-cover" 
-              onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=0D8ABC&textColor=fff`; }} 
-            />
-          ) : (
-            <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[13px] shrink-0 border border-blue-700 shadow-sm">
-              {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+        <div className="relative" ref={dropdownRef}>
+          <div 
+            className="flex items-center gap-3 pl-2 cursor-pointer"
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          >
+            {user?.role === 'faculty' ? (
+              <img 
+                src={user.avatar} 
+                alt="Avatar" 
+                className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 object-cover" 
+                onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=0D8ABC&textColor=fff`; }} 
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-bold text-[13px] shrink-0 border border-blue-700 shadow-sm">
+                {user?.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+              </div>
+            )}
+            <div className="text-left hidden sm:block">
+              <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">{user.name}</p>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize leading-tight">{user.role === 'faculty' ? 'Technical Trainer' : user.role}</p>
+            </div>
+          </div>
+
+          {/* Dropdown Menu */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1e293b] rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 py-1 z-50 overflow-hidden">
+              <button
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  const profileRoute = user?.role === 'student' ? '/student/profile' : '/faculty/profile';
+                  navigate(profileRoute);
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+              >
+                <Key className="w-4 h-4" />
+                <span>Change Password</span>
+              </button>
+              <div className="h-px bg-gray-100 dark:bg-gray-700 my-1"></div>
+              <button
+                onClick={() => {
+                  setIsDropdownOpen(false);
+                  navigate('/');
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Log out</span>
+              </button>
             </div>
           )}
-          <div className="text-left hidden sm:block">
-            <p className="text-[13px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">{user.name}</p>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 capitalize leading-tight">{user.role === 'faculty' ? 'Technical Trainer' : user.role}</p>
-          </div>
         </div>
       </div>
     </div>

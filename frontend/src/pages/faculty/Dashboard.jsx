@@ -181,17 +181,17 @@ export default function Dashboard() {
           {/* Quick Actions */}
           <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
             <h2 className="text-[15px] font-bold text-gray-800 mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
               {[
-                { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100', path: '/faculty/create-contest' },
-                { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', path: '/faculty/question-bank' },
-                { name: 'Submissions', icon: FileCheck, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-100', path: '/faculty/manage-contests' },
-                { name: 'Analytics', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', border: 'border-green-100', path: '/faculty/student-records' },
+                { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20', path: '/faculty/create-contest' },
+                { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50 dark:bg-purple-900/20', path: '/faculty/question-bank' },
+                { name: 'Submissions', icon: FileCheck, color: 'text-orange-600', bg: 'bg-orange-50 dark:bg-orange-900/20', path: '/faculty/manage-contests' },
+                { name: 'Analytics', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-900/20', path: '/faculty/student-records' },
               ].map((action, i) => (
                 <button
                   key={i}
                   onClick={() => navigate(action.path)}
-                  className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all gap-2 ${action.bg} ${action.border} hover:shadow-md hover:-translate-y-0.5`}
+                  className={`flex flex-col items-center justify-center p-5 transition-all gap-2 ${action.bg} hover:brightness-95 dark:hover:brightness-110`}
                 >
                   <action.icon className={`w-5 h-5 ${action.color}`} />
                   <span className={`text-[11px] font-bold ${action.color}`}>{action.name}</span>
