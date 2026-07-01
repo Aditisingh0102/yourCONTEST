@@ -135,6 +135,122 @@ Answer: a`}
   );
 }
 
+/* ─── Question Bank Modal ───────────────────────────────── */
+function QuestionBankModal({ onClose, onImport, currentQuestions = [] }) {
+  const [allQuestions, setAllQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState(new Set());
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchAllQuestions = async () => {
+      try {
+        const res = await getContests();
+        const contests = res.data || [];
+        const aggregated = [];
+        contests.forEach((contest) => {
+          const qs = contest.questionList || [];
+          qs.forEach((q) => {
+            if (!currentQuestions.some(cq => cq.id === q.id || (cq.question && cq.question === q.question) || (cq.title && cq.title === q.title))) {
+              aggregated.push({ ...q, contestName: contest.title || contest.name || 'Untitled Contest' });
+            }
+          });
+        });
+        const unique = [];
+        const seen = new Set();
+        aggregated.forEach(q => {
+           const identifier = q.id || q.question || q.title;
+           if (!seen.has(identifier)) {
+              seen.add(identifier);
+              unique.push(q);
+           }
+        });
+        setAllQuestions(unique);
+      } catch (err) {
+        console.error('Failed to fetch questions', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAllQuestions();
+  }, [currentQuestions]);
+
+  const filtered = allQuestions.filter((q) => {
+    const text = (q.question || q.title || q.problemStatement || '').toLowerCase();
+    return text.includes(search.toLowerCase());
+  });
+
+  const toggleSelect = (id) => {
+    const next = new Set(selected);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelected(next);
+  };
+
+  const handleImport = () => {
+    const toImport = allQuestions.filter(q => selected.has(q.id));
+    onImport(toImport);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] flex flex-col shadow-xl">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+            <BookOpen className="w-5 h-5 text-purple-500" /> Question Bank
+          </h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <XCircle className="w-6 h-6" />
+          </button>
+        </div>
+        
+        <div className="p-4 border-b border-gray-100">
+          <input
+            type="text"
+            placeholder="Search questions by text or title..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:border-purple-500 text-sm"
+          />
+        </div>
+
+        <div className="p-6 overflow-y-auto flex-1 bg-gray-50">
+          {loading ? (
+             <div className="text-center text-gray-500 text-sm py-10">Loading questions...</div>
+          ) : filtered.length === 0 ? (
+             <div className="text-center text-gray-500 text-sm py-10">No questions found.</div>
+          ) : (
+            <div className="space-y-3">
+              {filtered.map((q, i) => (
+                <div key={q.id} className={`flex gap-3 p-4 bg-white border rounded-xl hover:border-purple-300 transition-colors cursor-pointer shadow-sm ${selected.has(q.id) ? 'border-purple-500 bg-purple-50/30' : 'border-gray-200'}`} onClick={() => toggleSelect(q.id)}>
+                  <input type="checkbox" checked={selected.has(q.id)} onChange={() => toggleSelect(q.id)} className="mt-1" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider bg-gray-100 text-gray-600 px-2 py-0.5 rounded">{q.type}</span>
+                      <span className="text-[11px] text-gray-400 font-medium">{q.contestName}</span>
+                      <span className="text-[11px] font-semibold text-gray-500 ml-auto">{q.marks || 0} Marks</span>
+                    </div>
+                    <p className="text-sm font-semibold text-gray-800 line-clamp-2">{q.type === 'Coding' ? q.title : q.question}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        <div className="border-t border-gray-100 px-6 py-4 flex justify-end gap-3 bg-white rounded-b-2xl">
+          <button onClick={onClose} className="px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
+            Cancel
+          </button>
+          <button onClick={handleImport} disabled={selected.size === 0} className="px-5 py-2 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm">
+            Import Selected ({selected.size})
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Type meta ─────────────────────────────────────────── */
 const TYPE_META = {
   mcq: {
@@ -489,8 +605,8 @@ function SlotItem({ slot, slotIdx, active, filled, onClick }) {
   return (
     <button
       onClick={() => onClick(slotIdx)}
-      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all
-        ${active ? 'bg-gray-900 text-white shadow-sm' : 'hover:bg-gray-50 text-gray-700'}`}>
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all border
+        ${active ? 'bg-blue-50 border-blue-200 shadow-sm' : 'border-transparent hover:bg-gray-50'}`}>
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0
         bg-gradient-to-br ${meta.headerGrad}`}>
         {filled
@@ -498,14 +614,14 @@ function SlotItem({ slot, slotIdx, active, filled, onClick }) {
           : <Icon className="w-3.5 h-3.5 text-white" />}
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`text-[12px] font-semibold truncate ${active ? 'text-white' : 'text-gray-800'}`}>
+        <p className={`text-[12px] font-semibold truncate ${active ? 'text-blue-900' : 'text-gray-800'}`}>
           {meta.label} #{slot.localIdx}
         </p>
-        <p className={`text-[11px] truncate ${active ? 'text-gray-300' : 'text-gray-400'}`}>
+        <p className={`text-[11px] truncate ${active ? 'text-blue-600/70' : 'text-gray-400'}`}>
           {filled ? '✓ Saved' : 'Pending'}
         </p>
       </div>
-      {active && <ChevronRight className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />}
+      {active && <ChevronRight className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />}
     </button>
   );
 }
@@ -522,6 +638,7 @@ export default function ContestQuestions() {
   const [currentSlotIdx, setCurrentSlotIdx] = useState(0);
   const [editingQId, setEditingQId] = useState(null);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showQuestionBankModal, setShowQuestionBankModal] = useState(false);
 
   // Per-form state
   const [mcqForm,    setMcqForm]    = useState({ ...emptyMCQ });
@@ -724,11 +841,18 @@ export default function ContestQuestions() {
             <h1 className="text-2xl font-semibold text-gray-900">Add Questions</h1>
             <p className="text-sm text-gray-500 mt-0.5">{contest.title}</p>
           </div>
-          <button
-            onClick={() => setShowImportModal(true)}
-            className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
-            <Upload className="w-4 h-4" /> Import Document
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setShowQuestionBankModal(true)}
+              className="px-4 py-2 bg-purple-50 text-purple-600 font-semibold text-sm rounded-lg hover:bg-purple-100 flex items-center gap-2 transition-colors">
+              <BookOpen className="w-4 h-4" /> Question Bank
+            </button>
+            <button
+              onClick={() => setShowImportModal(true)}
+              className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2 transition-colors">
+              <Upload className="w-4 h-4" /> Import Document
+            </button>
+          </div>
         </div>
 
         {/* Progress bar */}
@@ -840,6 +964,29 @@ export default function ContestQuestions() {
             </div>
           </div>
         </div>
+
+        {showImportModal && (
+          <ImportModal 
+            onClose={() => setShowImportModal(false)} 
+            onImport={(importedQuestions) => {
+              const nextQuestions = [...questions, ...importedQuestions];
+              persist(nextQuestions);
+              setShowImportModal(false);
+            }} 
+          />
+        )}
+
+        {showQuestionBankModal && (
+          <QuestionBankModal
+            onClose={() => setShowQuestionBankModal(false)}
+            currentQuestions={questions}
+            onImport={(importedQuestions) => {
+              const nextQuestions = [...questions, ...importedQuestions];
+              persist(nextQuestions);
+              setShowQuestionBankModal(false);
+            }}
+          />
+        )}
       </div>
     );
   }
@@ -862,11 +1009,18 @@ export default function ContestQuestions() {
           <h1 className="text-2xl font-semibold text-gray-900">Manage Questions</h1>
           <p className="text-sm text-gray-500 mt-1">{contest.title} • {questions.length} questions added</p>
         </div>
-        <button
-          onClick={() => setShowImportModal(true)}
-          className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2">
-          <Upload className="w-4 h-4" /> Import Document
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setShowQuestionBankModal(true)}
+            className="px-4 py-2 bg-purple-50 text-purple-600 font-semibold text-sm rounded-lg hover:bg-purple-100 flex items-center gap-2 transition-colors">
+            <BookOpen className="w-4 h-4" /> Question Bank
+          </button>
+          <button
+            onClick={() => setShowImportModal(true)}
+            className="px-4 py-2 bg-blue-50 text-blue-600 font-semibold text-sm rounded-lg hover:bg-blue-100 flex items-center gap-2 transition-colors">
+            <Upload className="w-4 h-4" /> Import Document
+          </button>
+        </div>
         {editingQId && (
           <button
             onClick={() => { setEditingQId(null); setMcqForm({ ...emptyMCQ }); setTheoryForm({ ...emptyTheory }); setCodingForm({ ...emptyCoding }); }}
@@ -969,6 +1123,18 @@ export default function ContestQuestions() {
             persist(nextQuestions);
             setShowImportModal(false);
           }} 
+        />
+      )}
+
+      {showQuestionBankModal && (
+        <QuestionBankModal
+          onClose={() => setShowQuestionBankModal(false)}
+          currentQuestions={questions}
+          onImport={(importedQuestions) => {
+            const nextQuestions = [...questions, ...importedQuestions];
+            persist(nextQuestions);
+            setShowQuestionBankModal(false);
+          }}
         />
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
-import { getContests, getSubmissions } from '../../api';
+import { getContests, getSubmissions, updateSubmission, submitContestAnswers } from '../../api';
 import { socket } from '../../socket';
 
 export default function Arena() {
@@ -11,6 +11,8 @@ export default function Arena() {
   const [activeProblem, setActiveProblem] = useState(null);
   const [submittedResult, setSubmittedResult] = useState(null);
   const [answers, setAnswers] = useState({});
+  const [extraTime, setExtraTime] = useState(0);
+  const [existingSubmissionId, setExistingSubmissionId] = useState(null);
   const answersRef = React.useRef(answers);
 
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function Arena() {
   const [violations, setViolations] = useState(0);
   const [showWarning, setShowWarning] = useState(false);
   const isViolatingRef = React.useRef(false);
+  const graceTimerRef = React.useRef(null);
 
   const fetchContestData = async () => {
     try {
@@ -42,11 +45,24 @@ export default function Arena() {
       const profileStr = sessionStorage.getItem('student_profile');
       if (!profileStr) return; // Prevent execution if not logged in (will be redirected)
       const studentProfile = JSON.parse(profileStr);
-      const hasSubmitted = subsRes.data.some(sub => (sub.contestId === id) && (sub.studentId === studentProfile.id));
+      const existingSub = subsRes.data.find(sub => {
+        if (sub.contestId !== id) return false;
+        if (sub.studentId && studentProfile.id) {
+          return sub.studentId === studentProfile.id;
+        }
+        return sub.studentName === studentProfile.name;
+      });
 
-      if (hasSubmitted) {
-        setError("You have already submitted this assessment. You cannot retake it.");
-        return;
+      if (existingSub) {
+        if (existingSub.status === 'reopened' || existingSub.status === 'in_progress') {
+          setAnswers(existingSub.answers || {});
+          answersRef.current = existingSub.answers || {};
+          setExtraTime(existingSub.extraTime || 0);
+          setExistingSubmissionId(existingSub._id);
+        } else {
+          setError("You have already submitted this assessment. You cannot retake it.");
+          return;
+        }
       }
 
       if (current) {
@@ -118,13 +134,16 @@ export default function Arena() {
     if (isWaiting || !hasAgreed) return;
     if (contest && contest.strictFullscreen === false) return;
 
-    const handleViolation = () => {
+    const warningLimit = contest?.warningLimit !== undefined ? parseInt(contest.warningLimit) : 1;
+    const gracePeriodMs = (contest?.windowSwitchGracePeriod !== undefined ? parseInt(contest.windowSwitchGracePeriod) : 0) * 1000;
+
+    const triggerViolation = () => {
       if (isViolatingRef.current) return;
       isViolatingRef.current = true;
 
       setViolations(prev => {
         const newCount = prev + 1;
-        if (newCount > 1) { 
+        if (newCount > warningLimit) { 
           if (document.fullscreenElement) {
              document.exitFullscreen().catch(() => {});
           }
@@ -136,12 +155,40 @@ export default function Arena() {
       });
     };
 
+    const handleViolationStart = () => {
+       if (isViolatingRef.current) return;
+       if (gracePeriodMs > 0) {
+           if (!graceTimerRef.current) {
+               graceTimerRef.current = setTimeout(() => {
+                   triggerViolation();
+               }, gracePeriodMs);
+           }
+       } else {
+           triggerViolation();
+       }
+    };
+    
+    const handleViolationEnd = () => {
+        if (graceTimerRef.current && !isViolatingRef.current) {
+            clearTimeout(graceTimerRef.current);
+            graceTimerRef.current = null;
+        }
+    };
+
     const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') handleViolation();
+      if (document.visibilityState === 'hidden') {
+          handleViolationStart();
+      } else {
+          handleViolationEnd();
+      }
     };
 
     const handleFullscreenChange = () => {
-      if (!document.fullscreenElement) handleViolation();
+      if (!document.fullscreenElement) {
+          handleViolationStart();
+      } else {
+          handleViolationEnd();
+      }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -150,6 +197,7 @@ export default function Arena() {
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      if (graceTimerRef.current) clearTimeout(graceTimerRef.current);
     };
   }, [isWaiting, hasAgreed, navigate, contest]);
 
@@ -176,7 +224,10 @@ export default function Arena() {
     if (!contest || !hasAgreed) return;
 
     const storageKey = `contest_${contest.id || contest._id}_startTime`;
+    const extraStorageKey = `contest_${contest.id || contest._id}_extraStartTime`;
+    
     let studentStartTime = sessionStorage.getItem(storageKey);
+    let extraStartTime = sessionStorage.getItem(extraStorageKey);
 
     if (!studentStartTime) {
       studentStartTime = Date.now().toString();
@@ -204,8 +255,15 @@ export default function Arena() {
     const absoluteEndTime = (start && !isNaN(start)) ? start + durationMs : studentStartTime + durationMs;
     const normalEndTime = studentStartTime + durationMs;
 
-    // Student gets whichever ends first (capping late starters to the global end time)
-    const endTime = Math.min(normalEndTime, absoluteEndTime);
+    let endTime = Math.min(normalEndTime, absoluteEndTime);
+
+    if (extraTime > 0) {
+      if (!extraStartTime) {
+        extraStartTime = Date.now().toString();
+        sessionStorage.setItem(extraStorageKey, extraStartTime);
+      }
+      endTime = parseInt(extraStartTime, 10) + (extraTime * 60 * 1000);
+    }
 
     const interval = setInterval(() => {
       const diff = endTime - Date.now();
@@ -227,20 +285,59 @@ export default function Arena() {
   }, [contest, hasAgreed, navigate]);
 
   const handleStartAssessment = () => {
-    if (contest && contest.strictFullscreen === false) {
+    const start = async () => {
       setHasAgreed(true);
+      try {
+        const profileStr = sessionStorage.getItem('student_profile');
+        if (profileStr && !existingSubmissionId) {
+          const studentProfile = JSON.parse(profileStr);
+          const payload = {
+            contestId: contest?._id || contest?.id,
+            contestName: contest?.title || contest?.name,
+            studentId: studentProfile.id,
+            studentName: studentProfile.name,
+            batch: studentProfile.batch,
+            answers: {},
+            score: 0,
+            status: 'in_progress',
+            startedAt: new Date().toISOString(),
+            submittedAt: new Date().toISOString()
+          };
+          const res = await submitContestAnswers(payload);
+          if (res && res.data && res.data._id) {
+             setExistingSubmissionId(res.data._id);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to mark contest as started:", err);
+      }
+    };
+
+    if (contest && contest.strictFullscreen === false) {
+      start();
       return;
     }
     
     document.documentElement.requestFullscreen().then(() => {
-      setHasAgreed(true);
+      start();
     }).catch(err => {
       alert("Fullscreen mode is required to start the contest. Please allow fullscreen.");
     });
   };
 
-  const handleAnswerChange = (qId, val) => {
-    setAnswers({ ...answers, [qId]: val });
+  const handleAnswerChange = async (qId, val) => {
+    const newAnswers = { ...answers, [qId]: val };
+    setAnswers(newAnswers);
+    
+    if (existingSubmissionId) {
+      try {
+        await updateSubmission(existingSubmissionId, {
+          answers: newAnswers
+        });
+      } catch (err) {
+        console.error("Live update failed", err);
+      }
+    }
   };
 
   const performSubmission = async () => {
@@ -260,26 +357,35 @@ export default function Arena() {
       const profileStr = sessionStorage.getItem('student_profile');
       if (!profileStr) return;
       const studentProfile = JSON.parse(profileStr);
-      const { submitContestAnswers } = await import('../../api');
-      
-      const payload = {
-        contestId: contest?._id || contest?.id,
-        contestName: contest?.title || contest?.name,
-        studentId: studentProfile.id,
-        studentName: studentProfile.name,
-        batch: studentProfile.batch,
-        answers: answersRef.current,
-        score: score,
-        submittedAt: new Date().toISOString()
-      };
-
-      await submitContestAnswers(payload);
+      if (existingSubmissionId) {
+        await updateSubmission(existingSubmissionId, {
+          answers: answersRef.current,
+          score: score,
+          status: 'submitted',
+          submittedAt: new Date().toISOString()
+        });
+      } else {
+        const payload = {
+          contestId: contest?._id || contest?.id,
+          contestName: contest?.title || contest?.name,
+          studentId: studentProfile.id,
+          studentName: studentProfile.name,
+          batch: studentProfile.batch,
+          answers: answersRef.current,
+          score: score,
+          status: 'submitted',
+          submittedAt: new Date().toISOString()
+        };
+        await submitContestAnswers(payload);
+      }
     } catch(err) {
       console.error("Failed to save submission:", err);
     }
 
     const storageKey = `contest_${contest?.id || contest?._id}_startTime`;
+    const extraStorageKey = `contest_${contest?.id || contest?._id}_extraStartTime`;
     sessionStorage.removeItem(storageKey);
+    sessionStorage.removeItem(extraStorageKey);
     setSubmittedResult({ score, total: questions.length });
   };
 
@@ -350,7 +456,7 @@ export default function Arena() {
               <h1 className="text-2xl font-semibold text-gray-900 mb-6 border-b pb-4">Rules & Regulations</h1>
               
               <div className="space-y-4 text-gray-600 text-sm mb-8">
-                <p className="flex gap-3"><span className="text-blue-600 font-semibold">1.</span> <span>Do not switch tabs or minimize the browser window during the assessment. Doing so may result in automatic submission.</span></p>
+                <p className="flex gap-3"><span className="text-blue-600 font-semibold">1.</span> <span>Do not exit fullscreen mode (e.g., by pressing Esc), switch tabs, or minimize the browser window. Doing so will trigger a warning or automatic submission.</span></p>
                 <p className="flex gap-3"><span className="text-blue-600 font-semibold">2.</span> <span>Ensure you have a stable internet connection before starting the contest.</span></p>
                 <p className="flex gap-3"><span className="text-blue-600 font-semibold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
                 <p className="flex gap-3"><span className="text-blue-600 font-semibold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
@@ -409,7 +515,9 @@ export default function Arena() {
             <ShieldAlert className="w-20 h-20 text-red-500 mx-auto mb-6 animate-pulse" />
             <h1 className="text-3xl font-semibold text-white mb-4 tracking-tight">Violation Detected!</h1>
             <p className="text-red-200 text-lg mb-2">You have exited fullscreen or switched tabs.</p>
-            <p className="text-red-400 font-semibold mb-8">Warning 1 of 1. If this happens again, your test will be automatically submitted.</p>
+            <p className="text-red-400 font-semibold mb-8">
+              Warning {violations} of {contest?.warningLimit !== undefined ? contest.warningLimit : 1}. If you exceed the limit, your test will be automatically submitted.
+            </p>
             <button 
               onClick={() => {
                 document.documentElement.requestFullscreen().then(() => {

@@ -1,41 +1,81 @@
 import React, { useState } from 'react';
-import { X, Check, CheckCircle, XCircle, FileBarChart, Clock, RefreshCcw } from 'lucide-react';
-import { deleteSubmission } from '../../api';
+import { X, Check, CheckCircle, XCircle, FileBarChart, Clock, RefreshCcw, AlertCircle } from 'lucide-react';
+import { deleteSubmission, updateSubmission } from '../../api';
 
-export default function AnalyticsModal({ contest, submissions, onClose }) {
-  const [selectedStudent, setSelectedStudent] = useState(null);
+export default function AnalyticsModal({ contest, submissions, onClose, initialStudent = null }) {
+  const [selectedStudent, setSelectedStudent] = useState(initialStudent);
+  const [resetConfirm, setResetConfirm] = useState(false);
+  const [extendPrompt, setExtendPrompt] = useState({ show: false, minutes: '' });
 
   const totalMarks = contest?.questionList?.reduce((acc, q) => acc + q.marks, 0) || 0;
 
   // Deduplicate submissions strictly by studentName/studentId keeping the most recent
-  const uniqueSubsMap = new Map();
-  submissions.forEach(sub => {
-    const key = `${sub.studentId || sub.studentName}`;
-    if (!uniqueSubsMap.has(key)) {
-      uniqueSubsMap.set(key, sub);
-    } else {
-      const existing = uniqueSubsMap.get(key);
-      if (new Date(sub.submittedAt) > new Date(existing.submittedAt)) {
-        uniqueSubsMap.set(key, sub);
+  const uniqueSubmissions = React.useMemo(() => {
+    const map = new Map();
+    submissions.forEach(sub => {
+      const key = `${sub.studentId || sub.studentName}`;
+      if (!map.has(key)) {
+        map.set(key, sub);
+      } else {
+        const existing = map.get(key);
+        if (new Date(sub.submittedAt) > new Date(existing.submittedAt)) {
+          map.set(key, sub);
+        }
+      }
+    });
+    const arr = Array.from(map.values());
+    arr.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    return arr;
+  }, [submissions]);
+
+  React.useEffect(() => {
+    if (selectedStudent) {
+      const updatedSub = uniqueSubmissions.find(s => s._id === selectedStudent._id);
+      if (updatedSub && JSON.stringify(updatedSub.answers) !== JSON.stringify(selectedStudent.answers)) {
+        let calculatedScore = 0;
+        if (contest && contest.questionList && updatedSub.answers) {
+          contest.questionList.forEach(q => {
+            if (q.type === 'MCQ' && updatedSub.answers[q.id] === q.correctOption) {
+              calculatedScore += q.marks || 0;
+            }
+          });
+        }
+        setSelectedStudent({...updatedSub, calculatedScore});
       }
     }
-  });
-  const uniqueSubmissions = Array.from(uniqueSubsMap.values());
-  uniqueSubmissions.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  }, [uniqueSubmissions]);
 
   const handleRetest = async () => {
-    if (!selectedStudent || !window.confirm(`Are you sure you want to allow ${selectedStudent.studentName} to retest? This will permanently delete their current submission.`)) return;
+    if (!selectedStudent) return;
     
     try {
       await deleteSubmission(selectedStudent._id);
       setSelectedStudent(null);
-      // The parent component (ContestManager) will re-fetch submissions via socket event, or we could just close the modal.
-      // Closing the modal forces a clean state upon re-entry.
       onClose();
     } catch(err) {
       console.error("Failed to allow retest:", err);
       alert("Failed to delete submission.");
     }
+    setResetConfirm(false);
+  };
+
+  const handleExtend = async () => {
+    if (!selectedStudent) return;
+    const mins = parseInt(extendPrompt.minutes);
+    if (!mins || isNaN(mins) || mins <= 0) return;
+    
+    try {
+      await updateSubmission(selectedStudent._id, {
+        extraTime: (selectedStudent.extraTime || 0) + mins,
+        status: 'reopened'
+      });
+      alert(`Granted ${mins} extra minutes to ${selectedStudent.studentName}.`);
+      onClose(); // Close modal so parent refreshes
+    } catch(err) {
+      console.error(err);
+      alert("Failed to extend time");
+    }
+    setExtendPrompt({ show: false, minutes: '' });
   };
 
   return (
@@ -143,14 +183,24 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
                         Submitted: {new Date(selectedStudent.submittedAt).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                       </span>
                     </div>
-                    <button 
-                      onClick={handleRetest}
-                      className="px-3 py-1.5 bg-orange-50 text-orange-600 border border-orange-200 hover:bg-orange-100 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
-                      title="Delete this submission so the student can re-take the contest"
-                    >
-                      <RefreshCcw className="w-3.5 h-3.5" />
-                      Allow Retest
-                    </button>
+                    <div className="flex items-center gap-2 mt-2">
+                      <button 
+                        onClick={() => setExtendPrompt({ show: true, minutes: '' })}
+                        className="px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                        title="Grant extra time and reopen this submission"
+                      >
+                        <Clock className="w-3.5 h-3.5" />
+                        Extend Time
+                      </button>
+                      <button 
+                        onClick={() => setResetConfirm(true)}
+                        className="px-3 py-1.5 bg-orange-50 text-orange-600 border border-orange-200 hover:bg-orange-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                        title="Delete this submission so the student can re-take the contest"
+                      >
+                        <RefreshCcw className="w-3.5 h-3.5" />
+                        Reset Test
+                      </button>
+                    </div>
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">Score</p>
@@ -279,6 +329,76 @@ export default function AnalyticsModal({ contest, submissions, onClose }) {
 
         </div>
       </div>
+
+      {/* Reset Confirmation Modal */}
+      {resetConfirm && (
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center">
+            <div className="w-12 h-12 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Reset Submission?</h3>
+            <p className="text-sm text-gray-600 mb-6">
+              Are you sure you want to allow <strong>{selectedStudent?.studentName}</strong> to retest? This will permanently delete their current submission.
+            </p>
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setResetConfirm(false)}
+                className="flex-1 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleRetest}
+                className="flex-1 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors"
+              >
+                Yes, Delete It
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Extend Time Prompt Modal */}
+      {extendPrompt.show && (
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center">
+                <Clock className="w-5 h-5" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Extend Time</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-4">
+              How many extra minutes do you want to grant to <strong>{selectedStudent?.studentName}</strong>?
+            </p>
+            <input 
+              type="number"
+              min="1"
+              placeholder="e.g. 10"
+              value={extendPrompt.minutes}
+              onChange={(e) => setExtendPrompt({...extendPrompt, minutes: e.target.value})}
+              className="w-full px-4 py-2.5 mb-6 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm"
+              autoFocus
+            />
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setExtendPrompt({ show: false, minutes: '' })}
+                className="flex-1 py-2 bg-gray-100 text-gray-700 font-bold rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleExtend}
+                className="flex-1 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Check, AlertTriangle, Clock, HelpCircle, FileText, User, ChevronLeft } from 'lucide-react';
+import { getContests } from '../../api';
 
 export default function ContestRules() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [agreed, setAgreed] = useState(false);
-
   const [contest, setContest] = useState(null);
+  const [timeLeft, setTimeLeft] = useState('');
 
   React.useEffect(() => {
     if (!sessionStorage.getItem('student_profile')) {
@@ -16,21 +17,87 @@ export default function ContestRules() {
   }, [navigate]);
 
   React.useEffect(() => {
-    const saved = sessionStorage.getItem('app_contests');
-    if (saved) {
-      const all = JSON.parse(saved);
-      const current = all.find(c => c.id === parseInt(id));
-      if (current) setContest(current);
-    }
+    const fetchContestData = async () => {
+      try {
+        const res = await getContests();
+        const current = res.data.find(c => (c._id || c.id).toString() === id);
+        if (current) setContest(current);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchContestData();
   }, [id]);
+
+  React.useEffect(() => {
+    if (!contest || contest.status !== 'Upcoming') return;
+    
+    let start = 0;
+    if (contest.startTime && contest.startTime.includes(',')) {
+        const parts = contest.startTime.split(', ');
+        if(parts.length === 2) {
+           start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
+        }
+    } else if (contest.date && contest.time) {
+        start = new Date(`${contest.date}T${contest.time}:00`).getTime();
+    } else if (contest.startTime) {
+        start = new Date(contest.startTime).getTime();
+    }
+
+    if (!start || isNaN(start)) return;
+
+    const updateTimer = () => {
+      const now = Date.now();
+      const diff = start - now;
+      if (diff <= 0) {
+         setContest(prev => ({ ...prev, status: 'Live' }));
+         setTimeLeft('');
+         return;
+      }
+      
+      const h = Math.floor(diff / (1000 * 60 * 60));
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      
+      const pad = (num) => num.toString().padStart(2, '0');
+      
+      if (h >= 24) {
+         const days = Math.floor(h / 24);
+         const remH = h % 24;
+         setTimeLeft(`${days}d ${pad(remH)}h ${pad(m)}m ${pad(s)}s`);
+      } else {
+         setTimeLeft(`${pad(h)}h ${pad(m)}m ${pad(s)}s`);
+      }
+    };
+    
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [contest]);
 
   if (!contest) return <div className="p-8 text-center">Loading Contest Details...</div>;
 
   const handleStart = () => {
+    if (contest.status === 'Past') {
+      navigate('/student/reports');
+      return;
+    }
     if (agreed || contest.status !== 'Live') {
-      navigate(`/student/contests/${id}/arena`);
+      navigate(`/student/arena/${id}`);
     }
   };
+
+  const theme = (() => {
+    if (contest.type === 'Assessment') return {
+      bgLight: 'bg-purple-50/50', borderLight: 'border-purple-100', textMain: 'text-purple-600', textDark: 'text-purple-700', bgMain: 'bg-purple-600', bgHover: 'hover:bg-purple-700', bgMuted: 'bg-purple-100', peerCheckedBg: 'peer-checked:bg-purple-600 peer-checked:border-purple-600'
+    };
+    if (contest.type === 'Mock Test') return {
+      bgLight: 'bg-orange-50/50', borderLight: 'border-orange-100', textMain: 'text-orange-600', textDark: 'text-orange-700', bgMain: 'bg-orange-600', bgHover: 'hover:bg-orange-700', bgMuted: 'bg-orange-100', peerCheckedBg: 'peer-checked:bg-orange-600 peer-checked:border-orange-600'
+    };
+    return {
+      bgLight: 'bg-blue-50/50', borderLight: 'border-gray-100', textMain: 'text-blue-600', textDark: 'text-blue-700', bgMain: 'bg-blue-600', bgHover: 'hover:bg-blue-700', bgMuted: 'bg-blue-100', peerCheckedBg: 'peer-checked:bg-blue-600 peer-checked:border-blue-600'
+    };
+  })();
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
@@ -59,9 +126,9 @@ export default function ContestRules() {
       <div className="flex-1 max-w-[800px] w-full mx-auto py-8 px-6">
          
          <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden mb-6">
-            <div className="bg-blue-50/50 border-b border-gray-100 p-5 flex items-center gap-3">
-               <FileText className="w-6 h-6 text-blue-600" />
-               <h2 className="text-lg font-semibold text-gray-900">Assessment Details</h2>
+            <div className={`${theme.bgLight} border-b ${theme.borderLight} p-5 flex items-center gap-3`}>
+               <FileText className={`w-6 h-6 ${theme.textMain}`} />
+               <h2 className="text-lg font-semibold text-gray-900">{contest.type || 'Assessment'} Details</h2>
             </div>
             
             <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -106,8 +173,8 @@ export default function ContestRules() {
                   </li>
                   {contest.customRules && (Array.isArray(contest.customRules) ? contest.customRules : [contest.customRules]).map((rule, idx) => rule.trim() !== '' && (
                     <li key={idx} className="flex items-start gap-4">
-                       <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 text-[13px] font-semibold">{4 + idx}</span>
-                       <p className="mt-0.5 whitespace-pre-wrap"><strong className="text-blue-700">Faculty Rules:</strong> {rule}</p>
+                       <span className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 text-[13px] font-semibold ${theme.bgMuted} ${theme.textMain}`}>{4 + idx}</span>
+                       <p className="mt-0.5 whitespace-pre-wrap"><strong className={theme.textDark}>Faculty Rules:</strong> {rule}</p>
                     </li>
                   ))}
                </ul>
@@ -124,7 +191,7 @@ export default function ContestRules() {
                      checked={agreed}
                      onChange={(e) => setAgreed(e.target.checked)}
                    />
-                   <div className="w-6 h-6 border-2 border-gray-300 rounded-md peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-colors"></div>
+                   <div className={`w-6 h-6 border-2 border-gray-300 rounded-md transition-colors ${theme.peerCheckedBg}`}></div>
                    <Check className="w-4 h-4 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none stroke-[3]" />
                  </div>
                  <p className="text-[14px] text-gray-700 font-semibold group-hover:text-gray-900 transition-colors leading-snug">
@@ -137,7 +204,7 @@ export default function ContestRules() {
                 disabled={!agreed}
                 className={`shrink-0 px-8 py-3.5 rounded-xl font-semibold text-[15px] shadow-sm transition-all ${
                   agreed 
-                    ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md hover:-translate-y-0.5 cursor-pointer' 
+                    ? `${theme.bgMain} text-white ${theme.bgHover} hover:shadow-md hover:-translate-y-0.5 cursor-pointer` 
                     : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
                 }`}
               >
@@ -145,12 +212,23 @@ export default function ContestRules() {
               </button>
            </div>
          ) : contest.status === 'Upcoming' ? (
-           <div className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-sm p-6 text-center text-yellow-800 font-semibold">
-             This contest will start on {contest.date} at {contest.time}. The "Start Contest" button will appear here once it is live.
+           <div className="bg-yellow-50/80 border border-yellow-200 rounded-2xl shadow-sm p-8 flex flex-col items-center justify-center text-center">
+             <Clock className="w-12 h-12 text-yellow-500 mb-3 animate-pulse" />
+             <h3 className="text-xl font-bold text-yellow-800 mb-2">Contest Starts In</h3>
+             {timeLeft ? (
+               <div className="text-4xl font-black text-yellow-600 font-mono tracking-wider mb-4 drop-shadow-sm">
+                  {timeLeft}
+               </div>
+             ) : (
+               <p className="text-yellow-700 font-semibold mb-4">Fetching schedule...</p>
+             )}
+             <p className="text-yellow-700/80 font-medium text-sm max-w-md">
+               The "Submit & Start" button will automatically appear here once the countdown reaches zero. Ensure you have read all rules.
+             </p>
            </div>
          ) : (
            <div className="flex justify-center">
-             <button onClick={handleStart} className="px-8 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700">
+             <button onClick={handleStart} className={`px-8 py-3 ${theme.bgMain} text-white rounded-xl font-semibold ${theme.bgHover}`}>
                View Results & Submissions
              </button>
            </div>

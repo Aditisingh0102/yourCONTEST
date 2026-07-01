@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { upcomingContests, user } from '../../data/mockData';
 import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { getNotices, getContests } from '../../api';
+import { getNotices, getContests, getSubmissions } from '../../api';
 import { socket } from '../../socket';
 import { filterNoticesForStudent, getStudentBatchFromSession } from '../../utils/noticeUtils';
 
@@ -77,11 +77,61 @@ export default function Dashboard() {
     }
   };
 
+  const [upcomingContestsList, setUpcomingContestsList] = useState([]);
+  const [pastContestsList, setPastContestsList] = useState([]);
+  const [stats, setStats] = useState({ totalContests: 0, mockTestsTaken: 0, assessmentsGiven: 0, avgScore: 0 });
+
   const fetchContests = async () => {
     try {
-      const res = await getContests();
-      const studentBatch = JSON.parse(sessionStorage.getItem('student_profile'))?.batch || 'Alpha 1';
-      setContests(res.data.filter(c => c.status !== 'Ended' && (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)))).slice(0, 2)); // Show up to 2 active/upcoming
+      const [res, subRes] = await Promise.all([getContests(), getSubmissions()]);
+      const studentProfileStr = sessionStorage.getItem('student_profile');
+      const studentProfile = studentProfileStr ? JSON.parse(studentProfileStr) : { name: 'Aditi Singh', id: '23210101548', batch: 'Alpha 1' };
+      const studentBatch = studentProfile.batch || 'Alpha 1';
+      
+      const filtered = res.data.filter(c => (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch))));
+      
+      setUpcomingContestsList(filtered.filter(c => c.status === 'Live' || c.status === 'Upcoming').slice(0, 2));
+      setPastContestsList(filtered.filter(c => c.status === 'Past').slice(0, 2));
+
+      let totalContests = filtered.length;
+      let mockTestsTaken = 0;
+      let assessmentsGiven = 0;
+      let totalScore = 0;
+      let totalMaxMarks = 0;
+
+      const mySubs = (subRes.data || []).filter(sub => {
+        if (sub.studentId && studentProfile.id) return sub.studentId === studentProfile.id;
+        return sub.studentName === studentProfile.name;
+      });
+
+      mySubs.forEach(sub => {
+        const contest = res.data.find(c => (c._id || c.id) === sub.contestId);
+        if (contest) {
+          if (contest.type === 'Mock Test' || contest.type === 'Mock') mockTestsTaken++;
+          if (contest.type === 'Assessment') assessmentsGiven++;
+          
+          if (sub.status === 'submitted') {
+            let maxMarks = contest.questionList?.reduce((acc, q) => acc + (q.marks || 0), 0) || 0;
+            
+            // Recalculate score if not explicitly stored correctly (fallback)
+            let calcScore = 0;
+            if (sub.score !== undefined) {
+               calcScore = sub.score;
+            } else if (sub.answers && contest.questionList) {
+               contest.questionList.forEach(q => {
+                 if (q.type === 'MCQ' && sub.answers[q.id] === q.correctOption) calcScore += q.marks || 0;
+               });
+            }
+
+            totalMaxMarks += maxMarks;
+            totalScore += calcScore;
+          }
+        }
+      });
+
+      let avgScore = totalMaxMarks > 0 ? Math.round((totalScore / totalMaxMarks) * 100) : 0;
+      setStats({ totalContests, mockTestsTaken, assessmentsGiven, avgScore });
+
     } catch (error) {
       console.error("Failed to fetch contests", error);
     }
@@ -121,10 +171,10 @@ export default function Dashboard() {
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total Contests', value: 0, icon: Trophy, color: 'text-blue-500' },
-          { label: 'Mock Tests Taken', value: 0, icon: BookOpen, color: 'text-orange-500' },
-          { label: 'Assessments Given', value: 0, icon: Users, color: 'text-purple-500' },
-          { label: 'Avg. Score', value: '0%', icon: CheckCircle, color: 'text-green-500' },
+          { label: 'Total Contests', value: stats.totalContests, icon: Trophy, color: 'text-blue-500' },
+          { label: 'Mock Tests Taken', value: stats.mockTestsTaken, icon: BookOpen, color: 'text-orange-500' },
+          { label: 'Assessments Given', value: stats.assessmentsGiven, icon: Users, color: 'text-purple-500' },
+          { label: 'Avg. Score', value: `${stats.avgScore}%`, icon: CheckCircle, color: 'text-green-500' },
         ].map((stat, i) => (
           <div
             key={i}
@@ -154,7 +204,7 @@ export default function Dashboard() {
               <button className="text-[13px] font-medium text-blue-600 hover:underline" onClick={() => navigate(`/student/contests`)}>View all</button>
             </div>
 
-            {contests.length === 0 ? (
+            {upcomingContestsList.length === 0 ? (
               <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-10 flex flex-col items-center justify-center text-center">
                 <Trophy className="w-12 h-12 text-gray-300 mb-3" />
                 <h3 className="text-lg font-semibold text-gray-800 mb-1">No Upcoming Contests</h3>
@@ -165,7 +215,7 @@ export default function Dashboard() {
               </div>
             ) : (
               <div className="flex flex-col gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
-                {contests.map((contest) => (
+                {upcomingContestsList.map((contest) => (
                   <div key={contest._id} className="bg-white dark:bg-slate-900 p-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
                     <div>
                       <h3 className="text-[15px] font-semibold text-gray-900 dark:text-gray-100">{contest.name || contest.title || "Untitled Contest"}</h3>
@@ -176,7 +226,7 @@ export default function Dashboard() {
                         }`}>
                         {contest.status}
                       </span>
-                      <button onClick={() => navigate(`/student/contests`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">
+                      <button onClick={() => navigate(`/student/contests/${contest._id || contest.id}`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">
                         View Details
                       </button>
                     </div>
@@ -185,6 +235,35 @@ export default function Dashboard() {
               </div>
             )}
           </div>
+
+          {/* Past Contests */}
+          {pastContestsList.length > 0 && (
+            <div>
+              <div className="flex items-center justify-between mb-3 mt-8">
+                <h2 className="text-[15px] font-semibold text-gray-800">Past Contests</h2>
+                <button className="text-[13px] font-medium text-blue-600 hover:underline" onClick={() => navigate(`/student/contests`)}>View all</button>
+              </div>
+
+              <div className="flex flex-col gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
+                {pastContestsList.map((contest) => (
+                  <div key={contest._id} className="bg-white dark:bg-slate-900 p-5 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
+                    <div>
+                      <h3 className="text-[15px] font-semibold text-gray-900 dark:text-gray-100">{contest.name || contest.title || "Untitled Contest"}</h3>
+                      <p className="text-[13px] text-gray-500">{contest.subject || contest.type || 'Contest'} • {contest.duration}</p>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                        Past
+                      </span>
+                      <button onClick={() => navigate(`/student/contests/${contest._id || contest.id}`)} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                        View Results
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Notice Board */}
           <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-6">
