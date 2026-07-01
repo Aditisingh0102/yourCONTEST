@@ -132,6 +132,18 @@ app.post('/api/submissions', (req, res) => {
   res.status(201).json(newSubmission);
 });
 
+app.put('/api/submissions/:id', (req, res) => {
+  const index = submissions.findIndex(s => s._id === req.params.id);
+  if (index !== -1) {
+    submissions[index] = { ...submissions[index], ...req.body };
+    saveDB();
+    io.emit('SUBMISSION_UPDATED', submissions[index]);
+    res.json(submissions[index]);
+  } else {
+    res.status(404).json({ error: 'Not found' });
+  }
+});
+
 app.delete('/api/submissions/:id', (req, res) => {
   submissions = submissions.filter(s => s._id !== req.params.id);
   saveDB();

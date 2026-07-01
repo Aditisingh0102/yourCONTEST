@@ -205,7 +205,8 @@ export default function ContestForm() {
   const { id } = useParams();
 
   const [formData, setFormData] = useState({
-    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, batch: ['All']
+    title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, batch: ['All'],
+    warningLimit: 1, windowSwitchGracePeriod: 0
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
@@ -244,7 +245,9 @@ export default function ContestForm() {
             customRules: Array.isArray(contest.customRules) ? contest.customRules : (contest.customRules ? [contest.customRules] : []),
             strictFullscreen: contest.strictFullscreen !== false,
             disableCopyPaste: contest.disableCopyPaste !== false,
-            batch: Array.isArray(contest.batch) ? contest.batch : (contest.batch ? [contest.batch] : ['All'])
+            batch: Array.isArray(contest.batch) ? contest.batch : (contest.batch ? [contest.batch] : ['All']),
+            warningLimit: contest.warningLimit !== undefined ? contest.warningLimit : 1,
+            windowSwitchGracePeriod: contest.windowSwitchGracePeriod !== undefined ? contest.windowSwitchGracePeriod : 0
           });
         }
       });
@@ -278,7 +281,7 @@ export default function ContestForm() {
 
     try {
       if (id && dbContestId) {
-        // Edit mode — just save, then open modal
+        // Edit mode — just save and return
         await updateContest(dbContestId, {
           title: formData.title,
           type: formData.type,
@@ -287,9 +290,11 @@ export default function ContestForm() {
           customRules: formData.customRules || [],
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
-          batch: formData.batch
+          batch: formData.batch,
+          warningLimit: parseInt(formData.warningLimit) || 1,
+          windowSwitchGracePeriod: parseInt(formData.windowSwitchGracePeriod) || 0
         });
-        setSavedContestId(dbContestId);
+        navigate('/faculty/manage-contests');
       } else {
         // Create mode — save new contest, then open modal
         const newContest = {
@@ -306,12 +311,14 @@ export default function ContestForm() {
           strictFullscreen: formData.strictFullscreen,
           disableCopyPaste: formData.disableCopyPaste,
           batch: formData.batch,
+          warningLimit: parseInt(formData.warningLimit) || 1,
+          windowSwitchGracePeriod: parseInt(formData.windowSwitchGracePeriod) || 0,
           questionList: []
         };
         const res = await createContest(newContest);
         setSavedContestId(res.data._id || res.data.id);
+        setShowTypeModal(true);
       }
-      setShowTypeModal(true);
     } catch (err) {
       console.error(err);
       alert('Error saving contest');
@@ -479,21 +486,52 @@ export default function ContestForm() {
                 Rules & Proctoring
               </h3>
               <div className="space-y-5 pl-8">
-                <div className="flex gap-4">
-                  <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
-                      checked={formData.strictFullscreen} 
-                      onChange={(e) => setFormData({...formData, strictFullscreen: e.target.checked})} 
-                    />
-                    <span className="text-[14px] font-semibold text-gray-800">Strict Fullscreen Mode</span>
-                  </label>
-                  <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
-                      checked={formData.disableCopyPaste} 
-                      onChange={(e) => setFormData({...formData, disableCopyPaste: e.target.checked})} 
-                    />
-                    <span className="text-[14px] font-semibold text-gray-800">Disable Copy/Paste</span>
-                  </label>
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-4">
+                    <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                      <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
+                        checked={formData.strictFullscreen} 
+                        onChange={(e) => setFormData({...formData, strictFullscreen: e.target.checked})} 
+                      />
+                      <span className="text-[14px] font-semibold text-gray-800">Strict Fullscreen Mode</span>
+                    </label>
+                    <label className="flex flex-1 items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                      <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" 
+                        checked={formData.disableCopyPaste} 
+                        onChange={(e) => setFormData({...formData, disableCopyPaste: e.target.checked})} 
+                      />
+                      <span className="text-[14px] font-semibold text-gray-800">Disable Copy/Paste</span>
+                    </label>
+                  </div>
+                  
+                  {formData.strictFullscreen && (
+                    <div className="flex gap-4">
+                      <div className="flex-1">
+                        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Max Warnings Allowed</label>
+                        <input
+                          type="number"
+                          min="1"
+                          value={formData.warningLimit}
+                          onChange={(e) => setFormData({ ...formData, warningLimit: e.target.value })}
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Number of times student can exit fullscreen before auto-submission.</p>
+                      </div>
+                      <div className="flex-1">
+                        <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Window Switch Grace Period (Sec)</label>
+                        <input
+                          type="number"
+                          min="0"
+                          value={formData.windowSwitchGracePeriod}
+                          onChange={(e) => setFormData({ ...formData, windowSwitchGracePeriod: e.target.value })}
+                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                          required
+                        />
+                        <p className="text-xs text-gray-500 mt-1">Time allowed outside the window before a warning is given (0 for strict).</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
@@ -550,7 +588,7 @@ export default function ContestForm() {
               disabled={saving}
               className="flex-1 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-[15px] rounded-xl shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 hover:from-blue-500 hover:to-indigo-500 hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none">
               <Save className="w-5 h-5" />
-              {saving ? 'Saving...' : 'Save & Proceed to Questions'}
+              {saving ? 'Saving...' : (id ? 'Save Changes' : 'Save & Proceed to Questions')}
             </button>
           </div>
         </form>

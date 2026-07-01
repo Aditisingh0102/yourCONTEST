@@ -149,10 +149,10 @@ export default function Dashboard() {
                     onClick={() => navigate('/faculty/manage-contests')}
                     className="bg-white dark:bg-slate-900 p-5 hover:bg-gray-50 dark:hover:bg-slate-800 transition-all cursor-pointer relative group"
                   >
-                    <div className={`absolute top-4 right-4 text-[9px] font-semibold px-2 py-1 rounded uppercase tracking-wider border ${contest.status === 'Live' ? 'bg-red-50 text-red-600 border-red-200' : 'bg-gray-50 text-gray-600 border-gray-200'
+                    <div className={`absolute top-4 right-4 text-[9px] font-bold px-2 py-1 rounded uppercase tracking-wider border ${contest.status === 'Live' ? 'bg-red-50 text-red-600 border-red-200' : contest.status === 'Upcoming' ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-gray-50 text-gray-600 border-gray-200'
                       }`}>
                       {contest.status === 'Live' && <span className="inline-block w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse mr-1"></span>}
-                      {contest.status === 'Live' ? 'Live Now' : contest.date || 'Upcoming'}
+                      {contest.status === 'Live' ? 'Live Now' : contest.status === 'Past' ? 'Ended' : contest.status || 'Upcoming'}
                     </div>
 
                     <div className={`p-2 w-max rounded-lg mb-3 ${contest.type === 'Assessment' ? 'bg-purple-50 text-purple-600' : 'bg-orange-50 text-orange-500'}`}>

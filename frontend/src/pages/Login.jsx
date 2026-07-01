@@ -13,6 +13,7 @@ export default function Login() {
 
     if (erpId === '23210101548@uudoon.in' || erpId === '2321010548@uudoon.in') {
       sessionStorage.setItem('student_profile', JSON.stringify({
+        id: '23210101548',
         name: 'Aditi Singh',
         rollNo: '23210101548',
         regNo: 'UU23104209',
@@ -30,6 +31,7 @@ export default function Login() {
       navigate('/student/dashboard');
     } else if (erpId === '23210101763@uudoon.in') {
       sessionStorage.setItem('student_profile', JSON.stringify({
+        id: '23210101763',
         name: 'Ambar Kumar',
         rollNo: '23210101763',
         regNo: 'UU23104299',
