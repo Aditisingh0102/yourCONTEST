@@ -57,12 +57,15 @@ export default function NoticeForm() {
     }
 
     const payload = {
-      title: formData.title,
-      content: formData.content,
+      title: formData.title.trim(),
+      content: formData.content.trim(),
       type: formData.type,
       batch: formData.batch,
       author: 'Arun Kudiyal',
-      iconName, color, bg, borderColor
+      iconName,
+      color,
+      bg,
+      borderColor
     };
 
     try {

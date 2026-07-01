@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FileText, AlertCircle, Calendar, Briefcase, Info, BookOpen } from 'lucide-react';
 import { getNotices } from '../../api';
 import { socket } from '../../socket';
+import { filterNoticesForStudent, getStudentBatchFromSession } from '../../utils/noticeUtils';
 
 const iconMap = {
   Info, AlertCircle, FileText, Briefcase, BookOpen
@@ -13,36 +14,38 @@ export default function NoticeBoard() {
   useEffect(() => {
     fetchNotices();
 
-    socket.on('NOTICE_UPDATED', (data) => {
-      if (data.type === 'CREATE') setNotices(prev => [data.notice, ...prev]);
-      else if (data.type === 'UPDATE') setNotices(prev => prev.map(n => n._id === data.notice._id ? data.notice : n));
-      else if (data.type === 'DELETE') setNotices(prev => prev.filter(n => n._id !== data.id));
-    });
+    const handleNoticeUpdate = (data) => {
+      if (data.type === 'CREATE') {
+        setNotices(prev => {
+          const next = [data.notice, ...prev];
+          return filterNoticesForStudent(next, getStudentBatchFromSession());
+        });
+        return;
+      }
 
-    return () => socket.off('NOTICE_UPDATED');
+      if (data.type === 'UPDATE') {
+        setNotices(prev => filterNoticesForStudent(
+          prev.map((n) => (n._id === data.notice._id ? data.notice : n)),
+          getStudentBatchFromSession()
+        ));
+        return;
+      }
+
+      if (data.type === 'DELETE') {
+        setNotices(prev => prev.filter((n) => n._id !== data.id));
+      }
+    };
+
+    socket.on('NOTICE_UPDATED', handleNoticeUpdate);
+
+    return () => socket.off('NOTICE_UPDATED', handleNoticeUpdate);
   }, []);
 
   const fetchNotices = async () => {
     try {
       const res = await getNotices();
-      const profileStr = sessionStorage.getItem('student_profile');
-      let studentBatch = 'All';
-      if (profileStr) {
-        try {
-          const profile = JSON.parse(profileStr);
-          studentBatch = profile.batch || 'All';
-        } catch(e) {}
-      }
-
-      const filteredNotices = res.data.filter(n => {
-        if (!n.batch || n.batch.length === 0) return true; // Backward compatibility
-        if (Array.isArray(n.batch)) {
-          return n.batch.includes('All') || n.batch.includes(studentBatch);
-        }
-        return n.batch === 'All' || n.batch === studentBatch;
-      });
-
-      setNotices(filteredNotices);
+      const studentBatch = getStudentBatchFromSession();
+      setNotices(filterNoticesForStudent(res.data, studentBatch));
     } catch (error) {
       console.error("Failed to fetch notices", error);
     }

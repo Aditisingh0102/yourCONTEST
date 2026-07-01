@@ -4,6 +4,7 @@ import { Trophy, CheckCircle, Flame, Award, BookOpen, Users, Megaphone, AlertCir
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests } from '../../api';
 import { socket } from '../../socket';
+import { filterNoticesForStudent, getStudentBatchFromSession } from '../../utils/noticeUtils';
 
 const iconMap = {
   Info, AlertCircle, FileText, Briefcase, BookOpen
@@ -20,11 +21,29 @@ export default function Dashboard() {
     fetchNotices();
     fetchContests();
 
-    socket.on('NOTICE_UPDATED', (data) => {
-      if (data.type === 'CREATE') setNotices(prev => [data.notice, ...prev]);
-      else if (data.type === 'UPDATE') setNotices(prev => prev.map(n => n._id === data.notice._id ? data.notice : n));
-      else if (data.type === 'DELETE') setNotices(prev => prev.filter(n => n._id !== data.id));
-    });
+    const handleNoticeUpdate = (data) => {
+      if (data.type === 'CREATE') {
+        setNotices(prev => {
+          const next = [data.notice, ...prev];
+          return filterNoticesForStudent(next, getStudentBatchFromSession()).slice(0, 3);
+        });
+        return;
+      }
+
+      if (data.type === 'UPDATE') {
+        setNotices(prev => filterNoticesForStudent(
+          prev.map((n) => (n._id === data.notice._id ? data.notice : n)),
+          getStudentBatchFromSession()
+        ).slice(0, 3));
+        return;
+      }
+
+      if (data.type === 'DELETE') {
+        setNotices(prev => prev.filter((n) => n._id !== data.id));
+      }
+    };
+
+    socket.on('NOTICE_UPDATED', handleNoticeUpdate);
 
     socket.on('CONTEST_UPDATED', (data) => {
       if (data.type === 'CREATE') setContests(prev => [data.contest, ...prev]);
@@ -33,7 +52,7 @@ export default function Dashboard() {
     });
 
     return () => {
-      socket.off('NOTICE_UPDATED');
+      socket.off('NOTICE_UPDATED', handleNoticeUpdate);
       socket.off('CONTEST_UPDATED');
     };
   }, []);
@@ -41,22 +60,8 @@ export default function Dashboard() {
   const fetchNotices = async () => {
     try {
       const res = await getNotices();
-      const profileStr = sessionStorage.getItem('student_profile');
-      let studentBatch = 'All';
-      if (profileStr) {
-        try {
-          const profile = JSON.parse(profileStr);
-          studentBatch = profile.batch || 'All';
-        } catch(e) {}
-      }
-
-      const filteredNotices = res.data.filter(n => {
-        if (!n.batch || n.batch.length === 0) return true; // Backward compatibility
-        if (Array.isArray(n.batch)) {
-          return n.batch.includes('All') || n.batch.includes(studentBatch);
-        }
-        return n.batch === 'All' || n.batch === studentBatch;
-      });
+      const studentBatch = getStudentBatchFromSession();
+      const filteredNotices = filterNoticesForStudent(res.data, studentBatch);
 
       if (filteredNotices.length > 0) {
         if (sessionStorage.getItem('hasSeenNoticePopup') !== 'true') {

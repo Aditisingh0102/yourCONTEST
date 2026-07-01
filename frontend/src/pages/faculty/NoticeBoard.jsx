@@ -15,13 +15,25 @@ export default function FacultyNoticeBoard() {
   useEffect(() => {
     fetchNotices();
 
-    socket.on('NOTICE_UPDATED', (data) => {
-      if (data.type === 'CREATE') setNotices(prev => [data.notice, ...prev]);
-      else if (data.type === 'UPDATE') setNotices(prev => prev.map(n => n._id === data.notice._id ? data.notice : n));
-      else if (data.type === 'DELETE') setNotices(prev => prev.filter(n => n._id !== data.id));
-    });
+    const handleNoticeUpdate = (data) => {
+      if (data.type === 'CREATE') {
+        setNotices(prev => [data.notice, ...prev]);
+        return;
+      }
 
-    return () => socket.off('NOTICE_UPDATED');
+      if (data.type === 'UPDATE') {
+        setNotices(prev => prev.map((n) => (n._id === data.notice._id ? data.notice : n)));
+        return;
+      }
+
+      if (data.type === 'DELETE') {
+        setNotices(prev => prev.filter((n) => n._id !== data.id));
+      }
+    };
+
+    socket.on('NOTICE_UPDATED', handleNoticeUpdate);
+
+    return () => socket.off('NOTICE_UPDATED', handleNoticeUpdate);
   }, []);
 
   const fetchNotices = async () => {
