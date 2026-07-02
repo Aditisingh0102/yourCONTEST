@@ -4,6 +4,36 @@
 
 ---
 
+## 🔖 [2026-07-02] — Course Detail Features & Refinements
+
+**Commit:** `pending`  
+**Branch:** `main`  
+**Author:** Antigravity AI  
+**Summary:** Major enhancements to the Course Detail page for both Students and Faculty. Added Quick Notes with reminders, Contests & Reports tabs, Student Quick Actions (Contests, Question Bank), and a comprehensive Course Analytics Modal for Faculty. 
+
+---
+
+### 1. `frontend/src/pages/student/CourseDetail.jsx`
+
+| Element | Change | Reason |
+|---------|--------|--------|
+| Contests Tab | Added "Contests & Reports" tab with Upcoming/Past sections | Centralized contest tracking |
+| Quick Notes | Added Quick Notes sidebar with reminder time | Let students save contextual notes |
+| Quick Actions | Added grid with "Upcoming Contests" and "Question Bank" | Improved UX & access to features |
+
+---
+
+### 2. `frontend/src/pages/faculty/CourseDetail.jsx`
+
+| Element | Change | Reason |
+|---------|--------|--------|
+| Contests Tab | Added "Contests & Reports" tab | Faculty tracking of scheduled/past contests |
+| Course Analytics | Added CourseAnalyticsModal and wired up Analytics buttons | Insights on student progress |
+| Quick Notes | Added Quick Notes sidebar with reminder time | Faculty contextual note-taking |
+| Quick Actions | Wired up "Submissions" and "Question Bank" buttons | Full quick action functionality |
+
+---
+
 ## 🔖 [2026-06-26] — Dark Mode Theme Toggle Fix
 
 **Commit:** `d023d20`  
