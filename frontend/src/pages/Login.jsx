@@ -11,7 +11,14 @@ export default function Login() {
   const handleLogin = (e) => {
     e.preventDefault();
 
+    const initializeLightTheme = () => {
+      localStorage.setItem('theme', 'light');
+      sessionStorage.setItem('theme', 'light');
+      document.documentElement.classList.remove('dark', 'warm');
+    };
+
     if (erpId === '23210101548@uudoon.in' || erpId === '2321010548@uudoon.in') {
+      initializeLightTheme();
       sessionStorage.setItem('student_profile', JSON.stringify({
         id: '23210101548',
         name: 'Aditi Singh',
@@ -30,6 +37,7 @@ export default function Login() {
       window.dispatchEvent(new Event('profile-updated'));
       navigate('/student/dashboard');
     } else if (erpId === '23210101763@uudoon.in') {
+      initializeLightTheme();
       sessionStorage.setItem('student_profile', JSON.stringify({
         id: '23210101763',
         name: 'Ambar Kumar',
@@ -48,6 +56,7 @@ export default function Login() {
       window.dispatchEvent(new Event('profile-updated'));
       navigate('/student/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
+      initializeLightTheme();
       sessionStorage.setItem('faculty_profile', JSON.stringify({
         name: 'Arun Kudiyal',
         avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Arun',

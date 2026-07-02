@@ -8,12 +8,12 @@ import { useState, useEffect } from 'react';
  */
 export function useTheme() {
   const [theme, setTheme] = useState(() => {
-    const saved = sessionStorage.getItem('theme');
+    const saved = localStorage.getItem('theme') || sessionStorage.getItem('theme');
     if (saved && ['light', 'dark', 'warm'].includes(saved)) {
       return saved;
     }
-    // Default to dark mode on first visit
-    return 'dark';
+    // Default to light mode on first visit
+    return 'light';
   });
 
   useEffect(() => {
@@ -29,6 +29,7 @@ export function useTheme() {
     }
     
     sessionStorage.setItem('theme', theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const cycleTheme = () => {
