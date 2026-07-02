@@ -77,7 +77,7 @@
       "title": "rahul ass1",
       "type": "Lab Exam",
       "status": "Upcoming",
-      "startTime": "2026-07-01, 22:30",
+      "startTime": "2026-07-02, 14:17",
       "endTime": "TBD",
       "duration": "20 mins",
       "registered": 0,
@@ -89,7 +89,7 @@
       "batch": [
         "Alpha 1"
       ],
-      "warningLimit": 3,
+      "warningLimit": 2,
       "windowSwitchGracePeriod": 0,
       "questionList": [
         {
