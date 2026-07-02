@@ -1,8 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
-import { X, Check, CheckCircle, XCircle, FileBarChart, Clock, RefreshCcw, AlertCircle } from 'lucide-react';
+import { X, Check, CheckCircle, XCircle, FileBarChart, Clock, RefreshCcw, AlertCircle, Trophy, Users } from 'lucide-react';
 import { deleteSubmission, updateSubmission } from '../../api';
+import Leaderboard from '../../components/Leaderboard';
 
 export default function AnalyticsModal({ contest, submissions, onClose, initialStudent = null }) {
+  const [activeTab, setActiveTab] = useState('submissions');
   const [selectedStudent, setSelectedStudent] = useState(initialStudent);
   const [resetConfirm, setResetConfirm] = useState(false);
   const [extendPrompt, setExtendPrompt] = useState({ show: false, minutes: '' });
@@ -82,10 +84,10 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
 
   return (
     <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-5xl max-h-[90vh] flex flex-col overflow-hidden border dark:border-slate-700/50">
         
         {/* Modal Header */}
-        <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
+        <div className="px-6 py-4 border-b border-gray-100 dark:border-slate-700/50 flex items-center justify-between bg-white dark:bg-slate-900 shrink-0">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600">
               <FileBarChart className="w-5 h-5" />
@@ -99,7 +101,7 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
           </div>
           <button 
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -108,14 +110,30 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
         {/* Modal Body */}
         <div className="flex-1 flex overflow-hidden">
           
-          {/* Left Panel: Student List */}
-          <div className={`w-full md:w-1/3 border-r border-gray-100 bg-gray-50 flex flex-col overflow-y-auto ${selectedStudent ? 'hidden md:flex' : 'flex'}`}>
-            {uniqueSubmissions.length === 0 ? (
-              <div className="p-8 text-center text-gray-500 text-sm">
-                No submissions found for this contest.
-              </div>
-            ) : (
-              <div className="divide-y divide-gray-100">
+          {/* Left Panel: Student List or Leaderboard */}
+          <div className={`w-full ${activeTab === 'leaderboard' ? 'md:w-full' : 'md:w-1/3'} border-r border-gray-100 dark:border-slate-700/50 bg-gray-50 dark:bg-slate-800/30 flex flex-col overflow-hidden ${selectedStudent && activeTab === 'submissions' ? 'hidden md:flex' : 'flex'}`}>
+            <div className="flex bg-gray-100 dark:bg-slate-800 p-1 m-4 rounded-xl shrink-0 border dark:border-slate-700/50">
+              <button 
+                onClick={() => { setActiveTab('submissions'); setSelectedStudent(null); }}
+                className={`flex-1 py-1.5 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'submissions' ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+              >
+                <Users className="w-4 h-4" /> Submissions
+              </button>
+              <button 
+                onClick={() => { setActiveTab('leaderboard'); setSelectedStudent(null); }}
+                className={`flex-1 py-1.5 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 ${activeTab === 'leaderboard' ? 'bg-white dark:bg-slate-700 shadow-sm text-yellow-600 dark:text-yellow-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+              >
+                <Trophy className="w-4 h-4" /> Leaderboard
+              </button>
+            </div>
+
+            {activeTab === 'submissions' ? (
+              uniqueSubmissions.length === 0 ? (
+                <div className="p-8 text-center text-gray-500 text-sm overflow-y-auto">
+                  No submissions found for this contest.
+                </div>
+              ) : (
+                <div className="divide-y divide-gray-100 dark:divide-slate-700/50 overflow-y-auto flex-1">
                 {uniqueSubmissions.map((sub, idx) => {
                   
                   // Calculate dynamic score based on correct options
@@ -134,13 +152,13 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
                     <button
                       key={sub._id || idx}
                       onClick={() => setSelectedStudent({...sub, calculatedScore})}
-                      className={`w-full text-left p-4 hover:bg-white transition-colors focus:outline-none ${isSelected ? 'bg-white border-l-4 border-blue-600' : 'border-l-4 border-transparent'}`}
+                      className={`w-full text-left p-4 hover:bg-white dark:hover:bg-slate-700/50 transition-colors focus:outline-none ${isSelected ? 'bg-white dark:bg-slate-700 border-l-4 border-blue-600 dark:border-blue-400' : 'border-l-4 border-transparent'}`}
                     >
                       <div className="flex justify-between items-start mb-1">
-                        <span className="font-semibold text-gray-900 text-sm">{sub.studentName}</span>
-                        <span className="text-[13px] font-semibold text-blue-600">{calculatedScore} <span className="text-gray-400 text-[11px]">/ {totalMarks}</span></span>
+                        <span className="font-semibold text-gray-900 dark:text-white text-sm">{sub.studentName}</span>
+                        <span className="text-[13px] font-semibold text-blue-600 dark:text-blue-400">{calculatedScore} <span className="text-gray-400 dark:text-gray-500 text-[11px]">/ {totalMarks}</span></span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-[12px] text-gray-500">
+                      <div className="flex items-center gap-1.5 text-[12px] text-gray-500 dark:text-gray-400">
                         <Clock className="w-3.5 h-3.5" />
                         {new Date(sub.submittedAt).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                       </div>
@@ -148,16 +166,21 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
                   );
                 })}
               </div>
+              )
+            ) : (
+              <div className="flex-1 overflow-hidden p-4">
+                 <Leaderboard contestId={contest?._id || contest?.id} isFaculty={true} />
+              </div>
             )}
           </div>
 
           {/* Right Panel: Detailed View */}
-          <div className={`w-full md:w-2/3 bg-white flex flex-col overflow-y-auto ${!selectedStudent ? 'hidden md:flex' : 'flex'}`}>
+          <div className={`w-full md:w-2/3 bg-white dark:bg-slate-900 flex flex-col overflow-y-auto ${!selectedStudent || activeTab === 'leaderboard' ? 'hidden' : 'flex md:flex'}`}>
             {!selectedStudent ? (
               <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-                <FileBarChart className="w-12 h-12 text-gray-200 mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Select a Submission</h3>
-                <p className="text-sm text-gray-500 max-w-sm">Choose a student from the list to view their detailed question-by-question analysis.</p>
+                <FileBarChart className="w-12 h-12 text-gray-200 dark:text-slate-700 mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Select a Submission</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm">Choose a student from the list to view their detailed question-by-question analysis.</p>
               </div>
             ) : (
               <div className="p-6 space-y-6">
@@ -170,17 +193,17 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
                   </button>
                 </div>
                 
-                <div className="flex items-start justify-between mb-2 pb-4 border-b border-gray-100">
+                <div className="flex items-start justify-between mb-2 pb-4 border-b border-gray-100 dark:border-slate-700/50">
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">{selectedStudent.studentName}'s Report</h3>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600 font-medium mb-3">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">{selectedStudent.studentName}'s Report</h3>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-gray-600 dark:text-gray-400 font-medium mb-3">
                       {selectedStudent.studentId && (
-                        <span className="bg-gray-100 px-2 py-1 rounded border border-gray-200 text-gray-700">ID: {selectedStudent.studentId}</span>
+                        <span className="bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300">ID: {selectedStudent.studentId}</span>
                       )}
                       {selectedStudent.batch && (
-                        <span className="bg-blue-50 text-blue-700 px-2 py-1 rounded border border-blue-100">Batch: {selectedStudent.batch}</span>
+                        <span className="bg-blue-50 dark:bg-blue-500/10 text-blue-700 dark:text-blue-400 px-2 py-1 rounded border border-blue-100 dark:border-blue-500/20">Batch: {selectedStudent.batch}</span>
                       )}
-                      <span className="flex items-center gap-1.5 text-gray-500">
+                      <span className="flex items-center gap-1.5 text-gray-500 dark:text-gray-500">
                         <Clock className="w-3.5 h-3.5" />
                         Submitted: {new Date(selectedStudent.submittedAt).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                       </span>
@@ -188,7 +211,7 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
                     <div className="flex items-center gap-2 mt-2">
                       <button 
                         onClick={() => setExtendPrompt({ show: true, minutes: '' })}
-                        className="px-3 py-1.5 bg-blue-50 text-blue-600 border border-blue-200 hover:bg-blue-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                        className="px-3 py-1.5 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 hover:bg-blue-100 dark:hover:bg-blue-500/20 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
                         title="Grant extra time and reopen this submission"
                       >
                         <Clock className="w-3.5 h-3.5" />
@@ -196,7 +219,7 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
                       </button>
                       <button 
                         onClick={() => setResetConfirm(true)}
-                        className="px-3 py-1.5 bg-orange-50 text-orange-600 border border-orange-200 hover:bg-orange-100 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
+                        className="px-3 py-1.5 bg-orange-50 dark:bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-500/20 hover:bg-orange-100 dark:hover:bg-orange-500/20 rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm"
                         title="Delete this submission so the student can re-take the contest"
                       >
                         <RefreshCcw className="w-3.5 h-3.5" />
@@ -219,10 +242,10 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
                     const isAttempted = studentAnswer !== undefined && studentAnswer !== '';
 
                     return (
-                      <div key={prob.id} className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden">
-                        <div className="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+                      <div key={prob.id} className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl shadow-sm overflow-hidden">
+                        <div className="bg-gray-50 dark:bg-slate-800/50 px-5 py-3 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <span className="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-[12px] font-semibold shrink-0">
+                            <span className="w-6 h-6 rounded bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 flex items-center justify-center text-[12px] font-semibold shrink-0">
                               Q{index + 1}
                             </span>
                             <span className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 bg-white border border-gray-200 px-2 py-0.5 rounded">

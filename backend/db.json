@@ -2,6 +2,78 @@
   "notices": [],
   "contests": [
     {
+      "title": "dfsg",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-07-02, 14:03",
+      "endTime": "TBD",
+      "duration": "2 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "questionList": [
+        {
+          "id": 1782981111170,
+          "type": "MCQ",
+          "question": "fhgtnhxg",
+          "options": [
+            "cs",
+            "ds",
+            "vsdxcv",
+            "dsv"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782981092321",
+      "createdAt": "2026-07-02T08:31:32.321Z"
+    },
+    {
+      "title": "Real-Time Leaderboard Test",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-07-02, 13:45",
+      "endTime": "TBD",
+      "duration": "2 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "questionList": [
+        {
+          "id": 1782979922078,
+          "type": "MCQ",
+          "question": "vfvv",
+          "options": [
+            "c",
+            "fc",
+            "dc",
+            "cdfv"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1782979904719",
+      "createdAt": "2026-07-02T08:11:44.719Z"
+    },
+    {
       "title": "rahul ass1",
       "type": "Lab Exam",
       "status": "Upcoming",
@@ -571,6 +643,60 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1782981092321",
+      "contestName": "dfsg",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782981111170": 0
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-02T08:33:07.602Z",
+      "submittedAt": "2026-07-02T08:33:14.769Z",
+      "_id": "1782981187609"
+    },
+    {
+      "contestId": "1782979904719",
+      "contestName": "Real-Time Leaderboard Test",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782979922078": 0
+      },
+      "score": 1,
+      "status": "submitted",
+      "submittedAt": "2026-07-02T08:17:00.403Z",
+      "_id": "1782980220428"
+    },
+    {
+      "contestId": "1782979904719",
+      "contestName": "Real-Time Leaderboard Test",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782979922078": 0
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-02T08:15:11.349Z",
+      "submittedAt": "2026-07-02T08:15:19.598Z",
+      "_id": "1782980111358"
+    },
+    {
+      "contestId": "contest-123",
+      "studentId": "STU001",
+      "studentName": "Test Student",
+      "batch": "Alpha 1",
+      "answers": {
+        "q1": "1"
+      },
+      "_id": "1782980039232"
+    },
     {
       "contestId": "1782925098596",
       "contestName": "rahul ass1",

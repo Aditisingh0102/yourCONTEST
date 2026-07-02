@@ -238,10 +238,10 @@ export default function ContestManager() {
                 placeholder="Search contests..." 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-full md:w-64"
+                className="pl-9 pr-4 py-2 border border-gray-200 dark:border-slate-700 dark:bg-slate-800 dark:text-white rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 w-full md:w-64"
               />
             </div>
-            <button className="p-2 border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50 transition-colors">
+            <button className="p-2 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors">
               <Filter className="w-4 h-4" />
             </button>
           </div>
@@ -302,45 +302,45 @@ export default function ContestManager() {
                           <div className="flex gap-2 mr-2">
                             <button 
                               onClick={() => setExtendModal({ show: true, contestId: contest._id || contest.id, minutes: 30 })}
-                              className="px-3 py-1.5 text-[11px] font-semibold bg-green-50 text-green-600 border border-green-200 hover:bg-green-100 rounded-lg transition-colors whitespace-nowrap"
+                              className="px-3 py-1.5 text-[11px] font-semibold bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-500/20 hover:bg-green-100 dark:hover:bg-green-500/20 rounded-lg transition-colors whitespace-nowrap"
                               title="Extend Time"
                             >
                               + Extend Time
                             </button>
                             <button 
                               onClick={() => setEndTestConfirmModal({ show: true, contestId: contest._id || contest.id })}
-                              className="px-3 py-1.5 text-[11px] font-semibold bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 rounded-lg transition-colors whitespace-nowrap"
+                              className="px-3 py-1.5 text-[11px] font-semibold bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-500/20 hover:bg-red-100 dark:hover:bg-red-500/20 rounded-lg transition-colors whitespace-nowrap"
                               title="End Test"
                             >
                               End Test
                             </button>
                           </div>
                         )}
-                        <div className="flex items-center bg-gray-50/80 border border-gray-200/80 rounded-xl p-1 shadow-sm hover:shadow-md hover:bg-gray-50 transition-all duration-300">
+                        <div className="flex items-center bg-gray-50/80 dark:bg-slate-800/50 border border-gray-200/80 dark:border-slate-700/50 rounded-xl p-1 shadow-sm hover:shadow-md hover:bg-gray-50 dark:hover:bg-slate-800/80 transition-all duration-300">
                           <button 
                             onClick={() => navigate(`/faculty/edit-contest/${contest._id || contest.id}`)}
-                            className="p-2 text-gray-500 hover:text-blue-600 hover:bg-white hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-white dark:hover:bg-slate-700/50 hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
                             title="Edit Details">
                             <Edit3 className="w-4 h-4 transition-transform group-hover:scale-110" />
                           </button>
-                          <div className="w-px h-4 bg-gray-200 mx-0.5"></div>
+                          <div className="w-px h-4 bg-gray-200 dark:bg-slate-700 mx-0.5"></div>
                           <button 
                             onClick={() => navigate(`/faculty/manage-contests/${contest._id || contest.id}/questions`)}
-                            className="p-2 text-gray-500 hover:text-indigo-600 hover:bg-white hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-white dark:hover:bg-slate-700/50 hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
                             title="Manage Questions">
                             <FileText className="w-4 h-4 transition-transform group-hover:scale-110" />
                           </button>
-                          <div className="w-px h-4 bg-gray-200 mx-0.5"></div>
+                          <div className="w-px h-4 bg-gray-200 dark:bg-slate-700 mx-0.5"></div>
                           <button 
                             onClick={() => setAnalyticsModal({ show: true, contest, initialStudent: null })}
-                            className="p-2 text-gray-500 hover:text-green-600 hover:bg-white hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-white dark:hover:bg-slate-700/50 hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
                             title="View Analytics">
                             <BarChart2 className="w-4 h-4 transition-transform group-hover:scale-110" />
                           </button>
-                          <div className="w-px h-4 bg-gray-200 mx-0.5"></div>
+                          <div className="w-px h-4 bg-gray-200 dark:bg-slate-700 mx-0.5"></div>
                           <button 
                             onClick={() => handleDelete(contest._id || contest.id)}
-                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
+                            className="p-2 text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:shadow-sm rounded-lg transition-all duration-200 relative group" 
                             title="Delete Contest">
                             <Trash2 className="w-4 h-4 transition-transform group-hover:scale-110" />
                           </button>

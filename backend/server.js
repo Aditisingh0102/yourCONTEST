@@ -125,7 +125,23 @@ app.get('/api/submissions', (req, res) => {
 });
 
 app.post('/api/submissions', (req, res) => {
-  const newSubmission = { ...req.body, _id: Date.now().toString() };
+  let newSubmission = { ...req.body, _id: Date.now().toString(), submittedAt: Date.now() };
+
+  if (newSubmission.score === undefined && newSubmission.answers) {
+    const contest = contests.find(c => c._id === newSubmission.contestId || c.id === newSubmission.contestId);
+    if (contest && contest.questionList) {
+      let calcScore = 0;
+      contest.questionList.forEach(q => {
+        if (newSubmission.answers[q.id] !== undefined && newSubmission.answers[q.id] !== "") {
+          if (q.type === 'MCQ' && parseInt(newSubmission.answers[q.id], 10) === q.correctOption) {
+            calcScore += (q.marks || 1);
+          }
+        }
+      });
+      newSubmission.score = calcScore;
+    }
+  }
+
   submissions = [newSubmission, ...submissions];
   saveDB();
   io.emit('SUBMISSION_ADDED', newSubmission);

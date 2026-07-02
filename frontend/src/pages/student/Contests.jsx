@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, ChevronLeft, ChevronRight, SlidersHorizontal, AlertCircle, X } from 'lucide-react';
+import { Trophy, ChevronLeft, ChevronRight, SlidersHorizontal, AlertCircle, X, BarChart2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getContests } from '../../api';
 import { socket } from '../../socket';
+import Leaderboard from '../../components/Leaderboard';
 
 export default function Contests() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('upcoming');
   const [allContests, setAllContests] = useState([]);
   const [toastMessage, setToastMessage] = useState('');
+  const [leaderboardModal, setLeaderboardModal] = useState({ show: false, contestId: null, batch: null });
 
   const fetchContests = async () => {
     try {
@@ -144,17 +146,32 @@ export default function Contests() {
                      )}
                 </div>
 
-                <button 
-                  className={`px-6 py-1.5 rounded-lg text-[13px] font-semibold border transition-colors ${
-                    contest.status === 'Live' 
-                      ? 'bg-blue-600 border-blue-600 text-white group-hover:bg-blue-700 shadow-sm' 
-                      : contest.status === 'Upcoming'
-                      ? 'bg-white border-gray-300 text-gray-700 group-hover:border-gray-400 group-hover:bg-gray-50'
-                      : 'bg-white border-gray-300 text-gray-700 group-hover:border-gray-400 group-hover:bg-gray-50'
-                  }`}
-                >
-                  {contest.status === 'Live' ? 'Start Test' : contest.status === 'Upcoming' ? 'View Details' : 'View Results'}
-                </button>
+                <div className="flex gap-2">
+                  {contest.status === 'Past' && (
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const studentBatch = JSON.parse(sessionStorage.getItem('student_profile'))?.batch || 'Alpha 1';
+                        setLeaderboardModal({ show: true, contestId: contest._id || contest.id, batch: studentBatch });
+                      }}
+                      className="px-4 py-1.5 rounded-lg text-[13px] font-semibold border bg-white border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 transition-colors shadow-sm flex items-center gap-1.5"
+                    >
+                      <BarChart2 className="w-3.5 h-3.5" />
+                      Leaderboard
+                    </button>
+                  )}
+                  <button 
+                    className={`px-6 py-1.5 rounded-lg text-[13px] font-semibold border transition-colors ${
+                      contest.status === 'Live' 
+                        ? 'bg-blue-600 border-blue-600 text-white group-hover:bg-blue-700 shadow-sm' 
+                        : contest.status === 'Upcoming'
+                        ? 'bg-white border-gray-300 text-gray-700 group-hover:border-gray-400 group-hover:bg-gray-50'
+                        : 'bg-white border-gray-300 text-gray-700 group-hover:border-gray-400 group-hover:bg-gray-50'
+                    }`}
+                  >
+                    {contest.status === 'Live' ? 'Start Test' : contest.status === 'Upcoming' ? 'View Details' : 'View Results'}
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -187,6 +204,30 @@ export default function Contests() {
         </div>
 
       </div>
+
+      {/* Leaderboard Modal */}
+      {leaderboardModal.show && (
+        <div className="fixed inset-0 bg-[#0f172a]/90 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+          <div className="w-full max-w-4xl bg-[#1e293b] rounded-2xl shadow-2xl flex flex-col max-h-[90vh] border border-slate-700/50">
+            <div className="p-4 border-b border-slate-700/50 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                <Trophy className="w-6 h-6 text-yellow-500" />
+                Contest Leaderboard
+              </h3>
+              <button 
+                onClick={() => setLeaderboardModal({ show: false, contestId: null, batch: null })}
+                className="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden p-6 dark">
+              <Leaderboard contestId={leaderboardModal.contestId} batch={leaderboardModal.batch} />
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

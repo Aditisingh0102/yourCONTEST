@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
 import { getContests, getSubmissions, updateSubmission, submitContestAnswers } from '../../api';
 import { socket } from '../../socket';
+import Leaderboard from '../../components/Leaderboard';
 
 export default function Arena() {
   const { id } = useParams();
@@ -394,24 +395,35 @@ export default function Arena() {
   };
 
   if (submittedResult) {
+    const studentProfile = JSON.parse(sessionStorage.getItem('student_profile') || '{}');
     return (
-      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50 p-6">
-        <div className="bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700/50 text-center max-w-md w-full mx-4">
-          <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-green-500" />
-          </div>
-          <h2 className="text-2xl font-semibold text-white mb-3">Assessment Submitted</h2>
-          <p className="text-slate-400 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
+      <div className="fixed inset-0 bg-[#0f172a] flex flex-col font-sans z-50 overflow-y-auto p-6 md:p-10">
+        <div className="max-w-6xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-10">
           
-          <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 mb-8">
-             <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Score</p>
-             <p className="text-4xl font-semibold text-white">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
-             <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
+          {/* Left Panel: Personal Result */}
+          <div className="bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700/50 text-center w-full">
+            <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle className="w-10 h-10 text-green-500" />
+            </div>
+            <h2 className="text-2xl font-semibold text-white mb-3">Assessment Submitted</h2>
+            <p className="text-slate-400 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
+            
+            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 mb-8">
+               <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Score</p>
+               <p className="text-4xl font-semibold text-white">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
+               <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
+            </div>
+
+            <button onClick={() => navigate('/student/dashboard')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
+               Return to Dashboard
+            </button>
           </div>
 
-          <button onClick={() => navigate('/student/dashboard')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
-             Return to Dashboard
-          </button>
+          {/* Right Panel: Live Leaderboard */}
+          <div className="h-[600px] flex flex-col bg-[#1e293b] rounded-3xl shadow-2xl border border-slate-700/50 overflow-hidden dark">
+            <Leaderboard contestId={contest?._id || contest?.id} batch={studentProfile.batch} />
+          </div>
+
         </div>
       </div>
     );
