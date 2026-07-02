@@ -142,7 +142,7 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
           </button>
 
           {isNotificationsOpen && (
-            <div className="absolute right-0 mt-2 w-84 max-w-[90vw] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-xl z-50 overflow-hidden">
+            <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[90vw] rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-slate-900 shadow-xl z-50 overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                 <div>
                   <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notifications</p>
