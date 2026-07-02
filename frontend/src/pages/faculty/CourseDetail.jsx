@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Video, FileText, PlayCircle, ChevronLeft, FileCode, UploadCloud, Plus, Trash2, ExternalLink, Image as ImageIcon, X, Users } from 'lucide-react';
+import { BookOpen, Video, FileText, PlayCircle, ChevronLeft, FileCode, UploadCloud, Plus, Trash2, ExternalLink, Image as ImageIcon, X, Users, CheckSquare, Save, Edit3, PlusCircle, Library, FileCheck, BarChart2, Trophy, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -85,7 +85,48 @@ export default function CourseDetail() {
   const [assignmentData, setAssignmentData] = useState({ title: '', type: 'Project', format: 'GitHub Repo Submission', file: null, deadline: '' });
   const [assignmentError, setAssignmentError] = useState('');
   
+  const [upcomingContests] = useState([
+    { id: '101', title: 'Mid-term Mock Test', duration: '2 hours', type: 'Mock Test', status: 'Upcoming' },
+  ]);
+
+  const [pastContests] = useState([
+    { id: '100', title: 'Weekly Assessment 1', duration: '1 hour', type: 'Assessment', status: 'Completed', averageScore: '82%' },
+  ]);
+
+  const [quickNotes, setQuickNotes] = useState(() => {
+    const saved = sessionStorage.getItem(`faculty_course_${id}_quicknotes`);
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [newQuickNote, setNewQuickNote] = useState('');
+  const [newQuickNoteTime, setNewQuickNoteTime] = useState('');
+  const [editingQuickNoteId, setEditingQuickNoteId] = useState(null);
+  const [editingQuickNoteText, setEditingQuickNoteText] = useState('');
+  const [editingQuickNoteTime, setEditingQuickNoteTime] = useState('');
+
+  useEffect(() => {
+    sessionStorage.setItem(`faculty_course_${id}_quicknotes`, JSON.stringify(quickNotes));
+  }, [quickNotes, id]);
+
+  const addQuickNote = (e) => {
+    e.preventDefault();
+    if (!newQuickNote.trim()) return;
+    setQuickNotes([{ id: Date.now(), text: newQuickNote, reminderTime: newQuickNoteTime }, ...quickNotes]);
+    setNewQuickNote('');
+    setNewQuickNoteTime('');
+  };
+
+  const deleteQuickNote = (id) => {
+    setQuickNotes(quickNotes.filter(n => n.id !== id));
+  };
+
+  const saveQuickEdit = (id) => {
+    if (!editingQuickNoteText.trim()) return;
+    setQuickNotes(quickNotes.map(n => n.id === id ? { ...n, text: editingQuickNoteText, reminderTime: editingQuickNoteTime } : n));
+    setEditingQuickNoteId(null);
+  };
+  
   const [showSubmissionsModal, setShowSubmissionsModal] = useState(false);
+  const [showCourseAnalytics, setShowCourseAnalytics] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
   const mockSubmissions = [
@@ -341,6 +382,15 @@ export default function CourseDetail() {
                   <span className="flex items-center gap-2"><FileCode className="w-4 h-4" /> Assignments</span>
                   {activeTab === 'assignments' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></div>}
                 </button>
+                <button 
+                  onClick={() => setActiveTab('contests')}
+                  className={`pb-4 text-[15px] font-semibold transition-all whitespace-nowrap relative ${
+                    activeTab === 'contests' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
+                  }`}
+                >
+                  <span className="flex items-center gap-2"><Trophy className="w-4 h-4" /> Contests & Reports</span>
+                  {activeTab === 'contests' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></div>}
+                </button>
               </div>
 
               {/* Tab Content */}
@@ -410,7 +460,7 @@ export default function CourseDetail() {
                     <Plus className="w-4 h-4" /> Upload Note/PDF
                   </button>
                 </div>
-              ) : (
+              ) : activeTab === 'assignments' ? (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold text-gray-800">Course Assignments</h3>
@@ -463,14 +513,109 @@ export default function CourseDetail() {
                     </div>
                   ))}
                 </div>
+              ) : null}
+
+              {activeTab === 'contests' && (
+                <div className="space-y-6">
+                  {/* Upcoming Contests */}
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2"><AlertCircle className="w-4 h-4 text-orange-500" /> Scheduled Contests</h3>
+                    {upcomingContests.length === 0 ? (
+                      <p className="text-sm text-gray-500 py-4 text-center">No upcoming contests scheduled.</p>
+                    ) : (
+                      <div className="flex flex-col gap-[1px] bg-gray-200 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                        {upcomingContests.map((contest) => (
+                          <div key={contest.id} className="bg-white p-5 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-gray-900 mb-1">{contest.title}</h4>
+                              <p className="text-[13px] text-gray-500">{contest.type} • {contest.duration}</p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-orange-50 text-orange-600 border border-orange-100">
+                                {contest.status}
+                              </span>
+                              <button onClick={() => navigate(`/faculty/contest/${contest.id}`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">
+                                Manage
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Past Contests & Reports */}
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-4 mt-6 flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Past Contests & Reports</h3>
+                    {pastContests.length === 0 ? (
+                      <p className="text-sm text-gray-500 py-4 text-center">No past contests.</p>
+                    ) : (
+                      <div className="flex flex-col gap-[1px] bg-gray-200 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                        {pastContests.map((contest) => (
+                          <div key={contest.id} className="bg-white p-5 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-gray-900 mb-1">{contest.title}</h4>
+                              <p className="text-[13px] text-gray-500">{contest.type} • Avg Score: <span className="font-semibold text-gray-700">{contest.averageScore}</span></p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                Completed
+                              </span>
+                              <button onClick={() => navigate(`/faculty/contest/${contest.id}/report`)} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+                                View Report
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
 
            </div>
         </div>
 
         {/* Sidebar (Right) - Quick Stats/Actions */}
-        <div className="lg:w-1/3">
-           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sticky top-6">
+        <div className="lg:w-1/3 space-y-6">
+           {/* Quick Actions (Contest Section) */}
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+             <h3 className="text-[16px] font-semibold text-gray-900 mb-5">
+               Quick Actions
+             </h3>
+             <div className="grid grid-cols-2 grid-rows-2 gap-[1px] bg-gray-100 border border-gray-100 rounded-xl overflow-hidden">
+               <button 
+                 onClick={() => navigate('/faculty/create-contest')}
+                 className="flex flex-col items-center justify-center py-4 bg-[#c9d6ef] hover:opacity-90 transition-opacity"
+               >
+                 <PlusCircle className="w-5 h-5 text-[#c06518] mb-2" strokeWidth={2.5} />
+                 <span className="text-[12px] font-semibold text-[#c06518]">New Contest</span>
+               </button>
+               <button 
+                 onClick={() => navigate('/faculty/question-bank')}
+                 className="flex flex-col items-center justify-center py-4 bg-[#d6c8ed] hover:opacity-90 transition-opacity"
+               >
+                 <Library className="w-5 h-5 text-purple-600 mb-2" strokeWidth={2.5} />
+                 <span className="text-[12px] font-semibold text-purple-600">Question Bank</span>
+               </button>
+               <button 
+                 onClick={() => setActiveTab('assignments')}
+                 className="flex flex-col items-center justify-center py-4 bg-[#f0cdb6] hover:opacity-90 transition-opacity"
+               >
+                 <FileCheck className="w-5 h-5 text-[#d94d1a] mb-2" strokeWidth={2.5} />
+                 <span className="text-[12px] font-semibold text-[#d94d1a]">Submissions</span>
+               </button>
+                <button 
+                  onClick={() => setShowCourseAnalytics(true)}
+                  className="flex flex-col items-center justify-center py-4 bg-[#b7dfbc] hover:opacity-90 transition-opacity"
+                >
+                  <BarChart2 className="w-5 h-5 text-[#228b22] mb-2" strokeWidth={2.5} />
+                  <span className="text-[12px] font-semibold text-[#228b22]">Analytics</span>
+                </button>
+             </div>
+           </div>
+
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
              <h3 className="text-[16px] font-semibold text-gray-900 mb-5 flex items-center gap-2">
                <Users className="w-5 h-5 text-green-600" /> Class Insights
              </h3>
@@ -486,10 +631,106 @@ export default function CourseDetail() {
                   <p className="text-2xl font-semibold text-gray-900">82%</p>
                 </div>
                 
-                <button className="w-full mt-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-md">
+                <button 
+                  onClick={() => setShowCourseAnalytics(true)}
+                  className="w-full mt-4 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-md"
+                >
                   View Full Analytics
                 </button>
              </div>
+           </div>
+
+           {/* Quick Notes */}
+           <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col h-[400px]">
+             <div className="flex justify-between items-center mb-4">
+               <h3 className="text-[16px] font-semibold text-gray-900 flex items-center gap-2"><CheckSquare className="w-5 h-5 text-green-600" /> Quick Notes</h3>
+             </div>
+
+             <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1 scrollbar-thin scrollbar-thumb-gray-200">
+               {quickNotes.length === 0 ? (
+                 <p className="text-sm text-gray-400 text-center py-4">No notes added yet.</p>
+               ) : (
+                 quickNotes.map(note => (
+                   <div key={note.id} className="group bg-gray-50 border border-gray-100 rounded-lg p-3 relative hover:border-gray-200 transition-colors">
+                     {editingQuickNoteId === note.id ? (
+                       <div className="flex flex-col gap-2">
+                         <input
+                           type="text"
+                           value={editingQuickNoteText}
+                           onChange={(e) => setEditingQuickNoteText(e.target.value)}
+                           className="w-full bg-white border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-green-500"
+                           autoFocus
+                         />
+                         <div className="flex items-center gap-2">
+                           <input
+                             type="datetime-local"
+                             value={editingQuickNoteTime}
+                             onChange={(e) => setEditingQuickNoteTime(e.target.value)}
+                             className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-xs text-gray-500 focus:outline-none focus:border-green-500"
+                           />
+                           <button onClick={() => saveQuickEdit(note.id)} className="text-green-600 hover:text-green-700 bg-green-50 px-2 py-1 rounded">
+                             <Save className="w-4 h-4" />
+                           </button>
+                           <button onClick={() => setEditingQuickNoteId(null)} className="text-gray-400 hover:text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                             <X className="w-4 h-4" />
+                           </button>
+                         </div>
+                       </div>
+                     ) : (
+                       <div className="flex justify-between items-start gap-2">
+                         <div className="flex-1">
+                           <p className="text-sm text-gray-700 leading-snug break-words mb-1.5">{note.text}</p>
+                           {note.reminderTime && (
+                             <p className="text-[10px] font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full inline-block border border-green-200">
+                               Reminder: {new Date(note.reminderTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                             </p>
+                           )}
+                         </div>
+                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0">
+                           <button
+                             onClick={() => { setEditingQuickNoteId(note.id); setEditingQuickNoteText(note.text); setEditingQuickNoteTime(note.reminderTime || ''); }}
+                             className="p-1 text-gray-400 hover:text-blue-600 rounded"
+                           >
+                             <Edit3 className="w-3.5 h-3.5" />
+                           </button>
+                           <button
+                             onClick={() => deleteQuickNote(note.id)}
+                             className="p-1 text-gray-400 hover:text-red-600 rounded"
+                           >
+                             <Trash2 className="w-3.5 h-3.5" />
+                           </button>
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 ))
+               )}
+             </div>
+
+             <form onSubmit={addQuickNote} className="flex flex-col gap-2 mt-auto">
+               <input
+                 type="text"
+                 value={newQuickNote}
+                 onChange={(e) => setNewQuickNote(e.target.value)}
+                 placeholder="Type a new note..."
+                 className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-green-500 transition-colors"
+               />
+               <div className="flex gap-2">
+                 <input
+                   type="datetime-local"
+                   value={newQuickNoteTime}
+                   onChange={(e) => setNewQuickNoteTime(e.target.value)}
+                   className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-2 text-xs focus:outline-none focus:bg-white focus:border-green-500 text-gray-500"
+                 />
+                 <button
+                   type="submit"
+                   className="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg transition-colors flex items-center justify-center font-semibold"
+                   disabled={!newQuickNote.trim()}
+                 >
+                   <Plus className="w-4 h-4" />
+                 </button>
+               </div>
+             </form>
            </div>
         </div>
 
@@ -743,6 +984,93 @@ export default function CourseDetail() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Course Analytics Modal */}
+      {showCourseAnalytics && (
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center">
+                  <BarChart2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 leading-tight">Course Analytics</h3>
+                  <p className="text-sm text-gray-500 font-medium">{course.title}</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowCourseAnalytics(false)}
+                className="p-2 rounded-full hover:bg-gray-100 text-gray-400 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 overflow-y-auto flex-1 bg-gray-50/50">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-white border border-gray-100 p-5 rounded-xl shadow-sm">
+                  <p className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Total Enrolled</p>
+                  <p className="text-2xl font-bold text-gray-900">124 Students</p>
+                </div>
+                <div className="bg-white border border-gray-100 p-5 rounded-xl shadow-sm">
+                  <p className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Avg Completion</p>
+                  <p className="text-2xl font-bold text-blue-600">68%</p>
+                </div>
+                <div className="bg-white border border-gray-100 p-5 rounded-xl shadow-sm">
+                  <p className="text-[12px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Avg Score</p>
+                  <p className="text-2xl font-bold text-green-600">82%</p>
+                </div>
+              </div>
+              
+              <div className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-sm">
+                <div className="px-5 py-4 border-b border-gray-100 bg-white">
+                  <h4 className="font-semibold text-gray-800">Student Progress</h4>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-gray-50 text-gray-500 font-semibold border-b border-gray-100">
+                      <tr>
+                        <th className="px-5 py-3">Student Name</th>
+                        <th className="px-5 py-3">Roll No</th>
+                        <th className="px-5 py-3 text-center">Lectures Watched</th>
+                        <th className="px-5 py-3 text-center">Assignments</th>
+                        <th className="px-5 py-3 text-center">Avg Score</th>
+                        <th className="px-5 py-3 text-right">Progress</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {[
+                        { name: 'Aditi Singh', roll: '2023CSE1042', lec: '6/6', asgn: '2/2', score: '92%', prog: 100 },
+                        { name: 'Ambar', roll: '2023CSE1043', lec: '4/6', asgn: '1/2', score: '88%', prog: 66 },
+                        { name: 'Rahul Sharma', roll: '2023CSE1045', lec: '5/6', asgn: '2/2', score: '76%', prog: 85 },
+                        { name: 'Sneha Gupta', roll: '2023CSE1046', lec: '2/6', asgn: '0/2', score: '-', prog: 25 },
+                        { name: 'Vikram Patel', roll: '2023CSE1050', lec: '6/6', asgn: '2/2', score: '95%', prog: 100 },
+                      ].map((s, i) => (
+                        <tr key={i} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-5 py-3 font-medium text-gray-900">{s.name}</td>
+                          <td className="px-5 py-3 text-gray-500">{s.roll}</td>
+                          <td className="px-5 py-3 text-center text-gray-700">{s.lec}</td>
+                          <td className="px-5 py-3 text-center text-gray-700">{s.asgn}</td>
+                          <td className="px-5 py-3 text-center font-medium text-gray-900">{s.score}</td>
+                          <td className="px-5 py-3">
+                            <div className="flex items-center justify-end gap-3">
+                              <span className="font-semibold text-gray-700 w-8 text-right">{s.prog}%</span>
+                              <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div className={`h-full rounded-full ${s.prog > 80 ? 'bg-green-500' : s.prog > 50 ? 'bg-blue-500' : 'bg-orange-500'}`} style={{ width: `${s.prog}%` }}></div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>

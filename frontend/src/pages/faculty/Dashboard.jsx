@@ -19,15 +19,22 @@ export default function Dashboard() {
   const [notes, setNotes] = useState(() => {
     const saved = sessionStorage.getItem('faculty_notes');
     return saved ? JSON.parse(saved) : [
-      { id: 1, text: 'Prepare questions for Alpha 1 Mid-Term' },
-      { id: 2, text: 'Review Beta 1 assignment submissions' }
+      { id: 1, text: 'Prepare questions for Alpha 1 Mid-Term', reminderTime: '2026-07-03T10:00' },
+      { id: 2, text: 'Review Beta 1 assignment submissions', reminderTime: '' }
     ];
   });
   const [newNote, setNewNote] = useState('');
+  const [newNoteTime, setNewNoteTime] = useState('');
   const [editingNoteId, setEditingNoteId] = useState(null);
   const [editingNoteText, setEditingNoteText] = useState('');
+  const [editingNoteTime, setEditingNoteTime] = useState('');
 
   const [managedContests, setManagedContests] = useState([]);
+  
+  const [recentAssignments] = useState([
+    { id: 101, title: 'Build a React Portfolio', course: 'Full-Stack Web Development', submissions: 32, total: 45, deadline: '2026-07-05T23:59:00', status: 'Active' },
+    { id: 102, title: 'Data Structures Problem Set', course: 'Data Structures in Java', submissions: 15, total: 15, deadline: '2026-06-30T23:59:00', status: 'Completed' }
+  ]);
 
   useEffect(() => {
     const fetchContests = async () => {
@@ -52,8 +59,9 @@ export default function Dashboard() {
   const addNote = (e) => {
     e.preventDefault();
     if (!newNote.trim()) return;
-    setNotes([{ id: Date.now(), text: newNote }, ...notes]);
+    setNotes([{ id: Date.now(), text: newNote, reminderTime: newNoteTime }, ...notes]);
     setNewNote('');
+    setNewNoteTime('');
   };
 
   const deleteNote = (id) => {
@@ -62,7 +70,7 @@ export default function Dashboard() {
 
   const saveEdit = (id) => {
     if (!editingNoteText.trim()) return;
-    setNotes(notes.map(n => n.id === id ? { ...n, text: editingNoteText } : n));
+    setNotes(notes.map(n => n.id === id ? { ...n, text: editingNoteText, reminderTime: editingNoteTime } : n));
     setEditingNoteId(null);
   };
 
@@ -169,6 +177,42 @@ export default function Dashboard() {
             </div>
           </div>
 
+          {/* Recent Assignments */}
+          <div>
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-[15px] font-semibold text-gray-800 flex items-center gap-2"><FileCheck className="w-4 h-4 text-purple-600" /> Recent Assignments</h2>
+              <button onClick={() => navigate('/faculty/course-hub')} className="text-[13px] font-semibold text-purple-600 hover:text-purple-700">View All</button>
+            </div>
+            <div className="flex flex-col gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
+              {recentAssignments.map((assignment) => (
+                <div key={assignment.id} className="bg-white dark:bg-slate-900 p-5 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-[15px] font-semibold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 transition-colors">{assignment.title}</h3>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider border ${assignment.status === 'Active' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-gray-100 text-gray-600 border-gray-200'}`}>{assignment.status}</span>
+                    </div>
+                    <p className="text-[12px] text-gray-500 font-medium">{assignment.course}</p>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <div className="text-right">
+                      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Submissions</p>
+                      <p className="text-sm font-semibold text-gray-900"><span className="text-purple-600">{assignment.submissions}</span> / {assignment.total}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Deadline</p>
+                      <p className={`text-sm font-semibold ${new Date(assignment.deadline) < new Date() ? 'text-red-500' : 'text-gray-900'}`}>
+                        {new Date(assignment.deadline).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <button className="px-4 py-2 bg-gray-50 hover:bg-purple-50 hover:text-purple-600 text-gray-700 text-sm font-semibold rounded-lg border border-gray-200 transition-colors">
+                      Grade
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
 
 
         </div>
@@ -211,27 +255,42 @@ export default function Dashboard() {
                 notes.map(note => (
                   <div key={note.id} className="group bg-gray-50 border border-gray-100 rounded-lg p-3 relative hover:border-gray-200 transition-colors">
                     {editingNoteId === note.id ? (
-                      <div className="flex gap-2">
+                      <div className="flex flex-col gap-2">
                         <input
                           type="text"
                           value={editingNoteText}
                           onChange={(e) => setEditingNoteText(e.target.value)}
-                          className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-sm focus:outline-none focus:border-green-500"
+                          className="w-full bg-white border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-green-500"
                           autoFocus
                         />
-                        <button onClick={() => saveEdit(note.id)} className="text-green-600 hover:text-green-700">
-                          <Save className="w-4 h-4" />
-                        </button>
-                        <button onClick={() => setEditingNoteId(null)} className="text-gray-400 hover:text-gray-600">
-                          <X className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="datetime-local"
+                            value={editingNoteTime}
+                            onChange={(e) => setEditingNoteTime(e.target.value)}
+                            className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-xs text-gray-500 focus:outline-none focus:border-green-500"
+                          />
+                          <button onClick={() => saveEdit(note.id)} className="text-green-600 hover:text-green-700 bg-green-50 px-2 py-1 rounded">
+                            <Save className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => setEditingNoteId(null)} className="text-gray-400 hover:text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     ) : (
                       <div className="flex justify-between items-start gap-2">
-                        <p className="text-sm text-gray-700 leading-snug break-words flex-1">{note.text}</p>
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-700 leading-snug break-words mb-1.5">{note.text}</p>
+                          {note.reminderTime && (
+                            <p className="text-[10px] font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full inline-block border border-green-200">
+                              Reminder: {new Date(note.reminderTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                            </p>
+                          )}
+                        </div>
                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0">
                           <button
-                            onClick={() => { setEditingNoteId(note.id); setEditingNoteText(note.text); }}
+                            onClick={() => { setEditingNoteId(note.id); setEditingNoteText(note.text); setEditingNoteTime(note.reminderTime || ''); }}
                             className="p-1 text-gray-400 hover:text-blue-600 rounded"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
@@ -250,21 +309,29 @@ export default function Dashboard() {
               )}
             </div>
 
-            <form onSubmit={addNote} className="relative mt-auto">
+            <form onSubmit={addNote} className="flex flex-col gap-2 mt-auto">
               <input
                 type="text"
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 placeholder="Type a new note..."
-                className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-3 pr-10 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-green-500 transition-colors"
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-green-500 transition-colors"
               />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded-md transition-colors"
-                disabled={!newNote.trim()}
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+              <div className="flex gap-2">
+                <input
+                  type="datetime-local"
+                  value={newNoteTime}
+                  onChange={(e) => setNewNoteTime(e.target.value)}
+                  className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-2 text-xs focus:outline-none focus:bg-white focus:border-green-500 text-gray-500"
+                />
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg transition-colors flex items-center justify-center font-semibold"
+                  disabled={!newNote.trim()}
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
             </form>
           </div>
 

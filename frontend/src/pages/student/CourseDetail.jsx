@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, Video, FileText, CheckCircle2, PlayCircle, Download, ChevronLeft, FileCode, Image as ImageIcon, X } from 'lucide-react';
+import { BookOpen, Video, FileText, CheckCircle2, PlayCircle, Download, ChevronLeft, FileCode, Image as ImageIcon, X, CheckSquare, Save, Edit3, Trash2, Plus, Trophy, AlertCircle, Library } from 'lucide-react';
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -8,6 +8,40 @@ export default function CourseDetail() {
   const [activeTab, setActiveTab] = useState('lectures'); // lectures, documentation
 
   const [activeFile, setActiveFile] = useState(null);
+
+  const [notes, setNotes] = useState(() => {
+    const saved = sessionStorage.getItem('student_notes');
+    return saved ? JSON.parse(saved) : [
+      { id: 1, text: 'Review Data Structures concepts', reminderTime: '2026-07-04T10:00' },
+    ];
+  });
+  const [newNote, setNewNote] = useState('');
+  const [newNoteTime, setNewNoteTime] = useState('');
+  const [editingNoteId, setEditingNoteId] = useState(null);
+  const [editingNoteText, setEditingNoteText] = useState('');
+  const [editingNoteTime, setEditingNoteTime] = useState('');
+
+  React.useEffect(() => {
+    sessionStorage.setItem('student_notes', JSON.stringify(notes));
+  }, [notes]);
+
+  const addNote = (e) => {
+    e.preventDefault();
+    if (!newNote.trim()) return;
+    setNotes([{ id: Date.now(), text: newNote, reminderTime: newNoteTime }, ...notes]);
+    setNewNote('');
+    setNewNoteTime('');
+  };
+
+  const deleteNote = (id) => {
+    setNotes(notes.filter(n => n.id !== id));
+  };
+
+  const saveEdit = (id) => {
+    if (!editingNoteText.trim()) return;
+    setNotes(notes.map(n => n.id === id ? { ...n, text: editingNoteText, reminderTime: editingNoteTime } : n));
+    setEditingNoteId(null);
+  };
 
   const courseBaseDetails = {
     '1': { title: 'Full-Stack Web Development', professor: 'Dr. Sarah Jenkins', progress: 65, tags: ['React', 'Node.js', 'MongoDB'] },
@@ -53,6 +87,14 @@ export default function CourseDetail() {
       }
     } catch (e) {}
   }
+
+  const [upcomingContests] = useState([
+    { id: '101', title: 'Mid-term Mock Test', duration: '2 hours', type: 'Mock Test', status: 'Upcoming' },
+  ]);
+
+  const [pastContests] = useState([
+    { id: '100', title: 'Weekly Assessment 1', duration: '1 hour', type: 'Assessment', status: 'Completed', score: '85/100' },
+  ]);
 
   const course = {
     ...base,
@@ -196,11 +238,20 @@ export default function CourseDetail() {
                 <button 
                   onClick={() => setActiveTab('assignments')}
                   className={`pb-4 text-[15px] font-semibold transition-all relative ${
-                    activeTab === 'assignments' ? 'text-purple-600' : 'text-gray-500 hover:text-gray-800'
+                    activeTab === 'assignments' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
                   }`}
                 >
                   <span className="flex items-center gap-2"><FileCode className="w-4 h-4" /> Assignments</span>
-                  {activeTab === 'assignments' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-purple-600 rounded-t-full"></div>}
+                  {activeTab === 'assignments' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></div>}
+                </button>
+                <button 
+                  onClick={() => setActiveTab('contests')}
+                  className={`pb-4 text-[15px] font-semibold transition-all relative ${
+                    activeTab === 'contests' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-800'
+                  }`}
+                >
+                  <span className="flex items-center gap-2"><Trophy className="w-4 h-4" /> Contests & Reports</span>
+                  {activeTab === 'contests' && <div className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 rounded-t-full"></div>}
                 </button>
               </div>
 
@@ -308,12 +359,94 @@ export default function CourseDetail() {
                 </div>
               )}
 
+              {activeTab === 'contests' && (
+                <div className="space-y-6">
+                  {/* Upcoming Contests */}
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2"><AlertCircle className="w-4 h-4 text-orange-500" /> Upcoming Contests</h3>
+                    {upcomingContests.length === 0 ? (
+                      <p className="text-sm text-gray-500 py-4 text-center">No upcoming contests.</p>
+                    ) : (
+                      <div className="flex flex-col gap-[1px] bg-gray-200 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                        {upcomingContests.map((contest) => (
+                          <div key={contest.id} className="bg-white p-5 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-gray-900 mb-1">{contest.title}</h4>
+                              <p className="text-[13px] text-gray-500">{contest.type} • {contest.duration}</p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-orange-50 text-orange-600 border border-orange-100">
+                                {contest.status}
+                              </span>
+                              <button onClick={() => navigate(`/student/contests/${contest.id}`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">
+                                View Details
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Past Contests & Reports */}
+                  <div>
+                    <h3 className="font-semibold text-gray-800 mb-4 mt-6 flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-green-500" /> Past Tests & Reports</h3>
+                    {pastContests.length === 0 ? (
+                      <p className="text-sm text-gray-500 py-4 text-center">No past tests.</p>
+                    ) : (
+                      <div className="flex flex-col gap-[1px] bg-gray-200 rounded-xl overflow-hidden border border-gray-200 shadow-sm">
+                        {pastContests.map((contest) => (
+                          <div key={contest.id} className="bg-white p-5 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                            <div>
+                              <h4 className="text-[15px] font-semibold text-gray-900 mb-1">{contest.title}</h4>
+                              <p className="text-[13px] text-gray-500">{contest.type} • Score: <span className="font-semibold text-gray-700">{contest.score}</span></p>
+                            </div>
+                            <div className="flex items-center gap-4">
+                              <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                Completed
+                              </span>
+                              <button onClick={() => navigate(`/student/contests/${contest.id}`)} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+                                View Report
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
            </div>
         </div>
 
-        {/* Sidebar (Right) - Related Assignments */}
-        <div className="lg:w-1/3">
-           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6 sticky top-6">
+        {/* Sidebar (Right) */}
+        <div className="lg:w-1/3 space-y-6">
+           {/* Quick Actions */}
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+             <h3 className="text-[16px] font-semibold text-gray-900 mb-5">
+               Quick Actions
+             </h3>
+             <div className="grid grid-cols-2 gap-[1px] bg-gray-100 border border-gray-100 rounded-xl overflow-hidden">
+               <button 
+                 onClick={() => setActiveTab('contests')}
+                 className="flex flex-col items-center justify-center py-4 bg-[#c9d6ef] hover:opacity-90 transition-opacity"
+               >
+                 <AlertCircle className="w-5 h-5 text-blue-600 mb-2" strokeWidth={2.5} />
+                 <span className="text-[12px] font-semibold text-blue-600">Upcoming Contests</span>
+               </button>
+               <button 
+                 onClick={() => navigate('/student/contests')}
+                 className="flex flex-col items-center justify-center py-4 bg-[#d6c8ed] hover:opacity-90 transition-opacity"
+               >
+                 <Library className="w-5 h-5 text-purple-600 mb-2" strokeWidth={2.5} />
+                 <span className="text-[12px] font-semibold text-purple-600">Question Bank</span>
+               </button>
+             </div>
+           </div>
+
+           {/* Course Assignments */}
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
              <h3 className="text-[16px] font-semibold text-gray-900 mb-5 flex items-center gap-2">
                <FileCode className="w-5 h-5 text-purple-600" /> Course Assignments
              </h3>
@@ -341,6 +474,99 @@ export default function CourseDetail() {
                  </div>
                ))}
              </div>
+           </div>
+
+           {/* Quick Notes */}
+           <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col h-[400px]">
+             <div className="flex justify-between items-center mb-4">
+               <h3 className="text-[16px] font-semibold text-gray-900 flex items-center gap-2"><CheckSquare className="w-5 h-5 text-green-600" /> Quick Notes</h3>
+             </div>
+
+             <div className="flex-1 overflow-y-auto space-y-3 mb-4 pr-1 scrollbar-thin scrollbar-thumb-gray-200">
+               {notes.length === 0 ? (
+                 <p className="text-sm text-gray-400 text-center py-4">No notes added yet.</p>
+               ) : (
+                 notes.map(note => (
+                   <div key={note.id} className="group bg-gray-50 border border-gray-100 rounded-lg p-3 relative hover:border-gray-200 transition-colors">
+                     {editingNoteId === note.id ? (
+                       <div className="flex flex-col gap-2">
+                         <input
+                           type="text"
+                           value={editingNoteText}
+                           onChange={(e) => setEditingNoteText(e.target.value)}
+                           className="w-full bg-white border border-gray-200 rounded px-2 py-1.5 text-sm focus:outline-none focus:border-green-500"
+                           autoFocus
+                         />
+                         <div className="flex items-center gap-2">
+                           <input
+                             type="datetime-local"
+                             value={editingNoteTime}
+                             onChange={(e) => setEditingNoteTime(e.target.value)}
+                             className="flex-1 bg-white border border-gray-200 rounded px-2 py-1 text-xs text-gray-500 focus:outline-none focus:border-green-500"
+                           />
+                           <button onClick={() => saveEdit(note.id)} className="text-green-600 hover:text-green-700 bg-green-50 px-2 py-1 rounded">
+                             <Save className="w-4 h-4" />
+                           </button>
+                           <button onClick={() => setEditingNoteId(null)} className="text-gray-400 hover:text-gray-600 bg-gray-100 px-2 py-1 rounded">
+                             <X className="w-4 h-4" />
+                           </button>
+                         </div>
+                       </div>
+                     ) : (
+                       <div className="flex justify-between items-start gap-2">
+                         <div className="flex-1">
+                           <p className="text-sm text-gray-700 leading-snug break-words mb-1.5">{note.text}</p>
+                           {note.reminderTime && (
+                             <p className="text-[10px] font-semibold text-green-600 bg-green-100 px-2 py-0.5 rounded-full inline-block border border-green-200">
+                               Reminder: {new Date(note.reminderTime).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}
+                             </p>
+                           )}
+                         </div>
+                         <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 shrink-0">
+                           <button
+                             onClick={() => { setEditingNoteId(note.id); setEditingNoteText(note.text); setEditingNoteTime(note.reminderTime || ''); }}
+                             className="p-1 text-gray-400 hover:text-blue-600 rounded"
+                           >
+                             <Edit3 className="w-3.5 h-3.5" />
+                           </button>
+                           <button
+                             onClick={() => deleteNote(note.id)}
+                             className="p-1 text-gray-400 hover:text-red-600 rounded"
+                           >
+                             <Trash2 className="w-3.5 h-3.5" />
+                           </button>
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 ))
+               )}
+             </div>
+
+             <form onSubmit={addNote} className="flex flex-col gap-2 mt-auto">
+               <input
+                 type="text"
+                 value={newNote}
+                 onChange={(e) => setNewNote(e.target.value)}
+                 placeholder="Type a new note..."
+                 className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:bg-white focus:border-green-500 transition-colors"
+               />
+               <div className="flex gap-2">
+                 <input
+                   type="datetime-local"
+                   value={newNoteTime}
+                   onChange={(e) => setNewNoteTime(e.target.value)}
+                   className="flex-1 bg-gray-50 border border-gray-200 rounded-lg px-2 py-2 text-xs focus:outline-none focus:bg-white focus:border-green-500 text-gray-500"
+                 />
+                 <button
+                   type="submit"
+                   className="px-4 py-2 bg-green-100 text-green-700 hover:bg-green-200 rounded-lg transition-colors flex items-center justify-center font-semibold"
+                   disabled={!newNote.trim()}
+                 >
+                   <Plus className="w-4 h-4" />
+                 </button>
+               </div>
+             </form>
            </div>
         </div>
       </div>
