@@ -90,8 +90,6 @@ export default function Dashboard() {
       <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md flex items-center gap-6 relative overflow-hidden border border-transparent dark:border-blue-900/30 text-white">
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 dark:bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
         <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
-        
-        <img src={profileData.avatar} alt="Profile" className="w-16 h-16 rounded-full border-2 border-white/20 dark:border-blue-500/30 shadow-sm relative z-10 object-cover bg-white dark:bg-[#0b1120]" />
         <div className="relative z-10">
           <h1 className="text-3xl font-semibold mb-1 text-white">{profileData.name}</h1>
           <p className="text-blue-100 dark:text-blue-200/60 text-sm">{faculty.role} • {faculty.university}</p>

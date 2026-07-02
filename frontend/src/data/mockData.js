@@ -8,7 +8,7 @@ export const user = {
 export const faculty = {
   name: 'Arun Kudiyal',
   avatar: 'https://d14u0p1qkech25.cloudfront.net/1584531455_25f5c74a-4a73-40f4-b8e8-b0a96e3fa1fd_thumbnail_250x250',
-  role: 'Technical Head & Trainer',
+  role: 'Head of Technical Training',
   erp: 'UU9087@uumail.in',
   university: 'Uttaranchal University, Dehradun'
 };

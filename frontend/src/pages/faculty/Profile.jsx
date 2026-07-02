@@ -137,24 +137,7 @@ export default function FacultyProfile() {
         <div className="px-8 pb-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 -mt-12 relative z-10">
             <div className="flex flex-col md:flex-row md:items-end gap-6">
-              {/* Avatar Section with Upload Overlay */}
-              <div className="p-1.5 bg-white rounded-2xl shadow-sm shrink-0 w-28 h-28 relative group overflow-hidden">
-                <img
-                  src={profileData.avatar}
-                  alt={profileData.name}
-                  className="w-full h-full rounded-xl bg-gray-50 border border-gray-100 object-cover"
-                />
-                <label className="absolute inset-1.5 rounded-xl bg-black/40 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <Camera className="w-5 h-5 text-white" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAvatarChange}
-                    className="hidden"
-                  />
-                </label>
-              </div>
-              <div className="pb-2">
+              <div className="pb-2 pt-14 md:pt-0">
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-semibold text-gray-900">{profileData.name}</h1>
                   <CheckCircle2 className="w-5 h-5 text-blue-500 animate-pulse" />

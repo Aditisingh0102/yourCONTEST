@@ -199,7 +199,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-semibold uppercase tracking-wider ${
                       role === 'student' ? 'bg-blue-50 text-blue-600 border border-blue-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700' : 'bg-purple-50 text-purple-600 border border-purple-100 dark:!bg-zinc-800 dark:!text-gray-300 dark:!border-zinc-700'
                     }`}>
-                      {role === 'faculty' ? 'Technical Trainer' : role}
+                      {role === 'faculty' ? 'Head of Technical Training' : role}
                     </span>
                     <span className="text-[10px] text-gray-400 dark:text-gray-500 truncate">{role === 'student' ? profileData.rollNo : profileData.facultyId}</span>
                   </div>
