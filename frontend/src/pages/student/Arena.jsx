@@ -422,7 +422,7 @@ export default function Arena() {
           </div>
 
           {/* Right Panel: Live Leaderboard */}
-          <div className="h-[600px] flex flex-col bg-white glass-card rounded-3xl shadow-2xl border border-gray-200 overflow-hidden dark">
+          <div className="h-[600px] flex flex-col bg-white glass-card rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
             <Leaderboard contestId={contest?._id || contest?.id} batch={studentProfile.batch} />
           </div>
 

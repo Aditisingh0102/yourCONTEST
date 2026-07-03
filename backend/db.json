@@ -1,6 +1,38 @@
 {
   "notices": [
     {
+      "title": "New Contest: ggfg",
+      "content": "A new assessment has been scheduled on 03/07/2026 at 15:33 for 10 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "Alpha 1"
+      ],
+      "deadline": "2026-07-03",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783072945736",
+      "date": "2026-07-03T10:02:25.736Z"
+    },
+    {
+      "title": "New Contest: Rahul  ki aisi ki tesii",
+      "content": "A new coding challenge has been scheduled on 03/07/2026 at 15:23 for 4 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "Alpha 1"
+      ],
+      "deadline": "2026-07-03",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783072300365",
+      "date": "2026-07-03T09:51:40.365Z"
+    },
+    {
       "title": "New Contest: aditi",
       "content": "A new lab exam has been scheduled on 03/07/2026 at 14:45 for 6 mins. Please be prepared.",
       "type": "Important",
@@ -34,6 +66,58 @@
     }
   ],
   "contests": [
+    {
+      "title": "ggfg",
+      "type": "Assessment",
+      "status": "Upcoming",
+      "startTime": "2026-07-03, 15:33",
+      "endTime": "TBD",
+      "duration": "10 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "warningLimit": 3,
+      "windowSwitchGracePeriod": 10,
+      "courseId": "1",
+      "questionList": [
+        {
+          "id": 1782849572373,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "1",
+            "4",
+            "2",
+            "5"
+          ],
+          "correctOption": 1,
+          "marks": 1,
+          "contestName": "aditi"
+        },
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "aditi"
+        }
+      ],
+      "_id": "1783072945728",
+      "createdAt": "2026-07-03T10:02:25.728Z"
+    },
     {
       "title": "aditi",
       "type": "Lab Exam",
@@ -803,6 +887,37 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1783072945728",
+      "contestName": "ggfg",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782849572373": 1,
+        "1782908695740": 2
+      },
+      "score": 3,
+      "status": "submitted",
+      "startedAt": "2026-07-03T10:03:52.412Z",
+      "submittedAt": "2026-07-03T10:04:20.384Z",
+      "_id": "1783073032418"
+    },
+    {
+      "contestId": "1783072300358",
+      "contestName": "Rahul  ki aisi ki tesii",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1783072336557": 0
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-03T09:54:13.417Z",
+      "submittedAt": "2026-07-03T09:54:18.684Z",
+      "_id": "1783072453424"
+    },
     {
       "contestId": "1783067432462",
       "contestName": "hello",
