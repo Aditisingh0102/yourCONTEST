@@ -384,7 +384,7 @@ export default function CourseDetail() {
                               <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-orange-50 text-orange-600 border border-orange-100">
                                 {contest.status}
                               </span>
-                              <button onClick={() => navigate(`/student/contests/${contest.id}`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">
+                              <button onClick={() => navigate(`/student/contests/${contest._id || contest.id}`)} className="px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-lg hover:bg-gray-800">
                                 View Details
                               </button>
                             </div>
@@ -411,7 +411,7 @@ export default function CourseDetail() {
                               <span className="px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
                                 Completed
                               </span>
-                              <button onClick={() => navigate(`/student/contests/${contest.id}`)} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
+                              <button onClick={() => navigate(`/student/contests/${contest._id || contest.id}`)} className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors shadow-sm">
                                 View Report
                               </button>
                             </div>
