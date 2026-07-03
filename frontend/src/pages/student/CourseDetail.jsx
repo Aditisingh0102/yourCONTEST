@@ -95,7 +95,8 @@ export default function CourseDetail() {
 
   React.useEffect(() => {
     getContests().then(res => {
-      const filtered = res.data.filter(c => !c.courseId || c.courseId === 'All' || c.courseId === id);
+      // Strictly filter to only show contests explicitly created for THIS specific course
+      const filtered = res.data.filter(c => c.courseId?.toString() === id.toString());
       setUpcomingContests(filtered.filter(c => c.status === 'Upcoming' || c.status === 'Live'));
       setPastContests(filtered.filter(c => c.status === 'Completed' || c.status === 'Past'));
     }).catch(console.error);
