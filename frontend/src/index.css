@@ -193,38 +193,38 @@ html:not(.dark) .bg-yellow-100 {
 }
 
 .dark body {
-  background-color: #000000 !important;
+  background-color: #0f172a !important;
   color: #f8fafc !important;
 }
 
 /* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
-  background: linear-gradient(to bottom right, #18181b, #0a0a0a) !important;
-  border-color: #27272a !important;
+  background: #1e293b !important;
+  border-color: #334155 !important;
 }
 
 .dark .bg-gray-50,
 .dark .bg-slate-50 {
-  background-color: #18181b !important;
+  background-color: #0f172a !important;
 }
 
 .dark .bg-gray-100,
 .dark .bg-slate-100 {
-  background-color: #27272a !important;
+  background-color: #334155 !important;
 }
 
 .dark .bg-slate-50\/50 {
-  background-color: #09090b !important;
-  border-color: #27272a !important;
+  background-color: #020617 !important;
+  border-color: #334155 !important;
 }
 
 .dark .bg-gray-50\/50 {
-  background-color: rgba(24, 24, 27, 0.5) !important;
-  border-color: #27272a !important;
+  background-color: rgba(15, 23, 42, 0.5) !important;
+  border-color: #334155 !important;
 }
 
 .dark .bg-gray-100\/80 {
-  background-color: rgba(26, 26, 26, 0.8) !important;
+  background-color: rgba(30, 41, 59, 0.8) !important;
 }
 
 .dark .bg-white\/70 {
@@ -295,19 +295,19 @@ html:not(.dark) .bg-yellow-100 {
 
 /* ── Hover backgrounds ───────────────────────────────────── */
 .dark .hover\:bg-gray-50:hover {
-  background-color: #27272a !important;
+  background-color: #334155 !important;
 }
 
 .dark .hover\:bg-gray-100:hover {
-  background-color: #3f3f46 !important;
+  background-color: #475569 !important;
 }
 
 .dark .hover\:bg-slate-50:hover {
-  background-color: #27272a !important;
+  background-color: #334155 !important;
 }
 
 .dark .hover\:bg-gray-50\/50:hover {
-  background-color: rgba(24, 24, 27, 0.8) !important;
+  background-color: rgba(15, 23, 42, 0.8) !important;
 }
 
 .dark .hover\:bg-blue-50:hover {
@@ -417,7 +417,7 @@ html:not(.dark) .bg-yellow-100 {
 
 .dark .border-gray-100,
 .dark .border-gray-200 {
-  border-color: #27272a !important;
+  border-color: #334155 !important;
 }
 
 .dark .border-blue-100,

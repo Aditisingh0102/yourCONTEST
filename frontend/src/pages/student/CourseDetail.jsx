@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BookOpen, Video, FileText, CheckCircle2, PlayCircle, Download, ChevronLeft, FileCode, Image as ImageIcon, X, CheckSquare, Save, Edit3, Trash2, Plus, Trophy, AlertCircle, Library } from 'lucide-react';
+import { getContests } from '../../api';
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -50,6 +51,7 @@ export default function CourseDetail() {
     '4': { title: 'Cloud Computing with AWS', professor: 'Ms. Emily Chen', progress: 10, tags: ['AWS', 'DevOps', 'Cloud'] },
     '5': { title: 'Advanced Database Systems', professor: 'Dr. Robert Smith', progress: 0, tags: ['SQL', 'Postgres', 'Redis'] },
     '6': { title: 'Operating Systems Core', professor: 'Dr. Linus Torvalds', progress: 100, tags: ['C', 'Linux', 'OS'] },
+    '7': { title: 'Cybersecurity Fundamentals', professor: 'Prof. Kevin Mitnick', progress: 15, tags: ['Security', 'Network', 'Ethics'] },
   };
 
   const base = courseBaseDetails[id] || courseBaseDetails['2'];
@@ -88,13 +90,16 @@ export default function CourseDetail() {
     } catch (e) {}
   }
 
-  const [upcomingContests] = useState([
-    { id: '101', title: 'Mid-term Mock Test', duration: '2 hours', type: 'Mock Test', status: 'Upcoming' },
-  ]);
+  const [upcomingContests, setUpcomingContests] = useState([]);
+  const [pastContests, setPastContests] = useState([]);
 
-  const [pastContests] = useState([
-    { id: '100', title: 'Weekly Assessment 1', duration: '1 hour', type: 'Assessment', status: 'Completed', score: '85/100' },
-  ]);
+  React.useEffect(() => {
+    getContests().then(res => {
+      const filtered = res.data.filter(c => !c.courseId || c.courseId === 'All' || c.courseId === id);
+      setUpcomingContests(filtered.filter(c => c.status === 'Upcoming' || c.status === 'Live'));
+      setPastContests(filtered.filter(c => c.status === 'Completed' || c.status === 'Past'));
+    }).catch(console.error);
+  }, [id]);
 
   const course = {
     ...base,
@@ -163,7 +168,7 @@ export default function CourseDetail() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto py-6 space-y-6">
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       
       {/* Back Button & Header */}
       <div>
@@ -174,13 +179,13 @@ export default function CourseDetail() {
           <ChevronLeft className="w-4 h-4 mr-1" /> Back to Courses
         </button>
         
-        <div className="bg-gradient-to-r from-indigo-600 to-blue-700 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
+        <div className="bg-gradient-to-r from-indigo-600 to-blue-700 rounded-2xl md:rounded-3xl p-6 md:p-8 text-white shadow-lg relative overflow-hidden">
           <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
           <div className="absolute left-0 bottom-0 w-40 h-40 bg-indigo-900/40 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none"></div>
           
           <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <div className="flex gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4">
                  {course.tags.map((tag, i) => (
                    <span key={i} className="text-[10px] font-semibold text-indigo-900 bg-indigo-100 px-2.5 py-1 rounded-md uppercase tracking-wider shadow-sm">
                      {tag}
@@ -213,10 +218,10 @@ export default function CourseDetail() {
         
         {/* Main Content (Left) */}
         <div className="lg:w-2/3 space-y-6">
-           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 md:p-6">
               
               {/* Tabs */}
-              <div className="flex gap-8 border-b border-gray-100 mb-6 overflow-x-auto whitespace-nowrap">
+              <div className="flex gap-6 md:gap-8 border-b border-gray-100 mb-6 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar">
                 <button 
                   onClick={() => setActiveTab('lectures')}
                   className={`pb-4 text-[15px] font-semibold transition-all relative ${
@@ -258,7 +263,7 @@ export default function CourseDetail() {
               {/* Tab Content */}
               {activeTab === 'lectures' ? (
                 <div className="space-y-3">
-                  {course.lectures.map((lec, idx) => (
+                  {course.lectures.map((lec) => (
                     <div 
                       key={lec.id} 
                       onClick={() => openFile(lec)}
@@ -423,7 +428,7 @@ export default function CourseDetail() {
         {/* Sidebar (Right) */}
         <div className="lg:w-1/3 space-y-6">
            {/* Quick Actions */}
-           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 md:p-6">
              <h3 className="text-[16px] font-semibold text-gray-900 mb-5">
                Quick Actions
              </h3>
@@ -436,7 +441,7 @@ export default function CourseDetail() {
                  <span className="text-[12px] font-semibold text-blue-600">Upcoming Contests</span>
                </button>
                <button 
-                 onClick={() => navigate('/student/contests')}
+                 onClick={() => navigate('/student/question-bank')}
                  className="flex flex-col items-center justify-center py-4 bg-[#d6c8ed] hover:opacity-90 transition-opacity"
                >
                  <Library className="w-5 h-5 text-purple-600 mb-2" strokeWidth={2.5} />
@@ -446,7 +451,7 @@ export default function CourseDetail() {
            </div>
 
            {/* Course Assignments */}
-           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+           <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 md:p-6">
              <h3 className="text-[16px] font-semibold text-gray-900 mb-5 flex items-center gap-2">
                <FileCode className="w-5 h-5 text-purple-600" /> Course Assignments
              </h3>
@@ -477,7 +482,7 @@ export default function CourseDetail() {
            </div>
 
            {/* Quick Notes */}
-           <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col h-[400px]">
+           <div className="bg-white border border-gray-100 rounded-2xl p-4 md:p-6 shadow-sm flex flex-col h-[400px]">
              <div className="flex justify-between items-center mb-4">
                <h3 className="text-[16px] font-semibold text-gray-900 flex items-center gap-2"><CheckSquare className="w-5 h-5 text-green-600" /> Quick Notes</h3>
              </div>

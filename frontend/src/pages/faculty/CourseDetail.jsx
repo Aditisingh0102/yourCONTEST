@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { BookOpen, Video, FileText, PlayCircle, ChevronLeft, FileCode, UploadCloud, Plus, Trash2, ExternalLink, Image as ImageIcon, X, Users, CheckSquare, Save, Edit3, PlusCircle, Library, FileCheck, BarChart2, Trophy, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { getContests } from '../../api';
 
 export default function CourseDetail() {
   const { id } = useParams();
@@ -15,6 +16,7 @@ export default function CourseDetail() {
     '4': { title: 'Cloud Computing with AWS', professor: 'Ms. Emily Chen', progress: 10, tags: ['AWS', 'DevOps', 'Cloud'] },
     '5': { title: 'Advanced Database Systems', professor: 'Dr. Robert Smith', progress: 0, tags: ['SQL', 'Postgres', 'Redis'] },
     '6': { title: 'Operating Systems Core', professor: 'Dr. Linus Torvalds', progress: 100, tags: ['C', 'Linux', 'OS'] },
+    '7': { title: 'Cybersecurity Fundamentals', professor: 'Prof. Kevin Mitnick', progress: 15, tags: ['Security', 'Network', 'Ethics'] },
   };
 
   const base = courseBaseDetails[id] || courseBaseDetails['1'];
@@ -85,13 +87,16 @@ export default function CourseDetail() {
   const [assignmentData, setAssignmentData] = useState({ title: '', type: 'Project', format: 'GitHub Repo Submission', file: null, deadline: '' });
   const [assignmentError, setAssignmentError] = useState('');
   
-  const [upcomingContests] = useState([
-    { id: '101', title: 'Mid-term Mock Test', duration: '2 hours', type: 'Mock Test', status: 'Upcoming' },
-  ]);
+  const [upcomingContests, setUpcomingContests] = useState([]);
+  const [pastContests, setPastContests] = useState([]);
 
-  const [pastContests] = useState([
-    { id: '100', title: 'Weekly Assessment 1', duration: '1 hour', type: 'Assessment', status: 'Completed', averageScore: '82%' },
-  ]);
+  useEffect(() => {
+    getContests().then(res => {
+      const filtered = res.data.filter(c => !c.courseId || c.courseId === 'All' || c.courseId === id);
+      setUpcomingContests(filtered.filter(c => c.status === 'Upcoming' || c.status === 'Live'));
+      setPastContests(filtered.filter(c => c.status === 'Completed' || c.status === 'Past'));
+    }).catch(console.error);
+  }, [id]);
 
   const [quickNotes, setQuickNotes] = useState(() => {
     const saved = sessionStorage.getItem(`faculty_course_${id}_quicknotes`);

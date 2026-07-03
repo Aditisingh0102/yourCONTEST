@@ -56,6 +56,7 @@ export default function App() {
           <Route path="submissions" element={<Placeholder title="My Submissions" />} />
           <Route path="reports" element={<Reports />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="question-bank" element={<Placeholder title="Question Bank (Practice Area)" />} />
         </Route>
 
         <Route path="/student/contests/:id" element={<ContestRules />} />

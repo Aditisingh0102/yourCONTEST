@@ -15,8 +15,17 @@ export default function Contests() {
   const fetchContests = async () => {
     try {
       const res = await getContests();
-      const studentBatch = JSON.parse(sessionStorage.getItem('student_profile'))?.batch || 'Alpha 1';
-      setAllContests(res.data.filter(c => !c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch))));
+      const studentProfile = JSON.parse(sessionStorage.getItem('student_profile')) || { name: 'Aditi Singh', batch: 'Alpha 1' };
+      const studentBatch = studentProfile.batch || 'Alpha 1';
+      setAllContests(res.data.filter(c => {
+        const batchMatch = (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)));
+        if (!batchMatch) return false;
+        
+        if (c.courseId && c.courseId !== 'All') {
+          if (c.courseId == 7 && studentProfile.name?.toLowerCase().includes('ambar')) return false;
+        }
+        return true;
+      }));
     } catch(err) {
       console.error(err);
     }

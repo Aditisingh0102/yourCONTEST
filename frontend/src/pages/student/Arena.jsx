@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
+import { ChevronLeft, Sun, Moon, Coffee, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
 import { getContests, getSubmissions, updateSubmission, submitContestAnswers } from '../../api';
 import { socket } from '../../socket';
 import Leaderboard from '../../components/Leaderboard';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function Arena() {
+  const [theme, cycleTheme] = useTheme();
   const { id } = useParams();
   const navigate = useNavigate();
   const [contest, setContest] = useState(null);
@@ -397,20 +399,20 @@ export default function Arena() {
   if (submittedResult) {
     const studentProfile = JSON.parse(sessionStorage.getItem('student_profile') || '{}');
     return (
-      <div className="fixed inset-0 bg-[#0f172a] flex flex-col font-sans z-50 overflow-y-auto p-6 md:p-10">
+      <div className="fixed inset-0 bg-slate-50 flex flex-col font-sans z-50 overflow-y-auto p-6 md:p-10">
         <div className="max-w-6xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-10">
           
           {/* Left Panel: Personal Result */}
-          <div className="bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700/50 text-center w-full">
+          <div className="bg-white glass-card p-10 rounded-3xl shadow-2xl border border-gray-200 text-center w-full">
             <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-500" />
             </div>
-            <h2 className="text-2xl font-semibold text-white mb-3">Assessment Submitted</h2>
-            <p className="text-slate-400 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-3">Assessment Submitted</h2>
+            <p className="text-gray-500 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
             
-            <div className="bg-gray-800/50 border border-gray-700 rounded-2xl p-6 mb-8">
-               <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Total Score</p>
-               <p className="text-4xl font-semibold text-white">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
+            <div className="bg-gray-100/50 border border-gray-200 rounded-2xl p-6 mb-8">
+               <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Score</p>
+               <p className="text-4xl font-semibold text-gray-900">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
                <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
             </div>
 
@@ -420,7 +422,7 @@ export default function Arena() {
           </div>
 
           {/* Right Panel: Live Leaderboard */}
-          <div className="h-[600px] flex flex-col bg-[#1e293b] rounded-3xl shadow-2xl border border-slate-700/50 overflow-hidden dark">
+          <div className="h-[600px] flex flex-col bg-white glass-card rounded-3xl shadow-2xl border border-gray-200 overflow-hidden dark">
             <Leaderboard contestId={contest?._id || contest?.id} batch={studentProfile.batch} />
           </div>
 
@@ -431,13 +433,13 @@ export default function Arena() {
 
   if (error) {
     return (
-      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50">
-        <div className="bg-[#1e293b] p-10 rounded-3xl shadow-2xl border border-slate-700/50 text-center max-w-md w-full mx-4">
+      <div className="fixed inset-0 bg-slate-50 flex flex-col items-center justify-center font-sans z-50">
+        <div className="bg-white glass-card p-10 rounded-3xl shadow-2xl border border-gray-200 text-center max-w-md w-full mx-4">
           <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <ShieldAlert className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
-          <h2 className="text-2xl font-semibold text-white mb-3">Oops!</h2>
-          <p className="text-slate-400 font-medium mb-8 leading-relaxed">{error}</p>
+          <h2 className="text-2xl font-semibold text-gray-900 mb-3">Oops!</h2>
+          <p className="text-gray-500 font-medium mb-8 leading-relaxed">{error}</p>
           <button onClick={() => navigate('/student/contests')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
              Go Back to Dashboard
           </button>
@@ -448,9 +450,9 @@ export default function Arena() {
 
   if (!contest) {
     return (
-      <div className="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center font-sans z-50">
+      <div className="fixed inset-0 bg-slate-50 flex flex-col items-center justify-center font-sans z-50">
          <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-6"></div>
-         <p className="text-slate-400 font-semibold tracking-widest uppercase">Loading Arena...</p>
+         <p className="text-gray-500 font-semibold tracking-widest uppercase">Loading Arena...</p>
       </div>
     );
   }
@@ -479,7 +481,7 @@ export default function Arena() {
               </div>
 
               {isWaiting ? (
-                <div className="bg-gray-900 text-white rounded-xl p-8 text-center mt-8">
+                <div className="bg-gray-50 text-gray-900 rounded-xl p-8 text-center mt-8">
                    <div className="w-16 h-16 bg-orange-500/20 text-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                      <Clock className="w-8 h-8" />
                    </div>
@@ -503,9 +505,9 @@ export default function Arena() {
                   <button 
                     disabled={!rulesChecked}
                     onClick={handleStartAssessment}
-                    className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-white transition-all ${
+                    className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-gray-900 transition-all ${
                       rulesChecked 
-                        ? 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-600/30' 
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30' 
                         : 'bg-gray-300 cursor-not-allowed'
                     }`}
                   >
@@ -520,12 +522,12 @@ export default function Arena() {
   }
 
   return (
-    <div className="fixed inset-0 bg-[#0f172a] text-gray-300 z-50 flex flex-col font-sans">
+    <div className="fixed inset-0 bg-slate-50 text-gray-800 z-50 flex flex-col font-sans">
       {showWarning && (
         <div className="fixed inset-0 bg-red-900/95 z-[9999] flex items-center justify-center p-6 backdrop-blur-md">
           <div className="bg-black/80 border border-red-500/30 p-10 rounded-2xl max-w-lg text-center shadow-2xl shadow-red-900/50">
             <ShieldAlert className="w-20 h-20 text-red-500 mx-auto mb-6 animate-pulse" />
-            <h1 className="text-3xl font-semibold text-white mb-4 tracking-tight">Violation Detected!</h1>
+            <h1 className="text-3xl font-semibold text-gray-900 mb-4 tracking-tight">Violation Detected!</h1>
             <p className="text-red-200 text-lg mb-2">You have exited fullscreen or switched tabs.</p>
             <p className="text-red-400 font-semibold mb-8">
               Warning {violations} of {contest?.warningLimit !== undefined ? contest.warningLimit : 1}. If you exceed the limit, your test will be automatically submitted.
@@ -545,15 +547,31 @@ export default function Arena() {
         </div>
       )}
       {/* Top Navbar */}
-      <div className="h-14 bg-[#1e293b] border-b border-gray-700 flex items-center justify-between px-4 shrink-0">
+      <div className="h-14 bg-white glass-card border-b border-gray-200 flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-white transition-colors">
+          <button onClick={() => navigate(-1)} className="text-gray-500 hover:text-gray-900 transition-colors">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="font-semibold text-white tracking-wide">{contest.title}</span>
+          <span className="font-semibold text-gray-900 tracking-wide">{contest.title}</span>
         </div>
-        <div className="flex items-center gap-6">
-          <div className="flex items-center gap-2 text-orange-400 font-mono bg-gray-800 px-3 py-1.5 rounded-lg">
+        <div className="flex items-center gap-4">
+
+          <button
+            onClick={cycleTheme}
+            className={`
+              relative flex items-center justify-center w-9 h-9 rounded-full border transition-all duration-300 focus:outline-none
+              ${theme === 'dark'
+                ? 'bg-slate-800 border-slate-700 text-blue-300 hover:bg-slate-700'
+                : theme === 'warm'
+                ? 'bg-[#f6f3eb] border-[#e8e4d9] text-amber-700 hover:bg-[#eee8d5]'
+                : 'bg-blue-50 border-blue-200 text-yellow-500 hover:bg-blue-100'}
+            `}
+            title="Toggle Theme"
+          >
+            {theme === 'dark' ? <Moon className="w-4 h-4" /> : theme === 'warm' ? <Coffee className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+          </button>
+
+          <div className="flex items-center gap-2 text-orange-400 font-mono bg-gray-100 px-3 py-1.5 rounded-lg">
             <Clock className="w-4 h-4" />
             <span>{assessmentTimeRemaining || contest.duration}</span>
           </div>
@@ -567,10 +585,10 @@ export default function Arena() {
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Left Panel - Problems List */}
-        <div className="w-64 bg-[#1e293b] border-r border-gray-700 flex flex-col shrink-0">
-          <div className="p-4 border-b border-gray-700 font-semibold text-gray-400 uppercase text-xs tracking-wider shrink-0 flex justify-between items-center">
+        <div className="w-64 bg-white glass-card border-r border-gray-200 flex flex-col shrink-0">
+          <div className="p-4 border-b border-gray-200 font-semibold text-gray-500 uppercase text-xs tracking-wider shrink-0 flex justify-between items-center">
             <span>Questions</span>
-            <span className="bg-gray-800 px-2 py-0.5 rounded-full">{questions.length}</span>
+            <span className="bg-gray-100 px-2 py-0.5 rounded-full">{questions.length}</span>
           </div>
           <div className="flex-1 overflow-y-auto">
             {questions.length === 0 ? (
@@ -580,10 +598,10 @@ export default function Arena() {
                 <button 
                   key={prob.id}
                   onClick={() => setActiveProblem(prob)}
-                  className={`w-full text-left px-4 py-3 border-b border-gray-700/50 hover:bg-gray-800 transition-colors flex items-center justify-between ${activeProblem?.id === prob.id ? 'bg-gray-800 border-l-2 border-l-blue-500' : ''}`}
+                  className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-100 transition-colors flex items-center justify-between ${activeProblem?.id === prob.id ? 'bg-gray-100 border-l-2 border-l-blue-500' : ''}`}
                 >
                   <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-200">
+                    <span className="text-sm font-medium text-gray-900">
                       Q{idx + 1}. {prob.type === 'MCQ' ? 'Multiple Choice' : prob.type === 'Theory' ? 'Theory Q&A' : 'Coding'}
                     </span>
                     <span className="text-xs text-gray-500 mt-0.5 truncate max-w-[180px]">
@@ -601,24 +619,24 @@ export default function Arena() {
         {/* Center/Right Panel - Question Viewer */}
         {activeProblem ? (
           activeProblem.type === 'MCQ' ? (
-            <div className="flex-1 bg-[#0f172a] p-8 overflow-y-auto">
+            <div className="flex-1 bg-slate-50 p-8 overflow-y-auto">
               <div className="max-w-3xl mx-auto">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <span className="bg-blue-600 text-white text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide">MCQ</span>
-                    <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
+                    <span className="text-gray-500 text-sm font-medium">{activeProblem.marks} Marks</span>
                   </div>
                   {answers[activeProblem.id] !== undefined && answers[activeProblem.id] !== '' && (
                     <button 
                       onClick={() => handleAnswerChange(activeProblem.id, undefined)}
-                      className="text-gray-400 hover:text-gray-200 text-xs font-semibold uppercase tracking-wider transition-colors"
+                      className="text-gray-500 hover:text-gray-900 text-xs font-semibold uppercase tracking-wider transition-colors"
                     >
                       Clear Selection
                     </button>
                   )}
                 </div>
                 
-                <h2 className="text-xl font-medium text-white mb-8 leading-relaxed">
+                <h2 className="text-xl font-medium text-gray-900 mb-8 leading-relaxed">
                   {activeProblem.question}
                 </h2>
 
@@ -630,7 +648,7 @@ export default function Arena() {
                       className={`block p-4 rounded-xl border cursor-pointer transition-all ${
                         answers[activeProblem.id] === idx 
                           ? 'bg-blue-900/30 border-blue-500/50' 
-                          : 'bg-[#1e293b] border-gray-700 hover:border-gray-500'
+                          : 'bg-white glass-card border-gray-200 hover:border-gray-500'
                       }`}
                     >
                       <div className="flex items-center gap-3">
@@ -639,18 +657,18 @@ export default function Arena() {
                         }`}>
                           {answers[activeProblem.id] === idx && <div className="w-2.5 h-2.5 bg-blue-500 rounded-full"></div>}
                         </div>
-                        <span className="text-gray-200 text-[15px]">{opt}</span>
+                        <span className="text-gray-900 text-[15px]">{opt}</span>
                       </div>
                     </label>
                   ))}
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-800">
+                <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200">
                   <button 
                     onClick={() => setActiveProblem(questions[currentIndex - 1])}
                     disabled={currentIndex <= 0}
-                    className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                    className="px-6 py-2.5 bg-gray-100 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-gray-900 transition-colors"
                   >
                     Previous
                   </button>
@@ -665,23 +683,23 @@ export default function Arena() {
               </div>
             </div>
           ) : activeProblem.type === 'Theory' ? (
-            <div className="flex-1 bg-[#0f172a] p-8 overflow-y-auto">
+            <div className="flex-1 bg-slate-50 p-8 overflow-y-auto">
               <div className="max-w-3xl mx-auto">
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="bg-amber-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1.5">
+                  <span className="bg-amber-500 text-gray-900 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wide flex items-center gap-1.5">
                     <BookOpen className="w-3 h-3" /> Theory
                   </span>
-                  <span className="text-gray-400 text-sm font-medium">{activeProblem.marks} Marks</span>
+                  <span className="text-gray-500 text-sm font-medium">{activeProblem.marks} Marks</span>
                 </div>
 
-                <h2 className="text-xl font-medium text-white mb-8 leading-relaxed">
+                <h2 className="text-xl font-medium text-gray-900 mb-8 leading-relaxed">
                   {activeProblem.question}
                 </h2>
 
                 <div className="space-y-3">
-                  <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Your Answer</label>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Your Answer</label>
                   <textarea
-                    className="w-full min-h-[240px] bg-[#1e293b] border border-gray-700 focus:border-amber-500 rounded-xl p-4 text-gray-200 text-sm resize-y outline-none transition-colors placeholder-gray-600 leading-relaxed"
+                    className="w-full min-h-[240px] bg-white glass-card border border-gray-200 focus:border-amber-500 rounded-xl p-4 text-gray-900 text-sm resize-y outline-none transition-colors placeholder-gray-600 leading-relaxed"
                     placeholder="Write your answer here..."
                     value={answers[activeProblem.id] || ''}
                     onChange={(e) => handleAnswerChange(activeProblem.id, e.target.value)}
@@ -690,11 +708,11 @@ export default function Arena() {
                 </div>
 
                 {/* Navigation Buttons */}
-                <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-800">
+                <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200">
                   <button 
                     onClick={() => setActiveProblem(questions[currentIndex - 1])}
                     disabled={currentIndex <= 0}
-                    className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                    className="px-6 py-2.5 bg-gray-100 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-gray-900 transition-colors"
                   >
                     Previous
                   </button>
@@ -711,43 +729,43 @@ export default function Arena() {
           ) : (
             <>
               {/* Coding Question Viewer */}
-              <div className="flex-1 bg-[#0f172a] border-r border-gray-700 overflow-y-auto p-6">
+              <div className="flex-1 bg-slate-50 border-r border-gray-200 overflow-y-auto p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h1 className="text-2xl font-semibold text-white">{activeProblem.title}</h1>
+                  <h1 className="text-2xl font-semibold text-gray-900">{activeProblem.title}</h1>
                   <span className="px-3 py-1 bg-purple-900/40 text-purple-400 border border-purple-700/50 rounded-full text-xs font-semibold tracking-wide">
                     {activeProblem.marks} Marks
                   </span>
                 </div>
-                <div className="prose prose-invert max-w-none text-gray-300">
+                <div className="prose prose-invert max-w-none text-gray-800">
                   <p className="whitespace-pre-wrap">{activeProblem.problemStatement}</p>
                   
-                  <h3 className="text-lg font-semibold text-white mt-8 mb-2">Input Format</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-2">Input Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.inputFormat}</p>
                   
-                  <h3 className="text-lg font-semibold text-white mt-6 mb-2">Output Format</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Output Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.outputFormat}</p>
                   
                   <div className="space-y-6 mt-8">
                     {(activeProblem.testCases || (activeProblem.sampleInput ? [{ input: activeProblem.sampleInput, output: activeProblem.sampleOutput }] : [])).map((tc, idx) => (
                       <div key={idx} className="grid grid-cols-2 gap-4">
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Sample Input {idx + 1}</h4>
-                          <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{tc.input}</code></pre>
+                          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Sample Input {idx + 1}</h4>
+                          <pre className="bg-gray-100 p-4 rounded-lg text-sm text-gray-900 overflow-x-auto m-0"><code>{tc.input}</code></pre>
                         </div>
                         <div>
-                          <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Sample Output {idx + 1}</h4>
-                          <pre className="bg-gray-800 p-4 rounded-lg text-sm text-gray-200 overflow-x-auto m-0"><code>{tc.output}</code></pre>
+                          <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Sample Output {idx + 1}</h4>
+                          <pre className="bg-gray-100 p-4 rounded-lg text-sm text-gray-900 overflow-x-auto m-0"><code>{tc.output}</code></pre>
                         </div>
                       </div>
                     ))}
                   </div>
 
                   {/* Navigation Buttons */}
-                  <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-800 pb-8">
+                  <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200 pb-8">
                     <button 
                       onClick={() => setActiveProblem(questions[currentIndex - 1])}
                       disabled={currentIndex <= 0}
-                      className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
+                      className="px-6 py-2.5 bg-gray-100 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-gray-900 transition-colors"
                     >
                       Previous
                     </button>
@@ -763,9 +781,9 @@ export default function Arena() {
               </div>
 
               {/* Right Panel - Code Editor */}
-              <div className="w-1/2 flex flex-col bg-[#1e293b] shrink-0">
-                <div className="h-10 bg-[#0f172a] border-b border-gray-700 flex items-center px-4 justify-between shrink-0">
-                  <select className="bg-gray-800 text-sm text-gray-300 border-none outline-none rounded px-2 py-1 focus:ring-1 focus:ring-blue-500">
+              <div className="w-1/2 flex flex-col bg-white glass-card shrink-0">
+                <div className="h-10 bg-slate-50 border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
+                  <select className="bg-gray-100 text-sm text-gray-800 border-none outline-none rounded px-2 py-1 focus:ring-1 focus:ring-blue-500">
                     <option>C++</option>
                     <option>Java</option>
                     <option>Python 3</option>
@@ -781,8 +799,8 @@ export default function Arena() {
                     spellCheck="false"
                   ></textarea>
                 </div>
-                <div className="h-14 border-t border-gray-700 bg-[#0f172a] flex items-center justify-end px-4 gap-3 shrink-0">
-                   <button className="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <div className="h-14 border-t border-gray-200 bg-slate-50 flex items-center justify-end px-4 gap-3 shrink-0">
+                   <button className="px-4 py-1.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
                       <Play className="w-4 h-4" /> Run Code
                    </button>
                    <button 

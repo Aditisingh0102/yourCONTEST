@@ -66,10 +66,11 @@ export default function Dashboard() {
         const filteredNotices = filterNoticesForStudent(res.data, studentBatch);
 
         if (filteredNotices.length > 0) {
-          if (sessionStorage.getItem('hasSeenNoticePopup') !== 'true') {
+          const latestId = String(filteredNotices[0]._id || filteredNotices[0].id);
+          if (sessionStorage.getItem('lastSeenNoticeId') !== latestId) {
             setLatestNotice(filteredNotices[0]);
             setShowNoticePopup(true);
-            sessionStorage.setItem('hasSeenNoticePopup', 'true');
+            sessionStorage.setItem('lastSeenNoticeId', latestId);
           }
         }
 
@@ -86,7 +87,15 @@ export default function Dashboard() {
         const studentProfile = studentProfileStr ? JSON.parse(studentProfileStr) : { name: 'Aditi Singh', id: '23210101548', batch: 'Alpha 1' };
         const studentBatch = studentProfile.batch || 'Alpha 1';
         
-        const filtered = res.data.filter(c => (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch))));
+        const filtered = res.data.filter(c => {
+          const batchMatch = (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)));
+          if (!batchMatch) return false;
+          
+          if (c.courseId && c.courseId !== 'All') {
+            if (c.courseId == 7 && studentProfile.name?.toLowerCase().includes('ambar')) return false;
+          }
+          return true;
+        });
         
         setUpcomingContestsList(filtered.filter(c => c.status === 'Live' || c.status === 'Upcoming').slice(0, 2));
         setPastContestsList(filtered.filter(c => c.status === 'Past').slice(0, 2));
@@ -139,10 +148,18 @@ export default function Dashboard() {
 
     const handleNoticeUpdate = (data) => {
       if (data.type === 'CREATE') {
+        const isForMe = filterNoticesForStudent([data.notice], getStudentBatchFromSession()).length > 0;
+        
         setNotices(prev => {
           const next = [data.notice, ...prev];
           return filterNoticesForStudent(next, getStudentBatchFromSession()).slice(0, 3);
         });
+
+        if (isForMe) {
+          setLatestNotice(data.notice);
+          setShowNoticePopup(true);
+          sessionStorage.setItem('lastSeenNoticeId', String(data.notice._id || data.notice.id));
+        }
         return;
       }
 

@@ -142,7 +142,7 @@ export default function Dashboard() {
               <h2 className="text-[15px] font-semibold text-gray-800 flex items-center gap-2"><Trophy className="w-4 h-4 text-blue-600" /> Managed Contests</h2>
               <button onClick={() => navigate('/faculty/manage-contests')} className="text-[13px] font-semibold text-blue-600 hover:text-blue-700">View All</button>
             </div>
-            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-slate-600 rounded-xl overflow-hidden border border-gray-200 dark:border-slate-600 shadow-sm">
               {managedContests.length === 0 ? (
                 <div className="col-span-2 py-8 text-center bg-gray-50 dark:bg-slate-900 border border-dashed border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-500 font-medium">No contests created yet.</p>
@@ -183,7 +183,7 @@ export default function Dashboard() {
               <h2 className="text-[15px] font-semibold text-gray-800 flex items-center gap-2"><FileCheck className="w-4 h-4 text-purple-600" /> Recent Assignments</h2>
               <button onClick={() => navigate('/faculty/course-hub')} className="text-[13px] font-semibold text-purple-600 hover:text-purple-700">View All</button>
             </div>
-            <div className="flex flex-col gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm">
+            <div className="flex flex-col gap-[1px] bg-gray-200 dark:bg-slate-600 rounded-xl overflow-hidden border border-gray-200 dark:border-slate-600 shadow-sm">
               {recentAssignments.map((assignment) => (
                 <div key={assignment.id} className="bg-white dark:bg-slate-900 p-5 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors cursor-pointer group flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
@@ -223,7 +223,7 @@ export default function Dashboard() {
           {/* Quick Actions */}
           <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
             <h2 className="text-[15px] font-semibold text-gray-800 mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800">
+            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-slate-600 rounded-xl overflow-hidden border border-gray-200 dark:border-slate-600">
               {[
                 { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20', path: '/faculty/create-contest' },
                 { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50 dark:bg-purple-900/20', path: '/faculty/question-bank' },

@@ -5,7 +5,7 @@ import {
   Plus, Minus, ChevronRight, X, Sparkles, ListChecks, Trash2,
   ChevronDown, Check
 } from 'lucide-react';
-import { getContests, createContest, updateContest } from '../../api';
+import { getContests, createContest, updateContest, createNotice } from '../../api';
 
 /* ────────────────────────────────────────────────────────
    Question-type config — shown after contest is saved
@@ -206,7 +206,7 @@ export default function ContestForm() {
 
   const [formData, setFormData] = useState({
     title: '', type: 'Mock Test', startDate: '', startTime: '', duration: '', customRules: [], strictFullscreen: true, disableCopyPaste: true, batch: ['All'],
-    warningLimit: 1, windowSwitchGracePeriod: 0
+    warningLimit: 1, windowSwitchGracePeriod: 0, courseId: 'All'
   });
   const [dbContestId, setDbContestId]   = useState(null);
   const [showTypeModal, setShowTypeModal] = useState(false);
@@ -247,7 +247,8 @@ export default function ContestForm() {
             disableCopyPaste: contest.disableCopyPaste !== false,
             batch: Array.isArray(contest.batch) ? contest.batch : (contest.batch ? [contest.batch] : ['All']),
             warningLimit: contest.warningLimit !== undefined ? contest.warningLimit : 1,
-            windowSwitchGracePeriod: contest.windowSwitchGracePeriod !== undefined ? contest.windowSwitchGracePeriod : 0
+            windowSwitchGracePeriod: contest.windowSwitchGracePeriod !== undefined ? contest.windowSwitchGracePeriod : 0,
+            courseId: contest.courseId || 'All'
           });
         }
       });
@@ -293,7 +294,8 @@ export default function ContestForm() {
           disableCopyPaste: formData.disableCopyPaste,
           batch: formData.batch,
           warningLimit: parseInt(formData.warningLimit) || 1,
-          windowSwitchGracePeriod: parseInt(formData.windowSwitchGracePeriod) || 0
+          windowSwitchGracePeriod: parseInt(formData.windowSwitchGracePeriod) || 0,
+          courseId: formData.courseId
         });
         navigate('/faculty/manage-contests');
       } else {
@@ -314,10 +316,30 @@ export default function ContestForm() {
           batch: formData.batch,
           warningLimit: parseInt(formData.warningLimit) || 1,
           windowSwitchGracePeriod: parseInt(formData.windowSwitchGracePeriod) || 0,
+          courseId: formData.courseId,
           questionList: []
         };
         const res = await createContest(newContest);
         setSavedContestId(res.data._id || res.data.id);
+        
+        // Auto-create notice
+        try {
+          await createNotice({
+            title: `New Contest: ${formData.title}`,
+            content: `A new ${formData.type.toLowerCase()} has been scheduled on ${new Date(formData.startDate).toLocaleDateString()} at ${formData.startTime} for ${formData.duration} mins. Please be prepared.`,
+            type: 'Important',
+            batch: formData.batch,
+            deadline: formData.startDate,
+            author: 'System Admin', // or Faculty Name
+            iconName: 'AlertCircle',
+            color: 'text-orange-600',
+            bg: 'bg-orange-50',
+            borderColor: 'border-orange-100'
+          });
+        } catch (e) {
+          console.error("Failed to create auto-notice", e);
+        }
+
         setShowTypeModal(true);
       }
     } catch (err) {
@@ -361,7 +383,7 @@ export default function ContestForm() {
                 <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-semibold">1</span>
                 Basic Details
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pl-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pl-8">
                 <div>
                   <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Contest Name</label>
                   <input
@@ -426,6 +448,23 @@ export default function ContestForm() {
                       ))}
                     </div>
                   )}
+                </div>
+                <div className="relative">
+                  <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Select Course</label>
+                  <select
+                    value={formData.courseId}
+                    onChange={(e) => setFormData({ ...formData, courseId: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
+                  >
+                    <option value="All">General (All Courses)</option>
+                    <option value="1">Full-Stack Web Development</option>
+                    <option value="2">Data Structures in Java</option>
+                    <option value="3">Machine Learning Basics</option>
+                    <option value="4">Cloud Computing with AWS</option>
+                    <option value="5">Advanced Database Systems</option>
+                    <option value="6">Operating Systems Core</option>
+                    <option value="7">Cybersecurity Fundamentals</option>
+                  </select>
                 </div>
               </div>
             </div>

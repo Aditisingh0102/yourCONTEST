@@ -80,6 +80,19 @@ const initialCourses = [
     iconColor: 'text-teal-500',
     tags: ['C', 'Linux', 'OS'],
     icon: BookOpen
+  },
+  {
+    id: 7,
+    title: 'Cybersecurity Fundamentals',
+    subject: 'Security',
+    students: 210,
+    modules: 15,
+    status: 'Published',
+    rating: 4.8,
+    bgLight: 'bg-rose-50',
+    iconColor: 'text-rose-500',
+    tags: ['Security', 'Network', 'Ethics'],
+    icon: BookOpen
   }
 ];
 

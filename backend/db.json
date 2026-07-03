@@ -1,11 +1,171 @@
 {
-  "notices": [],
+  "notices": [
+    {
+      "title": "New Contest: aditi",
+      "content": "A new lab exam has been scheduled on 03/07/2026 at 14:45 for 6 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "Alpha 1"
+      ],
+      "deadline": "2026-07-03",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783069950265",
+      "date": "2026-07-03T09:12:30.265Z"
+    },
+    {
+      "title": "New Contest: adiit",
+      "content": "A new lab exam has been scheduled on 03/07/2026 at 14:43 for 2 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "Alpha 1"
+      ],
+      "deadline": "2026-07-03",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783069917132",
+      "date": "2026-07-03T09:11:57.132Z"
+    }
+  ],
   "contests": [
+    {
+      "title": "aditi",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-07-03, 14:45",
+      "endTime": "TBD",
+      "duration": "6 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1782849572373,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "1",
+            "4",
+            "2",
+            "5"
+          ],
+          "correctOption": 1,
+          "marks": 1,
+          "contestName": "adiit"
+        },
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "beta-1"
+        }
+      ],
+      "_id": "1783069950255",
+      "createdAt": "2026-07-03T09:12:30.255Z"
+    },
+    {
+      "title": "hello",
+      "type": "Coding Challenge",
+      "status": "Upcoming",
+      "startTime": "2026-07-03, 14:45",
+      "endTime": "TBD",
+      "duration": "23 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "7",
+      "questionList": [
+        {
+          "id": 1782849572373,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "1",
+            "4",
+            "2",
+            "5"
+          ],
+          "correctOption": 1,
+          "marks": 1,
+          "contestName": "Alpha -1"
+        }
+      ],
+      "_id": "1783067432462",
+      "createdAt": "2026-07-03T08:30:32.462Z"
+    },
+    {
+      "title": "ambar",
+      "type": "Coding Challenge",
+      "status": "Upcoming",
+      "startTime": "2026-07-03, 13:52",
+      "endTime": "TBD",
+      "duration": "121 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "Alpha 1"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "questionList": [
+        {
+          "id": 1782981111170,
+          "type": "MCQ",
+          "question": "fhgtnhxg",
+          "options": [
+            "cs",
+            "ds",
+            "vsdxcv",
+            "dsv"
+          ],
+          "correctOption": 0,
+          "marks": 1,
+          "contestName": "dfsg"
+        }
+      ],
+      "_id": "1783066834396",
+      "createdAt": "2026-07-03T08:20:34.396Z"
+    },
     {
       "title": "dfsg",
       "type": "Mock Test",
       "status": "Upcoming",
-      "startTime": "2026-07-02, 14:03",
+      "startTime": "2026-07-03, 13:48",
       "endTime": "TBD",
       "duration": "2 mins",
       "registered": 0,
@@ -644,8 +804,23 @@
   ],
   "submissions": [
     {
-      "contestId": "1782981092321",
-      "contestName": "dfsg",
+      "contestId": "1783067432462",
+      "contestName": "hello",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782849572373": 1
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-03T09:26:27.166Z",
+      "submittedAt": "2026-07-03T09:26:30.500Z",
+      "_id": "1783070787173"
+    },
+    {
+      "contestId": "1783066834396",
+      "contestName": "ambar",
       "studentId": "23210101548",
       "studentName": "Aditi Singh",
       "batch": "Alpha 1",
@@ -654,9 +829,70 @@
       },
       "score": 1,
       "status": "submitted",
-      "startedAt": "2026-07-02T08:33:07.602Z",
-      "submittedAt": "2026-07-02T08:33:14.769Z",
-      "_id": "1782981187609"
+      "startedAt": "2026-07-03T09:23:27.732Z",
+      "submittedAt": "2026-07-03T09:25:53.421Z",
+      "_id": "1783070607740"
+    },
+    {
+      "contestId": "1783069950255",
+      "contestName": "aditi",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782849572373": 1,
+        "1782908695740": 2
+      },
+      "score": 3,
+      "status": "submitted",
+      "submittedAt": 1783070143981,
+      "_id": "1783070143981"
+    },
+    {
+      "contestId": "1783069950255",
+      "contestName": "aditi",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782849572373": 1,
+        "1782908695740": 2
+      },
+      "score": 3,
+      "status": "submitted",
+      "submittedAt": 1783070143980,
+      "_id": "1783070143980"
+    },
+    {
+      "contestId": "1783069950255",
+      "contestName": "aditi",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782849572373": 1,
+        "1782908695740": 2
+      },
+      "score": 3,
+      "status": "submitted",
+      "startedAt": "2026-07-03T09:15:04.854Z",
+      "submittedAt": "2026-07-03T09:15:43.933Z",
+      "_id": "1783070104864"
+    },
+    {
+      "contestId": "1782981092321",
+      "contestName": "dfsg",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782981111170": 1
+      },
+      "score": 0,
+      "status": "submitted",
+      "startedAt": "2026-07-03T08:18:08.926Z",
+      "submittedAt": "2026-07-03T08:18:14.620Z",
+      "_id": "1783066688938"
     },
     {
       "contestId": "1782979904719",

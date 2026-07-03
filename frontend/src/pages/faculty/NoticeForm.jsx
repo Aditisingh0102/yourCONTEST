@@ -7,7 +7,7 @@ export default function NoticeForm() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const [formData, setFormData] = useState({ title: '', content: '', type: 'Important', batch: ['All'] });
+  const [formData, setFormData] = useState({ title: '', content: '', type: 'Important', batch: ['All'], deadline: '' });
   const [saving, setSaving] = useState(false);
   const [isBatchOpen, setIsBatchOpen] = useState(false);
   const batchDropdownRef = useRef(null);
@@ -31,7 +31,8 @@ export default function NoticeForm() {
             title: notice.title || '',
             content: notice.content || '',
             type: notice.type || 'Important',
-            batch: Array.isArray(notice.batch) ? notice.batch : (notice.batch ? [notice.batch] : ['All'])
+            batch: Array.isArray(notice.batch) ? notice.batch : (notice.batch ? [notice.batch] : ['All']),
+            deadline: notice.deadline || ''
           });
         }
       });
@@ -61,6 +62,7 @@ export default function NoticeForm() {
       content: formData.content.trim(),
       type: formData.type,
       batch: formData.batch,
+      deadline: formData.deadline,
       author: 'Arun Kudiyal',
       iconName,
       color,
@@ -122,7 +124,7 @@ export default function NoticeForm() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <div ref={batchDropdownRef} className="relative z-20">
                 <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Target Batch</label>
                 <div 
@@ -178,6 +180,16 @@ export default function NoticeForm() {
                   <option value="Placement">Placement / Internship</option>
                   <option value="Info">General Info</option>
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-semibold text-gray-700 mb-1.5">Deadline (Optional)</label>
+                <input 
+                  type="date" 
+                  value={formData.deadline}
+                  onChange={(e) => setFormData({...formData, deadline: e.target.value})}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all text-sm font-medium text-gray-700 cursor-pointer"
+                />
               </div>
             </div>
 

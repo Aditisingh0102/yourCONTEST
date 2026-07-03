@@ -52,7 +52,7 @@ export default function Login() {
         joinDate: 'August 2023',
         batch: 'Beta 1'
       }));
-      sessionStorage.removeItem('hasSeenNoticePopup');
+      sessionStorage.removeItem('lastSeenNoticeId');
       window.dispatchEvent(new Event('profile-updated'));
       navigate('/student/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {

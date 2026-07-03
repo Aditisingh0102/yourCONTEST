@@ -690,8 +690,8 @@ export default function ContestQuestions() {
       setTheoryForm({ ...emptyTheory });
       setCodingForm({ ...emptyCoding });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentSlotIdx, hasSlots]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSlotIdx, hasSlots, questions]);
 
   /* Save questions to DB */
   const persist = async (updatedList) => {
@@ -972,7 +972,17 @@ export default function ContestQuestions() {
           <ImportModal 
             onClose={() => setShowImportModal(false)} 
             onImport={(importedQuestions) => {
-              const nextQuestions = [...questions, ...importedQuestions];
+              if (importedQuestions.length === 0) return;
+              const nextQuestions = [...questions];
+              let cursor = currentSlotIdx;
+              importedQuestions.forEach(q => {
+                 if (cursor < slots.length) {
+                    nextQuestions[cursor] = { ...q, id: q.id || Date.now() + cursor };
+                    cursor++;
+                 } else {
+                    nextQuestions.push({ ...q, id: q.id || Date.now() + cursor });
+                 }
+              });
               persist(nextQuestions);
               setShowImportModal(false);
             }} 
@@ -984,7 +994,17 @@ export default function ContestQuestions() {
             onClose={() => setShowQuestionBankModal(false)}
             currentQuestions={questions}
             onImport={(importedQuestions) => {
-              const nextQuestions = [...questions, ...importedQuestions];
+              if (importedQuestions.length === 0) return;
+              const nextQuestions = [...questions];
+              let cursor = currentSlotIdx;
+              importedQuestions.forEach(q => {
+                 if (cursor < slots.length) {
+                    nextQuestions[cursor] = { ...q, id: q.id || Date.now() + cursor };
+                    cursor++;
+                 } else {
+                    nextQuestions.push({ ...q, id: q.id || Date.now() + cursor });
+                 }
+              });
               persist(nextQuestions);
               setShowQuestionBankModal(false);
             }}

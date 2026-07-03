@@ -74,6 +74,18 @@ const allCourses = [
     iconColor: 'text-teal-500',
     bgLight: 'bg-teal-50',
     tags: ['C', 'Linux', 'OS']
+  },
+  {
+    id: 7,
+    title: 'Cybersecurity Fundamentals',
+    professor: 'Prof. Kevin Mitnick',
+    progress: 15,
+    totalModules: 15,
+    completedModules: 2,
+    color: 'bg-rose-500',
+    iconColor: 'text-rose-500',
+    bgLight: 'bg-rose-50',
+    tags: ['Security', 'Network', 'Ethics']
   }
 ];
 
@@ -82,7 +94,18 @@ export default function Courses() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('ongoing'); // 'ongoing' or 'completed'
 
+  const [studentProfile] = useState(() => {
+    const saved = sessionStorage.getItem('student_profile');
+    if (saved) return JSON.parse(saved);
+    return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
+  });
+
   const filteredCourses = allCourses.filter(course => {
+    // Hide Cybersecurity Fundamentals from Ambar
+    if (course.id === 7 && studentProfile.name.toLowerCase().includes('ambar')) {
+      return false;
+    }
+
     const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           course.professor.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           course.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
