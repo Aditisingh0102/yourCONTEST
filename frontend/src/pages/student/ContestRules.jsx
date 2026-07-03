@@ -208,7 +208,7 @@ export default function ContestRules() {
                     : 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
                 }`}
               >
-                Submit & Start
+                Start the test
               </button>
            </div>
          ) : contest.status === 'Upcoming' ? (
@@ -223,7 +223,7 @@ export default function ContestRules() {
                <p className="text-yellow-700 font-semibold mb-4">Fetching schedule...</p>
              )}
              <p className="text-yellow-700/80 font-medium text-sm max-w-md">
-               The "Submit & Start" button will automatically appear here once the countdown reaches zero. Ensure you have read all rules.
+               The "Start the test" button will automatically appear here once the countdown reaches zero. Ensure you have read all rules.
              </p>
            </div>
          ) : (
