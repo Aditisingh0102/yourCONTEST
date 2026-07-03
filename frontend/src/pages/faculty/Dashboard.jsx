@@ -223,20 +223,20 @@ export default function Dashboard() {
           {/* Quick Actions */}
           <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
             <h2 className="text-[15px] font-semibold text-gray-800 mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-[1px] bg-gray-200 dark:bg-slate-600 rounded-xl overflow-hidden border border-gray-200 dark:border-slate-600">
+            <div className="grid grid-cols-2 gap-3">
               {[
-                { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-900/20', path: '/faculty/create-contest' },
-                { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50 dark:bg-purple-900/20', path: '/faculty/question-bank' },
-                { name: 'Submissions', icon: FileCheck, color: 'text-orange-600', bg: 'bg-orange-50 dark:bg-orange-900/20', path: '/faculty/manage-contests' },
-                { name: 'Analytics', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-900/20', path: '/faculty/student-records' },
+                { name: 'New Contest', icon: PlusCircle, color: 'text-blue-600', bg: 'bg-blue-50', path: '/faculty/create-contest' },
+                { name: 'Question Bank', icon: Library, color: 'text-purple-600', bg: 'bg-purple-50', path: '/faculty/question-bank' },
+                { name: 'Submissions', icon: FileCheck, color: 'text-orange-600', bg: 'bg-orange-50', path: '/faculty/manage-contests' },
+                { name: 'Analytics', icon: BarChart, color: 'text-green-600', bg: 'bg-green-50', path: '/faculty/student-records' },
               ].map((action, i) => (
                 <button
                   key={i}
                   onClick={() => navigate(action.path)}
-                  className={`flex flex-col items-center justify-center p-5 transition-all gap-2 ${action.bg} hover:brightness-95 dark:hover:brightness-110`}
+                  className={`flex flex-col items-center justify-center p-4 rounded-xl border border-gray-100 transition-all gap-1 ${action.bg} hover:shadow-md hover:-translate-y-0.5`}
                 >
-                  <action.icon className={`w-5 h-5 ${action.color}`} />
-                  <span className={`text-[11px] font-medium ${action.color}`}>{action.name}</span>
+                  <action.icon className={`w-5 h-5 mb-1 ${action.color}`} />
+                  <span className={`text-[12px] font-semibold ${action.color}`}>{action.name}</span>
                 </button>
               ))}
             </div>
