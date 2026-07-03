@@ -193,121 +193,126 @@ html:not(.dark) .bg-yellow-100 {
 }
 
 .dark body {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
+  background-color: #121212 !important;
+  color: #fafafa !important;
 }
 
 /* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
-  background: #1e293b !important;
-  border: 1px solid #475569 !important;
+  background: #1e1e1e !important;
+  border: 1px solid #333333 !important;
 }
 
 .dark .bg-gray-50,
 .dark .bg-slate-50 {
-  background-color: #0f172a !important;
+  background-color: #121212 !important;
 }
 
 .dark .bg-gray-100,
 .dark .bg-slate-100 {
-  background-color: #334155 !important;
+  background-color: #242424 !important;
 }
 
 .dark .bg-slate-50\/50 {
-  background-color: #020617 !important;
-  border-color: #334155 !important;
+  background-color: #121212 !important;
+  border-color: #333333 !important;
 }
 
 .dark .bg-gray-50\/50 {
-  background-color: rgba(15, 23, 42, 0.5) !important;
-  border-color: #334155 !important;
+  background-color: rgba(18, 18, 18, 0.5) !important;
+  border-color: #333333 !important;
 }
 
 .dark .bg-gray-100\/80 {
-  background-color: rgba(30, 41, 59, 0.8) !important;
+  background-color: rgba(36, 36, 36, 0.8) !important;
 }
 
 .dark .bg-white\/70 {
-  background-color: rgba(17, 17, 17, 0.7) !important;
+  background-color: rgba(24, 24, 24, 0.7) !important;
   color: #ededed !important;
 }
 
 .dark .bg-white\/20 {
-  background-color: rgba(34, 34, 34, 0.4) !important;
+  background-color: rgba(36, 36, 36, 0.4) !important;
   color: #ededed !important;
 }
 
 /* Color-tinted backgrounds */
 .dark .bg-blue-50,
 .dark .bg-blue-100 {
-  background-color: rgba(30, 58, 138, 0.4) !important;
+  background-color: rgba(59, 130, 246, 0.15) !important;
 }
 
 .dark .bg-indigo-50,
 .dark .bg-indigo-100 {
-  background-color: rgba(49, 46, 129, 0.4) !important;
+  background-color: rgba(99, 102, 241, 0.15) !important;
 }
 
 .dark .bg-green-50,
 .dark .bg-green-100 {
-  background-color: rgba(6, 78, 59, 0.4) !important;
+  background-color: rgba(34, 197, 94, 0.15) !important;
 }
 
 .dark .bg-red-50,
 .dark .bg-red-100 {
-  background-color: rgba(127, 29, 29, 0.4) !important;
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+.dark .bg-rose-50,
+.dark .bg-rose-100 {
+  background-color: rgba(244, 63, 94, 0.15) !important;
 }
 
 .dark .bg-yellow-50,
 .dark .bg-yellow-100 {
-  background-color: rgba(113, 63, 18, 0.5) !important;
+  background-color: rgba(234, 179, 8, 0.15) !important;
 }
 
 .dark .bg-orange-50,
 .dark .bg-orange-100 {
-  background-color: rgba(124, 45, 18, 0.5) !important;
+  background-color: rgba(249, 115, 22, 0.15) !important;
 }
 
 .dark .bg-purple-50,
 .dark .bg-purple-100 {
-  background-color: rgba(88, 28, 135, 0.4) !important;
+  background-color: rgba(168, 85, 247, 0.15) !important;
 }
 
 .dark .bg-teal-50,
 .dark .bg-teal-100 {
-  background-color: rgba(13, 148, 136, 0.4) !important;
+  background-color: rgba(20, 184, 166, 0.15) !important;
 }
 
 /* Opacity variants */
 .dark .bg-blue-50\/50 {
-  background-color: rgba(30, 58, 138, 0.15) !important;
+  background-color: rgba(59, 130, 246, 0.08) !important;
 }
 
 .dark .bg-indigo-50\/50 {
-  background-color: rgba(49, 46, 129, 0.15) !important;
-  border-color: rgba(49, 46, 129, 0.3) !important;
+  background-color: rgba(99, 102, 241, 0.08) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
 }
 
 .dark .bg-green-50\/50 {
-  background-color: rgba(6, 78, 59, 0.15) !important;
-  border-color: rgba(6, 78, 59, 0.3) !important;
+  background-color: rgba(34, 197, 94, 0.08) !important;
+  border-color: rgba(34, 197, 94, 0.2) !important;
 }
 
 /* ── Hover backgrounds ───────────────────────────────────── */
 .dark .hover\:bg-gray-50:hover {
-  background-color: #334155 !important;
+  background-color: #242424 !important;
 }
 
 .dark .hover\:bg-gray-100:hover {
-  background-color: #475569 !important;
+  background-color: #333333 !important;
 }
 
 .dark .hover\:bg-slate-50:hover {
-  background-color: #334155 !important;
+  background-color: #242424 !important;
 }
 
 .dark .hover\:bg-gray-50\/50:hover {
-  background-color: rgba(15, 23, 42, 0.8) !important;
+  background-color: rgba(36, 36, 36, 0.8) !important;
 }
 
 .dark .hover\:bg-blue-50:hover {
@@ -334,17 +339,17 @@ html:not(.dark) .bg-yellow-100 {
 .dark .text-gray-900,
 .dark .text-gray-800,
 .dark .text-slate-900 {
-  color: #f8fafc !important;
+  color: #fafafa !important;
 }
 
 .dark .text-gray-700,
 .dark .text-gray-600 {
-  color: #cbd5e1 !important;
+  color: #a1a1aa !important;
 }
 
 .dark .text-gray-500,
 .dark .text-gray-400 {
-  color: #94a3b8 !important;
+  color: #71717a !important;
 }
 
 /* Colored text */
@@ -412,7 +417,7 @@ html:not(.dark) .bg-yellow-100 {
 .dark .border-gray-300,
 .dark .border-slate-100,
 .dark .border-slate-200 {
-  border-color: #475569 !important;
+  border-color: #333333 !important;
 }
 
 .dark .border-blue-100,
@@ -473,33 +478,33 @@ html:not(.dark) .bg-yellow-100 {
 }
 
 .dark button.bg-white {
-  background-color: #334155 !important;
-  border-color: #475569 !important;
-  color: #f8fafc !important;
+  background-color: #242424 !important;
+  border-color: #333333 !important;
+  color: #fafafa !important;
 }
 
 .dark button.bg-white:hover {
-  background-color: #475569 !important;
-  border-color: #64748b !important;
+  background-color: #333333 !important;
+  border-color: #444444 !important;
 }
 
 /* ── Inputs / Forms ──────────────────────────────────────── */
 .dark input,
 .dark textarea,
 .dark select {
-  background-color: rgba(15, 23, 42, 0.6) !important;
-  color: #f8fafc !important;
-  border-color: #334155 !important;
+  background-color: rgba(24, 24, 24, 0.6) !important;
+  color: #fafafa !important;
+  border-color: #333333 !important;
 }
 
 .dark option {
-  background-color: #0f172a !important;
-  color: #f8fafc !important;
+  background-color: #121212 !important;
+  color: #fafafa !important;
 }
 
 .dark input::placeholder,
 .dark textarea::placeholder {
-  color: #64748b !important;
+  color: #71717a !important;
 }
 
 /* ── Shadows ─────────────────────────────────────────────── */
@@ -512,15 +517,15 @@ html:not(.dark) .bg-yellow-100 {
 
 /* ── Special components ──────────────────────────────────── */
 .dark .glass-card {
-  background-color: rgba(30, 41, 59, 0.7) !important;
-  border: 1px solid #475569 !important;
+  background-color: rgba(30, 30, 30, 0.7) !important;
+  border: 1px solid #333333 !important;
   backdrop-filter: blur(12px);
 }
 
 .dark .navbar-container,
 .dark .sidebar-container {
-  background-color: #0f172a !important;
-  border-color: #475569 !important;
+  background-color: #121212 !important;
+  border-color: #333333 !important;
 }
 
 /* ---------------------------------------------------------------
