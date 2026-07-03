@@ -104,7 +104,7 @@ export default function Login() {
                 required
 	  	maxLength={21}
                 className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-white/50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                placeholder="student@uudoon.in"
+                placeholder="enter username"
                 value={erpId}
                 onChange={(e) => setErpId(e.target.value)}
               />
@@ -121,7 +121,7 @@ export default function Login() {
                 type="password" 
                 required
                 className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-lg bg-white/50 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none"
-                placeholder="••••••••"
+                placeholder="enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
