@@ -200,7 +200,7 @@ html:not(.dark) .bg-yellow-100 {
 /* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
   background: #1e293b !important;
-  border-color: #334155 !important;
+  border: 1px solid #475569 !important;
 }
 
 .dark .bg-gray-50,
@@ -412,12 +412,7 @@ html:not(.dark) .bg-yellow-100 {
 .dark .border-gray-300,
 .dark .border-slate-100,
 .dark .border-slate-200 {
-  border-color: #1e293b !important;
-}
-
-.dark .border-gray-100,
-.dark .border-gray-200 {
-  border-color: #334155 !important;
+  border-color: #475569 !important;
 }
 
 .dark .border-blue-100,
@@ -518,14 +513,14 @@ html:not(.dark) .bg-yellow-100 {
 /* ── Special components ──────────────────────────────────── */
 .dark .glass-card {
   background-color: rgba(30, 41, 59, 0.7) !important;
-  border-color: rgba(51, 65, 85, 0.4) !important;
+  border: 1px solid #475569 !important;
   backdrop-filter: blur(12px);
 }
 
 .dark .navbar-container,
 .dark .sidebar-container {
   background-color: #0f172a !important;
-  border-color: #1e293b !important;
+  border-color: #475569 !important;
 }
 
 /* ---------------------------------------------------------------
