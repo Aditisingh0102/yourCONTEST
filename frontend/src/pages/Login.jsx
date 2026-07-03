@@ -55,6 +55,25 @@ export default function Login() {
       sessionStorage.removeItem('lastSeenNoticeId');
       window.dispatchEvent(new Event('profile-updated'));
       navigate('/student/dashboard');
+    } else if (erpId === '23210101001@uudoon.in') {
+      initializeLightTheme();
+      sessionStorage.setItem('student_profile', JSON.stringify({
+        id: '23210101001',
+        name: 'Rahul Rawat',
+        rollNo: '23210101001',
+        regNo: 'UU23104300',
+        branch: 'B.Tech CSE',
+        semester: '7th Semester',
+        email: '23210101001@uudoon.in',
+        phone: '+91 98765 11111',
+        avatar: 'https://ui-avatars.com/api/?name=Rahul+Rawat&background=0D8ABC&color=fff&size=128',
+        role: 'student',
+        joinDate: 'August 2023',
+        batch: 'Alpha-2'
+      }));
+      sessionStorage.removeItem('lastSeenNoticeId');
+      window.dispatchEvent(new Event('profile-updated'));
+      navigate('/student/dashboard');
     } else if (/^\d{1,11}@uumail\.in$/.test(erpId)) {
       initializeLightTheme();
       sessionStorage.setItem('faculty_profile', JSON.stringify({

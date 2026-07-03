@@ -10,20 +10,25 @@ export default function CourseDetail() {
 
 
   const courseBaseDetails = {
-    '1': { title: 'Full-Stack Web Development', professor: 'Dr. Sarah Jenkins', progress: 65, tags: ['React', 'Node.js', 'MongoDB'] },
-    '2': { title: 'Data Structures in Java', professor: 'Prof. Alan Turing', progress: 30, tags: ['Java', 'Algorithms', 'DSA'] },
-    '3': { title: 'Machine Learning Basics', professor: 'Dr. Andrew Ng', progress: 100, tags: ['Python', 'AI', 'TensorFlow'] },
-    '4': { title: 'Cloud Computing with AWS', professor: 'Ms. Emily Chen', progress: 10, tags: ['AWS', 'DevOps', 'Cloud'] },
-    '5': { title: 'Advanced Database Systems', professor: 'Dr. Robert Smith', progress: 0, tags: ['SQL', 'Postgres', 'Redis'] },
-    '6': { title: 'Operating Systems Core', professor: 'Dr. Linus Torvalds', progress: 100, tags: ['C', 'Linux', 'OS'] },
-    '7': { title: 'Cybersecurity Fundamentals', professor: 'Prof. Kevin Mitnick', progress: 15, tags: ['Security', 'Network', 'Ethics'] },
+    '1': { title: 'Full-Stack Web Development', professor: 'Dr. Sarah Jenkins', progress: 65, tags: ['React', 'Node.js', 'MongoDB'], status: 'Published' },
+    '2': { title: 'Data Structures in Java', professor: 'Prof. Alan Turing', progress: 30, tags: ['Java', 'Algorithms', 'DSA'], status: 'Published' },
+    '3': { title: 'Machine Learning Basics', professor: 'Dr. Andrew Ng', progress: 100, tags: ['Python', 'AI', 'TensorFlow'], status: 'Draft' },
+    '4': { title: 'Cloud Computing with AWS', professor: 'Ms. Emily Chen', progress: 10, tags: ['AWS', 'DevOps', 'Cloud'], status: 'Published' },
+    '5': { title: 'Advanced Database Systems', professor: 'Dr. Robert Smith', progress: 0, tags: ['SQL', 'Postgres', 'Redis'], status: 'Published' },
+    '6': { title: 'Operating Systems Core', professor: 'Dr. Linus Torvalds', progress: 100, tags: ['C', 'Linux', 'OS'], status: 'Published' },
+    '7': { title: 'Cybersecurity Fundamentals', professor: 'Prof. Kevin Mitnick', progress: 15, tags: ['Security', 'Network', 'Ethics'], status: 'Published' },
   };
 
   const base = courseBaseDetails[id] || courseBaseDetails['1'];
 
-  const [course] = useState({
-    ...base
+  const [course, setCourse] = useState(() => {
+    const saved = localStorage.getItem(`course_${id}_details`);
+    return saved ? JSON.parse(saved) : { ...base };
   });
+
+  useEffect(() => {
+    localStorage.setItem(`course_${id}_details`, JSON.stringify(course));
+  }, [course, id]);
 
   const [lectures, setLectures] = useState(() => {
     const saved = sessionStorage.getItem(`course_${id}_lectures`);
@@ -324,6 +329,9 @@ export default function CourseDetail() {
                      {tag}
                    </span>
                  ))}
+                 <span className={`text-[10px] font-bold px-3 py-1 rounded-md uppercase tracking-wider shadow-sm border ${course.status === 'Published' ? 'bg-green-500 text-white border-green-400' : 'bg-white/20 text-white border-white/30 backdrop-blur-md'}`}>
+                   {course.status}
+                 </span>
               </div>
               <h1 className="text-3xl md:text-4xl font-semibold mb-2">{course.title}</h1>
               <p className="text-blue-100 text-sm md:text-base font-medium flex items-center gap-2">
@@ -342,9 +350,15 @@ export default function CourseDetail() {
                </div>
                <button 
                  onClick={triggerFileInput}
-                 className="w-full mt-4 py-2 bg-white text-blue-600 flex items-center justify-center gap-2 text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors"
+                 className="w-full mt-4 py-2 bg-white text-blue-600 flex items-center justify-center gap-2 text-sm font-semibold rounded-lg hover:bg-blue-50 transition-colors shadow-sm"
                >
                  <UploadCloud className="w-4 h-4" /> Upload Material
+               </button>
+               <button 
+                 onClick={() => setCourse({...course, status: course.status === 'Published' ? 'Draft' : 'Published'})}
+                 className={`w-full mt-2 py-2 flex items-center justify-center gap-2 text-sm font-semibold rounded-lg transition-colors border shadow-sm ${course.status === 'Published' ? 'bg-gray-800 text-white border-gray-700 hover:bg-gray-700' : 'bg-green-500 text-white border-green-600 hover:bg-green-600'}`}
+               >
+                 {course.status === 'Published' ? 'Unpublish Course' : 'Publish Course'}
                </button>
                {/* Hidden file input removed, using modal now */}
             </div>

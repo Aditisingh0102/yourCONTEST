@@ -27,7 +27,7 @@ export default function Arena() {
   useEffect(() => {
     answersRef.current = answers;
   }, [answers]);
-  
+
   const [timeRemaining, setTimeRemaining] = useState('');
   const [assessmentTimeRemaining, setAssessmentTimeRemaining] = useState('');
   const [isWaiting, setIsWaiting] = useState(true);
@@ -43,7 +43,7 @@ export default function Arena() {
     try {
       const res = await getContests();
       const current = res.data.find(c => (c._id || c.id).toString() === id);
-      
+
       const subsRes = await getSubmissions();
       const profileStr = sessionStorage.getItem('student_profile');
       if (!profileStr) return; // Prevent execution if not logged in (will be redirected)
@@ -78,7 +78,7 @@ export default function Arena() {
       } else {
         setError("Contest not found. It might have been removed or the server restarted.");
       }
-    } catch(err) {
+    } catch (err) {
       console.error(err);
       setError("Failed to load contest data. Please check your connection.");
     }
@@ -92,26 +92,26 @@ export default function Arena() {
 
   useEffect(() => {
     if (!contest || contest.status !== 'Upcoming') return;
-    
+
     const interval = setInterval(() => {
       let start = 0;
       if (contest.startTime && contest.startTime.includes(',')) {
-          const parts = contest.startTime.split(', ');
-          if(parts.length === 2) {
-             start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
-          }
+        const parts = contest.startTime.split(', ');
+        if (parts.length === 2) {
+          start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
+        }
       } else if (contest.date && contest.time) {
-          start = new Date(`${contest.date}T${contest.time}:00`).getTime();
+        start = new Date(`${contest.date}T${contest.time}:00`).getTime();
       } else {
-          start = new Date(contest.startTime).getTime();
+        start = new Date(contest.startTime).getTime();
       }
 
       const now = new Date().getTime();
       const diff = start - now;
-      
+
       if (diff <= 0 || isNaN(diff)) {
         setTimeRemaining('00:00:00');
-        if(!isNaN(diff)) setIsWaiting(false);
+        if (!isNaN(diff)) setIsWaiting(false);
         clearInterval(interval);
       } else {
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -120,7 +120,7 @@ export default function Arena() {
         setTimeRemaining(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`);
       }
     }, 1000);
-    
+
     return () => clearInterval(interval);
   }, [contest]);
 
@@ -146,9 +146,9 @@ export default function Arena() {
 
       setViolations(prev => {
         const newCount = prev + 1;
-        if (newCount > warningLimit) { 
+        if (newCount > warningLimit) {
           if (document.fullscreenElement) {
-             document.exitFullscreen().catch(() => {});
+            document.exitFullscreen().catch(() => { });
           }
           performSubmission();
         } else {
@@ -159,38 +159,38 @@ export default function Arena() {
     };
 
     const handleViolationStart = () => {
-       if (isViolatingRef.current) return;
-       if (gracePeriodMs > 0) {
-           if (!graceTimerRef.current) {
-               graceTimerRef.current = setTimeout(() => {
-                   triggerViolation();
-               }, gracePeriodMs);
-           }
-       } else {
-           triggerViolation();
-       }
-    };
-    
-    const handleViolationEnd = () => {
-        if (graceTimerRef.current && !isViolatingRef.current) {
-            clearTimeout(graceTimerRef.current);
-            graceTimerRef.current = null;
+      if (isViolatingRef.current) return;
+      if (gracePeriodMs > 0) {
+        if (!graceTimerRef.current) {
+          graceTimerRef.current = setTimeout(() => {
+            triggerViolation();
+          }, gracePeriodMs);
         }
+      } else {
+        triggerViolation();
+      }
+    };
+
+    const handleViolationEnd = () => {
+      if (graceTimerRef.current && !isViolatingRef.current) {
+        clearTimeout(graceTimerRef.current);
+        graceTimerRef.current = null;
+      }
     };
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden') {
-          handleViolationStart();
+        handleViolationStart();
       } else {
-          handleViolationEnd();
+        handleViolationEnd();
       }
     };
 
     const handleFullscreenChange = () => {
       if (!document.fullscreenElement) {
-          handleViolationStart();
+        handleViolationStart();
       } else {
-          handleViolationEnd();
+        handleViolationEnd();
       }
     };
 
@@ -210,11 +210,11 @@ export default function Arena() {
         e.preventDefault();
         alert("Copying and pasting is strictly disabled during this assessment.");
       };
-      
+
       document.addEventListener('copy', handleCopyPaste);
       document.addEventListener('paste', handleCopyPaste);
       document.addEventListener('cut', handleCopyPaste);
-      
+
       return () => {
         document.removeEventListener('copy', handleCopyPaste);
         document.removeEventListener('paste', handleCopyPaste);
@@ -228,7 +228,7 @@ export default function Arena() {
 
     const storageKey = `contest_${contest.id || contest._id}_startTime`;
     const extraStorageKey = `contest_${contest.id || contest._id}_extraStartTime`;
-    
+
     let studentStartTime = sessionStorage.getItem(storageKey);
     let extraStartTime = sessionStorage.getItem(extraStorageKey);
 
@@ -236,25 +236,25 @@ export default function Arena() {
       studentStartTime = Date.now().toString();
       sessionStorage.setItem(storageKey, studentStartTime);
     }
-    
+
     studentStartTime = parseInt(studentStartTime, 10);
 
     let start = 0;
     if (contest.startTime && contest.startTime.includes(',')) {
-        const parts = contest.startTime.split(', ');
-        if(parts.length === 2) {
-           start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
-        }
+      const parts = contest.startTime.split(', ');
+      if (parts.length === 2) {
+        start = new Date(`${parts[0]}T${parts[1]}:00`).getTime();
+      }
     } else if (contest.date && contest.time) {
-        start = new Date(`${contest.date}T${contest.time}:00`).getTime();
+      start = new Date(`${contest.date}T${contest.time}:00`).getTime();
     } else {
-        start = new Date(contest.startTime).getTime();
+      start = new Date(contest.startTime).getTime();
     }
 
     const durationMatch = contest.duration?.match(/(\d+)/);
     const durationMins = durationMatch ? parseInt(durationMatch[1], 10) : 60;
     const durationMs = durationMins * 60 * 1000;
-    
+
     const absoluteEndTime = (start && !isNaN(start)) ? start + durationMs : studentStartTime + durationMs;
     const normalEndTime = studentStartTime + durationMs;
 
@@ -274,7 +274,7 @@ export default function Arena() {
       if (diff <= 0) {
         clearInterval(interval);
         setAssessmentTimeRemaining('00:00:00');
-        
+
         performSubmission();
       } else {
         const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -308,7 +308,7 @@ export default function Arena() {
           };
           const res = await submitContestAnswers(payload);
           if (res && res.data && res.data._id) {
-             setExistingSubmissionId(res.data._id);
+            setExistingSubmissionId(res.data._id);
           }
         }
       } catch (err) {
@@ -320,7 +320,7 @@ export default function Arena() {
       start();
       return;
     }
-    
+
     document.documentElement.requestFullscreen().then(() => {
       start();
     }).catch(err => {
@@ -331,7 +331,7 @@ export default function Arena() {
   const handleAnswerChange = async (qId, val) => {
     const newAnswers = { ...answers, [qId]: val };
     setAnswers(newAnswers);
-    
+
     if (existingSubmissionId) {
       try {
         await updateSubmission(existingSubmissionId, {
@@ -345,7 +345,7 @@ export default function Arena() {
 
   const performSubmission = async () => {
     if (document.fullscreenElement) {
-       document.exitFullscreen().catch(() => {});
+      document.exitFullscreen().catch(() => { });
     }
 
     let score = 0;
@@ -381,7 +381,7 @@ export default function Arena() {
         };
         await submitContestAnswers(payload);
       }
-    } catch(err) {
+    } catch (err) {
       console.error("Failed to save submission:", err);
     }
 
@@ -401,7 +401,7 @@ export default function Arena() {
     return (
       <div className="fixed inset-0 bg-slate-50 flex flex-col font-sans z-50 overflow-y-auto p-6 md:p-10">
         <div className="max-w-6xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-10">
-          
+
           {/* Left Panel: Personal Result */}
           <div className="bg-white glass-card p-10 rounded-3xl shadow-2xl border border-gray-200 text-center w-full">
             <div className="w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -409,20 +409,20 @@ export default function Arena() {
             </div>
             <h2 className="text-2xl font-semibold text-gray-900 mb-3">Assessment Submitted</h2>
             <p className="text-gray-500 font-medium mb-6 leading-relaxed">You have successfully submitted the assessment. Your answers have been recorded.</p>
-            
+
             <div className="bg-gray-100/50 border border-gray-200 rounded-2xl p-6 mb-8">
-               <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Score</p>
-               <p className="text-4xl font-semibold text-gray-900">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
-               <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
+              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Score</p>
+              <p className="text-4xl font-semibold text-gray-900">{submittedResult.score} <span className="text-xl text-gray-500">/ {submittedResult.total}</span></p>
+              <p className="text-xs text-gray-500 mt-3">Detailed reports will be available once the contest completely ends for all participants.</p>
             </div>
 
             <button onClick={() => navigate('/student/dashboard')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
-               Return to Dashboard
+              Return to Dashboard
             </button>
           </div>
 
           {/* Right Panel: Live Leaderboard */}
-          <div className="h-[600px] flex flex-col bg-white glass-card rounded-3xl shadow-2xl border border-gray-200 overflow-hidden">
+          <div className="h-[600px] flex flex-col bg-white glass-card rounded-3xl shadow-2xl border border-gray-200 overflow-hidden dark">
             <Leaderboard contestId={contest?._id || contest?.id} batch={studentProfile.batch} />
           </div>
 
@@ -441,7 +441,7 @@ export default function Arena() {
           <h2 className="text-2xl font-semibold text-gray-900 mb-3">Oops!</h2>
           <p className="text-gray-500 font-medium mb-8 leading-relaxed">{error}</p>
           <button onClick={() => navigate('/student/contests')} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-colors shadow-lg shadow-blue-900/20">
-             Go Back to Dashboard
+            Go Back to Dashboard
           </button>
         </div>
       </div>
@@ -451,8 +451,8 @@ export default function Arena() {
   if (!contest) {
     return (
       <div className="fixed inset-0 bg-slate-50 flex flex-col items-center justify-center font-sans z-50">
-         <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-6"></div>
-         <p className="text-gray-500 font-semibold tracking-widest uppercase">Loading Arena...</p>
+        <div className="w-12 h-12 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-6"></div>
+        <p className="text-gray-500 font-semibold tracking-widest uppercase">Loading Arena...</p>
       </div>
     );
   }
@@ -461,61 +461,60 @@ export default function Arena() {
     return (
       <div className="fixed inset-0 bg-gray-50 flex flex-col font-sans">
         <div className="h-16 bg-white border-b border-gray-200 flex items-center px-6 shrink-0 shadow-sm">
-           <button onClick={() => navigate('/student/contests')} className="text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2 font-medium">
-             <ChevronLeft className="w-5 h-5" /> Back to Dashboard
-           </button>
+          <button onClick={() => navigate('/student/contests')} className="text-gray-500 hover:text-gray-800 transition-colors flex items-center gap-2 font-medium">
+            <ChevronLeft className="w-5 h-5" /> Back to Dashboard
+          </button>
         </div>
         <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center">
-           <div className="bg-white max-w-3xl w-full rounded-2xl shadow-xl border border-gray-100 p-8">
-              <h1 className="text-2xl font-semibold text-gray-900 mb-6 border-b pb-4">Rules & Regulations</h1>
-              
-              <div className="space-y-4 text-gray-600 text-sm mb-8">
-                <p className="flex gap-3"><span className="text-blue-600 font-semibold">1.</span> <span>Do not exit fullscreen mode (e.g., by pressing Esc), switch tabs, or minimize the browser window. Doing so will trigger a warning or automatic submission.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-semibold">2.</span> <span>Ensure you have a stable internet connection before starting the contest.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-semibold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-semibold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
-                <p className="flex gap-3"><span className="text-blue-600 font-semibold">5.</span> <span>Any malpractice or copying will lead to immediate disqualification.</span></p>
-                {contest?.customRules && (Array.isArray(contest.customRules) ? contest.customRules : [contest.customRules]).map((rule, idx) => rule.trim() !== '' && (
-                  <p key={idx} className="flex gap-3"><span className="text-blue-600 font-semibold">{6 + idx}.</span> <span className="whitespace-pre-wrap"><strong className="text-blue-700">Faculty Instructions: </strong>{rule}</span></p>
-                ))}
-              </div>
+          <div className="bg-white max-w-3xl w-full rounded-2xl shadow-xl border border-gray-100 p-8">
+            <h1 className="text-2xl font-semibold text-gray-900 mb-6 border-b pb-4">Rules & Regulations</h1>
 
-              {isWaiting ? (
-                <div className="bg-gray-50 text-gray-900 rounded-xl p-8 text-center mt-8">
-                   <div className="w-16 h-16 bg-orange-500/20 text-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                     <Clock className="w-8 h-8" />
-                   </div>
-                   <h2 className="text-xl font-semibold mb-2">Assessment Starts In</h2>
-                   <div className="text-5xl font-mono font-semibold tracking-tight text-orange-400">{timeRemaining || "Loading..."}</div>
+            <div className="space-y-4 text-gray-600 text-sm mb-8">
+              <p className="flex gap-3"><span className="text-blue-600 font-semibold">1.</span> <span>Do not exit fullscreen mode (e.g., by pressing Esc), switch tabs, or minimize the browser window. Doing so will trigger a warning or automatic submission.</span></p>
+              <p className="flex gap-3"><span className="text-blue-600 font-semibold">2.</span> <span>Ensure you have a stable internet connection before starting the contest.</span></p>
+              <p className="flex gap-3"><span className="text-blue-600 font-semibold">3.</span> <span>For coding questions, write your solution in the provided editor and verify with Sample Test Cases before submitting.</span></p>
+              <p className="flex gap-3"><span className="text-blue-600 font-semibold">4.</span> <span>The timer will start automatically once you enter the Arena. The test will auto-submit when the time is up.</span></p>
+              <p className="flex gap-3"><span className="text-blue-600 font-semibold">5.</span> <span>Any malpractice or copying will lead to immediate disqualification.</span></p>
+              {contest?.customRules && (Array.isArray(contest.customRules) ? contest.customRules : [contest.customRules]).map((rule, idx) => rule.trim() !== '' && (
+                <p key={idx} className="flex gap-3"><span className="text-blue-600 font-semibold">{6 + idx}.</span> <span className="whitespace-pre-wrap"><strong className="text-blue-700">Faculty Instructions: </strong>{rule}</span></p>
+              ))}
+            </div>
+
+            {isWaiting ? (
+              <div className="bg-gray-50 text-gray-900 rounded-xl p-8 text-center mt-8">
+                <div className="w-16 h-16 bg-orange-500/20 text-orange-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                  <Clock className="w-8 h-8" />
                 </div>
-              ) : (
-                <div className="mt-8 bg-blue-50 border border-blue-100 p-6 rounded-xl">
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                      checked={rulesChecked}
-                      onChange={(e) => setRulesChecked(e.target.checked)}
-                    />
-                    <span className="text-gray-700 font-medium text-sm">
-                      I have read all the rules and regulations. I understand that any violation will lead to disqualification. I am ready to begin the assessment.
-                    </span>
-                  </label>
-                  
-                  <button 
-                    disabled={!rulesChecked}
-                    onClick={handleStartAssessment}
-                    className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-gray-900 transition-all ${
-                      rulesChecked 
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30' 
-                        : 'bg-gray-300 cursor-not-allowed'
+                <h2 className="text-xl font-semibold mb-2">Assessment Starts In</h2>
+                <div className="text-5xl font-mono font-semibold tracking-tight text-orange-400">{timeRemaining || "Loading..."}</div>
+              </div>
+            ) : (
+              <div className="mt-8 bg-blue-50 border border-blue-100 p-6 rounded-xl">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    className="mt-1 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    checked={rulesChecked}
+                    onChange={(e) => setRulesChecked(e.target.checked)}
+                  />
+                  <span className="text-gray-700 font-medium text-sm">
+                    I have read all the rules and regulations. I understand that any violation will lead to disqualification. I am ready to begin the assessment.
+                  </span>
+                </label>
+
+                <button
+                  disabled={!rulesChecked}
+                  onClick={handleStartAssessment}
+                  className={`mt-6 w-full py-3.5 rounded-xl font-semibold text-gray-900 transition-all ${rulesChecked
+                      ? 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/30'
+                      : 'bg-gray-300 cursor-not-allowed'
                     }`}
-                  >
-                    Start Assessment Now
-                  </button>
-                </div>
-              )}
-           </div>
+                >
+                  Start Assessment Now
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -532,7 +531,7 @@ export default function Arena() {
             <p className="text-red-400 font-semibold mb-8">
               Warning {violations} of {contest?.warningLimit !== undefined ? contest.warningLimit : 1}. If you exceed the limit, your test will be automatically submitted.
             </p>
-            <button 
+            <button
               onClick={() => {
                 document.documentElement.requestFullscreen().then(() => {
                   setShowWarning(false);
@@ -563,8 +562,8 @@ export default function Arena() {
               ${theme === 'dark'
                 ? 'bg-slate-800 border-slate-700 text-blue-300 hover:bg-slate-700'
                 : theme === 'warm'
-                ? 'bg-[#f6f3eb] border-[#e8e4d9] text-amber-700 hover:bg-[#eee8d5]'
-                : 'bg-blue-50 border-blue-200 text-yellow-500 hover:bg-blue-100'}
+                  ? 'bg-[#f6f3eb] border-[#e8e4d9] text-amber-700 hover:bg-[#eee8d5]'
+                  : 'bg-blue-50 border-blue-200 text-yellow-500 hover:bg-blue-100'}
             `}
             title="Toggle Theme"
           >
@@ -595,7 +594,7 @@ export default function Arena() {
               <div className="p-4 text-sm text-gray-500 text-center">No questions added yet.</div>
             ) : (
               questions.map((prob, idx) => (
-                <button 
+                <button
                   key={prob.id}
                   onClick={() => setActiveProblem(prob)}
                   className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-100 transition-colors flex items-center justify-between ${activeProblem?.id === prob.id ? 'bg-gray-100 border-l-2 border-l-blue-500' : ''}`}
@@ -627,7 +626,7 @@ export default function Arena() {
                     <span className="text-gray-500 text-sm font-medium">{activeProblem.marks} Marks</span>
                   </div>
                   {answers[activeProblem.id] !== undefined && answers[activeProblem.id] !== '' && (
-                    <button 
+                    <button
                       onClick={() => handleAnswerChange(activeProblem.id, undefined)}
                       className="text-gray-500 hover:text-gray-900 text-xs font-semibold uppercase tracking-wider transition-colors"
                     >
@@ -635,26 +634,24 @@ export default function Arena() {
                     </button>
                   )}
                 </div>
-                
+
                 <h2 className="text-xl font-medium text-gray-900 mb-8 leading-relaxed">
                   {activeProblem.question}
                 </h2>
 
                 <div className="space-y-3">
                   {activeProblem.options.map((opt, idx) => (
-                    <label 
-                      key={idx} 
+                    <label
+                      key={idx}
                       onClick={() => handleAnswerChange(activeProblem.id, idx)}
-                      className={`block p-4 rounded-xl border cursor-pointer transition-all ${
-                        answers[activeProblem.id] === idx 
-                          ? 'bg-blue-900/30 border-blue-500/50' 
+                      className={`block p-4 rounded-xl border cursor-pointer transition-all ${answers[activeProblem.id] === idx
+                          ? 'bg-blue-900/30 border-blue-500/50'
                           : 'bg-white glass-card border-gray-200 hover:border-gray-500'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${
-                          answers[activeProblem.id] === idx ? 'border-blue-500' : 'border-gray-500'
-                        }`}>
+                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 ${answers[activeProblem.id] === idx ? 'border-blue-500' : 'border-gray-500'
+                          }`}>
                           {answers[activeProblem.id] === idx && <div className="w-2.5 h-2.5 bg-blue-500 rounded-full"></div>}
                         </div>
                         <span className="text-gray-900 text-[15px]">{opt}</span>
@@ -665,14 +662,14 @@ export default function Arena() {
 
                 {/* Navigation Buttons */}
                 <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200">
-                  <button 
+                  <button
                     onClick={() => setActiveProblem(questions[currentIndex - 1])}
                     disabled={currentIndex <= 0}
                     className="px-6 py-2.5 bg-gray-100 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-gray-900 transition-colors"
                   >
                     Previous
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveProblem(questions[currentIndex + 1])}
                     disabled={currentIndex === questions.length - 1}
                     className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
@@ -709,14 +706,14 @@ export default function Arena() {
 
                 {/* Navigation Buttons */}
                 <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200">
-                  <button 
+                  <button
                     onClick={() => setActiveProblem(questions[currentIndex - 1])}
                     disabled={currentIndex <= 0}
                     className="px-6 py-2.5 bg-gray-100 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-gray-900 transition-colors"
                   >
                     Previous
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveProblem(questions[currentIndex + 1])}
                     disabled={currentIndex === questions.length - 1}
                     className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
@@ -738,13 +735,13 @@ export default function Arena() {
                 </div>
                 <div className="prose prose-invert max-w-none text-gray-800">
                   <p className="whitespace-pre-wrap">{activeProblem.problemStatement}</p>
-                  
+
                   <h3 className="text-lg font-semibold text-gray-900 mt-8 mb-2">Input Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.inputFormat}</p>
-                  
+
                   <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">Output Format</h3>
                   <p className="whitespace-pre-wrap">{activeProblem.outputFormat}</p>
-                  
+
                   <div className="space-y-6 mt-8">
                     {(activeProblem.testCases || (activeProblem.sampleInput ? [{ input: activeProblem.sampleInput, output: activeProblem.sampleOutput }] : [])).map((tc, idx) => (
                       <div key={idx} className="grid grid-cols-2 gap-4">
@@ -762,14 +759,14 @@ export default function Arena() {
 
                   {/* Navigation Buttons */}
                   <div className="flex items-center justify-between mt-12 pt-6 border-t border-gray-200 pb-8">
-                    <button 
+                    <button
                       onClick={() => setActiveProblem(questions[currentIndex - 1])}
                       disabled={currentIndex <= 0}
                       className="px-6 py-2.5 bg-gray-100 hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-gray-900 transition-colors"
                     >
                       Previous
                     </button>
-                    <button 
+                    <button
                       onClick={() => setActiveProblem(questions[currentIndex + 1])}
                       disabled={currentIndex === questions.length - 1}
                       className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-medium text-white transition-colors"
@@ -791,7 +788,7 @@ export default function Arena() {
                   </select>
                 </div>
                 <div className="flex-1 p-4 font-mono text-[13px] overflow-y-auto leading-relaxed outline-none">
-                  <textarea 
+                  <textarea
                     className="w-full h-full bg-transparent text-blue-100 resize-none outline-none focus:ring-0 placeholder-gray-600"
                     placeholder="// Write your solution here..."
                     value={answers[activeProblem.id] || ''}
@@ -800,15 +797,15 @@ export default function Arena() {
                   ></textarea>
                 </div>
                 <div className="h-14 border-t border-gray-200 bg-slate-50 flex items-center justify-end px-4 gap-3 shrink-0">
-                   <button className="px-4 py-1.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                      <Play className="w-4 h-4" /> Run Code
-                   </button>
-                   <button 
-                     onClick={() => handleAnswerChange(activeProblem.id, (answers[activeProblem.id] || ' ') + ' ')} 
-                     className="px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm font-medium transition-colors"
-                   >
-                      Submit Solution
-                   </button>
+                  <button className="px-4 py-1.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                    <Play className="w-4 h-4" /> Run Code
+                  </button>
+                  <button
+                    onClick={() => handleAnswerChange(activeProblem.id, (answers[activeProblem.id] || ' ') + ' ')}
+                    className="px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm font-medium transition-colors"
+                  >
+                    Submit Solution
+                  </button>
                 </div>
               </div>
             </>

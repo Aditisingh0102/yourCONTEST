@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookOpen, Video, FileText, Plus, Edit3, Trash2, Users, BarChart2, Search, Filter, X, UploadCloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -101,6 +101,21 @@ export default function CourseHub() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ title: '', subject: '', modules: '', status: 'Draft' });
+
+  useEffect(() => {
+    setCourses(prevCourses => prevCourses.map(course => {
+      const savedDetails = localStorage.getItem(`course_${course.id}_details`);
+      if (savedDetails) {
+        try {
+          const parsed = JSON.parse(savedDetails);
+          if (parsed.status) {
+            return { ...course, status: parsed.status };
+          }
+        } catch (e) {}
+      }
+      return course;
+    }));
+  }, []);
   
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
   const [selectedCourseForAnalytics, setSelectedCourseForAnalytics] = useState(null);

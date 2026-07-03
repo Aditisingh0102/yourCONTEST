@@ -68,7 +68,33 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
     };
 
     socket.on('NOTICE_UPDATED', handleNoticeUpdate);
-    return () => socket.off('NOTICE_UPDATED', handleNoticeUpdate);
+
+    // Listen for course publishing across tabs
+    const handleStorageChange = (e) => {
+      if (e.key && e.key.startsWith('course_') && e.key.endsWith('_details')) {
+        try {
+          const newVal = JSON.parse(e.newValue);
+          const oldVal = e.oldValue ? JSON.parse(e.oldValue) : {};
+          if (newVal.status === 'Published' && oldVal.status !== 'Published') {
+            const newNotice = {
+              _id: 'local_' + Date.now(),
+              title: `New Course Published!`,
+              type: 'COURSE',
+              content: `${newVal.title || 'A new course'} is now available for enrollment.`,
+              date: new Date().toISOString()
+            };
+            setNotifications(prev => [newNotice, ...prev].slice(0, 8));
+          }
+        } catch (err) {}
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      socket.off('NOTICE_UPDATED', handleNoticeUpdate);
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, [user?.role]);
 
   const handleNotificationToggle = () => {
