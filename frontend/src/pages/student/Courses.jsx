@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BookOpen, Video, Clock, CheckCircle, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,9 +7,9 @@ const allCourses = [
     id: 1,
     title: 'Full-Stack Web Development',
     professor: 'Dr. Sarah Jenkins',
-    progress: 65,
+    progress: 0,
     totalModules: 12,
-    completedModules: 8,
+    completedModules: 0,
     color: 'bg-blue-500',
     iconColor: 'text-blue-500',
     bgLight: 'bg-blue-50',
@@ -19,9 +19,9 @@ const allCourses = [
     id: 2,
     title: 'Data Structures in Java',
     professor: 'Prof. Alan Turing',
-    progress: 30,
+    progress: 0,
     totalModules: 10,
-    completedModules: 3,
+    completedModules: 0,
     color: 'bg-indigo-500',
     iconColor: 'text-indigo-500',
     bgLight: 'bg-indigo-50',
@@ -68,9 +68,9 @@ const allCourses = [
     id: 6,
     title: 'Operating Systems Core',
     professor: 'Dr. Linus Torvalds',
-    progress: 100,
+    progress: 0,
     totalModules: 10,
-    completedModules: 10,
+    completedModules: 0,
     color: 'bg-teal-500',
     iconColor: 'text-teal-500',
     bgLight: 'bg-teal-50',
@@ -80,40 +80,97 @@ const allCourses = [
     id: 7,
     title: 'Cybersecurity Fundamentals',
     professor: 'Prof. Kevin Mitnick',
-    progress: 15,
+    progress: 0,
     totalModules: 15,
-    completedModules: 2,
+    completedModules: 0,
     color: 'bg-rose-500',
     iconColor: 'text-rose-500',
     bgLight: 'bg-rose-50',
     tags: ['Security', 'Network', 'Ethics']
+  },
+  {
+    id: 8,
+    title: 'Advanced System Design',
+    professor: 'Mr. Alex Xu',
+    progress: 0,
+    totalModules: 15,
+    completedModules: 0,
+    color: 'bg-emerald-500',
+    iconColor: 'text-emerald-500',
+    bgLight: 'bg-emerald-50',
+    tags: ['Architecture', 'Scaling', 'Backend']
+  },
+  {
+    id: 9,
+    title: 'Go Programming Masterclass',
+    professor: 'Mr. Rob Pike',
+    progress: 0,
+    totalModules: 12,
+    completedModules: 0,
+    color: 'bg-cyan-500',
+    iconColor: 'text-cyan-500',
+    bgLight: 'bg-cyan-50',
+    tags: ['Go', 'Concurrency', 'Backend']
+  },
+  {
+    id: 10,
+    title: 'Kubernetes for DevOps',
+    professor: 'Mr. Kelsey Hightower',
+    progress: 0,
+    totalModules: 10,
+    completedModules: 0,
+    color: 'bg-sky-500',
+    iconColor: 'text-sky-500',
+    bgLight: 'bg-sky-50',
+    tags: ['K8s', 'Docker', 'DevOps']
   }
 ];
 
 export default function Courses() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeTab, setActiveTab] = useState('ongoing'); // 'ongoing', 'completed', 'new'
+  
+  const [studentProfile] = useState(() => {
+    const saved = sessionStorage.getItem('student_profile');
+    if (saved) return JSON.parse(saved);
+    // Fallback to a default name if not found
+    const userStr = sessionStorage.getItem('user');
+    if (userStr) {
+      try {
+         const u = JSON.parse(userStr);
+         if (u.name) return { name: u.name, batch: 'Alpha 1', branch: 'B.Tech CSE' };
+      } catch(e) {}
+    }
+    return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
+  });
+
+  const getStorageKey = () => `v2_student_enrolled_courses_${studentProfile.name.replace(/\s+/g, '_')}`;
 
   const [enrolledCourses, setEnrolledCourses] = useState(() => {
-    const saved = localStorage.getItem('student_enrolled_courses');
+    const saved = localStorage.getItem(getStorageKey());
     if (saved) return JSON.parse(saved);
-    // By default, assume enrolled in these IDs
-    return [1, 2, 4, 6, 7]; 
+    return []; 
   });
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState(enrolledCourses.length > 0 ? 'ongoing' : 'new');
+  const [updateTrigger, setUpdateTrigger] = useState(0);
+
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key && e.key.startsWith('course_') && e.key.endsWith('_details')) {
+        setUpdateTrigger(prev => prev + 1);
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   const handleEnroll = (courseId) => {
     const updated = [...enrolledCourses, courseId];
     setEnrolledCourses(updated);
-    localStorage.setItem('student_enrolled_courses', JSON.stringify(updated));
+    localStorage.setItem(getStorageKey(), JSON.stringify(updated));
     setActiveTab('ongoing');
   };
-
-  const [studentProfile] = useState(() => {
-    const saved = sessionStorage.getItem('student_profile');
-    if (saved) return JSON.parse(saved);
-    return { name: 'Aditi Singh', batch: 'Alpha 1', branch: 'B.Tech CSE' };
-  });
 
   const filteredCourses = allCourses.filter(course => {
     // Check localStorage for dynamic status changes made by faculty across tabs
@@ -133,6 +190,11 @@ export default function Courses() {
 
     // Hide Cybersecurity Fundamentals from Ambar
     if (course.id === 7 && studentProfile.name.toLowerCase().includes('ambar')) {
+      return false;
+    }
+
+    // Hide Rahul's custom courses from other students
+    if ([8, 9, 10].includes(course.id) && !studentProfile.name.toLowerCase().includes('rahul')) {
       return false;
     }
 
