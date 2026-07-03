@@ -45,146 +45,146 @@
    Tailwind's muted grays are nearly invisible on white/slate.
    These rules bump every shade to a strong, clearly readable tone.
    ═══════════════════════════════════════════════════════════════ */
-html:not(.dark) {
+html:not(.dark):not(.warm) {
   color-scheme: light;
 }
 
-html:not(.dark) body,
-html:not(.dark) .bg-slate-50,
-html:not(.dark) .bg-gray-50,
-html:not(.dark) .bg-slate-50\/50,
-html:not(.dark) .bg-gray-50\/50 {
-  background-color: #f0f4f8 !important;
+html:not(.dark):not(.warm) body,
+html:not(.dark):not(.warm) .bg-slate-50,
+html:not(.dark):not(.warm) .bg-gray-50,
+html:not(.dark):not(.warm) .bg-slate-50\/50,
+html:not(.dark):not(.warm) .bg-gray-50\/50 {
+  background-color: #e0e5e9 !important;
   color: #0f172a;
 }
 
-html:not(.dark) .bg-white {
+html:not(.dark):not(.warm) .bg-white {
   background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03), 0 2px 4px rgba(0, 0, 0, 0.02) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
 }
 
-html:not(.dark) .glass-card,
-html:not(.dark) .glass-panel {
+html:not(.dark):not(.warm) .glass-card,
+html:not(.dark):not(.warm) .glass-panel {
   background-color: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15) !important;
 }
 
-html:not(.dark) .border-gray-100,
-html:not(.dark) .border-gray-200,
-html:not(.dark) .border-slate-100,
-html:not(.dark) .border-slate-200 {
-  border-color: #e2e8f0 !important;
+html:not(.dark):not(.warm) .border-gray-100,
+html:not(.dark):not(.warm) .border-gray-200,
+html:not(.dark):not(.warm) .border-slate-100,
+html:not(.dark):not(.warm) .border-slate-200 {
+  border-color: #cbd5e1 !important;
 }
 
 /* Gray text scale → slate equivalents (all strong & readable) */
-html:not(.dark) .text-gray-900,
-html:not(.dark) .text-slate-900 {
+html:not(.dark):not(.warm) .text-gray-900,
+html:not(.dark):not(.warm) .text-slate-900 {
   color: #0f172a !important;
 }
 
-html:not(.dark) .text-gray-800,
-html:not(.dark) .text-slate-800 {
+html:not(.dark):not(.warm) .text-gray-800,
+html:not(.dark):not(.warm) .text-slate-800 {
   color: #1e293b !important;
 }
 
-html:not(.dark) .text-gray-700,
-html:not(.dark) .text-slate-700 {
+html:not(.dark):not(.warm) .text-gray-700,
+html:not(.dark):not(.warm) .text-slate-700 {
   color: #334155 !important;
 }
 
-html:not(.dark) .text-gray-600,
-html:not(.dark) .text-slate-600 {
+html:not(.dark):not(.warm) .text-gray-600,
+html:not(.dark):not(.warm) .text-slate-600 {
   color: #475569 !important;
 }
 
 /* These were nearly invisible — bumped 2 stops darker */
-html:not(.dark) .text-gray-500,
-html:not(.dark) .text-slate-500 {
+html:not(.dark):not(.warm) .text-gray-500,
+html:not(.dark):not(.warm) .text-slate-500 {
   color: #334155 !important;
 }
 
-html:not(.dark) .text-gray-400,
-html:not(.dark) .text-slate-400 {
+html:not(.dark):not(.warm) .text-gray-400,
+html:not(.dark):not(.warm) .text-slate-400 {
   color: #475569 !important;
 }
 
-html:not(.dark) .text-gray-300,
-html:not(.dark) .text-slate-300 {
+html:not(.dark):not(.warm) .text-gray-300,
+html:not(.dark):not(.warm) .text-slate-300 {
   color: #64748b !important;
 }
 
 /* Hover states */
-html:not(.dark) .hover\:text-gray-900:hover,
-html:not(.dark) .hover\:text-gray-800:hover {
+html:not(.dark):not(.warm) .hover\:text-gray-900:hover,
+html:not(.dark):not(.warm) .hover\:text-gray-800:hover {
   color: #0f172a !important;
 }
 
-html:not(.dark) .hover\:text-gray-600:hover {
+html:not(.dark):not(.warm) .hover\:text-gray-600:hover {
   color: #1e293b !important;
 }
 
 /* Inputs / textareas / selects */
-html:not(.dark) input,
-html:not(.dark) textarea,
-html:not(.dark) select {
+html:not(.dark):not(.warm) input,
+html:not(.dark):not(.warm) textarea,
+html:not(.dark):not(.warm) select {
   color: #0f172a !important;
   background-color: #f8fafc !important;
   border-color: #cbd5e1 !important;
   /* Slightly darker border for contrast */
 }
 
-html:not(.dark) input::placeholder,
-html:not(.dark) textarea::placeholder {
+html:not(.dark):not(.warm) input::placeholder,
+html:not(.dark):not(.warm) textarea::placeholder {
   color: #94a3b8 !important;
 }
 
 /* ── Tinted backgrounds for better contrast in Light Mode ──── */
-html:not(.dark) .bg-blue-50,
-html:not(.dark) .bg-blue-100 {
+html:not(.dark):not(.warm) .bg-blue-50,
+html:not(.dark):not(.warm) .bg-blue-100 {
   background-color: rgba(59, 130, 246, 0.25) !important;
   border-bottom: 1px solid rgba(59, 130, 246, 0.2);
 }
 
-html:not(.dark) .bg-indigo-50,
-html:not(.dark) .bg-indigo-100 {
+html:not(.dark):not(.warm) .bg-indigo-50,
+html:not(.dark):not(.warm) .bg-indigo-100 {
   background-color: rgba(99, 102, 241, 0.25) !important;
   border-bottom: 1px solid rgba(99, 102, 241, 0.2);
 }
 
-html:not(.dark) .bg-green-50,
-html:not(.dark) .bg-green-100 {
+html:not(.dark):not(.warm) .bg-green-50,
+html:not(.dark):not(.warm) .bg-green-100 {
   background-color: rgba(34, 197, 94, 0.25) !important;
   border-bottom: 1px solid rgba(34, 197, 94, 0.2);
 }
 
-html:not(.dark) .bg-orange-50,
-html:not(.dark) .bg-orange-100 {
+html:not(.dark):not(.warm) .bg-orange-50,
+html:not(.dark):not(.warm) .bg-orange-100 {
   background-color: rgba(249, 115, 22, 0.25) !important;
   border-bottom: 1px solid rgba(249, 115, 22, 0.2);
 }
 
-html:not(.dark) .bg-purple-50,
-html:not(.dark) .bg-purple-100 {
+html:not(.dark):not(.warm) .bg-purple-50,
+html:not(.dark):not(.warm) .bg-purple-100 {
   background-color: rgba(168, 85, 247, 0.25) !important;
   border-bottom: 1px solid rgba(168, 85, 247, 0.2);
 }
 
-html:not(.dark) .bg-teal-50,
-html:not(.dark) .bg-teal-100 {
+html:not(.dark):not(.warm) .bg-teal-50,
+html:not(.dark):not(.warm) .bg-teal-100 {
   background-color: rgba(20, 184, 166, 0.25) !important;
   border-bottom: 1px solid rgba(20, 184, 166, 0.2);
 }
 
-html:not(.dark) .bg-red-50,
-html:not(.dark) .bg-red-100 {
+html:not(.dark):not(.warm) .bg-red-50,
+html:not(.dark):not(.warm) .bg-red-100 {
   background-color: rgba(239, 68, 68, 0.25) !important;
   border-bottom: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-html:not(.dark) .bg-yellow-50,
-html:not(.dark) .bg-yellow-100 {
+html:not(.dark):not(.warm) .bg-yellow-50,
+html:not(.dark):not(.warm) .bg-yellow-100 {
   background-color: rgba(234, 179, 8, 0.3) !important;
   border-bottom: 1px solid rgba(234, 179, 8, 0.2);
 }
@@ -540,32 +540,41 @@ html:not(.dark) .bg-yellow-100 {
 }
 
 .warm body {
-  background-color: #fdfbf7 !important;
-  /* Warm light beige */
+  background-color: #f8f4e6 !important;
   color: #4a4036 !important;
-  /* Warm dark brown */
 }
 
 /* Backgrounds */
 .warm .bg-white {
-  background-color: #fffdfa !important;
-  border-color: #e8e4d9 !important;
+  background-color: #ffffff !important;
+  border-color: #e6dfcd !important;
+  box-shadow: 0 4px 15px rgba(140, 114, 85, 0.03) !important;
 }
 
-.warm .bg-slate-50,
+.warm .bg-slate-50 {
+  background-color: #f8f4e6 !important;
+}
+
 .warm .bg-gray-50 {
-  background-color: #f6f3eb !important;
+  background-color: #fdfaf3 !important;
 }
 
-.warm .bg-slate-100,
+.warm .bg-slate-100 {
+  background-color: #f4ebd8 !important;
+}
+
 .warm .bg-gray-100 {
-  background-color: #eee8d5 !important;
+  background-color: #f4ebd8 !important;
 }
 
-.warm .bg-slate-50\/50,
+.warm .bg-slate-50\/50 {
+  background-color: rgba(248, 244, 230, 0.7) !important;
+  border-color: #e6dfcd !important;
+}
+
 .warm .bg-gray-50\/50 {
-  background-color: rgba(246, 243, 235, 0.7) !important;
-  border-color: #e8e4d9 !important;
+  background-color: rgba(253, 250, 243, 0.7) !important;
+  border-color: #e6dfcd !important;
 }
 
 .warm .bg-white\/70 {
@@ -639,16 +648,16 @@ html:not(.dark) .bg-yellow-100 {
 /* Borders */
 .warm .border-gray-100,
 .warm .border-gray-200 {
-  border-color: #e8e4d9 !important;
+  border-color: #e6dfcd !important;
 }
 
 /* Inputs */
 .warm input,
 .warm textarea,
 .warm select {
-  background-color: #ffffff !important;
+  background-color: #fdfaf3 !important;
   color: #4a4036 !important;
-  border-color: #dcd6c8 !important;
+  border-color: #e6dfcd !important;
 }
 
 /* Glass Panels */
@@ -673,6 +682,6 @@ html:not(.dark) .bg-yellow-100 {
 /* Navbar/Sidebar */
 .warm .navbar-container,
 .warm .sidebar-container {
-  background-color: #fffdfa !important;
-  border-color: #e8e4d9 !important;
+  background-color: #ffffff !important;
+  border-color: #e6dfcd !important;
 }
