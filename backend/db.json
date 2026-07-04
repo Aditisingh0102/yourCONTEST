@@ -1,6 +1,22 @@
 {
   "notices": [
     {
+      "title": "New Contest: Batch 3 test",
+      "content": "A new lab exam has been scheduled on 04/07/2026 at 14:45 for 117 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-04",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783156359300",
+      "date": "2026-07-04T09:12:39.300Z"
+    },
+    {
       "title": "New Contest: ggfg",
       "content": "A new assessment has been scheduled on 03/07/2026 at 15:33 for 10 mins. Please be prepared.",
       "type": "Important",
@@ -66,6 +82,44 @@
     }
   ],
   "contests": [
+    {
+      "title": "Batch 3 test",
+      "type": "Lab Exam",
+      "status": "Upcoming",
+      "startTime": "2026-07-04, 14:45",
+      "endTime": "TBD",
+      "duration": "117 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 2,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "7",
+      "questionList": [
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "ggfg"
+        }
+      ],
+      "_id": "1783156359293",
+      "createdAt": "2026-07-04T09:12:39.293Z"
+    },
     {
       "title": "ggfg",
       "type": "Assessment",

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Trophy, CheckCircle, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User, X, CheckSquare, Save, Edit3, Trash2, Plus, FileCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests, getSubmissions } from '../../api';
@@ -208,7 +209,7 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md border border-transparent dark:border-blue-900/30 text-white relative overflow-hidden">
+      <div className="dashboard-banner bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md border border-transparent dark:border-blue-900/30 text-white relative overflow-hidden">
         <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 dark:bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
         <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         <div className="relative z-10">
@@ -517,7 +518,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {showNoticePopup && latestNotice && (
+      {showNoticePopup && latestNotice && createPortal(
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-300">
             <div className={`h-2 ${latestNotice.bg} w-full`}></div>
@@ -557,7 +558,8 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>
