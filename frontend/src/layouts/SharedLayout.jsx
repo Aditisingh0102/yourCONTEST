@@ -6,9 +6,7 @@ export default function SharedLayout({ user, role, theme, onCycleTheme, children
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const toggleSidebar = () => {
-    if (window.innerWidth < 1024) {
-      setIsMobileOpen(!isMobileOpen);
-    }
+    setIsMobileOpen(!isMobileOpen);
   };
 
   return (
