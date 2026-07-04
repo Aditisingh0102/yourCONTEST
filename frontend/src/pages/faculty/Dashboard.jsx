@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { faculty } from '../../data/mockData';
-import { Trophy, Users, FileCheck, CheckSquare, BarChart, Calendar, Edit3, PlusCircle, Library, Trash2, Save, X, Plus, Rocket, Zap, Target } from 'lucide-react';
+import { Trophy, Users, FileCheck, CheckSquare, BarChart as BarChartIcon, Calendar, Edit3, PlusCircle, Library, Trash2, Save, X, Plus, Rocket, Zap, Target } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { getContests } from '../../api';
+import { getContests, getSubmissions } from '../../api';
 import { socket } from '../../socket';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid, Legend } from 'recharts';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -30,6 +31,8 @@ export default function Dashboard() {
   const [editingNoteTime, setEditingNoteTime] = useState('');
 
   const [managedContests, setManagedContests] = useState([]);
+  const [batchPerformanceData, setBatchPerformanceData] = useState([]);
+  const [contestResultData, setContestResultData] = useState([]);
   
   const [recentAssignments] = useState([
     { id: 101, title: 'Build a React Portfolio', course: 'Full-Stack Web Development', submissions: 32, total: 45, deadline: '2026-07-05T23:59:00', status: 'Active' },
@@ -37,19 +40,59 @@ export default function Dashboard() {
   ]);
 
   useEffect(() => {
-    const fetchContests = async () => {
+    const fetchData = async () => {
       try {
-        const res = await getContests();
-        setManagedContests(res.data);
+        const [contestsRes, subsRes] = await Promise.all([
+          getContests(),
+          getSubmissions()
+        ]);
+        
+        setManagedContests(contestsRes.data);
+        const submissionsData = subsRes.data;
+
+        // Calculate Batch Performance dynamically
+        const bpData = allocatedBatchesList.map(batch => {
+          const batchName = batch.name;
+          const batchSubs = submissionsData.filter(s => s.batch === batchName);
+          if (batchSubs.length === 0) return { name: batchName, averageScore: 0, topScore: 0 };
+          
+          const scores = batchSubs.map(s => s.score || 0);
+          const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+          const top = Math.max(...scores);
+          return { name: batchName, averageScore: avg, topScore: top };
+        });
+        setBatchPerformanceData(bpData);
+
+        // Calculate Overall Results dynamically
+        // Assuming passing score is arbitrarily 5 for demonstration, or we can use 40% if maxScore is known. Let's use 5.
+        const totalStudents = allocatedBatchesList.reduce((acc, curr) => acc + curr.students, 0);
+        const totalSubs = submissionsData.length;
+        
+        const passed = submissionsData.filter(s => (s.score || 0) >= 5).length;
+        const failed = totalSubs - passed;
+        const notAttempted = Math.max(0, totalStudents - totalSubs);
+
+        setContestResultData([
+          { name: 'Passed', value: passed, color: '#22c55e' },
+          { name: 'Failed', value: failed, color: '#ef4444' },
+          { name: 'Not Attempted', value: notAttempted, color: '#94a3b8' },
+        ]);
+        
       } catch (error) {
-        console.error("Failed to fetch contests", error);
+        console.error("Failed to fetch dashboard data", error);
       }
     };
     
-    fetchContests();
+    fetchData();
 
-    socket.on('CONTEST_UPDATED', fetchContests);
-    return () => socket.off('CONTEST_UPDATED');
+    socket.on('CONTEST_UPDATED', fetchData);
+    socket.on('SUBMISSION_ADDED', fetchData);
+    socket.on('SUBMISSION_UPDATED', fetchData);
+    return () => {
+      socket.off('CONTEST_UPDATED', fetchData);
+      socket.off('SUBMISSION_ADDED', fetchData);
+      socket.off('SUBMISSION_UPDATED', fetchData);
+    };
   }, []);
 
   useEffect(() => {
@@ -135,6 +178,60 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-6">
+
+          {/* Analytics Overview Section */}
+          <div>
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-[15px] font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                <BarChartIcon className="w-4 h-4 text-blue-600 dark:text-blue-500" /> Analytics Overview
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Bar Chart Card */}
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5 shadow-sm">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Batch Performance</h3>
+                <div className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={batchPerformanceData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" opacity={0.5} />
+                      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
+                      <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.1)' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                      <Legend wrapperStyle={{ fontSize: '12px' }} />
+                      <Bar dataKey="averageScore" name="Avg Score" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={20} />
+                      <Bar dataKey="topScore" name="Top Score" fill="#818cf8" radius={[4, 4, 0, 0]} barSize={20} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+
+              {/* Doughnut Chart Card */}
+              <div className="bg-white dark:bg-slate-900 rounded-xl border border-gray-100 dark:border-gray-800 p-5 shadow-sm">
+                <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Overall Results</h3>
+                <div className="h-64 w-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={contestResultData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {contestResultData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                      <Legend wrapperStyle={{ fontSize: '12px' }} verticalAlign="bottom" height={36}/>
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Active & Upcoming Contests */}
           <div>

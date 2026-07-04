@@ -108,7 +108,7 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
   };
 
   return (
-    <div className="h-16 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0 navbar-container transition-colors duration-300">
+    <div className="h-16 bg-white dark:bg-[#0f172a] border-b border-gray-200 dark:border-gray-700 flex items-center justify-between px-6 sticky top-0 z-50 shrink-0 navbar-container transition-colors duration-300">
       <div className="flex items-center gap-4">
         {/* Sidebar Hamburger Toggle Button */}
         <button

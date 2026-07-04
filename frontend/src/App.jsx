@@ -29,6 +29,8 @@ import FacultyBatches from './pages/faculty/Batches';
 import StudentRecords from './pages/faculty/StudentRecords';
 import FacultyProfile from './pages/faculty/Profile';
 import QuestionBank from './pages/faculty/QuestionBank';
+import FacultyLeaderboard from './pages/faculty/Leaderboard';
+import FacultyAnalytics from './pages/faculty/Analytics';
 
 // Placeholders for other routes
 const Placeholder = ({ title }) => (
@@ -78,7 +80,8 @@ export default function App() {
           <Route path="batches" element={<FacultyBatches />} />
           <Route path="students" element={<StudentRecords />} />
           <Route path="student-records" element={<StudentRecords />} />
-          <Route path="results" element={<Placeholder title="Results & Analytics" />} />
+          <Route path="leaderboard" element={<FacultyLeaderboard />} />
+          <Route path="results" element={<FacultyAnalytics />} />
           <Route path="question-bank" element={<QuestionBank />} />
           <Route path="profile" element={<FacultyProfile />} />
         </Route>

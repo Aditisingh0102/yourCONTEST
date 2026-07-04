@@ -8,7 +8,8 @@ import {
   FileBarChart,
   Briefcase,
   X,
-  GraduationCap
+  GraduationCap,
+  Medal
 } from 'lucide-react';
 
 const getStudentLinks = () => {
@@ -27,6 +28,8 @@ const facultyLinks = [
   { name: 'Notice Board', path: '/faculty/notice', icon: Megaphone },
   { name: 'Course Hub', path: '/faculty/course-hub', icon: BookOpen },
   { name: 'Contest Manager', path: '/faculty/manage-contests', icon: Trophy },
+  { name: 'Leaderboard', path: '/faculty/leaderboard', icon: Medal },
+  { name: 'Analytics', path: '/faculty/results', icon: FileBarChart },
   { name: 'My Batches', path: '/faculty/batches', icon: Briefcase },
   { name: 'Student Records', path: '/faculty/students', icon: GraduationCap },
 ];

@@ -206,19 +206,20 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .dark body {
-  background-color: #121212 !important;
+  background-color: #09090b !important; /* Very dark zinc background for layout */
   color: #fafafa !important;
 }
 
 /* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
-  background: #1e1e1e !important;
-  border: 1px solid #333333 !important;
+  background: #18181b !important; /* Lighter zinc card background */
+  border: 1px solid #27272a !important; /* Subtle border to separate container */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
 }
 
 .dark .bg-gray-50,
 .dark .bg-slate-50 {
-  background-color: #121212 !important;
+  background-color: #09090b !important;
 }
 
 .dark .bg-gray-100,
@@ -227,13 +228,13 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .dark .bg-slate-50\/50 {
-  background-color: #121212 !important;
-  border-color: #333333 !important;
+  background-color: #09090b !important;
+  border-color: #27272a !important;
 }
 
 .dark .bg-gray-50\/50 {
-  background-color: rgba(18, 18, 18, 0.5) !important;
-  border-color: #333333 !important;
+  background-color: rgba(9, 9, 11, 0.5) !important;
+  border-color: #27272a !important;
 }
 
 .dark .bg-gray-100\/80 {
@@ -430,7 +431,7 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 .dark .border-gray-300,
 .dark .border-slate-100,
 .dark .border-slate-200 {
-  border-color: #333333 !important;
+  border-color: #27272a !important;
 }
 
 .dark .border-blue-100,
@@ -549,23 +550,23 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .warm body {
-  background-color: #f8f4e6 !important;
-  color: #4a4036 !important;
+  background-color: #e0d0b8 !important; /* Noticeably darker warm background */
+  color: #3e3222 !important;
 }
 
 /* Backgrounds */
 .warm .bg-white {
-  background-color: #ffffff !important;
-  border-color: #e6dfcd !important;
-  box-shadow: 0 4px 15px rgba(140, 114, 85, 0.03) !important;
+  background-color: #fdfbf7 !important; /* Much lighter, almost white but warm paper */
+  border-color: #c7b69c !important; /* Stronger border for separation */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important; /* Slightly stronger shadow */
 }
 
 .warm .bg-slate-50 {
-  background-color: #f8f4e6 !important;
+  background-color: #e0d0b8 !important;
 }
 
 .warm .bg-gray-50 {
-  background-color: #fdfaf3 !important;
+  background-color: #e8d9c2 !important;
 }
 
 .warm .bg-slate-100 {
@@ -577,13 +578,13 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .warm .bg-slate-50\/50 {
-  background-color: rgba(248, 244, 230, 0.7) !important;
-  border-color: #e6dfcd !important;
+  background-color: rgba(224, 208, 184, 0.8) !important;
+  border-color: #c7b69c !important;
 }
 
 .warm .bg-gray-50\/50 {
-  background-color: rgba(253, 250, 243, 0.7) !important;
-  border-color: #e6dfcd !important;
+  background-color: rgba(232, 217, 194, 0.8) !important;
+  border-color: #c7b69c !important;
 }
 
 .warm .bg-white\/70 {
@@ -593,17 +594,17 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 
 /* Buttons & Accents */
 .warm .bg-gray-900 {
-  background-color: #8c7255 !important;
-  color: #fff !important;
+  background-color: #695642 !important;
+  color: #f8f0de !important;
 }
 
 .warm .bg-blue-600 {
-  background-color: #d18d4f !important;
+  background-color: #c47c43 !important;
   color: #fff !important;
 }
 
 .warm .text-blue-600 {
-  color: #b87130 !important;
+  color: #a6622b !important;
 }
 
 .warm .border-blue-200 {
