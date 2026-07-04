@@ -36,9 +36,10 @@ const facultyLinks = [
 
 import { faculty } from '../data/mockData';
 
-export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOpen }) {
+export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOpen, isHamburgerHovered }) {
   const navigate = useNavigate();
   const links = role === 'student' ? getStudentLinks() : facultyLinks;
+  const isExpanded = isMobileOpen || isHamburgerHovered;
 
   const [profileData, setProfileData] = useState(() => {
     const saved = sessionStorage.getItem(role === 'student' ? 'student_profile' : 'faculty_profile');
@@ -90,7 +91,9 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
       {/* Sidebar Container */}
       <div 
         className={`bg-white dark:bg-[#0f172a] sidebar-container border-r border-gray-200 dark:border-gray-700 flex flex-col py-4 fixed lg:static inset-y-0 left-0 h-full z-50 transition-[width,padding,transform,box-shadow,background-color] duration-300 ease-in-out group overflow-hidden ${
-          isMobileOpen ? 'translate-x-0 w-[280px]' : '-translate-x-full lg:translate-x-0 w-[80px] lg:hover:w-[280px] lg:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]'
+          isMobileOpen ? 'translate-x-0 w-[280px]' : 
+          isHamburgerHovered ? '-translate-x-full lg:translate-x-0 w-[280px] shadow-[0_8px_30px_rgba(0,0,0,0.06)]' :
+          '-translate-x-full lg:translate-x-0 w-[80px] lg:hover:w-[280px] lg:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)]'
         }`}
       >
         {/* Header Section */}
@@ -100,7 +103,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
               <BookOpen className="w-5 h-5" />
             </div>
           </div>
-          <span className={`text-[16px] font-bold text-gray-900 dark:text-gray-100 transition-opacity duration-300 ease-in-out delay-75 ${isMobileOpen ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
+          <span className={`text-[16px] font-bold text-gray-900 dark:text-gray-100 transition-opacity duration-300 ease-in-out delay-75 ${isExpanded ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
             University Platform
           </span>
           <button 
@@ -129,7 +132,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                 }
               >
                 <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={2.2} />
-                <span className={`text-[14px] ml-[14px] whitespace-nowrap transition-opacity duration-300 ease-in-out delay-75 pointer-events-none lg:group-hover:pointer-events-auto ${isMobileOpen ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
+                <span className={`text-[14px] ml-[14px] whitespace-nowrap transition-opacity duration-300 ease-in-out delay-75 pointer-events-none lg:group-hover:pointer-events-auto ${isExpanded ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
                   {link.name}
                 </span>
               </NavLink>
@@ -163,7 +166,7 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
                <div className="absolute -bottom-0.5 -right-0.5 w-[12px] h-[12px] bg-green-500 border-[2.5px] border-white rounded-full"></div>
              </div>
              
-             <div className={`flex-1 min-w-0 text-left ml-[14px] transition-opacity duration-300 ease-in-out delay-100 ${isMobileOpen ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
+             <div className={`flex-1 min-w-0 text-left ml-[14px] transition-opacity duration-300 ease-in-out delay-100 ${isExpanded ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
                <h4 className="text-[13px] font-bold text-gray-900 dark:text-gray-100 truncate leading-tight">{profileData.name}</h4>
                <div className="flex items-center gap-1.5 mt-0.5">
                  <span className="text-[11px] font-medium text-gray-500 dark:text-gray-400 truncate">

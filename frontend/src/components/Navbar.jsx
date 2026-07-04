@@ -5,7 +5,7 @@ import { getNotices } from '../api';
 import { socket } from '../socket';
 import { filterNoticesForStudent, getStudentBatchFromSession } from '../utils/noticeUtils';
 
-export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
+export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme, onHamburgerHover }) {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
@@ -113,6 +113,8 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
         {/* Sidebar Hamburger Toggle Button */}
         <button
           onClick={onToggleSidebar}
+          onMouseEnter={() => onHamburgerHover && onHamburgerHover(true)}
+          onMouseLeave={() => onHamburgerHover && onHamburgerHover(false)}
           className="p-2 text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-100"
           aria-label="Toggle Sidebar"
         >
