@@ -56,11 +56,11 @@ html:not(.dark):not(.warm) .bg-slate-50 {
 }
 
 html:not(.dark):not(.warm) .bg-gray-50 {
-  background-color: #f8fafc !important;
+  background-color: #ffffff !important;
 }
 
 html:not(.dark):not(.warm) .bg-slate-50\/50 {
-  background-color: rgba(224, 229, 233, 0.7) !important;
+  background-color: rgba(170, 197, 220, 0.7) !important;
 }
 
 html:not(.dark):not(.warm) .bg-gray-50\/50 {
@@ -76,7 +76,7 @@ html:not(.dark):not(.warm) .bg-white {
 html:not(.dark):not(.warm) .glass-card,
 html:not(.dark):not(.warm) .glass-panel {
   background-color: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
+  border: 1px solid #c0cad5 !important;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15) !important;
 }
 
@@ -206,14 +206,17 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .dark body {
-  background-color: #09090b !important; /* Very dark zinc background for layout */
+  background-color: #09090b !important;
+  /* Very dark zinc background for layout */
   color: #fafafa !important;
 }
 
 /* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
-  background: #18181b !important; /* Lighter zinc card background */
-  border: 1px solid #27272a !important; /* Subtle border to separate container */
+  background: #18181b !important;
+  /* Lighter zinc card background */
+  border: 1px solid #27272a !important;
+  /* Subtle border to separate container */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
 }
 
@@ -550,15 +553,19 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .warm body {
-  background-color: #e0d0b8 !important; /* Noticeably darker warm background */
+  background-color: #e0d0b8 !important;
+  /* Noticeably darker warm background */
   color: #3e3222 !important;
 }
 
 /* Backgrounds */
 .warm .bg-white {
-  background-color: #fdfbf7 !important; /* Much lighter, almost white but warm paper */
-  border-color: #c7b69c !important; /* Stronger border for separation */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important; /* Slightly stronger shadow */
+  background-color: #fdfbf7 !important;
+  /* Much lighter, almost white but warm paper */
+  border-color: #c7b69c !important;
+  /* Stronger border for separation */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+  /* Slightly stronger shadow */
 }
 
 .warm .bg-slate-50 {
