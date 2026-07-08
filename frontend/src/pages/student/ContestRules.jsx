@@ -1,14 +1,31 @@
+// ============================================================================
+// START: IMPORTS
+// ============================================================================
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Check, AlertTriangle, Clock, HelpCircle, FileText, User, ChevronLeft } from 'lucide-react';
 import { getContests } from '../../api';
+// ============================================================================
+// END: IMPORTS
+// ============================================================================
 
+// ============================================================================
+// START: CONTEST RULES COMPONENT
+// ============================================================================
 export default function ContestRules() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // ---------------------------------------------------------
+  // STATE MANAGEMENT
+  // ---------------------------------------------------------
   const [agreed, setAgreed] = useState(false);
   const [contest, setContest] = useState(null);
   const [timeLeft, setTimeLeft] = useState('');
+
+  // ---------------------------------------------------------
+  // EFFECTS & DATA FETCHING
+  // ---------------------------------------------------------
 
   React.useEffect(() => {
     if (!sessionStorage.getItem('student_profile')) {
@@ -77,6 +94,9 @@ export default function ContestRules() {
 
   if (!contest) return <div className="p-8 text-center">Loading Contest Details...</div>;
 
+  // ---------------------------------------------------------
+  // EVENT HANDLERS & HELPERS
+  // ---------------------------------------------------------
   const handleStart = () => {
     if (contest.status === 'Past') {
       navigate('/student/reports');
@@ -99,6 +119,9 @@ export default function ContestRules() {
     };
   })();
 
+  // ---------------------------------------------------------
+  // RENDER UI
+  // ---------------------------------------------------------
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
       {/* Header */}
@@ -235,3 +258,6 @@ export default function ContestRules() {
     </div>
   );
 }
+// ============================================================================
+// END: CONTEST RULES COMPONENT
+// ============================================================================

@@ -1,5 +1,14 @@
+// ============================================================================
+// START: EXTERNAL IMPORTS
+// ============================================================================
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+// ============================================================================
+// END: EXTERNAL IMPORTS
+// ============================================================================
+// ============================================================================
+// START: PAGE & LAYOUT COMPONENT IMPORTS
+// ============================================================================
 import Login from './pages/Login';
 import StudentLayout from './layouts/StudentLayout';
 
@@ -15,8 +24,6 @@ import Profile from './pages/student/Profile';
 import Reports from './pages/student/Reports';
 import NoticeBoard from './pages/student/NoticeBoard';
 
-
-
 import FacultyDashboard from './pages/faculty/Dashboard';
 import FacultyNoticeBoard from './pages/faculty/NoticeBoard';
 import FacultyCourseHub from './pages/faculty/CourseHub';
@@ -31,7 +38,13 @@ import FacultyProfile from './pages/faculty/Profile';
 import QuestionBank from './pages/faculty/QuestionBank';
 import FacultyLeaderboard from './pages/faculty/Leaderboard';
 import FacultyAnalytics from './pages/faculty/Analytics';
+// ============================================================================
+// END: PAGE & LAYOUT COMPONENT IMPORTS
+// ============================================================================
 
+// ============================================================================
+// START: HELPER COMPONENTS
+// ============================================================================
 // Placeholders for other routes
 const Placeholder = ({ title }) => (
   <div className="p-6">
@@ -39,14 +52,22 @@ const Placeholder = ({ title }) => (
     <p className="text-gray-500">This feature is under development.</p>
   </div>
 );
+// ============================================================================
+// END: HELPER COMPONENTS
+// ============================================================================
 
+// ============================================================================
+// START: MAIN APP COMPONENT (ROUTING SETUP)
+// ============================================================================
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         
-        {/* Student Routes */}
+        {/* ========================================================= */}
+        {/* START: STUDENT ROUTES                                     */}
+        {/* ========================================================= */}
         <Route path="/student" element={<StudentLayout />}>
           <Route index element={<Navigate to="/student/dashboard" replace />} />
           <Route path="dashboard" element={<StudentDashboard />} />
@@ -63,10 +84,13 @@ export default function App() {
 
         <Route path="/student/contests/:id" element={<ContestRules />} />
         <Route path="/student/arena/:id" element={<Arena />} />
+        {/* ========================================================= */}
+        {/* END: STUDENT ROUTES                                       */}
+        {/* ========================================================= */}
 
-
-
-        {/* Faculty Routes */}
+        {/* ========================================================= */}
+        {/* START: FACULTY ROUTES                                     */}
+        {/* ========================================================= */}
         <Route path="/faculty" element={<FacultyLayout />}>
           <Route index element={<Navigate to="/faculty/dashboard" replace />} />
           <Route path="dashboard" element={<FacultyDashboard />} />
@@ -87,7 +111,13 @@ export default function App() {
         </Route>
         <Route path="/faculty/create-contest" element={<ContestForm />} />
         <Route path="/faculty/edit-contest/:id" element={<ContestForm />} />
+        {/* ========================================================= */}
+        {/* END: FACULTY ROUTES                                       */}
+        {/* ========================================================= */}
       </Routes>
     </BrowserRouter>
   );
 }
+// ============================================================================
+// END: MAIN APP COMPONENT
+// ============================================================================

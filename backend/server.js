@@ -23,7 +23,9 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
-// ── File-based persistent store ──────────────────────────────
+// ============================================================================
+// START: DATABASE CONFIGURATION & PERSISTENCE
+// ============================================================================
 const DB_FILE = path.join(__dirname, 'db.json');
 
 function loadDB() {
@@ -51,9 +53,17 @@ let notices = db.notices || [];
 let contests = db.contests || [];
 let submissions = db.submissions || [];
 
-// REST API Endpoints
+// ============================================================================
+// END: DATABASE CONFIGURATION & PERSISTENCE
+// ============================================================================
 
-// Notices API
+// ============================================================================
+// START: REST API ENDPOINTS
+// ============================================================================
+
+// ---------------------------------------------------------
+// NOTICES API
+// ---------------------------------------------------------
 app.get('/api/notices', (req, res) => {
   res.json(notices);
 });
@@ -85,7 +95,9 @@ app.delete('/api/notices/:id', (req, res) => {
   res.json({ message: 'Notice deleted' });
 });
 
-// Contests API
+// ---------------------------------------------------------
+// CONTESTS API
+// ---------------------------------------------------------
 app.get('/api/contests', (req, res) => {
   res.json(contests);
 });
@@ -119,7 +131,9 @@ app.delete('/api/contests/:id', (req, res) => {
   res.json({ message: 'Contest deleted' });
 });
 
-// Submissions API
+// ---------------------------------------------------------
+// SUBMISSIONS API
+// ---------------------------------------------------------
 app.get('/api/submissions', (req, res) => {
   res.json(submissions);
 });
@@ -167,7 +181,9 @@ app.delete('/api/submissions/:id', (req, res) => {
   res.json({ message: 'Submission deleted' });
 });
 
-// Document Parsing API
+// ---------------------------------------------------------
+// DOCUMENT PARSING API (PDF/DOCX to MCQ)
+// ---------------------------------------------------------
 app.post('/api/upload-questions', upload.single('document'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
@@ -251,7 +267,13 @@ function parseQuestionsFromText(text) {
   return questions;
 }
 
-// Socket.IO Connection
+// ============================================================================
+// END: REST API ENDPOINTS
+// ============================================================================
+
+// ============================================================================
+// START: SOCKET.IO CONNECTION & SERVER START
+// ============================================================================
 io.on('connection', (socket) => {
   console.log('A client connected:', socket.id);
   socket.on('disconnect', () => {
@@ -263,3 +285,6 @@ const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT} (Persistent JSON DB Mode - db.json)`);
 });
+// ============================================================================
+// END: SOCKET.IO CONNECTION & SERVER START
+// ============================================================================
