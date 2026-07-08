@@ -85,9 +85,9 @@
     {
       "title": "Batch 3 test",
       "type": "Lab Exam",
-      "status": "Upcoming",
-      "startTime": "2026-07-04, 14:45",
-      "endTime": "TBD",
+      "status": "Past",
+      "startTime": "2026-07-05, 00:14",
+      "endTime": "2026-07-04T18:45:02.753Z",
       "duration": "117 mins",
       "registered": 0,
       "questions": 1,
@@ -100,7 +100,7 @@
       ],
       "warningLimit": 2,
       "windowSwitchGracePeriod": 0,
-      "courseId": "7",
+      "courseId": "All",
       "questionList": [
         {
           "id": 1782908695740,
@@ -941,6 +941,51 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782908695740": 1
+      },
+      "score": 0,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:32.081Z",
+      "submittedAt": "2026-07-04T18:44:38.108Z",
+      "_id": "1783190672089"
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha-2",
+      "answers": {
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:23.877Z",
+      "submittedAt": "2026-07-04T18:44:26.220Z",
+      "_id": "1783190663884"
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:08.375Z",
+      "submittedAt": "2026-07-04T18:44:16.737Z",
+      "_id": "1783190648382"
+    },
     {
       "contestId": "1783072945728",
       "contestName": "ggfg",

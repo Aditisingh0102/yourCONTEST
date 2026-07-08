@@ -89,13 +89,13 @@ export default function ContestRules() {
 
   const theme = (() => {
     if (contest.type === 'Assessment') return {
-      bgLight: 'bg-purple-50/50', borderLight: 'border-purple-100', textMain: 'text-purple-600', textDark: 'text-purple-700', bgMain: 'bg-purple-600', bgHover: 'hover:bg-purple-700', bgMuted: 'bg-purple-100', peerCheckedBg: 'peer-checked:bg-purple-600 peer-checked:border-purple-600'
+      bgLight: 'bg-purple-50', borderLight: 'border-purple-100', textMain: 'text-purple-600', textDark: 'text-purple-700', bgMain: 'bg-purple-600', bgHover: 'hover:bg-purple-700', bgMuted: 'bg-purple-100', peerCheckedBg: 'peer-checked:bg-purple-600 peer-checked:border-purple-600'
     };
     if (contest.type === 'Mock Test') return {
-      bgLight: 'bg-orange-50/50', borderLight: 'border-orange-100', textMain: 'text-orange-600', textDark: 'text-orange-700', bgMain: 'bg-orange-600', bgHover: 'hover:bg-orange-700', bgMuted: 'bg-orange-100', peerCheckedBg: 'peer-checked:bg-orange-600 peer-checked:border-orange-600'
+      bgLight: 'bg-orange-50', borderLight: 'border-orange-100', textMain: 'text-orange-600', textDark: 'text-orange-700', bgMain: 'bg-orange-600', bgHover: 'hover:bg-orange-700', bgMuted: 'bg-orange-100', peerCheckedBg: 'peer-checked:bg-orange-600 peer-checked:border-orange-600'
     };
     return {
-      bgLight: 'bg-blue-50/50', borderLight: 'border-gray-100', textMain: 'text-blue-600', textDark: 'text-blue-700', bgMain: 'bg-blue-600', bgHover: 'hover:bg-blue-700', bgMuted: 'bg-blue-100', peerCheckedBg: 'peer-checked:bg-blue-600 peer-checked:border-blue-600'
+      bgLight: 'bg-blue-50', borderLight: 'border-gray-100', textMain: 'text-blue-600', textDark: 'text-blue-700', bgMain: 'bg-blue-600', bgHover: 'hover:bg-blue-700', bgMuted: 'bg-blue-100', peerCheckedBg: 'peer-checked:bg-blue-600 peer-checked:border-blue-600'
     };
   })();
 
@@ -151,7 +151,7 @@ export default function ContestRules() {
         </div>
 
         <div className="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden mb-8">
-          <div className="bg-red-50/50 border-b border-red-100 p-5 flex items-center gap-3">
+          <div className="bg-red-50 border-b border-red-100 p-5 flex items-center gap-3">
             <AlertTriangle className="w-6 h-6 text-red-500" />
             <h2 className="text-lg font-semibold text-gray-900">Important Instructions & Rules</h2>
           </div>
@@ -210,7 +210,7 @@ export default function ContestRules() {
               </button>
             </div>
           ) : contest.status === 'Upcoming' ? (
-            <div className="bg-yellow-50/80 border border-yellow-200 rounded-2xl shadow-sm p-8 flex flex-col items-center justify-center text-center">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-2xl shadow-sm p-8 flex flex-col items-center justify-center text-center">
               <Clock className="w-12 h-12 text-yellow-500 mb-3 animate-pulse" />
               <h3 className="text-xl font-bold text-yellow-800 mb-2">Contest Starts In</h3>
               {timeLeft ? (
@@ -220,7 +220,7 @@ export default function ContestRules() {
               ) : (
                 <p className="text-yellow-700 font-semibold mb-4">Fetching schedule...</p>
               )}
-              <p className="text-yellow-700/80 font-medium text-sm max-w-md">
+              <p className="text-yellow-700 font-medium text-sm max-w-md">
                 The "Start the test!" button will automatically appear here once the countdown reaches zero. Ensure you have read all rules.
               </p>
             </div>

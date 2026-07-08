@@ -388,7 +388,8 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .dark .text-yellow-600,
-.dark .text-yellow-700 {
+.dark .text-yellow-700,
+.dark .text-yellow-800 {
   color: #fbbf24 !important;
 }
 
