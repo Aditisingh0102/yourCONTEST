@@ -1,3 +1,6 @@
+// ============================================================================
+// START: IMPORTS
+// ============================================================================
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -6,6 +9,13 @@ import {
   Sparkles, Check, Upload, FileText
 } from 'lucide-react';
 import { getContests, updateContest, uploadQuestionsDocument } from '../../api';
+// ============================================================================
+// END: IMPORTS
+// ============================================================================
+
+// ============================================================================
+// START: HELPER COMPONENTS - MODALS
+// ============================================================================
 
 /* ─── Import Modal ───────────────────────────────────────── */
 function ImportModal({ onClose, onImport }) {
@@ -250,7 +260,14 @@ function QuestionBankModal({ onClose, onImport, currentQuestions = [] }) {
     </div>
   );
 }
+// ============================================================================
+// END: HELPER COMPONENTS - MODALS
+// ============================================================================
 
+
+// ============================================================================
+// START: CONSTANTS & UTILS
+// ============================================================================
 /* ─── Type meta ─────────────────────────────────────────── */
 const TYPE_META = {
   mcq: {
@@ -289,6 +306,14 @@ const TYPE_META = {
 const emptyMCQ    = { question: '', options: ['', '', '', ''], correctOption: 0, marks: 1 };
 const emptyTheory = { question: '', answer: '', marks: 5 };
 const emptyCoding = { title: '', problemStatement: '', inputFormat: '', outputFormat: '', constraints: '', testCases: [{ input: '', output: '' }], hiddenTestCases: [{ input: '', output: '' }], marks: 10 };
+// ============================================================================
+// END: CONSTANTS & UTILS
+// ============================================================================
+
+
+// ============================================================================
+// START: FORM COMPONENTS (MCQ, THEORY, CODING)
+// ============================================================================
 
 /* ─── MCQ form ──────────────────────────────────────────── */
 function MCQForm({ data, onChange, onSubmit, editing, error }) {
@@ -597,7 +622,14 @@ function CodingForm({ data, onChange, onSubmit, editing, error }) {
     </form>
   );
 }
+// ============================================================================
+// END: FORM COMPONENTS
+// ============================================================================
 
+
+// ============================================================================
+// START: SIDEBAR COMPONENTS
+// ============================================================================
 /* ─── Sidebar slot item ─────────────────────────────────── */
 function SlotItem({ slot, slotIdx, active, filled, onClick }) {
   const meta = TYPE_META[slot.type];
@@ -625,7 +657,14 @@ function SlotItem({ slot, slotIdx, active, filled, onClick }) {
     </button>
   );
 }
+// ============================================================================
+// END: SIDEBAR COMPONENTS
+// ============================================================================
 
+
+// ============================================================================
+// START: MAIN PAGE COMPONENT
+// ============================================================================
 /* ─── Main page ─────────────────────────────────────────── */
 export default function ContestQuestions() {
   const { id }         = useParams();
@@ -1162,3 +1201,6 @@ export default function ContestQuestions() {
     </div>
   );
 }
+// ============================================================================
+// END: MAIN PAGE COMPONENT
+// ============================================================================
