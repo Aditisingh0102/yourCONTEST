@@ -38,7 +38,7 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
         console.error('Failed to load notifications', error);
       }
     };
-    
+
     fetchNotices();
 
     const handleNoticeUpdate = (data) => {
@@ -85,7 +85,7 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
             };
             setNotifications(prev => [newNotice, ...prev].slice(0, 8));
           }
-        } catch (err) {}
+        } catch (err) { }
       }
     };
 
@@ -141,8 +141,8 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
             ${theme === 'dark'
               ? 'bg-slate-800 border-slate-700 focus:ring-slate-400 text-blue-300 hover:bg-slate-700'
               : theme === 'warm'
-              ? 'bg-[#f6f3eb] border-[#e8e4d9] focus:ring-amber-400 text-amber-700 hover:bg-[#eee8d5]'
-              : 'bg-blue-50 border-blue-200 focus:ring-blue-400 text-yellow-500 hover:bg-blue-100'}
+                ? 'bg-[#f6f3eb] border-[#e8e4d9] focus:ring-amber-400 text-amber-700 hover:bg-[#eee8d5]'
+                : 'bg-blue-50 border-blue-200 focus:ring-blue-400 text-yellow-500 hover:bg-blue-100'}
           `}
         >
           {theme === 'dark' ? (
@@ -234,16 +234,16 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
 
         {/* Avatar */}
         <div className="relative" ref={dropdownRef}>
-          <div 
+          <div
             className="flex items-center gap-3 pl-2 cursor-pointer"
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           >
             {user?.role === 'faculty' ? (
-              <img 
-                src={user.avatar} 
-                alt="Avatar" 
-                className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 object-cover" 
-                onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=0D8ABC&textColor=fff`; }} 
+              <img
+                src={user.avatar}
+                alt="Avatar"
+                className="w-8 h-8 rounded-full border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 object-cover"
+                onError={(e) => { e.target.onerror = null; e.target.src = `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}&backgroundColor=0D8ABC&textColor=fff`; }}
               />
             ) : (
               <div className="w-8 h-8 rounded-full bg-blue-600 dark:bg-blue-700 text-white flex items-center justify-center font-semibold text-[13px] shrink-0 border border-blue-700 shadow-sm">
