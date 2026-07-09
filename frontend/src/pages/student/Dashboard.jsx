@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Trophy, CheckCircle, BookOpen, Users, Megaphone, AlertCircle, FileText, Briefcase, Info, Rocket, Target, User, X, CheckSquare, Save, Edit3, Trash2, Plus, FileCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices, getContests, getSubmissions } from '../../api';
@@ -86,17 +87,17 @@ export default function Dashboard() {
         const studentProfileStr = sessionStorage.getItem('student_profile');
         const studentProfile = studentProfileStr ? JSON.parse(studentProfileStr) : { name: 'Aditi Singh', id: '23210101548', batch: 'Alpha 1' };
         const studentBatch = studentProfile.batch || 'Alpha 1';
-
+        
         const filtered = res.data.filter(c => {
           const batchMatch = (!c.batch || (Array.isArray(c.batch) ? (c.batch.includes('All') || c.batch.includes(studentBatch)) : (c.batch === 'All' || c.batch === studentBatch)));
           if (!batchMatch) return false;
-
+          
           if (c.courseId && c.courseId !== 'All') {
             if (c.courseId == 7 && studentProfile.name?.toLowerCase().includes('ambar')) return false;
           }
           return true;
         });
-
+        
         setUpcomingContestsList(filtered.filter(c => c.status === 'Live' || c.status === 'Upcoming').slice(0, 2));
         setPastContestsList(filtered.filter(c => c.status === 'Past').slice(0, 2));
 
@@ -116,17 +117,17 @@ export default function Dashboard() {
           if (contest) {
             if (contest.type === 'Mock Test' || contest.type === 'Mock') mockTestsTaken++;
             if (contest.type === 'Assessment') assessmentsGiven++;
-
+            
             if (sub.status === 'submitted') {
               let maxMarks = contest.questionList?.reduce((acc, q) => acc + (q.marks || 0), 0) || 0;
-
+              
               let calcScore = 0;
               if (sub.score !== undefined) {
-                calcScore = sub.score;
+                 calcScore = sub.score;
               } else if (sub.answers && contest.questionList) {
-                contest.questionList.forEach(q => {
-                  if (q.type === 'MCQ' && sub.answers[q.id] === q.correctOption) calcScore += q.marks || 0;
-                });
+                 contest.questionList.forEach(q => {
+                   if (q.type === 'MCQ' && sub.answers[q.id] === q.correctOption) calcScore += q.marks || 0;
+                 });
               }
 
               totalMaxMarks += maxMarks;
@@ -149,7 +150,7 @@ export default function Dashboard() {
     const handleNoticeUpdate = (data) => {
       if (data.type === 'CREATE') {
         const isForMe = filterNoticesForStudent([data.notice], getStudentBatchFromSession()).length > 0;
-
+        
         setNotices(prev => {
           const next = [data.notice, ...prev];
           return filterNoticesForStudent(next, getStudentBatchFromSession()).slice(0, 3);
@@ -208,15 +209,15 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
-      <div className="bg-gradient-to-r from-[#eff6ff] to-[#eef2ff] dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 shadow-sm border border-[#dbeafe] dark:border-slate-800 relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-64 h-64 bg-blue-400/10 dark:bg-blue-900/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-        <div className="absolute left-0 bottom-0 w-48 h-48 bg-indigo-400/10 dark:bg-indigo-900/20 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
+      <div className="dashboard-banner bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md border border-transparent dark:border-blue-900/30 text-white relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 dark:bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+        <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         <div className="relative z-10">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/60 dark:bg-blue-900/30 rounded-full text-[11px] font-semibold tracking-wider mb-3 shadow-sm border border-white dark:border-blue-800 uppercase text-blue-700 dark:text-blue-300">
-            {studentProfile.batch === 'Beta 1' ? <Target className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" /> : <Rocket className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />} BATCH: {studentProfile.batch || 'ALPHA 1'}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 dark:bg-blue-500/10 rounded-full text-[11px] font-semibold tracking-wider mb-3 shadow-sm border border-white/10 dark:border-blue-400/20 uppercase text-white dark:text-blue-200">
+            {studentProfile.batch === 'Beta 1' ? <Target className="w-3.5 h-3.5 text-white dark:text-blue-300" /> : <Rocket className="w-3.5 h-3.5 text-white dark:text-blue-300" />} BATCH: {studentProfile.batch || 'ALPHA 1'}
           </div>
-          <h1 className="text-3xl font-semibold mb-1 text-[#1e3a8a] dark:text-white">{studentProfile.name}</h1>
-          <p className="text-[#3b82f6] dark:text-slate-400 text-sm font-medium mb-4">UIT • {studentProfile.branch || 'B.Tech CSE'} • 4th Year Student</p>
+          <h1 className="text-3xl font-semibold mb-1 text-white">{studentProfile.name}</h1>
+          <p className="text-blue-100 dark:text-blue-200/60 text-sm mb-4">UIT • {studentProfile.branch || 'B.Tech CSE'} • 4th Year Student</p>
 
         </div>
       </div>
@@ -517,18 +518,18 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {showNoticePopup && latestNotice && (
+      {showNoticePopup && latestNotice && createPortal(
         <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden animate-in fade-in zoom-in-95 duration-300">
             <div className={`h-2 ${latestNotice.bg} w-full`}></div>
             <div className="p-6 relative">
-              <button
+              <button 
                 onClick={() => setShowNoticePopup(false)}
                 className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
-
+              
               <div className="flex items-center gap-3 mb-4 pr-8">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${latestNotice.bg} ${latestNotice.color}`}>
                   <Megaphone className="w-6 h-6" />
@@ -538,17 +539,17 @@ export default function Dashboard() {
                   <p className="text-sm text-gray-500 font-medium">From {latestNotice.author}</p>
                 </div>
               </div>
-
+              
               <div className="bg-gray-50 border border-gray-100 rounded-xl p-5 mb-5">
                 <h4 className="text-[16px] font-semibold text-gray-900 mb-2">{latestNotice.title}</h4>
                 <p className="text-[14px] text-gray-700 leading-relaxed whitespace-pre-wrap">{latestNotice.content}</p>
               </div>
-
+              
               <div className="flex items-center justify-between">
                 <span className={`px-2.5 py-1 rounded text-[11px] font-semibold tracking-wider uppercase border w-max ${latestNotice.bg} ${latestNotice.color} ${latestNotice.borderColor}`}>
                   {latestNotice.type}
                 </span>
-                <button
+                <button 
                   onClick={() => setShowNoticePopup(false)}
                   className="px-5 py-2.5 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors shadow-sm"
                 >
@@ -557,7 +558,8 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

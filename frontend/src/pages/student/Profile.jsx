@@ -105,16 +105,22 @@ export default function Profile() {
 
       {/* Top Banner / ID Card */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden relative">
-        <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-gray-800 dark:to-black border-b border-transparent dark:border-zinc-800"></div>
+        <div className="h-32 dashboard-banner bg-gradient-to-r from-blue-600 to-indigo-700 dark:from-gray-800 dark:to-black border-b border-transparent dark:border-zinc-800"></div>
 
         <div className="px-8 pb-8 relative">
           {/* Avatar Section with Upload Overlay */}
           <div className="absolute -top-12 left-8 group w-24 h-24 rounded-2xl border-4 border-white shadow-md bg-white overflow-hidden">
-            <img
-              src={profileData.avatar}
-              alt={profileData.name}
-              className="w-full h-full object-cover"
-            />
+            {profileData.avatar && !profileData.avatar.includes('ui-avatars.com') ? (
+              <img
+                src={profileData.avatar}
+                alt={profileData.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-blue-600 text-white flex items-center justify-center font-bold text-3xl">
+                {profileData.name ? profileData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'U'}
+              </div>
+            )}
             <label className="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <Camera className="w-6 h-6 text-white" />
               <input

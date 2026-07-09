@@ -270,16 +270,16 @@ export default function Courses() {
           <div
             key={course.id}
             onClick={() => navigate(`/student/courses/${course.id}`)}
-            className="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] overflow-hidden hover:shadow-xl hover:border-blue-100 hover:-translate-y-1 transition-all cursor-pointer group flex flex-col h-full"
+            className="glass-card rounded-2xl overflow-hidden hover:-translate-y-1 group flex flex-col h-full cursor-pointer"
           >
             {/* Header/Cover Image */}
             <div className={`h-32 ${course.bgLight} relative p-6 flex flex-col justify-between shrink-0`}>
               <div className="flex justify-between items-start">
-                <div className={`p-2.5 bg-white rounded-xl shadow-sm group-hover:scale-110 transition-transform ${course.iconColor}`}>
+                <div className={`p-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm group-hover:scale-110 transition-transform ${course.iconColor}`}>
                   <BookOpen className="w-5 h-5" />
                 </div>
                 {course.progress === 100 && (
-                  <span className="bg-green-100 text-green-700 text-[11px] font-semibold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-green-200">
+                  <span className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-[11px] font-semibold px-2.5 py-1 rounded-md flex items-center gap-1.5 border border-green-200 dark:border-green-800">
                     <CheckCircle className="w-3.5 h-3.5" /> Completed
                   </span>
                 )}
