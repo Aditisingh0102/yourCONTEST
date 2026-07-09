@@ -138,12 +138,12 @@ export default function Dashboard() {
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto">
       {/* Welcome Card */}
-      <div className="bg-gradient-to-r from-[#eff6ff] to-[#eef2ff] dark:from-slate-900 dark:to-slate-800 rounded-2xl p-8 shadow-sm flex items-center gap-6 relative overflow-hidden border border-[#dbeafe] dark:border-slate-800">
-        <div className="absolute right-0 top-0 w-64 h-64 bg-blue-400/10 dark:bg-blue-900/20 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
-        <div className="absolute left-0 bottom-0 w-48 h-48 bg-indigo-400/10 dark:bg-indigo-900/20 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
+      <div className="dashboard-banner bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-500 dark:from-slate-900 dark:via-[#0b1120] dark:to-[#020617] rounded-2xl p-8 shadow-md flex items-center gap-6 relative overflow-hidden border border-transparent dark:border-blue-900/30 text-white">
+        <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 dark:bg-blue-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
+        <div className="absolute left-0 bottom-0 w-48 h-48 bg-transparent dark:bg-indigo-500/10 rounded-full blur-3xl -ml-16 -mb-16 pointer-events-none"></div>
         <div className="relative z-10">
-          <h1 className="text-3xl font-semibold mb-1 text-[#1e3a8a] dark:text-white">{profileData.name}</h1>
-          <p className="text-[#3b82f6] dark:text-slate-400 text-sm font-medium">{faculty.role} • {faculty.university}</p>
+          <h1 className="text-3xl font-semibold mb-1 text-white">{profileData.name}</h1>
+          <p className="text-blue-100 dark:text-blue-200/60 text-sm font-medium">{faculty.role} • {faculty.university}</p>
         </div>
       </div>
 
@@ -218,6 +218,7 @@ export default function Dashboard() {
                         innerRadius={60}
                         outerRadius={80}
                         paddingAngle={5}
+                        minAngle={15}
                         dataKey="value"
                       >
                         {contestResultData.map((entry, index) => (

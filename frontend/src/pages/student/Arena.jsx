@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Sun, Moon, Coffee, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen } from 'lucide-react';
+import { ChevronLeft, Sun, Moon, Coffee, Play, Send, Clock, CheckCircle, ShieldAlert, AlertCircle, BookOpen, Loader2, Terminal, List } from 'lucide-react';
 import { getContests, getSubmissions, updateSubmission, submitContestAnswers } from '../../api';
 import { socket } from '../../socket';
 import Leaderboard from '../../components/Leaderboard';
 import { useTheme } from '../../hooks/useTheme';
+import Editor from '@monaco-editor/react';
 
 export default function Arena() {
   const [theme, cycleTheme] = useTheme();
@@ -12,11 +13,28 @@ export default function Arena() {
   const navigate = useNavigate();
   const [contest, setContest] = useState(null);
   const [activeProblem, setActiveProblem] = useState(null);
+  const [codingLanguages, setCodingLanguages] = useState({});
+  const activeLanguage = codingLanguages[activeProblem?.id] || '71'; // 71 = Python 3
+  const [submissionStatus, setSubmissionStatus] = useState('idle'); // 'idle' | 'evaluating' | 'submitting'
+  const [isExecuting, setIsExecuting] = useState(false);
+  const [executionResult, setExecutionResult] = useState(null);
+  const [showProblemList, setShowProblemList] = useState(false);
   const [submittedResult, setSubmittedResult] = useState(null);
+
+  const getMonacoLanguage = (id) => {
+    switch(id) {
+      case '54': return 'cpp';
+      case '62': return 'java';
+      case '71': return 'python';
+      case '63': return 'javascript';
+      default: return 'javascript';
+    }
+  };
   const [answers, setAnswers] = useState({});
   const [extraTime, setExtraTime] = useState(0);
   const [existingSubmissionId, setExistingSubmissionId] = useState(null);
   const answersRef = React.useRef(answers);
+  const codingLanguagesRef = React.useRef(codingLanguages);
 
   useEffect(() => {
     if (!sessionStorage.getItem('student_profile')) {
@@ -347,14 +365,63 @@ export default function Arena() {
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => { });
     }
+    
+    setSubmissionStatus('evaluating');
 
     let score = 0;
     const questions = contest?.questionList || [];
+    
     questions.forEach(q => {
       if (q.type === 'MCQ' && answersRef.current[q.id] === q.correctOption) {
         score += q.marks || 1;
       }
     });
+
+    const codingQuestions = questions.filter(q => q.type === 'Coding');
+    for (const q of codingQuestions) {
+      const rawSource = answersRef.current[q.id];
+      if (!rawSource || rawSource.trim() === "") continue;
+      
+      const langId = codingLanguagesRef.current[q.id] || '71';
+      const testCases = q.testCases?.length > 0 ? q.testCases : (q.sampleInput ? [{input: q.sampleInput, output: q.sampleOutput}] : []);
+      
+      let passedAll = true;
+      for (const tc of testCases) {
+        try {
+          const sourceCode = wrapCodeForExecution(rawSource, langId, tc.input);
+          const response = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Accept": "application/json" },
+            body: JSON.stringify({
+              source_code: sourceCode,
+              language_id: parseInt(langId),
+              stdin: tc.input
+            })
+          });
+          const data = await response.json();
+          if (data.status?.id === 3) {
+             const actualOutput = (data.stdout || "").trim();
+             const expectedOutput = (tc.output || "").trim();
+             if (actualOutput !== expectedOutput) {
+                passedAll = false;
+                break;
+             }
+          } else {
+             passedAll = false;
+             break;
+          }
+        } catch (e) {
+          console.error("Evaluation failed", e);
+          passedAll = false;
+          break;
+        }
+      }
+      if (passedAll) {
+        score += parseInt(q.marks || 10, 10);
+      }
+    }
+    
+    setSubmissionStatus('submitting');
 
     try {
       const profileStr = sessionStorage.getItem('student_profile');
@@ -390,10 +457,128 @@ export default function Arena() {
     sessionStorage.removeItem(storageKey);
     sessionStorage.removeItem(extraStorageKey);
     setSubmittedResult({ score, total: questions.length });
+    setSubmissionStatus('idle');
   };
 
   const submitContest = async () => {
     await performSubmission();
+  };
+
+  const formatJavaLiteral = (val, type) => {
+    if (val.startsWith('[')) {
+        const items = val.replace('[', '{').replace(']', '}');
+        if (type.includes('int[]')) return `new int[] ${items}`;
+        if (type.includes('String[]')) return `new String[] ${items}`;
+        return `new int[] ${items}`;
+    }
+    return val;
+  };
+
+  const wrapCodeForExecution = (userCode, langId, stdin) => {
+    try {
+      const rawValues = (stdin || "").match(/\[.*?\]|-?\d+|".*?"/g) || [];
+
+      // Java
+      if (langId === '62' && userCode.includes('class Solution')) {
+        if (userCode.includes('public static void main')) return userCode;
+        
+        const methodMatch = userCode.match(/public\s+([a-zA-Z0-9_\[\]<>]+)\s+([a-zA-Z0-9_]+)\s*\(([^)]*)\)/);
+        if (!methodMatch) return userCode;
+        
+        const returnType = methodMatch[1].trim();
+        const methodName = methodMatch[2].trim();
+        const paramList = methodMatch[3].split(',').map(p => p.trim());
+        const paramTypes = paramList.map(p => p.split(/\s+/)[0]);
+        
+        let invocationArgs = [];
+        for (let i = 0; i < paramTypes.length; i++) {
+            const val = rawValues[i] || 'null';
+            invocationArgs.push(formatJavaLiteral(val, paramTypes[i]));
+        }
+        
+        let printStatement = `System.out.println(result);`;
+        if (returnType === "int[]" || returnType === "String[]") {
+            printStatement = `System.out.println(java.util.Arrays.toString(result));`;
+        }
+        
+        const driverCode = `
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        ${returnType !== 'void' ? `${returnType} result = ` : ''}sol.${methodName}(${invocationArgs.join(', ')});
+        ${returnType !== 'void' ? printStatement : ''}
+    }
+}`;
+        return userCode + "\n" + driverCode;
+      }
+      
+      // Python 3
+      if (langId === '71' && userCode.includes('class Solution')) {
+        if (userCode.includes('if __name__')) return userCode;
+        const pyMatch = userCode.match(/def\s+([a-zA-Z0-9_]+)\s*\(/);
+        if (!pyMatch) return userCode;
+        const methodName = pyMatch[1];
+        const driverCode = `\nif __name__ == '__main__':\n    sol = Solution()\n    print(sol.${methodName}(${rawValues.join(', ')}))`;
+        return userCode + "\n" + driverCode;
+      }
+      
+      // JavaScript
+      if (langId === '63' && (userCode.includes('var ') || userCode.includes('let ') || userCode.includes('const ') || userCode.includes('function '))) {
+         if (userCode.includes('console.log(')) return userCode; // user already wrote testing code
+         const funcMatch = userCode.match(/(?:var|let|const|function)\s+([a-zA-Z0-9_]+)\s*=?\s*(?:function)?\s*\(/);
+         if (funcMatch) {
+             const driverCode = `\nconsole.log(JSON.stringify(${funcMatch[1]}(${rawValues.join(', ')})));`;
+             return userCode + "\n" + driverCode;
+         }
+      }
+      
+    } catch (e) {
+      console.warn("Failed to generate driver code:", e);
+    }
+    return userCode;
+  };
+
+  const executeCode = async () => {
+    if (!answers[activeProblem.id]?.trim()) {
+      alert("Please write some code before running.");
+      return;
+    }
+    
+    setIsExecuting(true);
+    setExecutionResult({ isRunning: true });
+    
+    try {
+      const rawSource = answers[activeProblem.id];
+      const stdin = activeProblem.sampleInput || (activeProblem.testCases && activeProblem.testCases.length > 0 ? activeProblem.testCases[0].input : "");
+      const sourceCode = wrapCodeForExecution(rawSource, activeLanguage, stdin);
+      
+      const response = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          source_code: sourceCode,
+          language_id: parseInt(activeLanguage),
+          stdin: stdin
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to execute code (${response.status}). Judge0 API might be down or rate-limited.`);
+      }
+      
+      const data = await response.json();
+      setExecutionResult(data);
+    } catch (err) {
+      console.error(err);
+      setExecutionResult({ error: err.message });
+    } finally {
+      setIsExecuting(false);
+    }
   };
 
   if (submittedResult) {
@@ -522,6 +707,19 @@ export default function Arena() {
 
   return (
     <div className="fixed inset-0 bg-slate-50 text-gray-800 z-50 flex flex-col font-sans">
+      {submissionStatus !== 'idle' && (
+        <div className="fixed inset-0 bg-black/60 z-[9999] flex items-center justify-center p-6 backdrop-blur-sm">
+          <div className="bg-white rounded-xl p-8 max-w-sm w-full text-center shadow-2xl flex flex-col items-center">
+             <Loader2 className="w-12 h-12 text-blue-600 animate-spin mb-4" />
+             <h2 className="text-xl font-bold text-gray-900 mb-2">
+               {submissionStatus === 'evaluating' ? "Evaluating Code..." : "Submitting Contest..."}
+             </h2>
+             <p className="text-gray-500 text-sm">
+               {submissionStatus === 'evaluating' ? "Running your code against hidden test cases. Please wait." : "Saving your results..."}
+             </p>
+          </div>
+        </div>
+      )}
       {showWarning && (
         <div className="fixed inset-0 bg-red-900/95 z-[9999] flex items-center justify-center p-6 backdrop-blur-md">
           <div className="bg-black/80 border border-red-500/30 p-10 rounded-2xl max-w-lg text-center shadow-2xl shadow-red-900/50">
@@ -550,6 +748,12 @@ export default function Arena() {
         <div className="flex items-center gap-4">
           <button onClick={() => navigate(-1)} className="text-gray-500 hover:text-gray-900 transition-colors">
             <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button 
+            onClick={() => setShowProblemList(!showProblemList)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+          >
+            <List className="w-4 h-4" /> Problem List
           </button>
           <span className="font-semibold text-gray-900 tracking-wide">{contest.title}</span>
         </div>
@@ -583,37 +787,42 @@ export default function Arena() {
 
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Left Panel - Problems List */}
-        <div className="w-64 bg-white glass-card border-r border-gray-200 flex flex-col shrink-0">
-          <div className="p-4 border-b border-gray-200 font-semibold text-gray-500 uppercase text-xs tracking-wider shrink-0 flex justify-between items-center">
-            <span>Questions</span>
-            <span className="bg-gray-100 px-2 py-0.5 rounded-full">{questions.length}</span>
+        {/* Left Panel - Problems List (Collapsible) */}
+        {showProblemList && (
+          <div className="w-64 bg-white glass-card border-r border-gray-200 flex flex-col shrink-0 z-10 shadow-lg absolute h-[calc(100vh-56px)] md:relative md:h-auto md:shadow-none">
+            <div className="p-4 border-b border-gray-200 font-semibold text-gray-500 uppercase text-xs tracking-wider shrink-0 flex justify-between items-center">
+              <span>Questions</span>
+              <span className="bg-gray-100 px-2 py-0.5 rounded-full">{questions.length}</span>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              {questions.length === 0 ? (
+                <div className="p-4 text-sm text-gray-500 text-center">No questions added yet.</div>
+              ) : (
+                questions.map((prob, idx) => (
+                  <button
+                    key={prob.id}
+                    onClick={() => {
+                      setActiveProblem(prob);
+                      if (window.innerWidth < 768) setShowProblemList(false);
+                    }}
+                    className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-100 transition-colors flex items-center justify-between ${activeProblem?.id === prob.id ? 'bg-gray-100 border-l-2 border-l-blue-500' : ''}`}
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-gray-900">
+                        Q{idx + 1}. {prob.type === 'MCQ' ? 'Multiple Choice' : prob.type === 'Theory' ? 'Theory Q&A' : 'Coding'}
+                      </span>
+                      <span className="text-xs text-gray-500 mt-0.5 truncate max-w-[180px]">
+                        {prob.type === 'Coding' ? prob.title : prob.question?.slice(0, 40)}{prob.type !== 'Coding' && prob.question?.length > 40 ? '…' : ''}
+                      </span>
+                      <span className="text-xs text-gray-600 mt-0.5">{prob.marks} Marks</span>
+                    </div>
+                    {answers[prob.id] !== undefined && answers[prob.id] !== '' && <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />}
+                  </button>
+                ))
+              )}
+            </div>
           </div>
-          <div className="flex-1 overflow-y-auto">
-            {questions.length === 0 ? (
-              <div className="p-4 text-sm text-gray-500 text-center">No questions added yet.</div>
-            ) : (
-              questions.map((prob, idx) => (
-                <button
-                  key={prob.id}
-                  onClick={() => setActiveProblem(prob)}
-                  className={`w-full text-left px-4 py-3 border-b border-gray-100 hover:bg-gray-100 transition-colors flex items-center justify-between ${activeProblem?.id === prob.id ? 'bg-gray-100 border-l-2 border-l-blue-500' : ''}`}
-                >
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium text-gray-900">
-                      Q{idx + 1}. {prob.type === 'MCQ' ? 'Multiple Choice' : prob.type === 'Theory' ? 'Theory Q&A' : 'Coding'}
-                    </span>
-                    <span className="text-xs text-gray-500 mt-0.5 truncate max-w-[180px]">
-                      {prob.type === 'Coding' ? prob.title : prob.question?.slice(0, 40)}{prob.type !== 'Coding' && prob.question?.length > 40 ? '…' : ''}
-                    </span>
-                    <span className="text-xs text-gray-600 mt-0.5">{prob.marks} Marks</span>
-                  </div>
-                  {answers[prob.id] !== undefined && answers[prob.id] !== '' && <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />}
-                </button>
-              ))
-            )}
-          </div>
-        </div>
+        )}
 
         {/* Center/Right Panel - Question Viewer */}
         {activeProblem ? (
@@ -780,31 +989,92 @@ export default function Arena() {
               {/* Right Panel - Code Editor */}
               <div className="w-1/2 flex flex-col bg-white glass-card shrink-0">
                 <div className="h-10 bg-slate-50 border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
-                  <select className="bg-gray-100 text-sm text-gray-800 border-none outline-none rounded px-2 py-1 focus:ring-1 focus:ring-blue-500">
-                    <option>C++</option>
-                    <option>Java</option>
-                    <option>Python 3</option>
-                    <option>JavaScript</option>
+                  <select 
+                    value={activeLanguage}
+                    onChange={(e) => {
+                       const val = e.target.value;
+                       setCodingLanguages(prev => ({ ...prev, [activeProblem.id]: val }));
+                       codingLanguagesRef.current[activeProblem.id] = val;
+                    }}
+                    className="bg-gray-100 text-sm text-gray-800 border-none outline-none rounded px-2 py-1 focus:ring-1 focus:ring-blue-500"
+                  >
+                    <option value="54">C++</option>
+                    <option value="62">Java</option>
+                    <option value="71">Python 3</option>
+                    <option value="63">JavaScript</option>
                   </select>
                 </div>
-                <div className="flex-1 p-4 font-mono text-[13px] overflow-y-auto leading-relaxed outline-none">
-                  <textarea
-                    className="w-full h-full bg-transparent text-blue-100 resize-none outline-none focus:ring-0 placeholder-gray-600"
-                    placeholder="// Write your solution here..."
+                <div className="flex-1 overflow-hidden border-b border-gray-200">
+                  <Editor
+                    height="100%"
+                    language={getMonacoLanguage(activeLanguage)}
+                    theme={theme === 'dark' ? 'vs-dark' : 'light'}
                     value={answers[activeProblem.id] || ''}
-                    onChange={(e) => handleAnswerChange(activeProblem.id, e.target.value)}
-                    spellCheck="false"
-                  ></textarea>
+                    onChange={(val) => handleAnswerChange(activeProblem.id, val)}
+                    options={{
+                      minimap: { enabled: false },
+                      fontSize: 14,
+                      scrollBeyondLastLine: false,
+                      smoothScrolling: true,
+                      padding: { top: 16 }
+                    }}
+                  />
                 </div>
+
+                {/* Console / Results Panel */}
+                {(isExecuting || executionResult) && (
+                  <div className="h-56 bg-[#1e1e1e] text-gray-300 font-mono text-[13px] flex flex-col shrink-0 overflow-hidden border-t border-gray-200">
+                    <div className="flex items-center justify-between px-4 py-2 bg-[#2d2d2d] border-b border-[#404040]">
+                      <div className="flex items-center gap-2 font-semibold text-gray-200">
+                        <Terminal className="w-4 h-4" /> Console
+                      </div>
+                      <button onClick={() => setExecutionResult(null)} className="text-gray-400 hover:text-white">✕</button>
+                    </div>
+                    <div className="p-4 overflow-y-auto flex-1">
+                      {isExecuting ? (
+                        <div className="flex items-center gap-2 text-blue-400">
+                          <Loader2 className="w-4 h-4 animate-spin" /> Running code on Judge0...
+                        </div>
+                      ) : executionResult?.error ? (
+                        <div className="text-red-400">Error: {executionResult.error}</div>
+                      ) : executionResult?.compile_output ? (
+                        <div className="text-red-400 whitespace-pre-wrap">{executionResult.compile_output}</div>
+                      ) : executionResult?.stderr ? (
+                        <div className="text-red-400 whitespace-pre-wrap">{executionResult.stderr}</div>
+                      ) : executionResult?.status?.id > 3 ? (
+                        <div className="text-red-400">
+                          <div className="font-semibold text-red-500 mb-1">{executionResult.status.description}</div>
+                          {executionResult.message && <div className="whitespace-pre-wrap">{executionResult.message}</div>}
+                        </div>
+                      ) : (
+                        <>
+                          <div className="text-green-400 mb-2 font-semibold">Execution Successful!</div>
+                          <div className="text-gray-400 mb-1">Output:</div>
+                          <div className="whitespace-pre-wrap mb-4 bg-black/30 p-2 rounded border border-gray-800">{executionResult?.stdout || "No output"}</div>
+                          <div className="text-gray-500 text-xs flex gap-4">
+                            <span>Time: {executionResult?.time}s</span>
+                            <span>Memory: {executionResult?.memory} KB</span>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
                 <div className="h-14 border-t border-gray-200 bg-slate-50 flex items-center justify-end px-4 gap-3 shrink-0">
-                  <button className="px-4 py-1.5 bg-gray-100 hover:bg-gray-700 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                    <Play className="w-4 h-4" /> Run Code
+                  <button 
+                    onClick={executeCode}
+                    disabled={isExecuting}
+                    className="px-4 py-1.5 bg-gray-100 hover:bg-gray-200 disabled:opacity-50 text-gray-900 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 border border-gray-300"
+                  >
+                    {isExecuting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Play className="w-4 h-4" />}
+                    {isExecuting ? "Running..." : "Run Code"}
                   </button>
                   <button
                     onClick={() => handleAnswerChange(activeProblem.id, (answers[activeProblem.id] || ' ') + ' ')}
-                    className="px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm font-medium transition-colors"
+                    className="px-4 py-1.5 bg-green-600 hover:bg-green-500 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
                   >
-                    Submit Solution
+                    Save Solution
                   </button>
                 </div>
               </div>
