@@ -49,18 +49,20 @@ html:not(.dark):not(.warm) {
   color-scheme: light;
 }
 
-html:not(.dark):not(.warm) body,
-html:not(.dark):not(.warm) .bg-slate-50 {
+html:not(.dark):not(.warm) body {
   background-color: #e0e5e9 !important;
   color: #0f172a;
 }
 
-html:not(.dark):not(.warm) .bg-gray-50 {
-  background-color: #f8fafc !important;
+html:not(.dark):not(.warm) .bg-slate-50,
+html:not(.dark):not(.warm) .bg-gray-50,
+html:not(.dark):not(.warm) .bg-blue-50 {
+  background-color: #fbfcfc !important;
+  border: 1px solid #cbd5e1 !important;
 }
 
 html:not(.dark):not(.warm) .bg-slate-50\/50 {
-  background-color: rgba(224, 229, 233, 0.7) !important;
+  background-color: rgba(212, 230, 245, 0.7) !important;
 }
 
 html:not(.dark):not(.warm) .bg-gray-50\/50 {
@@ -68,14 +70,14 @@ html:not(.dark):not(.warm) .bg-gray-50\/50 {
 }
 
 html:not(.dark):not(.warm) .bg-white {
-  background-color: #f5f5f5 !important;
+  background-color: #fbfcfc !important;
   border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
 }
 
 html:not(.dark):not(.warm) .glass-card,
 html:not(.dark):not(.warm) .glass-panel {
-  background-color: #ffffff !important;
+  background-color: #fbfcfc !important;
   border: 1px solid #cbd5e1 !important;
   box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.15) !important;
 }
@@ -87,6 +89,16 @@ html:not(.dark):not(.warm) .border-slate-200 {
   border-color: #cbd5e1 !important;
 }
 
+html:not(.dark):not(.warm) .bg-gray-200,
+html:not(.dark):not(.warm) .bg-slate-200 {
+  background-color: #cbd5e1 !important;
+}
+
+html:not(.dark):not(.warm) .bg-gray-100,
+html:not(.dark):not(.warm) .bg-slate-100 {
+  background-color: #e2e8f0 !important;
+}
+
 /* Gray text scale → slate equivalents (all strong & readable) */
 html:not(.dark):not(.warm) .text-gray-900,
 html:not(.dark):not(.warm) .text-slate-900 {
@@ -96,6 +108,33 @@ html:not(.dark):not(.warm) .text-slate-900 {
 html:not(.dark):not(.warm) .text-gray-800,
 html:not(.dark):not(.warm) .text-slate-800 {
   color: #1e293b !important;
+}
+
+/* Light mode specific banner overrides */
+html:not(.dark):not(.warm) .dashboard-banner {
+  background: #a7c6ef !important;
+  /* bg-blue-50 */
+  border: 1px solid #dbeafe !important;
+  color: #1e3a8a !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+html:not(.dark):not(.warm) .dashboard-banner h1 {
+  color: #1e3a8a !important;
+}
+
+html:not(.dark):not(.warm) .dashboard-banner p {
+  color: #2563eb !important;
+}
+
+html:not(.dark):not(.warm) .dashboard-banner .bg-white\/20 {
+  background-color: #dbeafe !important;
+  border-color: #3b7ac8 !important;
+  color: #1d4ed8 !important;
+}
+
+html:not(.dark):not(.warm) .dashboard-banner svg {
+  color: #1d4ed8 !important;
 }
 
 html:not(.dark):not(.warm) .text-gray-700,
@@ -206,14 +245,17 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .dark body {
-  background-color: #09090b !important; /* Very dark zinc background for layout */
+  background-color: #09090b !important;
+  /* Very dark zinc background for layout */
   color: #fafafa !important;
 }
 
 /* ── Backgrounds ─────────────────────────────────────────── */
 .dark .bg-white {
-  background: #18181b !important; /* Lighter zinc card background */
-  border: 1px solid #27272a !important; /* Subtle border to separate container */
+  background: #18181b !important;
+  /* Lighter zinc card background */
+  border: 1px solid #27272a !important;
+  /* Subtle border to separate container */
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3) !important;
 }
 
@@ -551,15 +593,19 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 }
 
 .warm body {
-  background-color: #e6d8c8 !important; /* Lighter warm background */
+  background-color: #e6d8c8 !important;
+  /* Lighter warm background */
   color: #3e3222 !important;
 }
 
 /* Backgrounds */
 .warm .bg-white {
-  background-color: #FAF7F2 !important; /* Cream */
-  border-color: #e8e4d9 !important; /* Lighter border */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04) !important; /* Softer shadow */
+  background-color: #FAF7F2 !important;
+  /* Cream */
+  border-color: #e8e4d9 !important;
+  /* Lighter border */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04) !important;
+  /* Softer shadow */
 }
 
 .warm .bg-slate-50 {
@@ -680,7 +726,8 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 
 /* Cards */
 .warm .glass-card {
-  background-color: #FAF7F2 !important; /* Match requested cream */
+  background-color: #FAF7F2 !important;
+  /* Match requested cream */
   border-color: #e8e4d9 !important;
   box-shadow: 0 4px 15px rgba(140, 114, 85, 0.04) !important;
 }
@@ -693,7 +740,8 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 /* Navbar/Sidebar */
 .warm .navbar-container,
 .warm .sidebar-container {
-  background-color: #FAF7F2 !important; /* Keep consistent with cards */
+  background-color: #FAF7F2 !important;
+  /* Keep consistent with cards */
   border-color: #e6dfcd !important;
 }
 

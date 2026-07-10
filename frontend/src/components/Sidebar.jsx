@@ -99,12 +99,12 @@ export default function Sidebar({ role, isCollapsed, isMobileOpen, setIsMobileOp
         {/* Header Section */}
         <div className="flex items-center h-[44px] mb-6 whitespace-nowrap overflow-hidden">
           <div className="shrink-0 flex justify-center w-[80px]">
-            <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-[12px] shadow-sm flex items-center justify-center">
-              <BookOpen className="w-5 h-5" />
+            <div className="text-orange-500 p-1 flex items-center justify-center">
+              <Trophy className="w-7 h-7" />
             </div>
           </div>
-          <span className={`text-[16px] font-bold text-gray-900 dark:text-gray-100 transition-opacity duration-300 ease-in-out delay-75 ${isExpanded ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
-            University Platform
+          <span className={`text-[20px] font-bold text-gray-900 dark:text-gray-100 transition-opacity duration-300 ease-in-out delay-75 ${isExpanded ? 'opacity-100' : 'opacity-0 lg:group-hover:opacity-100'}`}>
+            <span className="text-orange-500">v</span>Decided
           </span>
           <button 
             onClick={() => setIsMobileOpen(false)}

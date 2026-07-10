@@ -218,7 +218,6 @@ export default function Dashboard() {
           </div>
           <h1 className="text-3xl font-semibold mb-1 text-white">{studentProfile.name}</h1>
           <p className="text-blue-100 dark:text-blue-200/60 text-sm mb-4">UIT • {studentProfile.branch || 'B.Tech CSE'} • 4th Year Student</p>
-
         </div>
       </div>
 

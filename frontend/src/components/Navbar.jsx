@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { BookOpen, Moon, Sun, Bell, Menu, Coffee, LogOut, Key, X, ExternalLink, Megaphone } from 'lucide-react';
+import { Trophy, BookOpen, Moon, Sun, Bell, Menu, Coffee, LogOut, Key, X, ExternalLink, Megaphone } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getNotices } from '../api';
 import { socket } from '../socket';
@@ -120,8 +120,8 @@ export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme, onH
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="bg-blue-600 dark:bg-gradient-to-br dark:from-gray-700 dark:to-black text-white p-1.5 rounded-lg logo-icon hidden sm:block shadow-sm border border-transparent dark:border-gray-600">
-            <BookOpen className="w-5 h-5" />
+          <div className="text-orange-500 p-1 logo-icon hidden sm:flex items-center justify-center">
+            <Trophy className="w-6 h-6" />
           </div>
           <div className="flex flex-col sm:border-l sm:border-gray-300 dark:sm:border-gray-600 sm:pl-3 logo-text-container">
             <span className="text-[15px] font-semibold text-gray-800 dark:text-gray-100 leading-tight">University Platform</span>
