@@ -600,38 +600,31 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 
 /* Backgrounds */
 .warm .bg-white {
-  background-color: #FAF7F2 !important;
-  /* Cream */
-  border-color: #e8e4d9 !important;
-  /* Lighter border */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04) !important;
-  /* Softer shadow */
+  background-color: #ffffff !important;
+  border-color: #dfd3bf !important;
+  box-shadow: 0 4px 15px -3px rgba(105, 86, 66, 0.1), 0 4px 6px -4px rgba(105, 86, 66, 0.05) !important;
 }
 
-.warm .bg-slate-50 {
-  background-color: #e6d8c8 !important;
-}
-
-.warm .bg-gray-50 {
-  background-color: #e8d9c2 !important;
-}
-
-.warm .bg-slate-100 {
-  background-color: #f4ebd8 !important;
-}
-
+.warm .bg-slate-50,
+.warm .bg-gray-50,
+.warm .bg-slate-100,
 .warm .bg-gray-100 {
-  background-color: #f4ebd8 !important;
+  background-color: #fcfcfc !important;
+}
+
+.warm .bg-gray-200,
+.warm .bg-slate-200 {
+  background-color: #dfd3bf !important;
 }
 
 .warm .bg-slate-50\/50 {
-  background-color: rgba(224, 208, 184, 0.8) !important;
-  border-color: #c7b69c !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: #dfd3bf !important;
 }
 
 .warm .bg-gray-50\/50 {
-  background-color: rgba(232, 217, 194, 0.8) !important;
-  border-color: #c7b69c !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: #dfd3bf !important;
 }
 
 .warm .bg-white\/70 {
