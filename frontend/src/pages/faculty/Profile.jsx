@@ -132,17 +132,17 @@ export default function FacultyProfile() {
     <div className="max-w-[1000px] mx-auto py-6 space-y-6">
 
       {/* Profile Cover & Header */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
-        <div className="h-32 dashboard-banner bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-black border-b border-transparent dark:border-zinc-800"></div>
-        <div className="px-8 pb-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 -mt-12 relative z-10">
+      <div className="rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
+        <div className="absolute inset-0 dashboard-banner bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-black border-transparent dark:border-zinc-800"></div>
+        <div className="px-8 pb-8 pt-8 relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="flex flex-col md:flex-row md:items-end gap-6">
-              <div className="pb-2 pt-14 md:pt-0">
+              <div className="pb-2">
                 <div className="flex items-center gap-2">
                   <h1 className="text-2xl font-semibold text-gray-900">{profileData.name}</h1>
-                  <CheckCircle2 className="w-5 h-5 text-blue-500 animate-pulse" />
+                  <CheckCircle2 className="w-5 h-5 text-white animate-pulse" />
                 </div>
-                <p className="text-[15px] font-medium text-gray-500 mt-1">{profileData.designation}</p>
+                <p className="text-[15px] font-medium text-gray-900 mt-1">{profileData.designation}</p>
               </div>
             </div>
 

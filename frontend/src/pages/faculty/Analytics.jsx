@@ -135,7 +135,7 @@ export default function Analytics() {
   const pieColors = {
     light: ['#22c55e', '#ef4444', '#94a3b8'],
     dark: ['#4ade80', '#f87171', '#475569'],
-    warm: ['#84cc16', '#f97316', '#d6d3d1']
+    warm: ['#84cc16', '#ef4444', '#d6d3d1']
   };
 
   const currentPieColors = pieColors[theme] || pieColors.light;
@@ -201,8 +201,8 @@ export default function Analytics() {
                 <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                 <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.1)' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                 <Legend wrapperStyle={{ fontSize: '12px' }} />
-                <Bar dataKey="averageScore" name="Avg Score" fill={theme === 'warm' ? '#e6a96b' : '#3b82f6'} radius={[4, 4, 0, 0]} barSize={25} />
-                <Bar dataKey="topScore" name="Top Score" fill={theme === 'warm' ? '#fde68a' : '#818cf8'} radius={[4, 4, 0, 0]} barSize={25} />
+                <Bar dataKey="averageScore" name="Avg Score" fill={theme === 'warm' ? '#58508d' : '#3b82f6'} radius={[4, 4, 0, 0]} barSize={25} />
+                <Bar dataKey="topScore" name="Top Score" fill={theme === 'warm' ? '#bc5090' : '#818cf8'} radius={[4, 4, 0, 0]} barSize={25} />
               </BarChart>
             </ResponsiveContainer>
           </div>
