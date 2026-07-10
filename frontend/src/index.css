@@ -600,31 +600,37 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 
 /* Backgrounds */
 .warm .bg-white {
-  background-color: #ffffff !important;
-  border-color: #dfd3bf !important;
-  box-shadow: 0 4px 15px -3px rgba(105, 86, 66, 0.1), 0 4px 6px -4px rgba(105, 86, 66, 0.05) !important;
+  background-color: #FAF7F2 !important;
+  border-color: #d5c7b3 !important;
+  box-shadow: 0 4px 15px -3px rgba(105, 86, 66, 0.15), 0 4px 6px -4px rgba(105, 86, 66, 0.1) !important;
 }
 
-.warm .bg-slate-50,
-.warm .bg-gray-50,
+.warm .bg-slate-50 {
+  background-color: #e6d8c8 !important;
+}
+
+.warm .bg-gray-50 {
+  background-color: #e8d9c2 !important;
+}
+
 .warm .bg-slate-100,
 .warm .bg-gray-100 {
-  background-color: #fcfcfc !important;
+  background-color: #f4ebd8 !important;
 }
 
 .warm .bg-gray-200,
 .warm .bg-slate-200 {
-  background-color: #dfd3bf !important;
+  background-color: #c7b69c !important;
 }
 
 .warm .bg-slate-50\/50 {
-  background-color: rgba(255, 255, 255, 0.5) !important;
-  border-color: #dfd3bf !important;
+  background-color: rgba(224, 208, 184, 0.8) !important;
+  border-color: #c7b69c !important;
 }
 
 .warm .bg-gray-50\/50 {
-  background-color: rgba(255, 255, 255, 0.5) !important;
-  border-color: #dfd3bf !important;
+  background-color: rgba(232, 217, 194, 0.8) !important;
+  border-color: #c7b69c !important;
 }
 
 .warm .bg-white\/70 {
@@ -649,6 +655,53 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 
 .warm .border-blue-200 {
   border-color: #e8c9a8 !important;
+}
+
+/* Comprehensive Blue to Warm Overrides */
+.warm .bg-blue-500, .warm .bg-indigo-500, .warm .bg-indigo-600 {
+  background-color: #c47c43 !important;
+  color: #fff !important;
+}
+.warm .hover\:bg-blue-600:hover, .warm .hover\:bg-indigo-600:hover {
+  background-color: #a6622b !important;
+}
+.warm .bg-blue-50, .warm .bg-indigo-50 {
+  background-color: #f0e6da !important;
+}
+.warm .text-indigo-600 {
+  color: #a6622b !important;
+}
+.warm .text-blue-500, .warm .text-indigo-500 {
+  color: #c47c43 !important;
+}
+.warm .border-indigo-100, .warm .border-indigo-200 {
+  border-color: #e8c9a8 !important;
+}
+.warm .border-indigo-500, .warm .border-blue-500 {
+  border-color: #c47c43 !important;
+}
+
+/* Gradient Button & Banner Overrides */
+.warm .from-blue-600, .warm .from-blue-500, .warm .from-indigo-600 {
+  background: linear-gradient(135deg, #c79a7e 0%, #b88667 100%) !important;
+  color: #ffffff !important;
+}
+.warm .hover\:from-blue-500:hover, .warm .hover\:from-blue-400:hover {
+  background: linear-gradient(135deg, #b88667 0%, #a67252 100%) !important;
+}
+
+/* Shadows */
+.warm .shadow-blue-500\/30 {
+  box-shadow: 0 4px 14px 0 rgba(184, 134, 103, 0.4) !important;
+}
+.warm .hover\:shadow-blue-500\/50:hover {
+  box-shadow: 0 6px 20px rgba(184, 134, 103, 0.25) !important;
+}
+
+/* Inputs & Focus Rings */
+.warm input:focus, .warm textarea:focus, .warm select:focus {
+  border-color: #c47c43 !important;
+  box-shadow: 0 0 0 2px rgba(196, 124, 67, 0.2) !important;
 }
 
 /* Text */
@@ -740,17 +793,28 @@ html:not(.dark):not(.warm) .bg-yellow-100 {
 
 /* Dashboard Banner in Warm Theme */
 .warm .dashboard-banner {
-  background: linear-gradient(to right, #9a8b81, #a5978d, #9a8b81) !important;
-  color: #fffdfa !important;
-  border-color: #9a8b81 !important;
+  background: linear-gradient(135deg, #c79a7e 0%, #b88667 100%) !important;
+  border: 1px solid #b37e5e !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px -3px rgba(184, 134, 103, 0.3) !important;
+}
+
+.warm .dashboard-banner h1,
+.warm .dashboard-banner p {
+  color: #ffffff !important;
 }
 
 .warm .dashboard-banner p.text-blue-100 {
-  color: #e8e4d9 !important;
+  color: #fdfaf3 !important;
 }
 
-.warm .dashboard-banner .bg-white\/20 {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  border-color: rgba(255, 255, 255, 0.25) !important;
-  color: #fffdfa !important;
+.warm .dashboard-banner .bg-white\/20,
+.warm .dashboard-banner .bg-white\/10 {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.warm .dashboard-banner svg {
+  color: #ffffff !important;
 }

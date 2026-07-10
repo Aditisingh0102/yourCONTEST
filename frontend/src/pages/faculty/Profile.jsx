@@ -133,7 +133,7 @@ export default function FacultyProfile() {
 
       {/* Profile Cover & Header */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative">
-        <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-black border-b border-transparent dark:border-zinc-800"></div>
+        <div className="h-32 dashboard-banner bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-gray-800 dark:to-black border-b border-transparent dark:border-zinc-800"></div>
         <div className="px-8 pb-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 -mt-12 relative z-10">
             <div className="flex flex-col md:flex-row md:items-end gap-6">

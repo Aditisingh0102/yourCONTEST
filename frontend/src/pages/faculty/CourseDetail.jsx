@@ -317,7 +317,7 @@ export default function CourseDetail() {
           <ChevronLeft className="w-4 h-4 mr-1" /> Back to Course Hub
         </button>
         
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
+        <div className="dashboard-banner bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
           <div className="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none"></div>
           <div className="absolute left-0 bottom-0 w-40 h-40 bg-blue-900/40 rounded-full blur-2xl -ml-10 -mb-10 pointer-events-none"></div>
           
