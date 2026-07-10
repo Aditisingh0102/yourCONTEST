@@ -20,6 +20,7 @@ const getStudentLinks = () => {
     { name: 'Courses', path: `${base}/courses`, icon: BookOpen },
     { name: 'Contests', path: `${base}/contests`, icon: Trophy },
     { name: 'Reports', path: `${base}/reports`, icon: FileBarChart },
+    { name: 'Sample Report', path: `${base}/assessment-report`, icon: FileBarChart },
   ];
 };
 

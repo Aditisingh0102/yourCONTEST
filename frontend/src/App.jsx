@@ -22,6 +22,7 @@ import Courses from './pages/student/Courses';
 import CourseDetail from './pages/student/CourseDetail';
 import Profile from './pages/student/Profile';
 import Reports from './pages/student/Reports';
+import AssessmentReport from './pages/report/AssessmentReport';
 import NoticeBoard from './pages/student/NoticeBoard';
 
 import FacultyDashboard from './pages/faculty/Dashboard';
@@ -78,6 +79,7 @@ export default function App() {
           <Route path="leaderboard" element={<Placeholder title="Leaderboard" />} />
           <Route path="submissions" element={<Placeholder title="My Submissions" />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="assessment-report" element={<AssessmentReport />} />
           <Route path="profile" element={<Profile />} />
           <Route path="question-bank" element={<Placeholder title="Question Bank (Practice Area)" />} />
         </Route>

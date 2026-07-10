@@ -1,6 +1,22 @@
 {
   "notices": [
     {
+      "title": "New Contest: gfgggg",
+      "content": "A new mock test has been scheduled on 10/07/2026 at 14:32 for 3 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-10",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783674067356",
+      "date": "2026-07-10T09:01:07.356Z"
+    },
+    {
       "title": "New Contest: Batch 3 test",
       "content": "A new lab exam has been scheduled on 04/07/2026 at 14:45 for 117 mins. Please be prepared.",
       "type": "Important",
@@ -83,13 +99,49 @@
   ],
   "contests": [
     {
+      "title": "gfgggg",
+      "type": "Mock Test",
+      "status": "Upcoming",
+      "startTime": "2026-07-10, 14:32",
+      "endTime": "TBD",
+      "duration": "3 mins",
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1783674083584,
+          "type": "MCQ",
+          "question": "vb",
+          "options": [
+            "dsfsdf",
+            "sc",
+            "sad",
+            "ffg"
+          ],
+          "correctOption": 0,
+          "marks": 1
+        }
+      ],
+      "_id": "1783674067350",
+      "createdAt": "2026-07-10T09:01:07.350Z"
+    },
+    {
       "title": "Batch 3 test",
       "type": "Lab Exam",
       "status": "Past",
       "startTime": "2026-07-05, 00:14",
       "endTime": "2026-07-04T18:45:02.753Z",
       "duration": "117 mins",
-
       "registered": 0,
       "questions": 1,
       "submissions": 0,
@@ -128,7 +180,6 @@
       "startTime": "2026-07-03, 23:24",
       "endTime": "TBD",
       "duration": "10 mins",
-
       "registered": 0,
       "questions": 1,
       "submissions": 0,
@@ -1003,6 +1054,21 @@
     }
   ],
   "submissions": [
+    {
+      "contestId": "1783674067350",
+      "contestName": "gfgggg",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1783674083584": 0
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-10T09:02:06.158Z",
+      "submittedAt": "2026-07-10T09:02:10.631Z",
+      "_id": "1783674126169"
+    },
     {
       "contestId": "1783156359293",
       "contestName": "Batch 3 test",
