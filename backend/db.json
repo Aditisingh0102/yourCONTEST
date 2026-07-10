@@ -1,6 +1,22 @@
 {
   "notices": [
     {
+      "title": "New Contest: Batch 3 test",
+      "content": "A new lab exam has been scheduled on 04/07/2026 at 14:45 for 117 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-04",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783156359300",
+      "date": "2026-07-04T09:12:39.300Z"
+    },
+    {
       "title": "New Contest: ggfg",
       "content": "A new assessment has been scheduled on 03/07/2026 at 15:33 for 10 mins. Please be prepared.",
       "type": "Important",
@@ -67,24 +83,103 @@
   ],
   "contests": [
     {
+      "title": "Batch 3 test",
+      "type": "Lab Exam",
+      "status": "Past",
+      "startTime": "2026-07-05, 00:14",
+      "endTime": "2026-07-04T18:45:02.753Z",
+      "duration": "117 mins",
+<<<<<<< Updated upstream
+      "registered": 0,
+      "questions": 1,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": true,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 2,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "ggfg"
+        }
+      ],
+      "_id": "1783156359293",
+      "createdAt": "2026-07-04T09:12:39.293Z"
+    },
+    {
       "title": "ggfg",
       "type": "Assessment",
       "status": "Upcoming",
       "startTime": "2026-07-03, 23:24",
       "endTime": "TBD",
       "duration": "10 mins",
+=======
+>>>>>>> Stashed changes
       "registered": 0,
-      "questions": 2,
+      "questions": 1,
       "submissions": 0,
       "customRules": [],
       "strictFullscreen": true,
       "disableCopyPaste": true,
       "batch": [
+        "All"
+      ],
+      "warningLimit": 2,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "ggfg"
+        }
+      ],
+      "_id": "1783156359293",
+      "createdAt": "2026-07-04T09:12:39.293Z"
+    },
+    {
+      "title": "ggfg",
+      "type": "Assessment",
+      "status": "Past",
+      "startTime": "2026-07-09, 01:01",
+      "endTime": "2026-07-08T19:56:01.504Z",
+      "duration": "70 mins",
+      "registered": 0,
+      "questions": 3,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
         "Alpha 1"
       ],
       "warningLimit": 3,
       "windowSwitchGracePeriod": 10,
-      "courseId": "1",
+      "courseId": "All",
       "questionList": [
         {
           "id": 1782849572373,
@@ -113,6 +208,28 @@
           "correctOption": 2,
           "marks": 2,
           "contestName": "aditi"
+        },
+        {
+          "id": 1783538938260,
+          "type": "Coding",
+          "title": "Two Sum",
+          "problemStatement": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+          "inputFormat": "nums = [2,7,11,15], target = 9",
+          "outputFormat": "[0,1]",
+          "constraints": "2 <= nums.length <= 104",
+          "testCases": [
+            {
+              "input": "nums = [3,2,4], target = 6",
+              "output": "[1,2]"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "nums = [3,3], target = 6",
+              "output": "[0,1]"
+            }
+          ],
+          "marks": 10
         }
       ],
       "_id": "1783072945728",
@@ -888,6 +1005,51 @@
   ],
   "submissions": [
     {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782908695740": 1
+      },
+      "score": 0,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:32.081Z",
+      "submittedAt": "2026-07-04T18:44:38.108Z",
+      "_id": "1783190672089"
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha-2",
+      "answers": {
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:23.877Z",
+      "submittedAt": "2026-07-04T18:44:26.220Z",
+      "_id": "1783190663884"
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:08.375Z",
+      "submittedAt": "2026-07-04T18:44:16.737Z",
+      "_id": "1783190648382"
+    },
+    {
       "contestId": "1783072945728",
       "contestName": "ggfg",
       "studentId": "23210101548",
@@ -895,13 +1057,61 @@
       "batch": "Alpha 1",
       "answers": {
         "1782849572373": 1,
-        "1782908695740": 2
+        "1782908695740": 2,
+        "1783538938260": "import java.util.HashMap;\nimport java.util.Arrays;\n\npublic class Main {\n    public static void main(String[] args) {\n        // The judge might expect this entry point\n        Solution sol = new Solution();\n        int[] result = sol.twoSum(new int[]{2, 7, 11, 15}, 9);\n        System.out.println(Arrays.toString(result));\n    }\n}\n\nclass Solution {\n    public int[] twoSum(int[] nums, int target) {\n        HashMap<Integer, Integer> map = new HashMap<>();\n        \n        for (int i = 0; i < nums.length; i++) {\n            int complement = target - nums[i];\n            \n            // If the complement exists in our map, we found our pair!\n            if (map.containsKey(complement)) {\n                return new int[] { map.get(complement), i };\n            }\n            \n            // Otherwise, add the current number and its index to the map\n            map.put(nums[i], i);\n        }\n        \n        return new int[] {}; \n    }\n}        "
       },
       "score": 3,
       "status": "submitted",
-      "startedAt": "2026-07-03T10:03:52.412Z",
-      "submittedAt": "2026-07-03T10:04:20.384Z",
-      "_id": "1783073032418"
+      "startedAt": "2026-07-08T19:29:37.816Z",
+      "submittedAt": "2026-07-08T19:55:18.278Z",
+      "_id": "1783538977828",
+      "extraTime": 6,
+      "notes": ""
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1782908695740": 1
+      },
+      "score": 0,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:32.081Z",
+      "submittedAt": "2026-07-04T18:44:38.108Z",
+      "_id": "1783190672089"
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha-2",
+      "answers": {
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:23.877Z",
+      "submittedAt": "2026-07-04T18:44:26.220Z",
+      "_id": "1783190663884"
+    },
+    {
+      "contestId": "1783156359293",
+      "contestName": "Batch 3 test",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-04T18:44:08.375Z",
+      "submittedAt": "2026-07-04T18:44:16.737Z",
+      "_id": "1783190648382"
     },
     {
       "contestId": "1783072300358",

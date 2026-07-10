@@ -8,6 +8,11 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
   const [selectedStudent, setSelectedStudent] = useState(initialStudent);
   const [resetConfirm, setResetConfirm] = useState(false);
   const [extendPrompt, setExtendPrompt] = useState({ show: false, minutes: '' });
+  const [successModal, setSuccessModal] = useState({ show: false, title: '', message: '' });
+
+  const showSuccess = (message, title = 'Success!') => {
+    setSuccessModal({ show: true, title, message });
+  };
 
   const totalMarks = contest?.questionList?.reduce((acc, q) => acc + q.marks, 0) || 0;
 
@@ -55,10 +60,10 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
     try {
       await deleteSubmission(selectedStudent._id);
       setSelectedStudent(null);
-      onClose();
+      showSuccess("Retest allowed successfully!", "Submission Reset");
     } catch(err) {
       console.error("Failed to allow retest:", err);
-      alert("Failed to delete submission.");
+      showSuccess("Failed to allow retest", "Error");
     }
     setResetConfirm(false);
   };
@@ -73,11 +78,10 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
         extraTime: (selectedStudent.extraTime || 0) + mins,
         status: 'reopened'
       });
-      alert(`Granted ${mins} extra minutes to ${selectedStudent.studentName}.`);
-      onClose(); // Close modal so parent refreshes
+      showSuccess(`Time extended successfully for ${selectedStudent.studentName}!`, "Time Extended");
     } catch(err) {
       console.error(err);
-      alert("Failed to extend time");
+      showSuccess("Failed to extend time", "Error");
     }
     setExtendPrompt({ show: false, minutes: '' });
   };
@@ -424,6 +428,27 @@ export default function AnalyticsModal({ contest, submissions, onClose, initialS
         </div>
       )}
 
+      {/* Success/Error Custom Modal */}
+      {successModal.show && (
+        <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[80] flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 text-center">
+            <div className={`w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 ${successModal.title === 'Error' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+              {successModal.title === 'Error' ? <XCircle className="w-6 h-6" /> : <CheckCircle className="w-6 h-6" />}
+            </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">{successModal.title}</h3>
+            <p className="text-sm text-gray-600 mb-6">{successModal.message}</p>
+            <button 
+              onClick={() => {
+                setSuccessModal({ show: false, title: '', message: '' });
+                if (successModal.title !== 'Error') onClose();
+              }}
+              className="w-full py-2.5 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Okay
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Search, Filter, Download, UserCircle, CheckCircle, XCircle } from 'lucide-react';
-import { getSubmissions } from '../../api';
-
+import { useState, useEffect, useMemo } from 'react';
+import { Search, Filter, Download, UserCircle, CheckCircle, XCircle, TrendingUp, PieChart as PieChartIcon } from 'lucide-react';
+import { getSubmissions, getContests } from '../../api';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 const mockStudents = [
   { id: '23210101548@uudoon.in', name: 'Aditi Singh', batch: 'Alpha 1', testsTaken: 12, avgScore: 85, status: 'Excellent' },
   { id: 'ERP102', name: 'Riya Gupta', batch: 'Alpha 1', testsTaken: 11, avgScore: 92, status: 'Excellent' },
@@ -19,17 +19,22 @@ export default function StudentRecords() {
   const [filterBatch, setFilterBatch] = useState('All');
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [submissions, setSubmissions] = useState([]);
+  const [contests, setContests] = useState([]);
 
   useEffect(() => {
-    const fetchSubs = async () => {
+    const fetchData = async () => {
       try {
-        const res = await getSubmissions();
-        setSubmissions(res.data || []);
+        const [subRes, contRes] = await Promise.all([
+          getSubmissions(),
+          getContests()
+        ]);
+        setSubmissions(subRes.data || []);
+        setContests(contRes.data || []);
       } catch(err) {
-        console.error("Failed to fetch submissions:", err);
+        console.error("Failed to fetch data:", err);
       }
     };
-    fetchSubs();
+    fetchData();
   }, []);
 
   const studentSubmissionsRaw = submissions.filter(sub => sub.studentId === selectedStudent?.id);
@@ -40,6 +45,40 @@ export default function StudentRecords() {
      }
   });
   const studentSubmissions = Object.values(studentSubmissionsMap).sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+
+  const trendData = useMemo(() => {
+    return [...studentSubmissions].reverse().map(sub => ({
+      name: sub.contestName?.length > 15 ? sub.contestName.substring(0, 15) + '...' : sub.contestName || 'Unknown',
+      score: sub.score,
+      fullTitle: sub.contestName
+    }));
+  }, [studentSubmissions]);
+
+  const latestReportStats = useMemo(() => {
+    if (!studentSubmissions || studentSubmissions.length === 0) return null;
+    const latest = studentSubmissions[0];
+    
+    const contest = contests.find(c => (c._id || c.id) === latest.contestId);
+    if (!contest || !contest.questionList) return null;
+
+    let correct = 0, incorrect = 0, skipped = 0;
+    contest.questionList.forEach(q => {
+      const ans = latest.answers?.[q.id];
+      if (ans === undefined || ans === '') {
+        skipped++;
+      } else if (q.type === 'MCQ' && ans === q.correctOption) {
+        correct++;
+      } else {
+        incorrect++;
+      }
+    });
+
+    return [
+      { name: 'Correct', value: correct, color: '#22c55e' },
+      { name: 'Incorrect', value: incorrect, color: '#ef4444' },
+      { name: 'Skipped', value: skipped, color: '#94a3b8' },
+    ];
+  }, [studentSubmissions, contests]);
 
   const handleDownloadPDF = (sub) => {
     const printWindow = window.open('', '', 'width=800,height=600');
@@ -268,8 +307,85 @@ export default function StudentRecords() {
                        <span className="text-lg font-semibold text-gray-900">{selectedStudent.testsTaken}</span>
                     </div>
                  </div>
-              </div>
+               </div>
               
+              <div className="px-6 pb-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                  <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <TrendingUp className="w-4 h-4 text-blue-600" />
+                      <h3 className="text-sm font-semibold text-gray-800">Performance Trend</h3>
+                    </div>
+                    {trendData.length > 0 ? (
+                      <div className="h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={trendData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b' }} dy={10} />
+                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b' }} dx={-10} />
+                            <RechartsTooltip 
+                              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                              formatter={(value) => [`${value} Marks`, 'Score']}
+                              labelStyle={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}
+                            />
+                            <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, fill: '#2563eb' }} />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    ) : (
+                      <div className="h-[150px] flex items-center justify-center text-gray-400 text-sm">Not enough data to show trend</div>
+                    )}
+                  </div>
+
+                  <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+                    <div className="flex items-center gap-2 mb-4">
+                      <PieChartIcon className="w-4 h-4 text-purple-600" />
+                      <h3 className="text-sm font-semibold text-gray-800">Latest Accuracy</h3>
+                    </div>
+                    {latestReportStats && latestReportStats.some(s => s.value > 0) ? (
+                      <div className="flex items-center h-[200px]">
+                        <div className="flex-1 h-full">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={latestReportStats}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={40}
+                                outerRadius={60}
+                                paddingAngle={5}
+                                dataKey="value"
+                              >
+                                {latestReportStats.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                              <RechartsTooltip 
+                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                itemStyle={{ fontWeight: '500' }}
+                              />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
+                        <div className="w-24 flex flex-col justify-center gap-3 border-l border-gray-100 pl-4">
+                          {latestReportStats.map((stat, idx) => (
+                            <div key={idx} className="flex flex-col">
+                              <div className="flex items-center gap-1.5">
+                                <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: stat.color }}></div>
+                                <span className="text-[11px] font-medium text-gray-500">{stat.name}</span>
+                              </div>
+                              <span className="text-sm font-bold text-gray-900 ml-4">{stat.value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-[150px] flex items-center justify-center text-gray-400 text-sm">Detailed analysis not available</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div className="px-6 pb-6">
                  <h3 className="text-sm font-semibold text-gray-800 mb-3">Recent Assessments</h3>
                  <div className="space-y-2 max-h-48 overflow-y-auto pr-2">

@@ -5,7 +5,7 @@ import { getNotices } from '../api';
 import { socket } from '../socket';
 import { filterNoticesForStudent, getStudentBatchFromSession } from '../utils/noticeUtils';
 
-export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme }) {
+export default function Navbar({ user, onToggleSidebar, theme, onCycleTheme, onHamburgerHover }) {
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
