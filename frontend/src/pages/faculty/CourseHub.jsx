@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BookOpen, Video, FileText, Plus, Edit3, Trash2, Users, BarChart2, Search, Filter, X, UploadCloud } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../../hooks/useTheme';
 
 const initialCourses = [
   {
@@ -97,6 +98,7 @@ const initialCourses = [
 ];
 
 export default function CourseHub() {
+  const [theme] = useTheme();
   const [courses, setCourses] = useState(initialCourses);
   const [searchQuery, setSearchQuery] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -220,14 +222,22 @@ export default function CourseHub() {
           <div 
             key={course.id} 
             onClick={() => navigate(`/faculty/course-hub/${course.id}`)}
-            className="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] overflow-hidden hover:shadow-xl hover:border-blue-100 hover:-translate-y-1 transition-all group flex flex-col h-full cursor-pointer"
+            className={`rounded-2xl border shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all group flex flex-col h-full cursor-pointer ${
+              theme === 'warm' 
+                ? 'bg-[#faf8f6] border-[#e5ddd5] hover:border-[#d4c5b9]' 
+                : 'bg-white border-gray-100 hover:border-blue-100'
+            }`}
           >
-            <div className={`h-32 ${course.bgLight || 'bg-blue-50'} relative p-6 flex flex-col justify-between shrink-0`}>
+            <div className={`h-32 ${theme === 'warm' ? 'bg-[#f5eeea]' : (course.bgLight || 'bg-blue-50')} relative p-6 flex flex-col justify-between shrink-0`}>
                <div className="flex justify-between items-start">
-                  <div className={`p-2.5 bg-white rounded-xl shadow-sm group-hover:scale-110 transition-transform ${course.iconColor || 'text-blue-500'}`}>
+                  <div className={`p-2.5 rounded-xl shadow-sm group-hover:scale-110 transition-transform ${theme === 'warm' ? 'bg-white text-[#bc5090]' : `bg-white ${course.iconColor || 'text-blue-500'}`}`}>
                     <course.icon className="w-5 h-5" />
                   </div>
-                  <span className={`px-2.5 py-1 rounded text-[10px] font-semibold uppercase tracking-wider border shadow-sm ${course.status === 'Published' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-500 border-gray-200'}`}>
+                  <span className={`px-2.5 py-1 rounded text-[10px] font-semibold uppercase tracking-wider border shadow-sm ${
+                    theme === 'warm' 
+                      ? (course.status === 'Published' ? 'bg-[#e5ddd5] text-[#5c4d7d] border-[#d4c5b9]' : 'bg-[#f5eeea] text-[#7a6b63] border-[#e5ddd5]')
+                      : (course.status === 'Published' ? 'bg-blue-50 text-blue-600 border-blue-100' : 'bg-gray-50 text-gray-500 border-gray-200')
+                  }`}>
                     {course.status}
                   </span>
                </div>
@@ -242,42 +252,42 @@ export default function CourseHub() {
             
             <div className="p-5 flex-1 flex flex-col">
               <div className="mb-4">
-                <h3 className="text-[16px] font-semibold text-gray-900 leading-tight mb-1 group-hover:text-blue-600 transition-colors">{course.title}</h3>
-                <p className="text-[13px] text-gray-500">{course.subject}</p>
+                <h3 className={`text-[16px] font-semibold leading-tight mb-1 transition-colors ${theme === 'warm' ? 'text-[#3e322b] group-hover:text-[#5c4d7d]' : 'text-gray-900 group-hover:text-blue-600'}`}>{course.title}</h3>
+                <p className={`text-[13px] ${theme === 'warm' ? 'text-[#7a6b63]' : 'text-gray-500'}`}>{course.subject}</p>
               </div>
               
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${theme === 'warm' ? 'bg-[#e5ddd5] text-[#5c4d7d]' : 'bg-blue-50 text-blue-600'}`}>
                     <Users className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Students</p>
-                    <p className="text-[13px] font-semibold text-gray-800">{course.students}</p>
+                    <p className={`text-[10px] font-semibold uppercase tracking-wider ${theme === 'warm' ? 'text-[#a19086]' : 'text-gray-400'}`}>Students</p>
+                    <p className={`text-[13px] font-semibold ${theme === 'warm' ? 'text-[#3e322b]' : 'text-gray-800'}`}>{course.students}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${theme === 'warm' ? 'bg-[#e5ddd5] text-[#bc5090]' : 'bg-purple-50 text-purple-600'}`}>
                     <Video className="w-4 h-4" />
                   </div>
                   <div>
-                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Modules</p>
-                    <p className="text-[13px] font-semibold text-gray-800">{course.modules}</p>
+                    <p className={`text-[10px] font-semibold uppercase tracking-wider ${theme === 'warm' ? 'text-[#a19086]' : 'text-gray-400'}`}>Modules</p>
+                    <p className={`text-[13px] font-semibold ${theme === 'warm' ? 'text-[#3e322b]' : 'text-gray-800'}`}>{course.modules}</p>
                   </div>
                 </div>
               </div>
 
               {/* Actions */}
-              <div className="mt-auto pt-4 border-t border-gray-50 flex gap-2" onClick={e => e.stopPropagation()}>
-                <button onClick={() => navigate(`/faculty/course-hub/${course.id}`)} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600 rounded-lg text-[12px] font-semibold transition-colors">
+              <div className={`mt-auto pt-4 border-t flex gap-2 ${theme === 'warm' ? 'border-[#e5ddd5]' : 'border-gray-50'}`} onClick={e => e.stopPropagation()}>
+                <button onClick={() => navigate(`/faculty/course-hub/${course.id}`)} className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-semibold transition-colors ${theme === 'warm' ? 'bg-[#e5ddd5] text-[#5c4d7d] hover:bg-[#d4c5b9]' : 'bg-gray-50 hover:bg-blue-50 text-gray-700 hover:text-blue-600'}`}>
                   <Edit3 className="w-3.5 h-3.5" /> Edit
                 </button>
-                <button onClick={() => { setSelectedCourseForAnalytics(course); setShowAnalyticsModal(true); }} className="flex-1 flex items-center justify-center gap-1.5 py-2 bg-gray-50 hover:bg-green-50 text-gray-700 hover:text-green-600 rounded-lg text-[12px] font-semibold transition-colors">
+                <button onClick={() => { setSelectedCourseForAnalytics(course); setShowAnalyticsModal(true); }} className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[12px] font-semibold transition-colors ${theme === 'warm' ? 'bg-[#e5ddd5] text-[#5c4d7d] hover:bg-[#d4c5b9]' : 'bg-gray-50 hover:bg-green-50 text-gray-700 hover:text-green-600'}`}>
                   <BarChart2 className="w-3.5 h-3.5" /> Analytics
                 </button>
                 <button 
                   onClick={() => handleDelete(course.id)}
-                  className="px-3 py-2 bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-lg transition-colors"
+                  className={`px-3 py-2 rounded-lg transition-colors ${theme === 'warm' ? 'bg-[#e5ddd5] text-[#bc5090] hover:bg-[#d4c5b9] hover:text-[#913b68]' : 'bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500'}`}
                   title="Delete Course"
                 >
                   <Trash2 className="w-4 h-4" />

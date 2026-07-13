@@ -1,6 +1,182 @@
 {
   "notices": [
     {
+      "title": "New Contest: shashank",
+      "content": "A new mock test has been scheduled on 13/07/2026 at 18:31 for 20 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783947609275",
+      "date": "2026-07-13T13:00:09.275Z"
+    },
+    {
+      "title": "New Contest: ms",
+      "content": "A new mock test has been scheduled on 13/07/2026 at 14:50 for 23 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783934307298",
+      "date": "2026-07-13T09:18:27.298Z"
+    },
+    {
+      "title": "New Contest: adg",
+      "content": "A new mock test has been scheduled on 13/07/2026 at 14:49 for 26 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783934278719",
+      "date": "2026-07-13T09:17:58.719Z"
+    },
+    {
+      "title": "New Contest: alpha demo",
+      "content": "A new mock test has been scheduled on 13/07/2026 at 14:39 for 27 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "Beta 1"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783933701125",
+      "date": "2026-07-13T09:08:21.125Z"
+    },
+    {
+      "title": "New Contest: test5",
+      "content": "A new coding challenge has been scheduled on 13/07/2026 at 14:31 for 20 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "Alpha 1"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783933212679",
+      "date": "2026-07-13T09:00:12.679Z"
+    },
+    {
+      "title": "New Contest: batch 34",
+      "content": "A new mock test has been scheduled on 13/07/2026 at 14:19 for 70 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783932426318",
+      "date": "2026-07-13T08:47:06.318Z"
+    },
+    {
+      "title": "New Contest: dnsa",
+      "content": "A new coding challenge has been scheduled on 13/07/2026 at 14:17 for 23 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783932290988",
+      "date": "2026-07-13T08:44:50.988Z"
+    },
+    {
+      "title": "New Contest: hjhjh",
+      "content": "A new mock test has been scheduled on 13/07/2026 at 14:16 for 6 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783932237736",
+      "date": "2026-07-13T08:43:57.736Z"
+    },
+    {
+      "title": "New Contest: test1",
+      "content": "A new coding challenge has been scheduled on 13/07/2026 at 14:15 for 10 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783932168485",
+      "date": "2026-07-13T08:42:48.485Z"
+    },
+    {
+      "title": "New Contest: batch",
+      "content": "A new coding challenge has been scheduled on 13/07/2026 at 10:52 for 23 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-13",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783920009092",
+      "date": "2026-07-13T05:20:09.092Z"
+    },
+    {
+      "title": "New Contest: Batch -5",
+      "content": "A new coding challenge has been scheduled on 10/07/2026 at 15:38 for 20 mins. Please be prepared.",
+      "type": "Important",
+      "batch": [
+        "All"
+      ],
+      "deadline": "2026-07-10",
+      "author": "System Admin",
+      "iconName": "AlertCircle",
+      "color": "text-orange-600",
+      "bg": "bg-orange-50",
+      "borderColor": "border-orange-100",
+      "_id": "1783678076140",
+      "date": "2026-07-10T10:07:56.140Z"
+    },
+    {
       "title": "New Contest: gfgggg",
       "content": "A new mock test has been scheduled on 10/07/2026 at 14:32 for 3 mins. Please be prepared.",
       "type": "Important",
@@ -99,11 +275,316 @@
   ],
   "contests": [
     {
-      "title": "gfgggg",
+      "title": "shashank",
       "type": "Mock Test",
       "status": "Upcoming",
-      "startTime": "2026-07-10, 14:32",
+      "startTime": "2026-07-13, 18:31",
       "endTime": "TBD",
+      "duration": "20 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 2,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1782849572373,
+          "type": "MCQ",
+          "question": "sum 2+2",
+          "options": [
+            "1",
+            "4",
+            "2",
+            "5"
+          ],
+          "correctOption": 1,
+          "marks": 1,
+          "contestName": "ms"
+        },
+        {
+          "id": 1783538938260,
+          "type": "Coding",
+          "title": "Two Sum",
+          "problemStatement": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+          "inputFormat": "nums = [2,7,11,15], target = 9",
+          "outputFormat": "[0,1]",
+          "constraints": "2 <= nums.length <= 104",
+          "testCases": [
+            {
+              "input": "nums = [3,2,4], target = 6",
+              "output": "[1,2]"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "nums = [3,3], target = 6",
+              "output": "[0,1]"
+            }
+          ],
+          "marks": 10,
+          "contestName": "ms"
+        }
+      ],
+      "_id": "1783947609269",
+      "createdAt": "2026-07-13T13:00:09.269Z"
+    },
+    {
+      "title": "batch 34",
+      "type": "Mock Test",
+      "status": "Past",
+      "startTime": "2026-07-13, 14:19",
+      "endTime": "2026-07-13T09:06:50.740Z",
+      "duration": "70 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 1,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1783538938260,
+          "type": "Coding",
+          "title": "Two Sum",
+          "problemStatement": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+          "inputFormat": "nums = [2,7,11,15], target = 9",
+          "outputFormat": "[0,1]",
+          "constraints": "2 <= nums.length <= 104",
+          "testCases": [
+            {
+              "input": "nums = [3,2,4], target = 6",
+              "output": "[1,2]"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "nums = [3,3], target = 6",
+              "output": "[0,1]"
+            }
+          ],
+          "marks": 10,
+          "contestName": "dnsa"
+        },
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "dnsa"
+        }
+      ],
+      "_id": "1783932426311",
+      "createdAt": "2026-07-13T08:47:06.311Z"
+    },
+    {
+      "title": "test1",
+      "type": "Coding Challenge",
+      "status": "Upcoming",
+      "startTime": "2026-07-13, 14:38",
+      "endTime": "TBD",
+      "duration": "10 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 2,
+      "windowSwitchGracePeriod": 5,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1783538938260,
+          "type": "Coding",
+          "title": "Two Sum",
+          "problemStatement": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+          "inputFormat": "nums = [2,7,11,15], target = 9",
+          "outputFormat": "[0,1]",
+          "constraints": "2 <= nums.length <= 104",
+          "testCases": [
+            {
+              "input": "nums = [3,2,4], target = 6",
+              "output": "[1,2]"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "nums = [3,3], target = 6",
+              "output": "[0,1]"
+            }
+          ],
+          "marks": 10,
+          "contestName": "batch"
+        },
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "batch"
+        }
+      ],
+      "_id": "1783932168469",
+      "createdAt": "2026-07-13T08:42:48.469Z"
+    },
+    {
+      "title": "batch",
+      "type": "Coding Challenge",
+      "status": "Upcoming",
+      "startTime": "2026-07-13, 10:52",
+      "endTime": "TBD",
+      "duration": "23 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 3,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1783538938260,
+          "type": "Coding",
+          "title": "Two Sum",
+          "problemStatement": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+          "inputFormat": "nums = [2,7,11,15], target = 9",
+          "outputFormat": "[0,1]",
+          "constraints": "2 <= nums.length <= 104",
+          "testCases": [
+            {
+              "input": "nums = [3,2,4], target = 6",
+              "output": "[1,2]"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "nums = [3,3], target = 6",
+              "output": "[0,1]"
+            }
+          ],
+          "marks": 10,
+          "contestName": "Batch -5"
+        },
+        {
+          "id": 1782908695740,
+          "type": "MCQ",
+          "question": "multiply 4*4",
+          "options": [
+            "2",
+            "22",
+            "16",
+            "67"
+          ],
+          "correctOption": 2,
+          "marks": 2,
+          "contestName": "Batch 3 test"
+        }
+      ],
+      "_id": "1783920009084",
+      "createdAt": "2026-07-13T05:20:09.084Z"
+    },
+    {
+      "title": "Batch -5",
+      "type": "Coding Challenge",
+      "status": "Past",
+      "startTime": "2026-07-13, 10:50",
+      "endTime": "2026-07-13T05:07:04.229Z",
+      "duration": "20 mins",
+      "registered": 0,
+      "questions": 2,
+      "submissions": 0,
+      "customRules": [],
+      "strictFullscreen": true,
+      "disableCopyPaste": false,
+      "batch": [
+        "All"
+      ],
+      "warningLimit": 3,
+      "windowSwitchGracePeriod": 0,
+      "courseId": "All",
+      "questionList": [
+        {
+          "id": 1783674083584,
+          "type": "MCQ",
+          "question": "vb",
+          "options": [
+            "dsfsdf",
+            "sc",
+            "sad",
+            "ffg"
+          ],
+          "correctOption": 0,
+          "marks": 1,
+          "contestName": "gfgggg"
+        },
+        {
+          "id": 1783538938260,
+          "type": "Coding",
+          "title": "Two Sum",
+          "problemStatement": "Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.\n\nYou may assume that each input would have exactly one solution, and you may not use the same element twice.\n\nYou can return the answer in any order.",
+          "inputFormat": "nums = [2,7,11,15], target = 9",
+          "outputFormat": "[0,1]",
+          "constraints": "2 <= nums.length <= 104",
+          "testCases": [
+            {
+              "input": "nums = [3,2,4], target = 6",
+              "output": "[1,2]"
+            }
+          ],
+          "hiddenTestCases": [
+            {
+              "input": "nums = [3,3], target = 6",
+              "output": "[0,1]"
+            }
+          ],
+          "marks": 10,
+          "contestName": "ggfg"
+        }
+      ],
+      "_id": "1783678076135",
+      "createdAt": "2026-07-10T10:07:56.135Z"
+    },
+    {
+      "title": "gfgggg",
+      "type": "Mock Test",
+      "status": "Past",
+      "startTime": "2026-07-10, 14:32",
+      "endTime": "2026-07-10T09:26:25.538Z",
       "duration": "3 mins",
       "registered": 0,
       "questions": 1,
@@ -1055,6 +1536,213 @@
   ],
   "submissions": [
     {
+      "contestId": "1783947609269",
+      "contestName": "shashank",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha 2",
+      "answers": {
+        "1782849572373": 1,
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")  "
+      },
+      "score": 1,
+      "status": "submitted",
+      "submittedAt": 1783948885329,
+      "_id": "1783948885329"
+    },
+    {
+      "contestId": "1783947609269",
+      "contestName": "shashank",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha 2",
+      "answers": {
+        "1782849572373": 1,
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")  "
+      },
+      "score": 1,
+      "status": "submitted",
+      "submittedAt": 1783947938629,
+      "_id": "1783947938629"
+    },
+    {
+      "contestId": "1783947609269",
+      "contestName": "shashank",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha 2",
+      "answers": {
+        "1782849572373": 1,
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")  "
+      },
+      "score": 1,
+      "status": "submitted",
+      "submittedAt": 1783947938627,
+      "_id": "1783947938627"
+    },
+    {
+      "contestId": "1783947609269",
+      "contestName": "shashank",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha 2",
+      "answers": {
+        "1782849572373": 1,
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")  "
+      },
+      "score": 0,
+      "status": "in_progress",
+      "startedAt": "2026-07-13T13:01:29.772Z",
+      "submittedAt": 1783947689785,
+      "_id": "1783947689785"
+    },
+    {
+      "contestId": "1783932168469",
+      "contestName": "test1",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")    "
+      },
+      "score": 0,
+      "status": "submitted",
+      "submittedAt": 1783932902030,
+      "_id": "1783932902030"
+    },
+    {
+      "contestId": "1783932168469",
+      "contestName": "test1",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")    "
+      },
+      "score": 0,
+      "status": "in_progress",
+      "startedAt": "2026-07-13T08:53:27.260Z",
+      "submittedAt": 1783932807283,
+      "_id": "1783932807283"
+    },
+    {
+      "contestId": "1783932426311",
+      "contestName": "batch 34",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {},
+      "score": 0,
+      "status": "submitted",
+      "submittedAt": 1783932787548,
+      "_id": "1783932787548"
+    },
+    {
+      "contestId": "1783932426311",
+      "contestName": "batch 34",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {},
+      "score": 0,
+      "status": "submitted",
+      "submittedAt": 1783932787546,
+      "_id": "1783932787546"
+    },
+    {
+      "contestId": "1783932426311",
+      "contestName": "batch 34",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {},
+      "score": 0,
+      "status": "in_progress",
+      "startedAt": "2026-07-13T08:52:58.513Z",
+      "submittedAt": 1783932778520,
+      "_id": "1783932778520"
+    },
+    {
+      "contestId": "1783920009084",
+      "contestName": "batch",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha 2",
+      "answers": {
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")           ",
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-13T05:28:57.268Z",
+      "submittedAt": "2026-07-13T05:29:13.463Z",
+      "_id": "1783920537279"
+    },
+    {
+      "contestId": "1783920009084",
+      "contestName": "batch",
+      "studentId": "23210101763",
+      "studentName": "Ambar Kumar",
+      "batch": "Beta 1",
+      "answers": {
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")           ",
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-13T05:25:56.175Z",
+      "submittedAt": "2026-07-13T05:26:31.343Z",
+      "_id": "1783920356185"
+    },
+    {
+      "contestId": "1783920009084",
+      "contestName": "batch",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")             ",
+        "1782908695740": 2
+      },
+      "score": 2,
+      "status": "submitted",
+      "startedAt": "2026-07-13T05:24:37.783Z",
+      "submittedAt": "2026-07-13T05:25:01.656Z",
+      "_id": "1783920277795"
+    },
+    {
+      "contestId": "1783678076135",
+      "contestName": "Batch -5",
+      "studentId": "23210101001",
+      "studentName": "Rahul Rawat",
+      "batch": "Alpha 2",
+      "answers": {
+        "1783674083584": 0,
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\")           "
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-13T05:05:50.850Z",
+      "submittedAt": "2026-07-13T05:06:24.851Z",
+      "_id": "1783919150862"
+    },
+    {
+      "contestId": "1783678076135",
+      "contestName": "Batch -5",
+      "studentId": "23210101548",
+      "studentName": "Aditi Singh",
+      "batch": "Alpha 1",
+      "answers": {
+        "1783674083584": 0,
+        "1783538938260": "import sys\n\ndef two_sum(nums, target):\n    # Dictionary to store the value and its corresponding index\n    num_map = {}\n    \n    for i, num in enumerate(nums):\n        complement = target - num\n        # If complement is found, return the current index and the complement's index\n        if complement in num_map:\n            return [num_map[complement], i]\n        \n        # Otherwise, add the current number to the map\n        num_map[num] = i\n        \n    return []\n\nif __name__ == \"__main__\":\n    # Read all input from Judge0 standard input\n    input_data = sys.stdin.read().strip().split('\\n')\n    \n    if len(input_data) >= 2:\n        # Parse the first line as the array (handling both JSON brackets or space-separated)\n        raw_nums = input_data[0].replace('[', '').replace(']', '').replace(',', ' ')\n        nums = list(map(int, raw_nums.split()))\n        \n        # Parse the second line as the target\n        target = int(input_data[1].strip())\n        \n        # Execute and print to standard output for Judge0 evaluation\n        result = two_sum(nums, target)\n        \n        # Print output in the format [index1, index2]\n        print(f\"[{result[0]}, {result[1]}]\") "
+      },
+      "score": 1,
+      "status": "submitted",
+      "startedAt": "2026-07-10T10:08:46.329Z",
+      "submittedAt": "2026-07-10T10:17:21.820Z",
+      "_id": "1783678126338"
+    },
+    {
       "contestId": "1783674067350",
       "contestName": "gfgggg",
       "studentId": "23210101548",
@@ -1089,7 +1777,7 @@
       "contestName": "Batch 3 test",
       "studentId": "23210101001",
       "studentName": "Rahul Rawat",
-      "batch": "Alpha-2",
+      "batch": "Alpha 2",
       "answers": {
         "1782908695740": 2
       },
@@ -1153,7 +1841,7 @@
       "contestName": "Batch 3 test",
       "studentId": "23210101001",
       "studentName": "Rahul Rawat",
-      "batch": "Alpha-2",
+      "batch": "Alpha 2",
       "answers": {
         "1782908695740": 2
       },

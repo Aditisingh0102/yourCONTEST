@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { getContests, getSubmissions } from '../../api';
 import { socket } from '../../socket';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid, Legend } from 'recharts';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [theme] = useTheme();
   const [showBatches, setShowBatches] = useState(false);
   const [showStudents, setShowStudents] = useState(false);
 
@@ -53,7 +55,7 @@ export default function Dashboard() {
         // Calculate Batch Performance dynamically
         const bpData = allocatedBatchesList.map(batch => {
           const batchName = batch.name;
-          const batchSubs = submissionsData.filter(s => s.batch === batchName);
+          const batchSubs = submissionsData.filter(s => s.batch === batchName || (batchName === 'Alpha 2' && s.batch === 'Alpha-2'));
           if (batchSubs.length === 0) return { name: batchName, averageScore: 0, topScore: 0 };
 
           const scores = batchSubs.map(s => s.score || 0);
@@ -64,18 +66,18 @@ export default function Dashboard() {
         setBatchPerformanceData(bpData);
 
         // Calculate Overall Results dynamically
-        // Assuming passing score is arbitrarily 5 for demonstration, or we can use 40% if maxScore is known. Let's use 5.
+        // Using score >= 2 to match Analytics.jsx
         const totalStudents = allocatedBatchesList.reduce((acc, curr) => acc + curr.students, 0);
         const totalSubs = submissionsData.length;
 
-        const passed = submissionsData.filter(s => (s.score || 0) >= 5).length;
+        const passed = submissionsData.filter(s => (s.score || 0) >= 2).length;
         const failed = totalSubs - passed;
         const notAttempted = Math.max(0, totalStudents - totalSubs);
 
         setContestResultData([
-          { name: 'Passed', value: passed, color: '#22c55e' },
-          { name: 'Failed', value: failed, color: '#ef4444' },
-          { name: 'Not Attempted', value: notAttempted, color: '#94a3b8' },
+          { name: 'Passed', value: passed },
+          { name: 'Failed', value: failed },
+          { name: 'Not Attempted', value: notAttempted },
         ]);
 
       } catch (error) {
@@ -198,8 +200,8 @@ export default function Dashboard() {
                       <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#64748b' }} />
                       <Tooltip cursor={{ fill: 'rgba(148, 163, 184, 0.1)' }} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                       <Legend wrapperStyle={{ fontSize: '12px' }} />
-                      <Bar dataKey="averageScore" name="Avg Score" fill="#3b82f6" radius={[4, 4, 0, 0]} barSize={20} />
-                      <Bar dataKey="topScore" name="Top Score" fill="#818cf8" radius={[4, 4, 0, 0]} barSize={20} />
+                      <Bar dataKey="averageScore" name="Avg Score" fill={theme === 'warm' ? '#58508d' : '#3b82f6'} radius={[4, 4, 0, 0]} barSize={20} />
+                      <Bar dataKey="topScore" name="Top Score" fill={theme === 'warm' ? '#bc5090' : '#818cf8'} radius={[4, 4, 0, 0]} barSize={20} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -221,9 +223,15 @@ export default function Dashboard() {
                         minAngle={15}
                         dataKey="value"
                       >
-                        {contestResultData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
+                        {contestResultData.map((entry, index) => {
+                          const pieColors = {
+                            light: ['#22c55e', '#ef4444', '#94a3b8'],
+                            dark: ['#4ade80', '#f87171', '#475569'],
+                            warm: ['#84cc16', '#ef4444', '#d6d3d1']
+                          };
+                          const currentPieColors = pieColors[theme] || pieColors.light;
+                          return <Cell key={`cell-${index}`} fill={currentPieColors[index % currentPieColors.length]} style={{ outline: 'none' }} />;
+                        })}
                       </Pie>
                       <Tooltip contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                       <Legend wrapperStyle={{ fontSize: '12px' }} verticalAlign="bottom" height={36} />

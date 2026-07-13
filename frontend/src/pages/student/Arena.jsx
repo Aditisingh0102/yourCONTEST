@@ -56,6 +56,7 @@ export default function Arena() {
   const [showWarning, setShowWarning] = useState(false);
   const isViolatingRef = React.useRef(false);
   const graceTimerRef = React.useRef(null);
+  const isSubmittingRef = React.useRef(false);
 
   const fetchContestData = async () => {
     try {
@@ -197,6 +198,7 @@ export default function Arena() {
     };
 
     const handleVisibilityChange = () => {
+      if (isSubmittingRef.current) return;
       if (document.visibilityState === 'hidden') {
         handleViolationStart();
       } else {
@@ -205,6 +207,7 @@ export default function Arena() {
     };
 
     const handleFullscreenChange = () => {
+      if (isSubmittingRef.current) return;
       if (!document.fullscreenElement) {
         handleViolationStart();
       } else {
@@ -362,6 +365,7 @@ export default function Arena() {
   };
 
   const performSubmission = async () => {
+    isSubmittingRef.current = true;
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => { });
     }
@@ -400,8 +404,8 @@ export default function Arena() {
           });
           const data = await response.json();
           if (data.status?.id === 3) {
-             const actualOutput = (data.stdout || "").trim();
-             const expectedOutput = (tc.output || "").trim();
+             const actualOutput = (data.stdout || "").replace(/\s+/g, '');
+             const expectedOutput = (tc.output || "").replace(/\s+/g, '');
              if (actualOutput !== expectedOutput) {
                 passedAll = false;
                 break;
@@ -456,7 +460,8 @@ export default function Arena() {
     const extraStorageKey = `contest_${contest?.id || contest?._id}_extraStartTime`;
     sessionStorage.removeItem(storageKey);
     sessionStorage.removeItem(extraStorageKey);
-    setSubmittedResult({ score, total: questions.length });
+    const totalMarks = questions.reduce((sum, q) => sum + parseInt(q.marks || (q.type === 'MCQ' ? 1 : 10), 10), 0);
+    setSubmittedResult({ score, total: totalMarks });
     setSubmissionStatus('idle');
   };
 
@@ -552,6 +557,7 @@ public class Main {
     try {
       const rawSource = answers[activeProblem.id];
       const stdin = activeProblem.sampleInput || (activeProblem.testCases && activeProblem.testCases.length > 0 ? activeProblem.testCases[0].input : "");
+      const expectedOutput = activeProblem.sampleOutput || (activeProblem.testCases && activeProblem.testCases.length > 0 ? activeProblem.testCases[0].output : "");
       const sourceCode = wrapCodeForExecution(rawSource, activeLanguage, stdin);
       
       const response = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
@@ -572,6 +578,18 @@ public class Main {
       }
       
       const data = await response.json();
+      
+      if (data.status?.id === 3) {
+         const actualOut = (data.stdout || "").replace(/\s+/g, '');
+         const expected = (expectedOutput || "").replace(/\s+/g, '');
+         if (actualOut === expected) {
+            data.isCorrect = true;
+            data.marksAwarded = activeProblem.marks;
+         } else {
+            data.isCorrect = false;
+         }
+      }
+
       setExecutionResult(data);
     } catch (err) {
       console.error(err);
@@ -1051,6 +1069,15 @@ public class Main {
                           <div className="text-green-400 mb-2 font-semibold">Execution Successful!</div>
                           <div className="text-gray-400 mb-1">Output:</div>
                           <div className="whitespace-pre-wrap mb-4 bg-black/30 p-2 rounded border border-gray-800">{executionResult?.stdout || "No output"}</div>
+                          
+                          {executionResult.isCorrect !== undefined && (
+                            <div className={`mt-2 mb-4 font-semibold p-3 rounded border ${executionResult.isCorrect ? 'bg-green-900/20 border-green-500/30 text-green-400' : 'bg-red-900/20 border-red-500/30 text-red-400'}`}>
+                              {executionResult.isCorrect 
+                                ? `🎉 Testcase Passed! You will get ${executionResult.marksAwarded} Marks for this question on submission.` 
+                                : 'Output did not match expected output.'}
+                            </div>
+                          )}
+
                           <div className="text-gray-500 text-xs flex gap-4">
                             <span>Time: {executionResult?.time}s</span>
                             <span>Memory: {executionResult?.memory} KB</span>

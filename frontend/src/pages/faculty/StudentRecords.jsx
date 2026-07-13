@@ -7,11 +7,13 @@ const mockStudents = [
   { id: 'ERP102', name: 'Riya Gupta', batch: 'Alpha 1', testsTaken: 11, avgScore: 92, status: 'Excellent' },
   { id: 'ERP103', name: 'Vihaan Singh', batch: 'Alpha 1', testsTaken: 12, avgScore: 65, status: 'Average' },
   { id: 'ERP104', name: 'Ananya Patel', batch: 'Alpha 1', testsTaken: 8, avgScore: 45, status: 'Needs Attention' },
+  { id: '23210101001', name: 'Rahul Rawat', batch: 'Alpha 2', testsTaken: 14, avgScore: 91, status: 'Excellent' },
   { id: 'ERP201', name: 'Arjun Kumar', batch: 'Alpha 2', testsTaken: 10, avgScore: 78, status: 'Good' },
   { id: 'ERP202', name: 'Sneha Iyer', batch: 'Alpha 2', testsTaken: 9, avgScore: 88, status: 'Excellent' },
   { id: 'ERP203', name: 'Vivaan Joshi', batch: 'Alpha 2', testsTaken: 10, avgScore: 55, status: 'Average' },
   { id: '23210101763@uudoon.in', name: 'Ambar Kumar', batch: 'Beta 1', testsTaken: 15, avgScore: 95, status: 'Excellent' },
   { id: 'ERP302', name: 'Neha Sharma', batch: 'Beta 1', testsTaken: 4, avgScore: 72, status: 'Good' },
+
 ];
 
 export default function StudentRecords() {
@@ -30,7 +32,7 @@ export default function StudentRecords() {
         ]);
         setSubmissions(subRes.data || []);
         setContests(contRes.data || []);
-      } catch(err) {
+      } catch (err) {
         console.error("Failed to fetch data:", err);
       }
     };
@@ -40,11 +42,11 @@ export default function StudentRecords() {
   const studentSubmissionsRaw = submissions.filter(sub => sub.studentId === selectedStudent?.id);
   const studentSubmissionsMap = {};
   studentSubmissionsRaw.forEach(sub => {
-     if (!studentSubmissionsMap[sub.contestId] || new Date(sub.submittedAt) > new Date(studentSubmissionsMap[sub.contestId].submittedAt)) {
-        studentSubmissionsMap[sub.contestId] = sub;
-     }
+    if (!studentSubmissionsMap[sub.contestId] || new Date(sub.submittedAt) > new Date(studentSubmissionsMap[sub.contestId].submittedAt)) {
+      studentSubmissionsMap[sub.contestId] = sub;
+    }
   });
-  const studentSubmissions = Object.values(studentSubmissionsMap).sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+  const studentSubmissions = Object.values(studentSubmissionsMap).sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
 
   const trendData = useMemo(() => {
     return [...studentSubmissions].reverse().map(sub => ({
@@ -57,7 +59,7 @@ export default function StudentRecords() {
   const latestReportStats = useMemo(() => {
     if (!studentSubmissions || studentSubmissions.length === 0) return null;
     const latest = studentSubmissions[0];
-    
+
     const contest = contests.find(c => (c._id || c.id) === latest.contestId);
     if (!contest || !contest.questionList) return null;
 
@@ -149,7 +151,7 @@ export default function StudentRecords() {
 
   return (
     <div className="max-w-[1200px] mx-auto py-6 space-y-6">
-      
+
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -165,17 +167,17 @@ export default function StudentRecords() {
       <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 justify-between items-center">
         <div className="relative w-full md:max-w-md">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input 
-            type="text" 
-            placeholder="Search by student name or ERP ID..." 
+          <input
+            type="text"
+            placeholder="Search by student name or ERP ID..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500 transition-all text-sm font-medium"
           />
         </div>
-        
+
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <select 
+          <select
             value={filterBatch}
             onChange={(e) => setFilterBatch(e.target.value)}
             className="w-full md:w-auto px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 text-sm font-semibold text-gray-700"
@@ -228,7 +230,7 @@ export default function StudentRecords() {
                       <div className="flex items-center gap-2">
                         <span className="text-[14px] font-semibold text-gray-900">{student.avgScore}%</span>
                         <div className="w-16 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                          <div 
+                          <div
                             className={`h-full rounded-full ${student.avgScore >= 75 ? 'bg-green-500' : student.avgScore >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`}
                             style={{ width: `${student.avgScore}%` }}
                           ></div>
@@ -265,157 +267,157 @@ export default function StudentRecords() {
 
       {selectedStudent && (
         <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-           <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200">
-              <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50">
-                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-semibold text-xl">
-                       {selectedStudent.name.charAt(0)}
-                    </div>
-                    <div>
-                       <h2 className="text-xl font-semibold text-gray-900">{selectedStudent.name}</h2>
-                       <p className="text-sm text-gray-500 font-medium">{selectedStudent.id} • Batch: {selectedStudent.batch}</p>
-                    </div>
-                 </div>
-                 <button onClick={() => setSelectedStudent(null)} className="p-2 text-gray-400 hover:text-gray-600 bg-white rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
-                   <XCircle className="w-5 h-5" />
-                 </button>
-              </div>
-              
-              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
-                    <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Performance Overview</p>
-                    <div className="flex items-end gap-2 mb-2">
-                       <span className="text-3xl font-semibold text-gray-900">{selectedStudent.avgScore}%</span>
-                       <span className="text-sm font-medium text-gray-500 mb-1">Avg. Score</span>
-                    </div>
-                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
-                       <div className={`h-full rounded-full ${selectedStudent.avgScore >= 75 ? 'bg-green-500' : selectedStudent.avgScore >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${selectedStudent.avgScore}%` }}></div>
-                    </div>
-                    <p className="text-xs text-gray-500 font-medium">Across {selectedStudent.testsTaken} tests taken</p>
-                 </div>
-                 
-                 <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
-                       <span className="text-sm font-medium text-gray-600">Overall Status</span>
-                       <span className={`px-3 py-1 text-[11px] font-semibold rounded-md uppercase tracking-wider border ${getStatusColor(selectedStudent.status)}`}>
-                         {selectedStudent.status}
-                       </span>
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
-                       <span className="text-sm font-medium text-gray-600">Total Tests Taken</span>
-                       <span className="text-lg font-semibold text-gray-900">{selectedStudent.testsTaken}</span>
-                    </div>
-                 </div>
-               </div>
-              
-              <div className="px-6 pb-2">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-                  <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <TrendingUp className="w-4 h-4 text-blue-600" />
-                      <h3 className="text-sm font-semibold text-gray-800">Performance Trend</h3>
-                    </div>
-                    {trendData.length > 0 ? (
-                      <div className="h-[200px] w-full">
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={trendData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b' }} dy={10} />
-                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b' }} dx={-10} />
-                            <RechartsTooltip 
-                              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                              formatter={(value) => [`${value} Marks`, 'Score']}
-                              labelStyle={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}
-                            />
-                            <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, fill: '#2563eb' }} />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </div>
-                    ) : (
-                      <div className="h-[150px] flex items-center justify-center text-gray-400 text-sm">Not enough data to show trend</div>
-                    )}
-                  </div>
-
-                  <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
-                    <div className="flex items-center gap-2 mb-4">
-                      <PieChartIcon className="w-4 h-4 text-purple-600" />
-                      <h3 className="text-sm font-semibold text-gray-800">Latest Accuracy</h3>
-                    </div>
-                    {latestReportStats && latestReportStats.some(s => s.value > 0) ? (
-                      <div className="flex items-center h-[200px]">
-                        <div className="flex-1 h-full">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                              <Pie
-                                data={latestReportStats}
-                                cx="50%"
-                                cy="50%"
-                                innerRadius={40}
-                                outerRadius={60}
-                                paddingAngle={5}
-                                dataKey="value"
-                              >
-                                {latestReportStats.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                              </Pie>
-                              <RechartsTooltip 
-                                contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                itemStyle={{ fontWeight: '500' }}
-                              />
-                            </PieChart>
-                          </ResponsiveContainer>
-                        </div>
-                        <div className="w-24 flex flex-col justify-center gap-3 border-l border-gray-100 pl-4">
-                          {latestReportStats.map((stat, idx) => (
-                            <div key={idx} className="flex flex-col">
-                              <div className="flex items-center gap-1.5">
-                                <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: stat.color }}></div>
-                                <span className="text-[11px] font-medium text-gray-500">{stat.name}</span>
-                              </div>
-                              <span className="text-sm font-bold text-gray-900 ml-4">{stat.value}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="h-[150px] flex items-center justify-center text-gray-400 text-sm">Detailed analysis not available</div>
-                    )}
-                  </div>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-semibold text-xl">
+                  {selectedStudent.name.charAt(0)}
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold text-gray-900">{selectedStudent.name}</h2>
+                  <p className="text-sm text-gray-500 font-medium">{selectedStudent.id} • Batch: {selectedStudent.batch}</p>
                 </div>
               </div>
+              <button onClick={() => setSelectedStudent(null)} className="p-2 text-gray-400 hover:text-gray-600 bg-white rounded-full border border-gray-200 hover:bg-gray-50 transition-colors">
+                <XCircle className="w-5 h-5" />
+              </button>
+            </div>
 
-              <div className="px-6 pb-6">
-                 <h3 className="text-sm font-semibold text-gray-800 mb-3">Recent Assessments</h3>
-                 <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
-                    {studentSubmissions.length === 0 ? <div className="text-sm text-gray-500 py-2">No submissions found.</div> : null}
-                    {studentSubmissions.map((sub, idx) => (
-                      <div key={idx} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-default">
-                        <div className="flex items-center gap-3">
-                           <CheckCircle className="w-4 h-4 text-green-500" />
-                           <div className="flex flex-col">
-                             <span className="text-[13px] font-semibold text-gray-700">{sub.contestName}</span>
-                             <span className="text-[11px] text-gray-500">{new Date(sub.submittedAt).toLocaleString()}</span>
-                           </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                           <span className="text-[13px] font-semibold text-gray-900">{sub.score} Marks</span>
-                           <button onClick={() => handleDownloadPDF(sub)} className="p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors" title="Download Report">
-                             <Download className="w-4 h-4" />
-                           </button>
-                        </div>
+            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
+                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">Performance Overview</p>
+                <div className="flex items-end gap-2 mb-2">
+                  <span className="text-3xl font-semibold text-gray-900">{selectedStudent.avgScore}%</span>
+                  <span className="text-sm font-medium text-gray-500 mb-1">Avg. Score</span>
+                </div>
+                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-2">
+                  <div className={`h-full rounded-full ${selectedStudent.avgScore >= 75 ? 'bg-green-500' : selectedStudent.avgScore >= 50 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{ width: `${selectedStudent.avgScore}%` }}></div>
+                </div>
+                <p className="text-xs text-gray-500 font-medium">Across {selectedStudent.testsTaken} tests taken</p>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                  <span className="text-sm font-medium text-gray-600">Overall Status</span>
+                  <span className={`px-3 py-1 text-[11px] font-semibold rounded-md uppercase tracking-wider border ${getStatusColor(selectedStudent.status)}`}>
+                    {selectedStudent.status}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-gray-100">
+                  <span className="text-sm font-medium text-gray-600">Total Tests Taken</span>
+                  <span className="text-lg font-semibold text-gray-900">{selectedStudent.testsTaken}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 pb-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <TrendingUp className="w-4 h-4 text-blue-600" />
+                    <h3 className="text-sm font-semibold text-gray-800">Performance Trend</h3>
+                  </div>
+                  {trendData.length > 0 ? (
+                    <div className="h-[200px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={trendData} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b' }} dy={10} />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#64748b' }} dx={-10} />
+                          <RechartsTooltip
+                            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                            formatter={(value) => [`${value} Marks`, 'Score']}
+                            labelStyle={{ fontWeight: '600', color: '#1e293b', marginBottom: '4px' }}
+                          />
+                          <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={3} dot={{ r: 4, fill: '#3b82f6', strokeWidth: 2, stroke: '#fff' }} activeDot={{ r: 6, fill: '#2563eb' }} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </div>
+                  ) : (
+                    <div className="h-[150px] flex items-center justify-center text-gray-400 text-sm">Not enough data to show trend</div>
+                  )}
+                </div>
+
+                <div className="bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    <PieChartIcon className="w-4 h-4 text-purple-600" />
+                    <h3 className="text-sm font-semibold text-gray-800">Latest Accuracy</h3>
+                  </div>
+                  {latestReportStats && latestReportStats.some(s => s.value > 0) ? (
+                    <div className="flex items-center h-[200px]">
+                      <div className="flex-1 h-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={latestReportStats}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={40}
+                              outerRadius={60}
+                              paddingAngle={5}
+                              dataKey="value"
+                            >
+                              {latestReportStats.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <RechartsTooltip
+                              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                              itemStyle={{ fontWeight: '500' }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
                       </div>
-                    ))}
-                 </div>
+                      <div className="w-24 flex flex-col justify-center gap-3 border-l border-gray-100 pl-4">
+                        {latestReportStats.map((stat, idx) => (
+                          <div key={idx} className="flex flex-col">
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-2.5 h-2.5 rounded-full shadow-sm" style={{ backgroundColor: stat.color }}></div>
+                              <span className="text-[11px] font-medium text-gray-500">{stat.name}</span>
+                            </div>
+                            <span className="text-sm font-bold text-gray-900 ml-4">{stat.value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-[150px] flex items-center justify-center text-gray-400 text-sm">Detailed analysis not available</div>
+                  )}
+                </div>
               </div>
-              
-              <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
-                 <button onClick={() => setSelectedStudent(null)} className="px-5 py-2 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors">
-                    Close Report
-                 </button>
+            </div>
+
+            <div className="px-6 pb-6">
+              <h3 className="text-sm font-semibold text-gray-800 mb-3">Recent Assessments</h3>
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
+                {studentSubmissions.length === 0 ? <div className="text-sm text-gray-500 py-2">No submissions found.</div> : null}
+                {studentSubmissions.map((sub, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 border border-gray-100 rounded-lg hover:bg-gray-50 transition-colors cursor-default">
+                    <div className="flex items-center gap-3">
+                      <CheckCircle className="w-4 h-4 text-green-500" />
+                      <div className="flex flex-col">
+                        <span className="text-[13px] font-semibold text-gray-700">{sub.contestName}</span>
+                        <span className="text-[11px] text-gray-500">{new Date(sub.submittedAt).toLocaleString()}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <span className="text-[13px] font-semibold text-gray-900">{sub.score} Marks</span>
+                      <button onClick={() => handleDownloadPDF(sub)} className="p-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors" title="Download Report">
+                        <Download className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-           </div>
+            </div>
+
+            <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+              <button onClick={() => setSelectedStudent(null)} className="px-5 py-2 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-gray-800 transition-colors">
+                Close Report
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

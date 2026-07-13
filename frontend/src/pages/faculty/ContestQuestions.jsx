@@ -339,7 +339,7 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
       </div>
       <div className="space-y-3">
         <label className="block text-[13px] font-semibold text-gray-700">Options</label>
-        {data.options.map((opt, idx) => (
+        {(data.options || []).map((opt, idx) => (
           <div key={idx} className="flex items-center gap-3">
             <span className="w-6 text-center text-sm font-semibold text-gray-400">{idx + 1}.</span>
             <input
@@ -363,7 +363,7 @@ function MCQForm({ data, onChange, onSubmit, editing, error }) {
             onChange={e => onChange({ ...data, correctOption: parseInt(e.target.value) })}
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white focus:outline-none focus:border-blue-500 text-sm"
           >
-            {data.options.map((_, idx) => (
+            {(data.options || []).map((_, idx) => (
               <option key={idx} value={idx}>Option {idx + 1}</option>
             ))}
           </select>
@@ -536,7 +536,7 @@ function CodingForm({ data, onChange, onSubmit, editing, error }) {
             <Plus className="w-4 h-4" /> Add Test Case
           </button>
         </div>
-        {testCases.map((tc, idx) => (
+        {(testCases || []).map((tc, idx) => (
           <div key={idx} className="p-4 border border-gray-200 rounded-xl bg-gray-50/50 space-y-3 relative group">
             {testCases.length > 1 && (
               <button type="button" onClick={() => removeTestCase(idx)} className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors">
@@ -573,7 +573,7 @@ function CodingForm({ data, onChange, onSubmit, editing, error }) {
             <Plus className="w-4 h-4" /> Add Hidden Test Case
           </button>
         </div>
-        {hiddenTestCases.map((tc, idx) => (
+        {(hiddenTestCases || []).map((tc, idx) => (
           <div key={idx} className="p-4 border border-gray-200 rounded-xl bg-gray-50/50 space-y-3 relative group">
             {hiddenTestCases.length > 1 && (
               <button type="button" onClick={() => removeHiddenTestCase(idx)} className="absolute top-3 right-3 text-gray-400 hover:text-red-500 transition-colors">
@@ -720,9 +720,9 @@ export default function ContestQuestions() {
     if (slotQ) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setEditingQId(slotQ.id);
-      if (slot.type === 'mcq')    setMcqForm({ question: slotQ.question, options: slotQ.options, correctOption: slotQ.correctOption, marks: slotQ.marks });
-      if (slot.type === 'theory') setTheoryForm({ question: slotQ.question, answer: slotQ.answer, marks: slotQ.marks });
-      if (slot.type === 'coding') setCodingForm({ title: slotQ.title, problemStatement: slotQ.problemStatement, inputFormat: slotQ.inputFormat, outputFormat: slotQ.outputFormat, constraints: slotQ.constraints || '', testCases: slotQ.testCases || (slotQ.sampleInput ? [{ input: slotQ.sampleInput, output: slotQ.sampleOutput }] : [{ input: '', output: '' }]), hiddenTestCases: slotQ.hiddenTestCases || (slotQ.hiddenInput ? [{ input: slotQ.hiddenInput, output: slotQ.hiddenOutput }] : [{ input: '', output: '' }]), marks: slotQ.marks });
+      if (slot.type === 'mcq')    setMcqForm({ question: slotQ.question || '', options: slotQ.options || ['', '', '', ''], correctOption: slotQ.correctOption || 0, marks: slotQ.marks || 1 });
+      if (slot.type === 'theory') setTheoryForm({ question: slotQ.question || '', answer: slotQ.answer || '', marks: slotQ.marks || 5 });
+      if (slot.type === 'coding') setCodingForm({ title: slotQ.title || '', problemStatement: slotQ.problemStatement || '', inputFormat: slotQ.inputFormat || '', outputFormat: slotQ.outputFormat || '', constraints: slotQ.constraints || '', testCases: slotQ.testCases || (slotQ.sampleInput ? [{ input: slotQ.sampleInput, output: slotQ.sampleOutput }] : [{ input: '', output: '' }]), hiddenTestCases: slotQ.hiddenTestCases || (slotQ.hiddenInput ? [{ input: slotQ.hiddenInput, output: slotQ.hiddenOutput }] : [{ input: '', output: '' }]), marks: slotQ.marks || 10 });
     } else {
       setEditingQId(null);
       setMcqForm({ ...emptyMCQ });
@@ -770,7 +770,7 @@ export default function ContestQuestions() {
   };
 
   const currentMcqError = (() => {
-    const opts = mcqForm.options.map(o => o.trim()).filter(Boolean);
+    const opts = (mcqForm.options || []).map(o => o?.trim?.() || '').filter(Boolean);
     if (new Set(opts).size !== opts.length) return "Options cannot be repeated.";
     if (isDuplicateQuestion(mcqForm.question, editingQId, currentSlotIdx)) return "This question already exists in the contest.";
     return null;
@@ -787,7 +787,7 @@ export default function ContestQuestions() {
   })();
 
   const freeMcqError = (() => {
-    const opts = mcqForm.options.map(o => o.trim()).filter(Boolean);
+    const opts = (mcqForm.options || []).map(o => o?.trim?.() || '').filter(Boolean);
     if (new Set(opts).size !== opts.length) return "Options cannot be repeated.";
     if (isDuplicateQuestion(mcqForm.question, editingQId)) return "This question already exists in the contest.";
     return null;

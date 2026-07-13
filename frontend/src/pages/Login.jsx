@@ -69,7 +69,7 @@ export default function Login() {
         avatar: 'https://ui-avatars.com/api/?name=Rahul+Rawat&background=0D8ABC&color=fff&size=128',
         role: 'student',
         joinDate: 'August 2023',
-        batch: 'Alpha-2'
+        batch: 'Alpha 2'
       }));
       sessionStorage.removeItem('lastSeenNoticeId');
       window.dispatchEvent(new Event('profile-updated'));

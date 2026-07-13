@@ -42,7 +42,7 @@ export default function Analytics() {
         setAllSubmissions(submissionsData);
 
         // Extract unique options for filters
-        const batches = [...new Set(submissionsData.map(s => s.batch).filter(Boolean))];
+        const batches = [...new Set(submissionsData.map(s => s.batch === 'Alpha-2' ? 'Alpha 2' : s.batch).filter(Boolean))];
         const students = [...new Set(submissionsData.map(s => s.studentName).filter(Boolean))];
 
         // Include batches from our allocated list even if no submissions exist yet
@@ -71,7 +71,8 @@ export default function Analytics() {
   useEffect(() => {
     // 1. Filter the submissions based on current selections
     const filteredSubs = allSubmissions.filter(s => {
-      const matchBatch = selectedBatch === 'All' || s.batch === selectedBatch;
+      const effectiveBatch = s.batch === 'Alpha-2' ? 'Alpha 2' : s.batch;
+      const matchBatch = selectedBatch === 'All' || effectiveBatch === selectedBatch;
       const matchStudent = selectedStudent === 'All' || s.studentName === selectedStudent;
       return matchBatch && matchStudent;
     });
@@ -82,7 +83,7 @@ export default function Analytics() {
       : [selectedBatch];
 
     const bpData = batchesToProcess.map(batchName => {
-      const batchSubs = filteredSubs.filter(s => s.batch === batchName);
+      const batchSubs = filteredSubs.filter(s => s.batch === batchName || (batchName === 'Alpha 2' && s.batch === 'Alpha-2'));
       if (batchSubs.length === 0) return { name: batchName, averageScore: 0, topScore: 0 };
 
       const scores = batchSubs.map(s => s.score || 0);
